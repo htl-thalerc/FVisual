@@ -1,6 +1,0 @@
---- Webservice ---
-Port: 3030
-Default REST URL: /api/...
-  * /api/mitglieder
-  * /api/einsaetze
-  * /api/stuetzpunkte
