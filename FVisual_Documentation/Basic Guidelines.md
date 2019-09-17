@@ -1,3 +1,0 @@
-Webservice
-Port: 3030
-REST URL default: /api/...
