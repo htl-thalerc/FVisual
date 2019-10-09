@@ -28,7 +28,7 @@ CREATE TABLE Mitglieder
   nachname      VARCHAR(30),
   id_stuetzpunkt INTEGER,
   id_dienstgrad INTEGER,
-  CONSTRAINT pk_Mitglieder PRIMARY KEY (id),
+  CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),
   CONSTRAINT fk_Einsatzfahrzeug_Stuetzpunkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
   CONSTRAINT fk_Dienstgrad FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id)
 );
@@ -38,7 +38,7 @@ CREATE TABLE Einsatzfahrzeuge
   id      INTEGER,
   rufname VARCHAR(30),
   id_stuetzpunkt INTEGER,
-  CONSTRAINT pk_Einsatzfahrzeuge PRIMARY KEY (id),
+  CONSTRAINT pk_Einsatzfahrzeuge PRIMARY KEY (id, id_stuetzpunkt),
   CONSTRAINT fk_Einsatzfahrzeug_Stuetzpunkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
   CONSTRAINT uq_Einsatzfahrzeug UNIQUE (rufname)
 );
@@ -131,7 +131,7 @@ CREATE TABLE Mitglied_war_bei_Einsatz
   id_Stuetzpunkt INTEGER,
   id_Einsatz     INTEGER,
   CONSTRAINT pk_Mitglied_war_bei_Einsatz PRIMARY KEY (id_Mitglied, id_Stuetzpunkt, id_einsatz),
-  CONSTRAINT fk_Mitglied_war_bei_Einsatz FOREIGN KEY (id_Mitglied, id_Stuetzpunkt) REFERENCES Mitglieder (id_mitglied),
+  CONSTRAINT fk_Mitglied_war_bei_Einsatz FOREIGN KEY (id_Mitglied, id_Stuetzpunkt) REFERENCES Mitglieder (id_mitglied, id_Stuetzpunkt),
   CONSTRAINT fk_Einsatzkraft_bei_Einsatz FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES Einsatzkraft_war_bei_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
 
@@ -141,6 +141,6 @@ CREATE TABLE Fahrzeug_war_bei_Einsatz
   id_Stuetzpunkt     INTEGER,
   id_Einsatz         INTEGER,
   CONSTRAINT pk_Fahrzeug_war_bei_Einsatz PRIMARY KEY (id_Einsatzfahrzeug, id_Stuetzpunkt, id_einsatz),
-  CONSTRAINT fk_FZG_war_bei_Einsatz FOREIGN KEY (id_Einsatzfahrzeug, id_Stuetzpunkt) REFERENCES Einsatzfahrzeuge (id_einsatzfahrzeug),
+  CONSTRAINT fk_FZG_war_bei_Einsatz FOREIGN KEY (id_Einsatzfahrzeug, id_Stuetzpunkt) REFERENCES Einsatzfahrzeuge (id_einsatzfahrzeug, id_Stuetzpunkt),
   CONSTRAINT fk_EKR_war_bei_Einsatz FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES Einsatzkraft_war_bei_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
