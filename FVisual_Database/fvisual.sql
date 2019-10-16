@@ -202,9 +202,13 @@ INSERT INTO Einsatzcodes VALUES (42, 'FLUGNOT 1');
 INSERT INTO Einsatzcodes VALUES (43, 'FLUGNOT 2');
 
 INSERT INTO Stuetzpunkte VALUES(1, 'Feuerwehr St. Peter Spittal');
+INSERT INTO Stuetzpunkte VALUES(2, 'Feuerwehr Olsach-Molzbichl');
 
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (1, 1, 'KRFA');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (2, 1, 'TLFA-2000');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (3, 1, 'LF-A');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (4, 1, 'RTB-50');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (5, 1, 'Ölwehranhänger');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (6, 2, 'TLFA-4000');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (7, 2, 'LFA');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (8, 2, 'Katastrophenschutzanhänger');
