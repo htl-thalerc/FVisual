@@ -25,6 +25,7 @@ CREATE TABLE Mitglieder
   id            INTEGER,
   vorname       VARCHAR(30),
   nachname      VARCHAR(30),
+  isAdmin       VARCHAR(3),
   id_stuetzpunkt INTEGER,
   id_dienstgrad INTEGER,
   CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),

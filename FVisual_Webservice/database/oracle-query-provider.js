@@ -1,5 +1,7 @@
 'use strict';
 
+/**ALL QUERYSTRINGS FOR DB*/
+
 module.exports.EINSAETZE_SELECT_ALL = "";
 module.exports.EINSAETZE_SELECT_FILTER = "";
 module.exports.EINSAETZE_SELECT_BYID = "";
