@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
-	
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMainframe">
-	<!-- TODO Add Nodes -->
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMainframe">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+            <Menu mnemonicParsing="false" text="Management">
+              <items>
+                <MenuItem fx:id="mitemOperationManagement" mnemonicParsing="false" text="Operation Management" />
+                  <MenuItem fx:id="mitemBaseManagement" mnemonicParsing="false" text="Base Management" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Profile">
+            <items>
+              <MenuItem fx:id="mitemProfileSetting" mnemonicParsing="false" text="Profile Setting" />
+                  <MenuItem fx:id="mitemLogout" mnemonicParsing="false" text="Logout" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
 </BorderPane>
