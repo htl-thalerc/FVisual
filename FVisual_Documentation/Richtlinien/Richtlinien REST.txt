@@ -1,6 +1,20 @@
 server: localhost
 Port: 3030
 
+200 OK successful GET and PUT
+
+201 Created for successful POST.  URI for the created resource is specified in the Location header field
+
+204 No Content for successful DELETE. No message body.
+
+400 Bad Request with error, if the new resource to be created through POST already exists
+
+404 Not Found with error, if GET or PUT has not found anything matching the Request-URI
+
+415 Unsupported Media Type with error, if POST or PUT if the request body is not in application/json MIME type
+
+500 Internal Server Error with error, if server encountered an unexpected error while processing the request
+
 Path: /
 	GET /
 	code: 200
