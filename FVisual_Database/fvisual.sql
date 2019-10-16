@@ -1,7 +1,6 @@
 DROP TABLE Dienstgrade CASCADE CONSTRAINTS;
 DROP TABLE Mitglieder CASCADE CONSTRAINTS;
 DROP TABLE Einsatzfahrzeuge CASCADE CONSTRAINTS;
-DROP TABLE Stuetzpunktorte CASCADE CONSTRAINTS;
 DROP TABLE Einsatzorte CASCADE CONSTRAINTS;
 DROP TABLE Stuetzpunkte CASCADE CONSTRAINTS;
 DROP TABLE Einsatzarten CASCADE CONSTRAINTS;
@@ -34,17 +33,6 @@ CREATE TABLE Mitglieder
 );
 
 
-CREATE TABLE Stuetzpunktorte
-(
-  id      INTEGER,
-  ort     VARCHAR(50),
-  plz     INTEGER,
-  strasse VARCHAR(50),
-  hausnr  VARCHAR(50),
-  CONSTRAINT pk_Stuetzpunktorte PRIMARY KEY (id),
-  CONSTRAINT uq_Stuetzpunktort UNIQUE (ort, plz, strasse, hausnr)
-);
-
 CREATE TABLE Einsatzorte
 (
   id      INTEGER,
@@ -57,8 +45,13 @@ CREATE TABLE Stuetzpunkte
 (
   id   INTEGER,
   name VARCHAR(50),
+  ort     VARCHAR(50),
+  plz     INTEGER,
+  strasse VARCHAR(50),
+  hausnr  VARCHAR(50),
   CONSTRAINT pk_STPNKT PRIMARY KEY (id),
-  CONSTRAINT uq_Stuetzpunkt UNIQUE (name)
+  CONSTRAINT uq_Stuetzpunkt UNIQUE (name),
+  CONSTRAINT uq_Stuetzpunktort UNIQUE (ort, plz, strasse, hausnr)
 );
 
 CREATE TABLE Einsatzfahrzeuge
