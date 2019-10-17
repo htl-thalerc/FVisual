@@ -27,22 +27,22 @@ adminRouter.get('/', (req, res) => {
 });
 
 // GET    | /admin/:userId
-userRouter.get('/:userId', (req, res) => {
+adminRouter.get('/:userId', (req, res) => {
     res.status(200).send('found: ' + req.params.userId);
 });
 
 // POST   | /admin
-userRouter.post('/', (req, res) => {
+adminRouter.post('/', (req, res) => {
     res.status(201).send("added:  1 - " + req.body.username + "-" + req.body.password + "-" + "true");
 });
 
 // PUT    | /admin/userId
-userRouter.put('/:userId', (req, res) => {
+adminRouter.put('/:userId', (req, res) => {
     res.status(200).send("updated " + userId + ": " + req.body.username + "-" + req.body.password + "-" + "true");
 })
 
 // DELETE | /admin/:userId
-userRouter.delete('/:userId', (req, res) => {
+adminRouter.delete('/:userId', (req, res) => {
     res.status(204).send();
 })
 
