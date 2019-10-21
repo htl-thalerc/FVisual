@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 public class ControllerMainframe implements Initializable {
@@ -26,7 +27,7 @@ public class ControllerMainframe implements Initializable {
 	@FXML
 	private MenuItem mItemLogout;
 	@FXML
-	private AnchorPane mainPane;
+	private BorderPane mainPane;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 
 	@Override
@@ -36,7 +37,7 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemOperationManagement(ActionEvent aE) {
-		AnchorPane operationManagementPane = null;
+		BorderPane operationManagementPane = null;
 		try {
 			this.middlePaneContent.clear();
 			this.middlePaneContent.addAll(this.mainPane.getChildren());
@@ -50,7 +51,7 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemBaseManagement(ActionEvent aE) {
-		AnchorPane baseManagementPane = null;
+		BorderPane baseManagementPane = null;
 		try {
 			this.middlePaneContent.clear();
 			this.middlePaneContent.addAll(this.mainPane.getChildren());
