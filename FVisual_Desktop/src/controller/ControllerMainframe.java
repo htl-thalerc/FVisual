@@ -5,17 +5,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import com.sun.prism.paint.Color;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 
 public class ControllerMainframe implements Initializable {
 	@FXML
@@ -37,27 +33,20 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemOperationManagement(ActionEvent aE) {
-		BorderPane operationManagementPane = null;
-		try {
-			this.middlePaneContent.clear();
-			this.middlePaneContent.addAll(this.mainPane.getChildren());
-			this.mainPane.getChildren().clear();
-			operationManagementPane = FXMLLoader.load(getClass().getResource("/gui/OperationManagement.fxml"));
-			this.mainPane.getChildren().add(operationManagementPane);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.loadContentIntoMainPane("/gui/OperationManagement.fxml");
 	}
 
 	@FXML
 	private void onClickmItemBaseManagement(ActionEvent aE) {
-		BorderPane baseManagementPane = null;
+		this.loadContentIntoMainPane("/gui/BaseManagement.fxml");
+	}
+	
+	private void loadContentIntoMainPane(String fxmlRessourceURL) {
 		try {
 			this.middlePaneContent.clear();
 			this.middlePaneContent.addAll(this.mainPane.getChildren());
 			this.mainPane.getChildren().clear();
-			baseManagementPane = FXMLLoader.load(getClass().getResource("/gui/BaseManagement.fxml"));
-			this.mainPane.getChildren().add(baseManagementPane);
+			this.mainPane.getChildren().add(FXMLLoader.load(getClass().getResource(fxmlRessourceURL)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
