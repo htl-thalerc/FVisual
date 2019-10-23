@@ -62,14 +62,15 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="1.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="180.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <GridPane>
                     <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -111,23 +112,57 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label style="-fx-font-weight: bold;" text="Label" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets right="5.0" />
-                           </GridPane.margin>
-                        </Label>
                         <Label GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </Label>
+                        <Button mnemonicParsing="false" text="Load Vehicles" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Button>
                      </children>
                   </GridPane>
-                  <TableView fx:id="tvVehicleData" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="20.0" right="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </TableView>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                     <center>
+                        <TableView fx:id="tvVehicleData" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
+                           </BorderPane.margin>
+                        </TableView>
+                     </center>
+                     <top>
+                        <Accordion BorderPane.alignment="CENTER">
+                          <panes>
+                            <TitledPane animated="false" text="Filter Operation Vehicles">
+                                 <content>
+                                    <GridPane>
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <TextField />
+                                          <TextField GridPane.rowIndex="1" />
+                                          <TextField />
+                                          <TextField GridPane.columnIndex="1" />
+                                          <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                       </children>
+                                    </GridPane>
+                                 </content>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                            </TitledPane>
+                          </panes>
+                        </Accordion>
+                     </top>
+                  </BorderPane>
                </children>
             </GridPane>
          </children>
