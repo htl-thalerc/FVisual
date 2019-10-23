@@ -1,5 +1,7 @@
 package bll;
 
+import javafx.scene.control.CheckBox;
+
 public class Base {
 	private int baseId;
 	private String name;
@@ -8,8 +10,21 @@ public class Base {
 	private String street;
 	private String houseNr;
 	
+	private CheckBox selection;
+	
 	public Base(int baseId, String name, String place, int plz, String street, String houseNr) {
 		super();
+		this.baseId = baseId;
+		this.name = name;
+		this.place = place;
+		this.plz = plz;
+		this.street = street;
+		this.houseNr = houseNr;
+	}
+	
+	public Base(CheckBox selection, int baseId, String name, String place, int plz, String street, String houseNr) {
+		super();
+		this.selection = selection;
 		this.baseId = baseId;
 		this.name = name;
 		this.place = place;
@@ -64,5 +79,9 @@ public class Base {
 
 	public void setHouseNr(String houseNr) {
 		this.houseNr = houseNr;
+	}
+	
+	public CheckBox getSelection() {
+		return selection;
 	}
 }
