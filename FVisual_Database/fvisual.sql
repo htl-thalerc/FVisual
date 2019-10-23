@@ -1,4 +1,4 @@
-DROP TABLE Dienstgrade CASCADE CONSTRAINTS;
+﻿DROP TABLE Dienstgrade CASCADE CONSTRAINTS;
 DROP TABLE Mitglieder CASCADE CONSTRAINTS;
 DROP TABLE Einsatzfahrzeuge CASCADE CONSTRAINTS;
 DROP TABLE Einsatzorte CASCADE CONSTRAINTS;
@@ -25,12 +25,15 @@ CREATE TABLE Mitglieder
   id            INTEGER,
   vorname       VARCHAR(30),
   nachname      VARCHAR(30),
+  username		VARCHAR(30),
+  password		VARCHAR(250),
   isAdmin       VARCHAR(3),
   id_stuetzpunkt INTEGER,
   id_dienstgrad INTEGER,
   CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),
   CONSTRAINT fk_Einsatzfahrzeug_Stuetzpunkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
-  CONSTRAINT fk_Dienstgrad FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id)
+  CONSTRAINT fk_Dienstgrad FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id),
+  CONSTRAINT uq_Username UNIQUE(username)
 );
 
 
