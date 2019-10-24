@@ -7,19 +7,19 @@ public class Operation {
 	private int operationId;
 	private OperationCode operationCode;
 	private OperationType operationType;
-	private OperationPlace operationPlace;
+	private String address;
 	private String title;
 	private String shortDescription;
 	private Date date;
 	private Time time;
 	
 	public Operation(int operationId, OperationCode operationCode, OperationType operationType,
-			OperationPlace operationPlace, String title, String shortDescription, Date date, Time time) {
+			String address, String title, String shortDescription, Date date, Time time) {
 		super();
 		this.operationId = operationId;
 		this.operationCode = operationCode;
 		this.operationType = operationType;
-		this.operationPlace = operationPlace;
+		this.address = address;
 		this.title = title;
 		this.shortDescription = shortDescription;
 		this.date = date;
@@ -54,12 +54,12 @@ public class Operation {
 		this.operationType = operationType;
 	}
 
-	public OperationPlace getOperationPlace() {
-		return operationPlace;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setOperationPlace(OperationPlace operationPlace) {
-		this.operationPlace = operationPlace;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getTitle() {

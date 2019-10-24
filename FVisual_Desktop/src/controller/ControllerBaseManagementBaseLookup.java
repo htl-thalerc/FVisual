@@ -6,14 +6,14 @@ import java.util.ResourceBundle;
 import bll.Base;
 import bll.OperationVehicle;
 import bll.TableViewRowData;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -33,6 +33,10 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private Label lbShowPlzAndPlaceData;
 	@FXML
 	private Label lbShowAddressData;
+	@FXML
+	private Button btnLoadVehicles;
+	
+	private ObservableList<TableViewRowData> obsListTVVehicles = null;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -78,7 +82,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		TableColumn<TableViewRowData, String> columnCorrespondingBase = new TableColumn<TableViewRowData, String>("Corresponding Base");
 
 		//columnSelection.setCellValueFactory(cellData -> cellData.getValue().getVehicle().getSelection());
-		columnNickname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVehicle().getNickname()));
+		columnNickname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVehicle().getDescription()));
 		columnCorrespondingBase.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
 
 		this.tvVehicleData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -90,28 +94,28 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void fillTableViews() {
-		ObservableList<Base> coll = FXCollections.observableArrayList();
+		ObservableList<Base> obsListTVBaseData = FXCollections.observableArrayList();
 		
 		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.","2");
 		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg", "17");
 
-		coll.add(b1);
-		coll.add(b2);
+		obsListTVBaseData.add(b1);
+		obsListTVBaseData.add(b2);
 
-		this.tvBaseData.setItems(coll);
+		this.tvBaseData.setItems(obsListTVBaseData);
 		
-		ObservableList<TableViewRowData> coll2 = FXCollections.observableArrayList();
+		this.obsListTVVehicles = FXCollections.observableArrayList();
 
-		coll2.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 1, "KRFA", b1)));
-		coll2.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 2, "TLFA-2000", b1)));
-		coll2.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 3, "LF-A", b1)));
-		coll2.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 4, "RTB-50", b1)));
-		coll2.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 5, "Ölwehranhänger", b1)));
-		coll2.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 6, "TLFA-4000", b2)));
-		coll2.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 7, "LFA", b2)));
-		coll2.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 8, "Katastrophenschutzanhänger", b2)));
+		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 1, "KRFA", b1)));
+		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 2, "TLFA-2000", b1)));
+		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 3, "LF-A", b1)));
+		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 4, "RTB-50", b1)));
+		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 5, "Ölwehranhänger", b1)));
+		obsListTVVehicles.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 6, "TLFA-4000", b2)));
+		obsListTVVehicles.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 7, "LFA", b2)));
+		obsListTVVehicles.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 8, "Katastrophenschutzanhänger", b2)));
 
-		this.tvVehicleData.setItems(coll2);
+		this.tvVehicleData.setItems(obsListTVVehicles);
 	}
 
 	private void initTableViewBaseListener() {
@@ -131,5 +135,19 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	private void initTableViewVehicleListener() {
 
+	}
+	
+	@FXML private void onClickBtnLoadVehicles(ActionEvent aE) {
+		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
+		ObservableList<TableViewRowData> filteredCollOfVehicles = FXCollections.observableArrayList();
+		if(selectedBase != null) {
+			ObservableList<TableViewRowData> collOfAllVehicles = this.obsListTVVehicles.sorted();
+			for(int i=0;i<collOfAllVehicles.size();i++) {
+				if(collOfAllVehicles.get(i).getBase().getBaseId() == selectedBase.getBaseId()) {
+					filteredCollOfVehicles.add(collOfAllVehicles.get(i));
+				}
+			}
+			this.tvVehicleData.setItems(filteredCollOfVehicles);
+		}
 	}
 }

@@ -117,7 +117,7 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </Label>
-                        <Button mnemonicParsing="false" text="Load Vehicles" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                        <Button fx:id="btnLoadVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadVehicles" text="Load Vehicles" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>

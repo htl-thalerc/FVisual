@@ -4,15 +4,15 @@ import javafx.scene.control.CheckBox;
 
 public class OperationVehicle {
 	private int operationVehicleId;
-	private String nickname;
+	private String description;
 	private Base base;
 	
 	private CheckBox selection;
 	
-	public OperationVehicle(int operationVehicleId, String nickname, Base base) {
+	public OperationVehicle(int operationVehicleId, String description, Base base) {
 		super();
 		this.operationVehicleId = operationVehicleId;
-		this.nickname = nickname;
+		this.description = description;
 		this.base = base;
 	}
 	
@@ -20,7 +20,7 @@ public class OperationVehicle {
 		super();
 		this.selection = selection;
 		this.operationVehicleId = operationVehicleId;
-		this.nickname = nickname;
+		this.description = description;
 		this.base = base;
 	}
 	
@@ -36,12 +36,12 @@ public class OperationVehicle {
 		this.operationVehicleId = operationVehicleId;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Base getBase() {
