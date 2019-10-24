@@ -1,72 +1,15 @@
 ﻿DROP TABLE Dienstgrade CASCADE CONSTRAINTS;
 DROP TABLE Mitglieder CASCADE CONSTRAINTS;
 DROP TABLE Einsatzfahrzeuge CASCADE CONSTRAINTS;
-DROP TABLE Einsatzorte CASCADE CONSTRAINTS;
 DROP TABLE Stuetzpunkte CASCADE CONSTRAINTS;
 DROP TABLE Einsatzarten CASCADE CONSTRAINTS;
 DROP TABLE Einsatzcodes CASCADE CONSTRAINTS;
 DROP TABLE Andere_Organisationen CASCADE CONSTRAINTS;
 DROP TABLE Einsaetze CASCADE CONSTRAINTS;
-DROP TABLE AOrg_war_bei_Einsatz CASCADE CONSTRAINTS;
-DROP TABLE Einsatzkraft_war_bei_Einsatz CASCADE CONSTRAINTS;
-DROP TABLE Mitglied_war_bei_Einsatz CASCADE CONSTRAINTS;
-DROP TABLE Fahrzeug_war_bei_Einsatz CASCADE CONSTRAINTS;
-
-CREATE TABLE Dienstgrade
-(
-  id          INTEGER,
-  kuerzel     VARCHAR(3),
-  bezeichnung VARCHAR(25),
-  CONSTRAINT pk_Dienstgrade PRIMARY KEY (id)
-);
-
-CREATE TABLE Mitglieder
-(
-  id            INTEGER,
-  vorname       VARCHAR(30),
-  nachname      VARCHAR(30),
-  username		VARCHAR(30),
-  password		VARCHAR(250),
-  isAdmin       VARCHAR(3),
-  id_stuetzpunkt INTEGER,
-  id_dienstgrad INTEGER,
-  CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),
-  CONSTRAINT fk_Einsatzfahrzeug_Stuetzpunkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
-  CONSTRAINT fk_Dienstgrad FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id),
-  CONSTRAINT uq_Username UNIQUE(username)
-);
-
-
-CREATE TABLE Einsatzorte
-(
-  id      INTEGER,
-  adresse VARCHAR(100),
-  CONSTRAINT pk_Einsatzort PRIMARY KEY (id),
-  CONSTRAINT uq_Einsatzort UNIQUE (adresse)
-);
-
-CREATE TABLE Stuetzpunkte
-(
-  id   INTEGER,
-  name VARCHAR(50),
-  ort     VARCHAR(50),
-  plz     INTEGER,
-  strasse VARCHAR(50),
-  hausnr  VARCHAR(50),
-  CONSTRAINT pk_STPNKT PRIMARY KEY (id),
-  CONSTRAINT uq_Stuetzpunkt UNIQUE (name),
-  CONSTRAINT uq_Stuetzpunktort UNIQUE (ort, plz, strasse, hausnr)
-);
-
-CREATE TABLE Einsatzfahrzeuge
-(
-  id      INTEGER,
-  rufname VARCHAR(30),
-  id_stuetzpunkt INTEGER,
-  CONSTRAINT pk_Einsatzfahrzeuge PRIMARY KEY (id, id_stuetzpunkt),
-  CONSTRAINT fk_Einsatzfahrzeug_Stuetzpunkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
-  CONSTRAINT uq_Einsatzfahrzeug UNIQUE (rufname)
-);
+DROP TABLE AOrg_wb_Einsatz CASCADE CONSTRAINTS;
+DROP TABLE EKraft_wb_Einsatz CASCADE CONSTRAINTS;
+DROP TABLE Mtg_wb_Einsatz CASCADE CONSTRAINTS;
+DROP TABLE FZG_wb_Einsatz CASCADE CONSTRAINTS;
 
 CREATE TABLE Einsatzarten
 (
@@ -80,16 +23,62 @@ CREATE TABLE Einsatzcodes
 (
   id   INTEGER,
   code VARCHAR(30),
-  CONSTRAINT pk_Einsatzcodes PRIMARY KEY (id),
+  CONSTRAINT pk_Einsatzcode PRIMARY KEY (id),
   CONSTRAINT uq_Einsatzcode UNIQUE (code)
+);
 
+CREATE TABLE Dienstgrade
+(
+  id          INTEGER,
+  kuerzel     VARCHAR(3),
+  bezeichnung VARCHAR(25),
+  CONSTRAINT pk_Dienstgrade PRIMARY KEY (id)
 );
 
 CREATE TABLE Andere_Organisationen(
   id  INTEGER,
   name VARCHAR(100),
   CONSTRAINT pk_Andere_Organisationen PRIMARY KEY (id),
-  CONSTRAINT uq_Andere_Organisationen UNIQUE(name)
+  CONSTRAINT uq_Andere_Organisation UNIQUE(name)
+);
+
+CREATE TABLE Stuetzpunkte
+(
+  id   INTEGER,
+  name VARCHAR(50),
+  ort     VARCHAR(50),
+  plz     INTEGER,
+  strasse VARCHAR(50),
+  hausnr  VARCHAR(50),
+  CONSTRAINT pk_Stuetzpunkte PRIMARY KEY (id),
+  CONSTRAINT uq_Stuetzpunkt_Name UNIQUE (name),
+  CONSTRAINT uq_Stuetzpunkt_Ort UNIQUE (ort, plz, strasse, hausnr)
+);
+
+CREATE TABLE Mitglieder
+(
+  id            INTEGER,
+  vorname       VARCHAR(30),
+  nachname      VARCHAR(30),
+  username		VARCHAR(30),
+  password		VARCHAR(250),
+  isAdmin       VARCHAR(3),
+  id_stuetzpunkt INTEGER,
+  id_dienstgrad INTEGER,
+  CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),
+  CONSTRAINT fk_Mitglied_refStpnkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
+  CONSTRAINT fk_Mitglied_refDG FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id),
+  CONSTRAINT uq_Mitglied_Username UNIQUE(username)
+);
+
+CREATE TABLE Einsatzfahrzeuge
+(
+  id      INTEGER,
+  bezeichnung VARCHAR(30),
+  id_stuetzpunkt INTEGER,
+  CONSTRAINT pk_Einsatzfahrzeuge PRIMARY KEY (id, id_stuetzpunkt),
+  CONSTRAINT fk_Einsatzfahrzeug_refStpnkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
+  CONSTRAINT uq_Einsatzfahrzeug UNIQUE (bezeichnung, id_stuetzpunkt)
 );
 
 CREATE TABLE Einsaetze
@@ -97,52 +86,51 @@ CREATE TABLE Einsaetze
   id               INTEGER,
   id_einsatzcode   INTEGER,
   id_einsatzart    INTEGER,
-  id_einsatzort    INTEGER,
   titel            VARCHAR(50),
   kurzbeschreibung VARCHAR(250),
+  adresse          VARCHAR(100),
   datum            DATE,
   zeit             TIMESTAMP,
-  CONSTRAINT pk_Einsatz PRIMARY KEY (id),
-  CONSTRAINT fk_Einsaetzte_Einsatzort FOREIGN KEY (id_einsatzort) REFERENCES Einsatzorte (id),
-  CONSTRAINT fk_Einsaetzte_Einsatzart FOREIGN KEY (id_einsatzart) REFERENCES Einsatzarten (id),
-  CONSTRAINT fk_Einsaetzte_Einsatzcode FOREIGN KEY (id_einsatzcode) REFERENCES Einsatzcodes (id)
+  CONSTRAINT pk_Einsaetze PRIMARY KEY (id),
+  CONSTRAINT fk_Einsatz_Einsatzart FOREIGN KEY (id_einsatzart) REFERENCES Einsatzarten (id),
+  CONSTRAINT fk_Einsatz_Einsatzcode FOREIGN KEY (id_einsatzcode) REFERENCES Einsatzcodes (id)
 );
 
-CREATE TABLE AOrg_war_bei_Einsatz(
+CREATE TABLE AOrg_wb_Einsatz(
     id_einsatz INTEGER,
     id_andere_org INTEGER,
-    CONSTRAINT fk_Einsatz FOREIGN KEY (id_Einsatz) REFERENCES Einsaetze (id),
-     CONSTRAINT fk_ANDERE_ORGANISATIONEN FOREIGN KEY (id_andere_org) REFERENCES ANDERE_ORGANISATIONEN (id)
+    CONSTRAINT fk_AORG_wb_E_refEinsatz FOREIGN KEY (id_Einsatz) REFERENCES Einsaetze (id),
+     CONSTRAINT fk_AORG_wb_E_refAOrg FOREIGN KEY (id_andere_org) REFERENCES ANDERE_ORGANISATIONEN (id)
 
 );
 
-CREATE TABLE Einsatzkraft_war_bei_Einsatz
+CREATE TABLE EKraft_wb_Einsatz
 (
   id_Stuetzpunkt INTEGER,
   id_Einsatz     INTEGER,
-  CONSTRAINT pk_Einsatzkraft_war_im_Einsatz PRIMARY KEY (id_Stuetzpunkt, id_Einsatz),
-  CONSTRAINT fk_Einsatz FOREIGN KEY (id_Einsatz) REFERENCES Einsaetze (id),
-  CONSTRAINT fk_Stuetzpunkt FOREIGN KEY (id_Stuetzpunkt) REFERENCES Stuetzpunkte (id)
+  CONSTRAINT pk_EKraft_wb_Einsatz PRIMARY KEY (id_Stuetzpunkt, id_Einsatz),
+  CONSTRAINT fk_EKraft_wb_E_refEinsatz FOREIGN KEY (id_Einsatz) REFERENCES Einsaetze (id),
+  CONSTRAINT fk_EKraft_wb_E_refStpnkt FOREIGN KEY (id_Stuetzpunkt) REFERENCES Stuetzpunkte (id)
 );
 
-CREATE TABLE Mitglied_war_bei_Einsatz
+CREATE TABLE Mtg_wb_Einsatz
 (
   id_Mitglied    INTEGER,
   id_Stuetzpunkt INTEGER,
   id_Einsatz     INTEGER,
-  CONSTRAINT pk_Mitglied_war_bei_Einsatz PRIMARY KEY (id_Mitglied, id_Stuetzpunkt, id_einsatz),
-  CONSTRAINT fk_Mitglied_war_bei_Einsatz FOREIGN KEY (id_Mitglied, id_Stuetzpunkt) REFERENCES Mitglieder (id_mitglied, id_Stuetzpunkt),
-  CONSTRAINT fk_Einsatzkraft_bei_Einsatz FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES Einsatzkraft_war_bei_Einsatz (id_Stuetzpunkt, id_Einsatz)
+  CONSTRAINT pk_Mtg_wb_Einsatz PRIMARY KEY (id_Mitglied, id_Stuetzpunkt, id_einsatz),
+  CONSTRAINT fk_Mtg_wb_Einsatz_refMtg FOREIGN KEY (id_Mitglied, id_Stuetzpunkt) REFERENCES Mitglieder (id, id_Stuetzpunkt),
+  CONSTRAINT fk_Mtg_wb_Einsatz_refEinsatz FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
 
-CREATE TABLE Fahrzeug_war_bei_Einsatz
+CREATE TABLE FZG_wb_Einsatz
 (
   id_Einsatzfahrzeug INTEGER,
   id_Stuetzpunkt     INTEGER,
   id_Einsatz         INTEGER,
-  CONSTRAINT pk_Fahrzeug_war_bei_Einsatz PRIMARY KEY (id_Einsatzfahrzeug, id_Stuetzpunkt, id_einsatz),
-  CONSTRAINT fk_FZG_war_bei_Einsatz FOREIGN KEY (id_Einsatzfahrzeug, id_Stuetzpunkt) REFERENCES Einsatzfahrzeuge (id_einsatzfahrzeug, id_Stuetzpunkt),
-  CONSTRAINT fk_EKR_war_bei_Einsatz FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES Einsatzkraft_war_bei_Einsatz (id_Stuetzpunkt, id_Einsatz)
+  CONSTRAINT pk_FZG_wb_Einsatz PRIMARY KEY (id_Einsatzfahrzeug, id_Stuetzpunkt, id_einsatz),
+  CONSTRAINT fk_FZG_wb_Einsatz_FZG FOREIGN KEY (id_Einsatzfahrzeug, id_Stuetzpunkt) REFERENCES Einsatzfahrzeuge (id, id_Stuetzpunkt),
+  CONSTRAINT fk_FZG_wb_Einsatz_EKraft FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
 
 INSERT INTO Einsatzarten VALUES(1, 'Verkehrsunfall');
@@ -198,14 +186,32 @@ INSERT INTO Einsatzcodes VALUES (41, 'B WASSER');
 INSERT INTO Einsatzcodes VALUES (42, 'FLUGNOT 1');
 INSERT INTO Einsatzcodes VALUES (43, 'FLUGNOT 2');
 
-INSERT INTO Stuetzpunkte VALUES(1, 'Feuerwehr St. Peter Spittal');
-INSERT INTO Stuetzpunkte VALUES(2, 'Feuerwehr Olsach-Molzbichl');
+INSERT INTO Stuetzpunkte VALUES(1, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800,  'St. Peter', 47);
+INSERT INTO Stuetzpunkte VALUES(2, 'Feuerwehr Olsach-Molzbichl', 'Rothenthurn', 9701, 'Molzbichl', 67 );
 
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (1, 1, 'KRFA');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (2, 1, 'TLFA-2000');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (3, 1, 'LF-A');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (4, 1, 'RTB-50');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (5, 1, 'Ölwehranhänger');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (6, 2, 'TLFA-4000');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (7, 2, 'LFA');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, rufname) VALUES (8, 2, 'Katastrophenschutzanhänger');
+SELECT * FROM Stuetzpunkte;
+
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (1, 1, 'KRFA');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (2, 1, 'TLFA-2000');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (3, 1, 'LF-A');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (4, 1, 'RTB-50');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (5, 1, 'Ölwehranhänger');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (6, 2, 'TLFA-4000');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (7, 2, 'LFA');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (8, 2, 'Katastrophenschutzanhänger');
+
+INSERT INTO DIENSTGRADE VALUES (1, 'PFM', 'Probefeuerwehrmann');
+INSERT INTO DIENSTGRADE VALUES (2, 'FM', 'Feuerwehrmann');
+INSERT INTO DIENSTGRADE VALUES (3, 'OFM', 'Oberfeuerwehrmann');
+INSERT INTO DIENSTGRADE VALUES (4, 'HFM', 'Hauptfeuerwehrmann');
+INSERT INTO DIENSTGRADE VALUES (5, 'LM', 'Löschmeister');
+INSERT INTO DIENSTGRADE VALUES (6, 'OLM', 'Oberlöschmeister');
+INSERT INTO DIENSTGRADE VALUES (7, 'HFM', 'Hauptlöschmeister');
+INSERT INTO DIENSTGRADE VALUES (8, 'BM', 'Brandmeister');
+INSERT INTO DIENSTGRADE VALUES (9, 'OBM', 'Oberbrandmeister');
+INSERT INTO DIENSTGRADE VALUES (10, 'HBM', 'Hauptbrandmeister');
+INSERT INTO DIENSTGRADE VALUES (11, 'BI', 'Brandinspektor');
+INSERT INTO DIENSTGRADE VALUES (12, 'OBI', 'Oberbrandinspektor');
+INSERT INTO DIENSTGRADE VALUES (13, 'HBI', 'Hauptbrandinspektor');
+
+COMMIT;
