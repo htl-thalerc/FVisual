@@ -22,7 +22,6 @@ app.use(centralErrorHandler.errorHandler);
 
 /* public sector */
 app.use('/login', securityModule.login);
-app.use('/logout', securityModule.logout);
 app.get('/', function (req, res) {
     res.status(200).send('API up and running!');
 });

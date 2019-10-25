@@ -6,9 +6,9 @@ const oracledb = require('oracledb');
 /* oracle configuration */
 oracledb.autoCommit = true;
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
-usn = `d5a20`
-pwd = `d5a`
-cStr = `192.168.128.152:1521/ora11g`;
+const usn = `d5a20`;
+const pwd = `d5a`;
+const cStr = `10.0.6.111:1521/ora11g`;
 
 /* single execute */
 var execute = async function (querystring, params, cbf) {

@@ -21,5 +21,4 @@ function authenticate(req, res, next) {
 
 /* exports */
 module.exports.login = login;
-module.exports.logout = logout;
 module.exports.authenticate = authenticate;

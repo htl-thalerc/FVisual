@@ -7,14 +7,15 @@ module.exports.ECODES_GET = "SELECT id, code FROM Einsatzcodes";
 module.exports.DG_GET = "SELECT id, kuerzel, bezeichnung FROM Dienstgrade";
 
 module.exports.AORGS_GET = "SELECT id, name FROM Andere_Organisationen";
-module.exports.AORGS_GETBY_AORGS_ID = "";
+module.exports.AORGS_GETBY_AORGS_ID = "SELECT id, name FROM Andere_Organisationen WHERE id = :1";
 module.exports.AORGS_GETBY_AORGS_NAME = "SELECT id, name FROM Andere_Organisationen WHERE name = :1";
 module.exports.AORGS_POST = "INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, :1)";
-module.exports.AORGS_PUT = "UPDATE Andere_Organisationen SET name = :2 WHERE id = :1";
+module.exports.AORGS_PUT = "UPDATE Andere_Organisationen SET name = :1 WHERE id = :2";
 module.exports.AORGS_DELETE = "DELETE FROM Andere_Organisationen WHERE id = :1";
 
 module.exports.STPNKT_GET = "";
 module.exports.STPNKT_GETBY_STPNKT_ID = "";
+module.exports.STPNKT_GETBY_STPNKT_NAME = "";
 module.exports.STPNKT_POST = "";
 module.exports.STPNKT_PUT = "";
 module.exports.STPNKT_DELETE = "";

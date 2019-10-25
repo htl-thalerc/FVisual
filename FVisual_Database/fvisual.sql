@@ -82,7 +82,7 @@ CREATE TABLE Mitglieder
   nachname      VARCHAR(30),
   username		VARCHAR(30),
   password		VARCHAR(250),
-  isAdmin       VARCHAR(3),
+  isAdmin       VARCHAR(5),
   CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),
   CONSTRAINT fk_Mitglied_refStpnkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
   CONSTRAINT fk_Mitglied_refDG FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id),
@@ -151,7 +151,7 @@ CREATE TABLE FZG_wb_Einsatz
   CONSTRAINT fk_FZG_wb_Einsatz_EKraft FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
 
-INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Verkehrsunfall');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(1, 'Verkehrsunfall');
 INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Brandeinsatz');
 INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Technischer Einsatz');
 INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Hilfeleistung');
@@ -160,7 +160,7 @@ INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Per
 INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Brandmeldealarm');
 INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Wespen / Hornissen / Bienen');
 
-INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T KDO');
+INSERT INTO Einsatzcodes(id, code) VALUES (1, 'T KDO');
 INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 0');
 INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 1');
 INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 2');
@@ -204,7 +204,7 @@ INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B WASSER')
 INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'FLUGNOT 1');
 INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'FLUGNOT 2');
 
-INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'PFM', 'Probefeuerwehrmann');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (1, 'PFM', 'Probefeuerwehrmann');
 INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'FM', 'Feuerwehrmann');
 INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'OFM', 'Oberfeuerwehrmann');
 INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'HFM', 'Hauptfeuerwehrmann');
@@ -218,23 +218,23 @@ INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextva
 INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'OBI', 'Oberbrandinspektor');
 INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'HBI', 'Hauptbrandinspektor');
 
-INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Polizei');
+INSERT INTO Andere_Organisationen(id, name) VALUES(1, 'Polizei');
 INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Polizeihubschrauber');
 INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Rotes Kreuz');
 INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Notarzt');
 INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Rettungshubschrauber');
 
-INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800,  'St. Peter', 47);
+INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(1, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800,  'St. Peter', 47);
 INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, 'Feuerwehr Olsach-Molzbichl', 'Rothenthurn', 9701, 'Molzbichl', 67 );
 
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 1, 2, 'Florian', 'Graf', 'graff', 'lauch', true);
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 1, 2, 'Sandro', 'Assek', 'asseks', 'lauch', true);
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 1, 2, 'Christoph', 'Thaler', 'thalerc', 'lauch', true);
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 2, 'Andreas', 'Drabosenig', 'drabosa', 'lauch', true);
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 2, 'User', 'Normal', 'user', 'user', false);
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 2, 'User', 'Admin', 'admin', 'admin', true);
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(1, 2, 1, 'Florian', 'Graf', 'graff', 'lauch', 'true');
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 1, 'Sandro', 'Assek', 'asseks', 'lauch', 'true');
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 1, 'Christoph', 'Thaler', 'thalerc', 'lauch', 'true');
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 3, 2, 'Andreas', 'Drabosenig', 'drabosa', 'lauch', 'true');
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 4, 2, 'User', 'Normal', 'user', 'user', 'false');
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 5, 2, 'User', 'Admin', 'admin', 'admin', 'true');
 
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'KRFA');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (1, 1, 'KRFA');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'TLFA-2000');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'LF-A');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'RTB-50');

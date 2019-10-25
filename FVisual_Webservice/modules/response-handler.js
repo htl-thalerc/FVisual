@@ -4,7 +4,7 @@
 const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 
-var res_GET_DEFAULT = function (req, res) {
+var res_GET_DEFAULT = function (res) {
     return function (err, result) {
         if (err) {
             console.warn(err);
@@ -19,7 +19,7 @@ var res_GET_DEFAULT = function (req, res) {
     }
 }
 
-var res_POST_DEFAULT = function (req, res) {
+var res_POST_DEFAULT = function (res, querystring, params) {
     return function (err, result) {
         if (err) {
             console.warn(err);
@@ -29,7 +29,7 @@ var res_POST_DEFAULT = function (req, res) {
                 'offset': err.offset
             });
         } else {
-            oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_NAME, [req.body.name], (err, result) => {
+            oracleJobs.execute(querystring, params, (err, result) => {
                 if (err) {
                     console.warn(err);
                     res.status(500).send({
@@ -45,7 +45,7 @@ var res_POST_DEFAULT = function (req, res) {
     }
 }
 
-var res_PUT_DEFAULT = function (req, res) {
+var res_PUT_DEFAULT = function (res, querystring, params) {
     return function (err, result) {
         if (err) {
             console.warn(err);
@@ -55,12 +55,23 @@ var res_PUT_DEFAULT = function (req, res) {
                 'offset': err.offset
             });
         } else {
-            res.status(200).send(result);
+            oracleJobs.execute(querystring, params, (err, result) => {
+                if (err) {
+                    console.warn(err);
+                    res.status(500).send({
+                        'code': err.errorNum,
+                        'message': err.message,
+                        'offset': err.offset
+                    });
+                } else {
+                    res.status(200).send(result.rows);
+                }
+            });
         }
     }
 }
 
-var res_DELETE_DEFAULT = function (req, res) {
+var res_DELETE_DEFAULT = function (res) {
     return function (err, result) {
         if (err) {
             console.warn(err);
