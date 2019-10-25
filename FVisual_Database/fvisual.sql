@@ -76,13 +76,13 @@ CREATE TABLE Stuetzpunkte
 CREATE TABLE Mitglieder
 (
   id            INTEGER,
+  id_dienstgrad INTEGER,
+  id_stuetzpunkt INTEGER,
   vorname       VARCHAR(30),
   nachname      VARCHAR(30),
   username		VARCHAR(30),
   password		VARCHAR(250),
   isAdmin       VARCHAR(3),
-  id_stuetzpunkt INTEGER,
-  id_dienstgrad INTEGER,
   CONSTRAINT pk_Mitglieder PRIMARY KEY (id, id_stuetzpunkt),
   CONSTRAINT fk_Mitglied_refStpnkt FOREIGN KEY (id_stuetzpunkt) REFERENCES Stuetzpunkte (id),
   CONSTRAINT fk_Mitglied_refDG FOREIGN KEY (id_dienstgrad) REFERENCES Dienstgrade (id),
@@ -151,84 +151,96 @@ CREATE TABLE FZG_wb_Einsatz
   CONSTRAINT fk_FZG_wb_Einsatz_EKraft FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
 
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Verkehrsunfall');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Brandeinsatz');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Technischer Einsatz');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Hilfeleistung');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Technische Hilfeleistung');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Personensuche');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Brandmeldealarm');
-INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Wespen / Hornissen / Bienen');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Verkehrsunfall');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Brandeinsatz');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Technischer Einsatz');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Hilfeleistung');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Technische Hilfeleistung');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Personensuche');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Brandmeldealarm');
+INSERT INTO Einsatzarten(id, beschreibung) VALUES(seq_Einsatzarten.nextval, 'Wespen / Hornissen / Bienen');
 
-INSERT INTO Einsatzcodes VALUES (1, 'T KDO');
-INSERT INTO Einsatzcodes VALUES (2, 'T 0');
-INSERT INTO Einsatzcodes VALUES (3, 'T 1');
-INSERT INTO Einsatzcodes VALUES (4, 'T 2');
-INSERT INTO Einsatzcodes VALUES (5, 'T 3');
-INSERT INTO Einsatzcodes VALUES (6, 'T 4');
-INSERT INTO Einsatzcodes VALUES (7, 'T UNWETTER 1');
-INSERT INTO Einsatzcodes VALUES (8, 'T UNWETTER 2');
-INSERT INTO Einsatzcodes VALUES (9, 'T PERSON 1');
-INSERT INTO Einsatzcodes VALUES (10, 'T PERSON 2');
-INSERT INTO Einsatzcodes VALUES (11, 'T PERSON GAS');
-INSERT INTO Einsatzcodes VALUES (12, 'T PERSON WASSER 1');
-INSERT INTO Einsatzcodes VALUES (13, 'T PERSON WASSER 2');
-INSERT INTO Einsatzcodes VALUES (14, 'T WASSER');
-INSERT INTO Einsatzcodes VALUES (15, 'T GAS 1');
-INSERT INTO Einsatzcodes VALUES (16, 'T GAS 2');
-INSERT INTO Einsatzcodes VALUES (17, 'T SCHADSTOFF 1');
-INSERT INTO Einsatzcodes VALUES (18, 'T SCHADSTOFF 2');
-INSERT INTO Einsatzcodes VALUES (19, 'T SCHADSTOFF 3');
-INSERT INTO Einsatzcodes VALUES (20, 'T SCHADSTOFF 4');
-INSERT INTO Einsatzcodes VALUES (21, 'T VU 1');
-INSERT INTO Einsatzcodes VALUES (22, 'T VU 2');
-INSERT INTO Einsatzcodes VALUES (23, 'T VU 3');
-INSERT INTO Einsatzcodes VALUES (24, 'T VU 4');
-INSERT INTO Einsatzcodes VALUES (25, 'T VU 5');
-INSERT INTO Einsatzcodes VALUES (26, 'T SONDERLAGE');
-INSERT INTO Einsatzcodes VALUES (27, 'B 0');
-INSERT INTO Einsatzcodes VALUES (28, 'B 1');
-INSERT INTO Einsatzcodes VALUES (29, 'B 2');
-INSERT INTO Einsatzcodes VALUES (30, 'B 3');
-INSERT INTO Einsatzcodes VALUES (31, 'B 3 PERSON');
-INSERT INTO Einsatzcodes VALUES (32, 'B 4');
-INSERT INTO Einsatzcodes VALUES (33, 'B 4 PERSON');
-INSERT INTO Einsatzcodes VALUES (34, 'B 5');
-INSERT INTO Einsatzcodes VALUES (35, 'B 6');
-INSERT INTO Einsatzcodes VALUES (36, 'B 7');
-INSERT INTO Einsatzcodes VALUES (37, 'B 8');
-INSERT INTO Einsatzcodes VALUES (38, 'B 9');
-INSERT INTO Einsatzcodes VALUES (39, 'BMA 1');
-INSERT INTO Einsatzcodes VALUES (40, 'BMA 2');
-INSERT INTO Einsatzcodes VALUES (41, 'B WASSER');
-INSERT INTO Einsatzcodes VALUES (42, 'FLUGNOT 1');
-INSERT INTO Einsatzcodes VALUES (43, 'FLUGNOT 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T KDO');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 0');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 3');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T 4');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T UNWETTER 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T UNWETTER 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T PERSON 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T PERSON 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T PERSON GAS');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T PERSON WASSER 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T PERSON WASSER 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T WASSER');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T GAS 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T GAS 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T SCHADSTOFF 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T SCHADSTOFF 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T SCHADSTOFF 3');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T SCHADSTOFF 4');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T VU 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T VU 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T VU 3');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T VU 4');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T VU 5');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'T SONDERLAGE');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 0');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 3');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 3 PERSON');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 4');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 4 PERSON');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 5');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 6');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 7');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 8');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B 9');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'BMA 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'BMA 2');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'B WASSER');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'FLUGNOT 1');
+INSERT INTO Einsatzcodes(id, code) VALUES (seq_Einsatzcodes.nextval, 'FLUGNOT 2');
 
-INSERT INTO Stuetzpunkte VALUES(1, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800,  'St. Peter', 47);
-INSERT INTO Stuetzpunkte VALUES(2, 'Feuerwehr Olsach-Molzbichl', 'Rothenthurn', 9701, 'Molzbichl', 67 );
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'PFM', 'Probefeuerwehrmann');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'FM', 'Feuerwehrmann');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'OFM', 'Oberfeuerwehrmann');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'HFM', 'Hauptfeuerwehrmann');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'LM', 'Löschmeister');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'OLM', 'Oberlöschmeister');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'HFM', 'Hauptlöschmeister');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'BM', 'Brandmeister');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'OBM', 'Oberbrandmeister');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'HBM', 'Hauptbrandmeister');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'BI', 'Brandinspektor');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'OBI', 'Oberbrandinspektor');
+INSERT INTO Dienstgrade(id, kuerzel, bezeichnung) VALUES (seq_Dienstgrade.nextval, 'HBI', 'Hauptbrandinspektor');
 
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (1, 1, 'KRFA');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (2, 1, 'TLFA-2000');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (3, 1, 'LF-A');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (4, 1, 'RTB-50');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (5, 1, 'Ölwehranhänger');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (6, 2, 'TLFA-4000');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (7, 2, 'LFA');
-INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (8, 2, 'Katastrophenschutzanhänger');
+INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Polizei');
+INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Polizeihubschrauber');
+INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Rotes Kreuz');
+INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Notarzt');
+INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, 'Rettungshubschrauber');
 
-INSERT INTO DIENSTGRADE VALUES (1, 'PFM', 'Probefeuerwehrmann');
-INSERT INTO DIENSTGRADE VALUES (2, 'FM', 'Feuerwehrmann');
-INSERT INTO DIENSTGRADE VALUES (3, 'OFM', 'Oberfeuerwehrmann');
-INSERT INTO DIENSTGRADE VALUES (4, 'HFM', 'Hauptfeuerwehrmann');
-INSERT INTO DIENSTGRADE VALUES (5, 'LM', 'Löschmeister');
-INSERT INTO DIENSTGRADE VALUES (6, 'OLM', 'Oberlöschmeister');
-INSERT INTO DIENSTGRADE VALUES (7, 'HFM', 'Hauptlöschmeister');
-INSERT INTO DIENSTGRADE VALUES (8, 'BM', 'Brandmeister');
-INSERT INTO DIENSTGRADE VALUES (9, 'OBM', 'Oberbrandmeister');
-INSERT INTO DIENSTGRADE VALUES (10, 'HBM', 'Hauptbrandmeister');
-INSERT INTO DIENSTGRADE VALUES (11, 'BI', 'Brandinspektor');
-INSERT INTO DIENSTGRADE VALUES (12, 'OBI', 'Oberbrandinspektor');
-INSERT INTO DIENSTGRADE VALUES (13, 'HBI', 'Hauptbrandinspektor');
+INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800,  'St. Peter', 47);
+INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, 'Feuerwehr Olsach-Molzbichl', 'Rothenthurn', 9701, 'Molzbichl', 67 );
 
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 1, 2, 'Florian', 'Graf', 'graff', 'lauch', true);
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 1, 2, 'Sandro', 'Assek', 'asseks', 'lauch', true);
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 1, 2, 'Christoph', 'Thaler', 'thalerc', 'lauch', true);
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 2, 'Andreas', 'Drabosenig', 'drabosa', 'lauch', true);
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 2, 'User', 'Normal', 'user', 'user', false);
+INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(seq_Mitglieder.nextval, 2, 2, 'User', 'Admin', 'admin', 'admin', true);
+
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'KRFA');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'TLFA-2000');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'LF-A');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'RTB-50');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 1, 'Ölwehranhänger');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 2, 'TLFA-4000');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 2, 'LFA');
+INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 2, 'Katastrophenschutzanhänger');
 
 COMMIT;
