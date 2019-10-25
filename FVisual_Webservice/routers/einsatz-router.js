@@ -1,3 +1,5 @@
+'use strict';
+
 /* ************************************************************************* */
 /*                             einsatz-router.js                             */
 /*                                                                           */
@@ -25,11 +27,11 @@
 /*                                                                           */
 /* ************************************************************************* */
 
-'use strict';
-
+/* node modules */
 const express = require('express');
-const einsatzRouter = express.Router();
 
+/* local variables */
+const einsatzRouter = express.Router();
 
 /**
  * GET    |  /einsaetze
@@ -119,4 +121,5 @@ einsatzRouter.delete('/:eId/andere_organisationen/:aOrgId', (req, res) => {
     res.status(200).send('{"working": "fine"}');
 });
 
+/* exports */
 module.exports = einsatzRouter;

@@ -1,3 +1,5 @@
+'use strict';
+
 /* ************************************************************************* */
 /*                                base-router.js                             */
 /*                                                                           */
@@ -9,7 +11,6 @@
 /*  GET     |  /einsatzarten                                                 */
 /*  GET     |  /einsatzcodes                                                 */
 /*  GET     |  /dienstgrade                                                  */
-/*  GET     |  /einsatzorte                                                  */
 /*  GET     |  /andere_organisationen                                        */
 /*  POST    |  /andere_organisationen                                        */
 /*  PUT     |  /andere_organisationen/:aOrgId                                */
@@ -17,87 +18,51 @@
 /*                                                                           */
 /* ************************************************************************* */
 
-'use strict';
-
+/* node modules */
 const express = require('express');
+
+/* own modules */
+const oracleJobs = require('../database/oracle-jobs');
+const oracleQueryProvider = require('../database/oracle-query-provider');
+const responseHandler = require('../modules/response-handler');
+
+/* local variables */
 const baseRoutes = express.Router();
-var oracledb = require('oracledb');
-const connAttrs = require('./../database/oracle-connection');
 
 // GET    | /einsatzarten
 baseRoutes.get('/einsatzarten', (req, res) => {
-    oracledb.getConnection(connAttrs, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-
-        connection.execute("SELECT * FROM einsatzarten", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the user profile",
-                    detailed_message: err.message
-                }));
-            } else {
-                res.contentType('application/json').status(200);
-                res.send(JSON.stringify(result.rows));
-            }
-            // Release the connection
-            connection.release(
-                function (err) {
-                    if (err) {
-                        console.error(err.message);
-                    } else {
-                        console.log("GET /user_profiles : Connection released");
-                    }
-                });
-        });
-    });
+    oracleJobs.execute(oracleQueryProvider.EARTEN_GET, [], responseHandler.GET_DEFAULT(req, res));
 });
 
 // GET    | /einsatzcodes
 baseRoutes.get('/einsatzcodes', (req, res) => {
-
+    oracleJobs.execute(oracleQueryProvider.ECODES_GET, [], responseHandler.GET_DEFAULT(req, res));
 });
 
-// GET    | /dienstgrad
-baseRoutes.get('/dienstgrad', (req, res) => {
-
-});
-
-// GET    | /einsatzorte
-baseRoutes.get('/einsatzorte', (req, res) => {
-
+// GET    | /dienstgrade
+baseRoutes.get('/dienstgrade', (req, res) => {
+    oracleJobs.execute(oracleQueryProvider.DG_GET, [], responseHandler.GET_DEFAULT(req, res));
 });
 
 // GET    | /andere_organisationen
 baseRoutes.get('/andere_organisationen', (req, res) => {
-
+    oracleJobs.execute(oracleQueryProvider.AORGS_GET, [], responseHandler.GET_DEFAULT(req, res));
 });
 
 // POST   | /andere_organisationen
 baseRoutes.post('/andere_organisationen', (req, res) => {
-
+    oracleJobs.execute(oracleQueryProvider.AORGS_POST, [req.body.name], responseHandler.POST_DEFAULT(req, res));
 });
 
 // PUT    | /andere_organisationen/:aOrgId
 baseRoutes.put('/andere_organisationen/:aOrgId', (req, res) => {
-
+    oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [req.params.id, req.body.name], responseHandler.PUT_DEFAULT(req, res));
 });
 
 // DELETE | /andere_organisationen/:aOrgId
 baseRoutes.delete('/andere_organisationen/:aOrgId', (req, res) => {
-
+    oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [req.params.id], responseHandler.DELETE_DEFAULT(req, res));
 });
 
+/* exports */
 module.exports = baseRoutes;

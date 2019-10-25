@@ -15,7 +15,10 @@
 
 'use strict';
 
+/* node mudules */
 const express = require('express');
+
+/* local variables */
 const adminRouter = express.Router();
 
 /**
@@ -46,5 +49,5 @@ adminRouter.delete('/:userId', (req, res) => {
     res.status(204).send();
 })
 
-
+/* exports */
 module.exports = adminRouter;

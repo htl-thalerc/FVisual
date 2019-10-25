@@ -1,3 +1,5 @@
+'use strict';
+
 /* ************************************************************************* */
 /*                             stuetzpunkt-router.js                         */
 /*                                                                           */
@@ -10,7 +12,7 @@
 /*  PUT     | /stuetzpunkte/:stuetzId                                        */
 /*  DELETE  | /stuetzpunkte/:stuetzId                                        */
 /*  GET     | /stuetzpunkte/:stuetzId/mitglieder                             */
-/*  GET     | /stuetzpunkte/:stuetzId/mitglieder/;mitglId                    */
+/*  GET     | /stuetzpunkte/:stuetzId/mitglieder/:mitglId                    */
 /*  POST    | /stuetzpunkte/:stuetzId/mitglieder                             */
 /*  PUT     | /stuetzpunkte/:stuetzId/mitglieder/:mitglId                    */
 /*  DELETE  | /stuetzpunkte/:stuetzId/mitglieder/:mitglId                    */
@@ -21,9 +23,11 @@
 /*  DELETE  | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId                       */
 /*                                                                           */
 /* ************************************************************************* */
-'use strict';
 
+/* node modules */
 const express = require('express');
+
+/* local variables */
 const stuetzpunktRouter = express.Router();
 
 // GET    | /stuetzpunkte
@@ -101,4 +105,5 @@ stuetzpunktRouter.delete('/:stuetzId/fahrzeuge/:fzgId', (req, res) => {
     res.status(200).send('{"working": "fine"}');
 });
 
+/* exports */
 module.exports = stuetzpunktRouter;
