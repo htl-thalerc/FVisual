@@ -11,9 +11,27 @@ DROP TABLE EKraft_wb_Einsatz CASCADE CONSTRAINTS;
 DROP TABLE Mtg_wb_Einsatz CASCADE CONSTRAINTS;
 DROP TABLE FZG_wb_Einsatz CASCADE CONSTRAINTS;
 
+DROP SEQUENCE seq_Einsatzarten;
+DROP SEQUENCE seq_Einsatzcodes;
+DROP SEQUENCE seq_Dienstgrade;
+DROP SEQUENCE seq_Andere_Organisationen;
+DROP SEQUENCE seq_Stuetzpunkte;
+DROP SEQUENCE seq_Mitglieder;
+DROP SEQUENCE seq_Einsatzfahrzeuge;
+DROP SEQUENCE seq_Einsaetze;
+
+CREATE SEQUENCE seq_Einsatzarten START WITH 1;
+CREATE SEQUENCE seq_Einsatzcodes START WITH 1;
+CREATE SEQUENCE seq_Dienstgrade START WITH 1;
+CREATE SEQUENCE seq_Andere_Organisationen START WITH 1;
+CREATE SEQUENCE seq_Stuetzpunkte START WITH 1;
+CREATE SEQUENCE seq_Mitglieder START WITH 1;
+CREATE SEQUENCE seq_Einsatzfahrzeuge START WITH 1;
+CREATE SEQUENCE seq_Einsaetze START WITH 1;
+
 CREATE TABLE Einsatzarten
 (
-  id           INTEGER,
+  id          INTEGER,
   beschreibung VARCHAR(100),
   CONSTRAINT pk_Einsatzarten PRIMARY KEY (id),
   CONSTRAINT uq_Einsatzart UNIQUE(beschreibung)
@@ -133,14 +151,14 @@ CREATE TABLE FZG_wb_Einsatz
   CONSTRAINT fk_FZG_wb_Einsatz_EKraft FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
 );
 
-INSERT INTO Einsatzarten VALUES(1, 'Verkehrsunfall');
-INSERT INTO Einsatzarten VALUES(2, 'Brandeinsatz');
-INSERT INTO Einsatzarten VALUES(3, 'Technischer Einsatz');
-INSERT INTO Einsatzarten VALUES(4, 'Hilfeleistung');
-INSERT INTO Einsatzarten VALUES(5, 'Technische Hilfeleistung');
-INSERT INTO Einsatzarten VALUES(6, 'Personensuche');
-INSERT INTO Einsatzarten VALUES(7, 'Brandmeldealarm');
-INSERT INTO Einsatzarten VALUES(8, 'Wespen / Hornissen / Bienen');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Verkehrsunfall');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Brandeinsatz');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Technischer Einsatz');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Hilfeleistung');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Technische Hilfeleistung');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Personensuche');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Brandmeldealarm');
+INSERT INTO Einsatzarten VALUES(seq_Einsatzarten.nextval, 'Wespen / Hornissen / Bienen');
 
 INSERT INTO Einsatzcodes VALUES (1, 'T KDO');
 INSERT INTO Einsatzcodes VALUES (2, 'T 0');
@@ -189,8 +207,6 @@ INSERT INTO Einsatzcodes VALUES (43, 'FLUGNOT 2');
 INSERT INTO Stuetzpunkte VALUES(1, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800,  'St. Peter', 47);
 INSERT INTO Stuetzpunkte VALUES(2, 'Feuerwehr Olsach-Molzbichl', 'Rothenthurn', 9701, 'Molzbichl', 67 );
 
-SELECT * FROM Stuetzpunkte;
-
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (1, 1, 'KRFA');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (2, 1, 'TLFA-2000');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (3, 1, 'LF-A');
@@ -213,5 +229,6 @@ INSERT INTO DIENSTGRADE VALUES (10, 'HBM', 'Hauptbrandmeister');
 INSERT INTO DIENSTGRADE VALUES (11, 'BI', 'Brandinspektor');
 INSERT INTO DIENSTGRADE VALUES (12, 'OBI', 'Oberbrandinspektor');
 INSERT INTO DIENSTGRADE VALUES (13, 'HBI', 'Hauptbrandinspektor');
+
 
 COMMIT;
