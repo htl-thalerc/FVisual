@@ -39,6 +39,10 @@ public class ControllerBaseManagement implements Initializable {
 	 * Loads for Tab 'Create New Base' the Content
 	 */
 	private void initTabCreateNewBase() {
-
+		try {
+			this.tabCreateNewBase.setContent(FXMLLoader.load(getClass().getResource("/gui/CreateBase.fxml")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

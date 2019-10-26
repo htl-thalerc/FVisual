@@ -105,25 +105,20 @@
                               <Insets right="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowNameData" GridPane.columnIndex="1">
+                        <Label fx:id="lbShowNameData" text="No Data available - Select Base" GridPane.columnIndex="1">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowPlzAndPlaceData" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="lbShowPlzAndPlaceData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowAddressData" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label fx:id="lbShowAddressData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
-                        </Label>
-                        <Label GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
                         </Label>
                         <Button fx:id="btnLoadVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadVehicles" text="Load Vehicles" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                            <GridPane.margin>
