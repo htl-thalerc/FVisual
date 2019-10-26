@@ -84,4 +84,9 @@ public class Base {
 	public CheckBox getSelection() {
 		return selection;
 	}
+	
+	@Override
+	public String toString() {
+		return this.selection.isSelected() + ", " + this.baseId + ", " + this.name + ", " + this.place + ", " + this.plz + ", " + this.street + ", " + this.houseNr;
+	}
 }

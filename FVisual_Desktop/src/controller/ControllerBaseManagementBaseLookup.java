@@ -1,11 +1,11 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import bll.Base;
 import bll.OperationVehicle;
-import bll.TableViewRowData;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +26,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
 	private TableView<Base> tvBaseData;
 	@FXML
-	private TableView<TableViewRowData> tvVehicleData;
+	private TableView<OperationVehicle> tvVehicleData;
 	@FXML
 	private Label lbShowNameData;
 	@FXML
@@ -35,8 +35,13 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private Label lbShowAddressData;
 	@FXML
 	private Button btnLoadVehicles;
-	
-	private ObservableList<TableViewRowData> obsListTVVehicles = null;
+	@FXML
+	private Button btnSelectAllOrNone;
+	@FXML
+	private TableColumn<Base, String> columnSelection;
+
+	private ObservableList<Base> obsListTVBaseData = null;
+	private ObservableList<OperationVehicle> obsListTVVehicles = null;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -49,14 +54,13 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewBase() {
-		TableColumn<Base, String> columnSelection = new TableColumn<Base, String>("");
 		TableColumn<Base, String> columnName = new TableColumn<Base, String>("Name");
 		TableColumn<Base, String> columnPlace = new TableColumn<Base, String>("Place");
 		TableColumn<Base, Number> columnPlz = new TableColumn<Base, Number>("Plz");
 		TableColumn<Base, String> columnStreet = new TableColumn<Base, String>("Street");
 		TableColumn<Base, Number> columnHouseNr = new TableColumn<Base, Number>("Nr");
 
-		columnSelection.setCellValueFactory(new PropertyValueFactory<Base, String>("selection"));
+		this.columnSelection.setCellValueFactory(new PropertyValueFactory<Base, String>("selection"));
 		columnName.setCellValueFactory(new PropertyValueFactory<Base, String>("name"));
 		columnPlace.setCellValueFactory(new PropertyValueFactory<Base, String>("place"));
 		columnPlz.setCellValueFactory(new PropertyValueFactory<Base, Number>("plz"));
@@ -64,58 +68,62 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		columnHouseNr.setCellValueFactory(new PropertyValueFactory<Base, Number>("houseNr"));
 
 		this.tvBaseData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 3.5);
+		this.columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 10);
 		columnName.setMaxWidth(1f * Integer.MAX_VALUE * 32.5);
 		columnPlace.setMaxWidth(1f * Integer.MAX_VALUE * 31);
 		columnPlz.setMaxWidth(1f * Integer.MAX_VALUE * 8);
 		columnStreet.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnHouseNr.setMaxWidth(1f * Integer.MAX_VALUE * 5);
 
-		this.tvBaseData.getColumns().addAll(columnSelection, columnName, columnPlace, columnPlz, columnStreet,
-				columnHouseNr);
+		this.tvBaseData.getColumns().addAll(columnName, columnPlace, columnPlz, columnStreet, columnHouseNr);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewVehicle() {
-		TableColumn<TableViewRowData, CheckBox> columnSelection = new TableColumn<TableViewRowData, CheckBox>("");
-		TableColumn<TableViewRowData, String> columnNickname = new TableColumn<TableViewRowData, String>("Nickname");
-		TableColumn<TableViewRowData, String> columnCorrespondingBase = new TableColumn<TableViewRowData, String>("Corresponding Base");
+		TableColumn<OperationVehicle, CheckBox> columnSelection = new TableColumn<OperationVehicle, CheckBox>("");
+		TableColumn<OperationVehicle, String> columnVehicleDescription = new TableColumn<OperationVehicle, String>(
+				"Description");
+		TableColumn<OperationVehicle, String> columnCorrespondingBase = new TableColumn<OperationVehicle, String>(
+				"Corresponding Base");
 
-		//columnSelection.setCellValueFactory(cellData -> cellData.getValue().getVehicle().getSelection());
-		columnNickname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVehicle().getDescription()));
-		columnCorrespondingBase.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
+		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<OperationVehicle, String>("description"));
+		columnVehicleDescription
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
+		columnCorrespondingBase
+				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
 
 		this.tvVehicleData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 3.5);
-		columnNickname.setMaxWidth(1f * Integer.MAX_VALUE * 51.5);
+		columnVehicleDescription.setMaxWidth(1f * Integer.MAX_VALUE * 51.5);
 		columnCorrespondingBase.setMaxWidth(1f * Integer.MAX_VALUE * 45);
 
-		this.tvVehicleData.getColumns().addAll(columnSelection, columnNickname, columnCorrespondingBase);
+		this.tvVehicleData.getColumns().addAll(columnSelection, columnVehicleDescription, columnCorrespondingBase);
 	}
 
 	private void fillTableViews() {
-		ObservableList<Base> obsListTVBaseData = FXCollections.observableArrayList();
-		
-		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.","2");
-		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg", "17");
-
-		obsListTVBaseData.add(b1);
-		obsListTVBaseData.add(b2);
-
-		this.tvBaseData.setItems(obsListTVBaseData);
-		
+		this.obsListTVBaseData = FXCollections.observableArrayList();
 		this.obsListTVVehicles = FXCollections.observableArrayList();
 
-		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 1, "KRFA", b1)));
-		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 2, "TLFA-2000", b1)));
-		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 3, "LF-A", b1)));
-		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 4, "RTB-50", b1)));
-		obsListTVVehicles.add(new TableViewRowData(b1, new OperationVehicle(new CheckBox(), 5, "Ölwehranhänger", b1)));
-		obsListTVVehicles.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 6, "TLFA-4000", b2)));
-		obsListTVVehicles.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 7, "LFA", b2)));
-		obsListTVVehicles.add(new TableViewRowData(b2, new OperationVehicle(new CheckBox(), 8, "Katastrophenschutzanhänger", b2)));
+		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.",
+				"2");
+		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg",
+				"17");
 
-		this.tvVehicleData.setItems(obsListTVVehicles);
+		this.obsListTVBaseData.add(b1);
+		this.obsListTVBaseData.add(b2);
+
+		this.tvBaseData.setItems(this.obsListTVBaseData);
+
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 1, "KRFA", b1));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 2, "TLFA-2000", b1));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 3, "LF-A", b1));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 4, "RTB-50", b1));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 5, "Ölwehranhänger", b1));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 6, "TLFA-4000", b2));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 7, "LFA", b2));
+		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 8, "Katastrophenschutzanhänger", b2));
+
+		this.tvVehicleData.setItems(this.obsListTVVehicles);
 	}
 
 	private void initTableViewBaseListener() {
@@ -136,18 +144,46 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private void initTableViewVehicleListener() {
 
 	}
-	
-	@FXML private void onClickBtnLoadVehicles(ActionEvent aE) {
-		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
-		ObservableList<TableViewRowData> filteredCollOfVehicles = FXCollections.observableArrayList();
-		if(selectedBase != null) {
-			ObservableList<TableViewRowData> collOfAllVehicles = this.obsListTVVehicles.sorted();
-			for(int i=0;i<collOfAllVehicles.size();i++) {
-				if(collOfAllVehicles.get(i).getBase().getBaseId() == selectedBase.getBaseId()) {
-					filteredCollOfVehicles.add(collOfAllVehicles.get(i));
+
+	@FXML
+	private void onClickBtnLoadVehicles(ActionEvent aE) {
+		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
+		ObservableList<OperationVehicle> collOfAllVehicles = this.obsListTVVehicles.sorted();
+		ObservableList<OperationVehicle> filteredCollOfVehicles = FXCollections.observableArrayList();
+		ArrayList<Base> collOfAllSelectedBases = new ArrayList<Base>();
+
+		for (int i = 0; i < collOfAllBases.size(); i++) {
+			if (collOfAllBases.get(i).getSelection().isSelected()) {
+				collOfAllSelectedBases.add(collOfAllBases.get(i));
+			}
+		}
+		if (collOfAllSelectedBases.size() >= 1) {
+			for (int j = 0; j < collOfAllSelectedBases.size(); j++) {
+				for (int i = 0; i < collOfAllVehicles.size(); i++) {
+					if (collOfAllVehicles.get(i).getBase().getBaseId() == collOfAllSelectedBases.get(j).getBaseId()) {
+						filteredCollOfVehicles.add(collOfAllVehicles.get(i));
+					}
 				}
 			}
 			this.tvVehicleData.setItems(filteredCollOfVehicles);
+		} else {
+			this.tvVehicleData.setItems(collOfAllVehicles);
+		}
+	}
+
+	@FXML
+	private void onClickBtnSelectAllOrNone(ActionEvent aE) {
+		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
+		if (btnSelectAllOrNone.getText().equals("All")) {
+			btnSelectAllOrNone.setText("None");
+			for (int i = 0; i < collOfAllBases.size(); i++) {
+				collOfAllBases.get(i).getSelection().setSelected(true);
+			}
+		} else {
+			btnSelectAllOrNone.setText("All");
+			for (int i = 0; i < collOfAllBases.size(); i++) {
+				collOfAllBases.get(i).getSelection().setSelected(false);
+			}
 		}
 	}
 }

@@ -16,7 +16,7 @@ public class OperationVehicle {
 		this.base = base;
 	}
 	
-	public OperationVehicle(CheckBox selection, int operationVehicleId, String nickname, Base base) {
+	public OperationVehicle(CheckBox selection, int operationVehicleId, String description, Base base) {
 		super();
 		this.selection = selection;
 		this.operationVehicleId = operationVehicleId;
