@@ -19,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import manager.BaseManager;
+import manager.OperationVehicleManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -101,9 +103,14 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void fillTableViews() {
+		/*
+		 * this.obsListTVBaseData = FXCollections.observableArrayList(BaseManager.getInstance().getBases());
+		 * this.obsListTVVehicles = FXCollections.observableArrayList(OperationVehicleManager.getInstance().getOperationVehicles());
+		 */
+
 		this.obsListTVBaseData = FXCollections.observableArrayList();
 		this.obsListTVVehicles = FXCollections.observableArrayList();
-
+		
 		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.",
 				"2");
 		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg",

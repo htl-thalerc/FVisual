@@ -2,7 +2,7 @@ package bll;
 
 import javafx.scene.control.CheckBox;
 
-public class Base {
+public class Base implements Comparable<Base> {
 	private int baseId;
 	private String name;
 	private String place;
@@ -83,6 +83,11 @@ public class Base {
 	
 	public CheckBox getSelection() {
 		return selection;
+	}
+	
+	@Override
+	public int compareTo(Base obj) {
+		return this.name.compareTo(obj.name);
 	}
 	
 	@Override
