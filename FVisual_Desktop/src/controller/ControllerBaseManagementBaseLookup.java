@@ -123,7 +123,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 7, "LFA", b2));
 		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 8, "Katastrophenschutzanhänger", b2));
 
-		this.tvVehicleData.setItems(this.obsListTVVehicles);
+		this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
 	}
 
 	private void initTableViewBaseListener() {

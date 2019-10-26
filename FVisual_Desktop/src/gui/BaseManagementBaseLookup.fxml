@@ -60,7 +60,7 @@
                <columns>
                   <TableColumn fx:id="columnSelection" maxWidth="55.0" prefWidth="55.0">
                      <graphic>
-                        <Button fx:id="btnSelectAllOrNone" mnemonicParsing="false" onAction="#onClickBtnSelectAllOrNone" text="All" />
+                        <Button fx:id="btnSelectAllOrNone" maxWidth="55.0" mnemonicParsing="false" onAction="#onClickBtnSelectAllOrNone" prefWidth="55.0" text="All" />
                      </graphic>
                   </TableColumn>
                </columns>
@@ -105,17 +105,17 @@
                               <Insets right="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowNameData" style="-fx-font-weight: bold" GridPane.columnIndex="1">
+                        <Label fx:id="lbShowNameData" GridPane.columnIndex="1">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowPlzAndPlaceData" style="-fx-font-weight: bold" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="lbShowPlzAndPlaceData" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowAddressData" style="-fx-font-weight: bold" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label fx:id="lbShowAddressData" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
