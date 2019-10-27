@@ -6,8 +6,8 @@
 /*  HTTP Endpoints for the base - REST API                                   */
 /*                                                                           */
 /*  Method  |  URL                                                           */
-//loginmanagement
-//loginandroid
+/*  POST    |  /loginmanagement                                              */
+/*  POST    |  /loginandroid                                                 */
 /*  GET     |  /einsatzarten                                                 */
 /*  GET     |  /einsatzcodes                                                 */
 /*  GET     |  /dienstgrade                                                  */
