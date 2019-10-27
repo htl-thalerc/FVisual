@@ -13,12 +13,12 @@ module.exports.AORGS_POST = "INSERT INTO Andere_Organisationen(id, name) VALUES(
 module.exports.AORGS_PUT = "UPDATE Andere_Organisationen SET name = :1 WHERE id = :2";
 module.exports.AORGS_DELETE = "DELETE FROM Andere_Organisationen WHERE id = :1";
 
-module.exports.STPNKT_GET = "";
-module.exports.STPNKT_GETBY_STPNKT_ID = "";
-module.exports.STPNKT_GETBY_STPNKT_NAME = "";
-module.exports.STPNKT_POST = "";
-module.exports.STPNKT_PUT = "";
-module.exports.STPNKT_DELETE = "";
+module.exports.STPNKT_GET = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte";
+module.exports.STPNKT_GETBY_STPNKT_ID = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE id = :1";
+module.exports.STPNKT_GETBY_STPNKT_NAME = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE name = :1";
+module.exports.STPNKT_POST = "INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, :1, :2, :3,  :4, :5)";
+module.exports.STPNKT_PUT = "UPDATE Stuetzpunkte SET name= :1, ort= :2, plz = :3, strasse = :4, hausnr = :5 WHERE id = :6";
+module.exports.STPNKT_DELETE = "DELETE FROM Stuetzpunkte WHERE id = :1";
 
 module.exports.MTGA_ADMIN_GET = "";
 module.exports.MTGA_ADMIN_GET_BY_MTGA_ID = "";

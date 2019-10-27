@@ -7,8 +7,8 @@
 /*                                                                           */
 /*  Method  |  URL                                                           */
 /*  GET     |  /einsaetze                                                    */
-/*  GET     |  /einsaetze?                                                   */
-/*  GET     |  /einsaetze/:eId                                               */
+/*  GET     |  /einsaetze?id=eId                                             */
+/*  GET     |  /einsaetze?id=eName&eZeit                                     */
 /*  POST    |  /einsaetze                                                    */
 /*  PUT     |  /einsaetze/:eId                                               */
 /*  DELETE  |  /einsaetze/:eId                                               */
@@ -33,16 +33,10 @@ const express = require('express');
 /* local variables */
 const einsatzRouter = express.Router();
 
-/**
- * GET    |  /einsaetze
- * GET    |  /einsaetze?
- */
+// GET     |  /einsaetze
+// GET     |  /einsaetze?id=eId
+// GET     |  /einsaetze?id=eName&eZeit
 einsatzRouter.get('/', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
-});
-
-// GET    |  /einsaetze/:eId
-einsatzRouter.get('/:eId', (req, res) => {
     res.status(200).send('{"working": "fine"}');
 });
 

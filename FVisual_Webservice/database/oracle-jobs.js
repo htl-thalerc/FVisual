@@ -8,7 +8,12 @@ oracledb.autoCommit = true;
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 const usn = `d5a20`;
 const pwd = `d5a`;
-const cStr = `10.0.6.111:1521/ora11g`;
+
+//intern
+//const cStr = `10.0.6.111:1521/ora11g`;
+
+//extern
+const cStr = `212.152.179.117:1521/ora11g`;
 
 /* single execute */
 var execute = async function (querystring, params, cbf) {

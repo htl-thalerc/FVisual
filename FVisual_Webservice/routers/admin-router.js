@@ -5,7 +5,8 @@
 /*                                                                           */
 /*  Method  |  URL                                                           */
 /*  GET     |  /admin                                                        */
-/*  GET     |  /admin?search                                                 */
+/*  GET     |  /admin?id=admId                                               */
+/*  GET     |  /admin?id=admName                                             */
 /*  GET     |  /admin/:userId                                                */
 /*  POST    |  /admin                                                        */
 /*  PUT     |  /admin/:userId                                                */
@@ -21,18 +22,13 @@ const express = require('express');
 /* local variables */
 const adminRouter = express.Router();
 
-/**
- * GET    | /admin
- * GET    | /admin?search
- */
+/*  GET     |  /admin                                                        */
+/*  GET     |  /admin?id=admId                                               */
+/*  GET     |  /admin?id=admName                                             */
 adminRouter.get('/', (req, res) => {
     res.status(200).send('{"subquery": "fine"}');
 });
 
-// GET    | /admin/:userId
-adminRouter.get('/:userId', (req, res) => {
-    res.status(200).send('found: ' + req.params.userId);
-});
 
 // POST   | /admin
 adminRouter.post('/', (req, res) => {
