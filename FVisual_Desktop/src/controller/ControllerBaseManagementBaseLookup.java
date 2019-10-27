@@ -45,6 +45,12 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private ObservableList<Base> obsListTVBaseData = null;
 	private ObservableList<OperationVehicle> obsListTVVehicles = null;
 
+	private ControllerBaseManagement controllerBaseManagement;
+
+	public ControllerBaseManagementBaseLookup(ControllerBaseManagement controllerBaseManagement) {
+		this.controllerBaseManagement = controllerBaseManagement;
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initTableViewBase();
@@ -104,13 +110,16 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	private void fillTableViews() {
 		/*
-		 * this.obsListTVBaseData = FXCollections.observableArrayList(BaseManager.getInstance().getBases());
-		 * this.obsListTVVehicles = FXCollections.observableArrayList(OperationVehicleManager.getInstance().getOperationVehicles());
+		 * this.obsListTVBaseData =
+		 * FXCollections.observableArrayList(BaseManager.getInstance().getBases());
+		 * this.obsListTVVehicles =
+		 * FXCollections.observableArrayList(OperationVehicleManager.getInstance().
+		 * getOperationVehicles());
 		 */
 
 		this.obsListTVBaseData = FXCollections.observableArrayList();
 		this.obsListTVVehicles = FXCollections.observableArrayList();
-		
+
 		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.",
 				"2");
 		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg",

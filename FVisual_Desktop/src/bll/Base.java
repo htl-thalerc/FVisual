@@ -92,6 +92,6 @@ public class Base implements Comparable<Base> {
 	
 	@Override
 	public String toString() {
-		return this.selection.isSelected() + ", " + this.baseId + ", " + this.name + ", " + this.place + ", " + this.plz + ", " + this.street + ", " + this.houseNr;
+		return this.baseId + ", " + this.name + ", " + this.place + ", " + this.plz + ", " + this.street + ", " + this.houseNr;
 	}
 }

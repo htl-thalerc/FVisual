@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import app.Helper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,10 +14,9 @@ import javafx.scene.control.TabPane;
 public class ControllerBaseManagement implements Initializable {
 	@FXML
 	private TabPane mainTabPaneBaseManagement;
-	@FXML
-	private Tab tabBaseLookup;
-	@FXML
-	private Tab tabCreateNewBase;
+
+	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup;
+	private ControllerCreateBase controllerCreateBase;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -28,21 +28,35 @@ public class ControllerBaseManagement implements Initializable {
 	 * Loads for Tab 'Base Lookup' the Content
 	 */
 	private void initTabBaseLookup() {
+		FXMLLoader loader = Helper.loadFXML("/gui/BaseManagementBaseLookup.fxml");
+		Tab tabBaseLookup = new Tab();
+		tabBaseLookup.setText("Base Lookup");
+		this.controllerBaseManagementBaseLookup = new ControllerBaseManagementBaseLookup(this);
+		loader.setController(this.controllerBaseManagementBaseLookup);
+
 		try {
-			this.tabBaseLookup.setContent(FXMLLoader.load(getClass().getResource("/gui/BaseManagementBaseLookup.fxml")));
-		} catch (IOException e) {
+			tabBaseLookup.setContent(loader.load());
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+		this.mainTabPaneBaseManagement.getTabs().add(tabBaseLookup);
 	}
 
 	/**
 	 * Loads for Tab 'Create New Base' the Content
 	 */
 	private void initTabCreateNewBase() {
+		FXMLLoader loader = Helper.loadFXML("/gui/CreateBase.fxml");
+		Tab tabCreateBase = new Tab();
+		tabCreateBase.setText("Create Base");
+		this.controllerCreateBase = new ControllerCreateBase(this);
+		loader.setController(this.controllerCreateBase);
+
 		try {
-			this.tabCreateNewBase.setContent(FXMLLoader.load(getClass().getResource("/gui/CreateBase.fxml")));
-		} catch (IOException e) {
+			tabCreateBase.setContent(loader.load());
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+		this.mainTabPaneBaseManagement.getTabs().add(tabCreateBase);
 	}
 }

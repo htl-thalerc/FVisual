@@ -17,6 +17,12 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 	@FXML private Button btnAddEnteredVehicle;
 	@FXML private TextField tfDescription;
 	
+	private ControllerCreateBase controllerCreateBase;
+	
+	public ControllerCreateBaseTabOperationVehicle(ControllerCreateBase controllerCreateBase) {
+		this.controllerCreateBase = controllerCreateBase;
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		
