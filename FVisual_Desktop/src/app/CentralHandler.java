@@ -2,12 +2,12 @@ package app;
 
 import javafx.fxml.FXMLLoader;
 
-public class Helper {
-	private static Helper helper;
+public class CentralHandler {
+	private static CentralHandler helper;
 	
-	public static Helper getInstance() {
+	public static CentralHandler getInstance() {
 		if(helper == null) {
-			helper = new Helper();
+			helper = new CentralHandler();
 		}
 		return helper;
 	}

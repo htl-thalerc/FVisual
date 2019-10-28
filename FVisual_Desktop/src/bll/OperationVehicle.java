@@ -66,4 +66,9 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 
 	    return this.base.getName().compareTo(obj.getBase().getName());
 	}
+	
+	@Override
+	public String toString() {
+		return this.description;
+	}
 }

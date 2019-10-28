@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import app.Helper;
+import app.CentralHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -28,7 +28,7 @@ public class ControllerBaseManagement implements Initializable {
 	 * Loads for Tab 'Base Lookup' the Content
 	 */
 	private void initTabBaseLookup() {
-		FXMLLoader loader = Helper.loadFXML("/gui/BaseManagementBaseLookup.fxml");
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseManagementBaseLookup.fxml");
 		Tab tabBaseLookup = new Tab();
 		tabBaseLookup.setText("Base Lookup");
 		this.controllerBaseManagementBaseLookup = new ControllerBaseManagementBaseLookup(this);
@@ -46,7 +46,7 @@ public class ControllerBaseManagement implements Initializable {
 	 * Loads for Tab 'Create New Base' the Content
 	 */
 	private void initTabCreateNewBase() {
-		FXMLLoader loader = Helper.loadFXML("/gui/CreateBase.fxml");
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBase.fxml");
 		Tab tabCreateBase = new Tab();
 		tabCreateBase.setText("Create Base");
 		this.controllerCreateBase = new ControllerCreateBase(this);

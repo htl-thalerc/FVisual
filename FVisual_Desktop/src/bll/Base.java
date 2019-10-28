@@ -6,29 +6,29 @@ public class Base implements Comparable<Base> {
 	private int baseId;
 	private String name;
 	private String place;
-	private int plz;
+	private int postCode;
 	private String street;
 	private String houseNr;
 	
 	private CheckBox selection;
 	
-	public Base(int baseId, String name, String place, int plz, String street, String houseNr) {
+	public Base(int baseId, String name, String place, int postCode, String street, String houseNr) {
 		super();
 		this.baseId = baseId;
 		this.name = name;
 		this.place = place;
-		this.plz = plz;
+		this.postCode = postCode;
 		this.street = street;
 		this.houseNr = houseNr;
 	}
 	
-	public Base(CheckBox selection, int baseId, String name, String place, int plz, String street, String houseNr) {
+	public Base(CheckBox selection, int baseId, String name, String place, int postCode, String street, String houseNr) {
 		super();
 		this.selection = selection;
 		this.baseId = baseId;
 		this.name = name;
 		this.place = place;
-		this.plz = plz;
+		this.postCode = postCode;
 		this.street = street;
 		this.houseNr = houseNr;
 	}
@@ -57,12 +57,12 @@ public class Base implements Comparable<Base> {
 		this.place = place;
 	}
 
-	public int getPlz() {
-		return plz;
+	public int getPostCode() {
+		return postCode;
 	}
 
-	public void setPlz(int plz) {
-		this.plz = plz;
+	public void setPostCode(int postCode) {
+		this.postCode = postCode;
 	}
 
 	public String getStreet() {
@@ -92,6 +92,6 @@ public class Base implements Comparable<Base> {
 	
 	@Override
 	public String toString() {
-		return this.baseId + ", " + this.name + ", " + this.place + ", " + this.plz + ", " + this.street + ", " + this.houseNr;
+		return this.baseId + ", " + this.name + ", " + this.place + ", " + this.postCode + ", " + this.street + ", " + this.houseNr;
 	}
 }

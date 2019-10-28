@@ -76,7 +76,7 @@
                <children>
                   <GridPane>
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="20.0" prefWidth="30.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -95,7 +95,7 @@
                               <Insets right="5.0" />
                            </padding>
                         </Label>
-                        <Label style="-fx-font-weight: bold;" text="Plz and Place" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                        <Label style="-fx-font-weight: bold;" text="Postcode and Place" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                            <padding>
                               <Insets right="5.0" />
                            </padding>
@@ -110,7 +110,7 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="lbShowPlzAndPlaceData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="lbShowPostcodeAndPlaceData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="5.0" />
                            </padding>

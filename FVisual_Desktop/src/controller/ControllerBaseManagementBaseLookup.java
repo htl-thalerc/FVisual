@@ -32,7 +32,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
 	private Label lbShowNameData;
 	@FXML
-	private Label lbShowPlzAndPlaceData;
+	private Label lbShowPostcodeAndPlaceData;
 	@FXML
 	private Label lbShowAddressData;
 	@FXML
@@ -64,14 +64,14 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private void initTableViewBase() {
 		TableColumn<Base, String> columnName = new TableColumn<Base, String>("Name");
 		TableColumn<Base, String> columnPlace = new TableColumn<Base, String>("Place");
-		TableColumn<Base, Number> columnPlz = new TableColumn<Base, Number>("Plz");
+		TableColumn<Base, Number> columnPostCode = new TableColumn<Base, Number>("Postcode");
 		TableColumn<Base, String> columnStreet = new TableColumn<Base, String>("Street");
 		TableColumn<Base, Number> columnHouseNr = new TableColumn<Base, Number>("Nr");
 
 		this.columnSelection.setCellValueFactory(new PropertyValueFactory<Base, String>("selection"));
 		columnName.setCellValueFactory(new PropertyValueFactory<Base, String>("name"));
 		columnPlace.setCellValueFactory(new PropertyValueFactory<Base, String>("place"));
-		columnPlz.setCellValueFactory(new PropertyValueFactory<Base, Number>("plz"));
+		columnPostCode.setCellValueFactory(new PropertyValueFactory<Base, Number>("postCode"));
 		columnStreet.setCellValueFactory(new PropertyValueFactory<Base, String>("street"));
 		columnHouseNr.setCellValueFactory(new PropertyValueFactory<Base, Number>("houseNr"));
 
@@ -79,11 +79,11 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 10);
 		columnName.setMaxWidth(1f * Integer.MAX_VALUE * 32.5);
 		columnPlace.setMaxWidth(1f * Integer.MAX_VALUE * 31);
-		columnPlz.setMaxWidth(1f * Integer.MAX_VALUE * 8);
+		columnPostCode.setMaxWidth(1f * Integer.MAX_VALUE * 8);
 		columnStreet.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnHouseNr.setMaxWidth(1f * Integer.MAX_VALUE * 5);
 
-		this.tvBaseData.getColumns().addAll(columnName, columnPlace, columnPlz, columnStreet, columnHouseNr);
+		this.tvBaseData.getColumns().addAll(columnName, columnPlace, columnPostCode, columnStreet, columnHouseNr);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -153,7 +153,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	private void showBaseData(Base selectedBase) {
 		this.lbShowNameData.setText(selectedBase.getName());
-		this.lbShowPlzAndPlaceData.setText(selectedBase.getPlz() + ", " + selectedBase.getPlace());
+		this.lbShowPostcodeAndPlaceData.setText(selectedBase.getPostCode() + ", " + selectedBase.getPlace());
 		this.lbShowAddressData.setText(selectedBase.getStreet() + ", " + selectedBase.getHouseNr());
 	}
 
@@ -190,13 +190,13 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
 	private void onClickBtnSelectAllOrNone(ActionEvent aE) {
 		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
-		if (btnSelectAllOrNone.getText().equals("All")) {
-			btnSelectAllOrNone.setText("None");
+		if (this.btnSelectAllOrNone.getText().equals("All")) {
+			this.btnSelectAllOrNone.setText("None");
 			for (int i = 0; i < collOfAllBases.size(); i++) {
 				collOfAllBases.get(i).getSelection().setSelected(true);
 			}
 		} else {
-			btnSelectAllOrNone.setText("All");
+			this.btnSelectAllOrNone.setText("All");
 			for (int i = 0; i < collOfAllBases.size(); i++) {
 				collOfAllBases.get(i).getSelection().setSelected(false);
 			}

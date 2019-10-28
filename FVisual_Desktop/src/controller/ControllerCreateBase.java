@@ -2,10 +2,13 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import app.Helper;
+import app.CentralHandler;
 import bll.Base;
+import bll.OperationVehicle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +37,8 @@ public class ControllerCreateBase implements Initializable {
 
 	private Tab tabBase;
 	private Tab tabOperationVehicle;
+	
+	private Base createdBase = null;
 
 	public ControllerCreateBase(ControllerBaseManagement controllerBaseManagement) {
 		this.controllerBaseManagement = controllerBaseManagement;
@@ -55,7 +60,7 @@ public class ControllerCreateBase implements Initializable {
 	}
 
 	private void initPaneBase() {
-		FXMLLoader loader = Helper.loadFXML("/gui/CreateBaseTabBase.fxml");
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBaseTabBase.fxml");
 		this.tabBase = new Tab();
 		this.tabBase.setText("Base");
 		this.controllerCreateBaseTabBase = new ControllerCreateBaseTabBase(this);
@@ -70,7 +75,7 @@ public class ControllerCreateBase implements Initializable {
 	}
 
 	private void initPaneOperationVehicle() {
-		FXMLLoader loader = Helper.loadFXML("/gui/CreateBaseTabOperationVehicle.fxml");
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBaseTabOperationVehicle.fxml");
 		this.tabOperationVehicle = new Tab();
 		this.tabOperationVehicle.setText("Operationvehicle");
 		this.controllerCreateBaseTabOperationVehicle = new ControllerCreateBaseTabOperationVehicle(this);
@@ -113,14 +118,20 @@ public class ControllerCreateBase implements Initializable {
 		this.tabPaneBase.getSelectionModel().select(this.tabOperationVehicle);
 		this.btnNext.setDisable(true);
 		this.btnBack.setDisable(false);
+		this.setCreatedBase(this.controllerCreateBaseTabBase.getCreatedBaseData());
 	}
 
 	@FXML
 	private void onClickBtnFinish(ActionEvent aE) {
-		Base createdBase = this.controllerCreateBaseTabBase.getCreatedBaseData();
-
-		if (createdBase != null) {
+		this.setCreatedBase(this.controllerCreateBaseTabBase.getCreatedBaseData());
+		Base createdBase = this.getCreatedBase();
+		List<OperationVehicle> collOfCreateVehicles = this.controllerCreateBaseTabOperationVehicle.getCreatedVehicleData();
+		
+		if (createdBase != null && collOfCreateVehicles.size() != 0) {
 			System.out.println(createdBase.toString());
+			for(int i=0;i<collOfCreateVehicles.size();i++) {
+				System.out.println(collOfCreateVehicles.get(i).toString());
+			}
 		}
 	}
 
@@ -138,5 +149,13 @@ public class ControllerCreateBase implements Initializable {
 	
 	public void setTabOperationVehicleDisability(boolean isDiabled) {
 		this.tabOperationVehicle.setDisable(isDiabled);
+	}
+	
+	private void setCreatedBase(Base createdBase) {
+		this.createdBase = createdBase;
+	}
+	
+	public Base getCreatedBase() {
+		return this.createdBase;
 	}
 }
