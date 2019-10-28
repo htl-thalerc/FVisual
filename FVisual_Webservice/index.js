@@ -21,10 +21,11 @@ app.use(bodyParser.json());
 app.use(centralErrorHandler.errorHandler);
 
 /* public sector */
-app.use('/login', securityModule.login);
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.status(200).send('API up and running!');
 });
+
+app.use('/login', securityModule.login);
 
 /* security module */
 app.use(securityModule.authenticate);
@@ -36,6 +37,6 @@ app.use('/einsaetze', einsatzRouter);
 app.use('/stuetzpunkte', stuetzpunktRouter);
 
 /* run app */
-app.listen(PORT, function() {
+app.listen(PORT, function () {
     console.log(`API running on ${HOSTNAME}:${PORT}!`);
 });

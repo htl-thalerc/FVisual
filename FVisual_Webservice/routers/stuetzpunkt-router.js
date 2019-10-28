@@ -40,9 +40,9 @@ const stuetzpunktRouter = express.Router();
 // GET    | /stuetzpunkte?stuetzId
 // GET    | /stuetzpunkte?stuetzName
 stuetzpunktRouter.get('/', (req, res) => {
-    if(req.query.name)
+    if (req.query.name)
         oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.query.name], responseHandler.GET_DEFAULT(res));
-    else if(req.query.id)
+    else if (req.query.id)
         oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.query.id)], responseHandler.GET_DEFAULT(res));
     else
         oracleJobs.execute(oracleQueryProvider.STPNKT_GET, [], responseHandler.GET_DEFAULT(res));

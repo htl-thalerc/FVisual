@@ -2,7 +2,18 @@
 
 /* login */
 function login(req, res) {
-    res.status(200).send(req.body.username);
+    if (req.headers.flow == "mobile")
+        res.status(200).send({
+            "username": req.body.username,
+            "flow": req.headers.flow
+        });
+    else if (req.headers.flow == "management")
+        res.status(200).send({
+            "username": req.body.username,
+            "flow": req.headers.flow
+        });
+    else
+        res.status(400).send("invalid flow");
 }
 
 /* authenticate */
