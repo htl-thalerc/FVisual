@@ -77,6 +77,10 @@ stuetzpunktRouter.post('/:stuetzId/mitglieder', (req, res) => {
     res.status(200).send('{"working": "fine"}');
 });
 
+// UPDATE Mitglieder SET id_dienstgrad = :1, id_stuetzpunkt = :2, vorname = :3, nachname = :4;
+// UPDATE Mitglieder SET password = :1 WHERE id = :2 AND id_stuetzpunkt = :3;
+// UPDATE Mitglieder SET id = :1, id_dienstgrad = :1, id_stuetzpunkt = :1, vorname = :1, nachname = :1, isAdmin = :1 WHERE id = :2 AND id_stuetzpunkt = :3;
+
 // PUT    | /stuetzpunkte/:stuetzId/mitglieder/:mitglId
 stuetzpunktRouter.put('/:stuetzId/mitglieder/:mitglId', (req, res) => {
     res.status(200).send('{"working": "fine"}');
