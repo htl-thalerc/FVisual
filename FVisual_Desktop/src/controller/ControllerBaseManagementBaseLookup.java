@@ -109,13 +109,10 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void fillTableViews() {
-		/*
-		 * this.obsListTVBaseData =
-		 * FXCollections.observableArrayList(BaseManager.getInstance().getBases());
-		 * this.obsListTVVehicles =
-		 * FXCollections.observableArrayList(OperationVehicleManager.getInstance().
-		 * getOperationVehicles());
-		 */
+		
+		 //this.obsListTVBaseData = FXCollections.observableArrayList(BaseManager.getInstance().getBases());
+		 //this.obsListTVVehicles = FXCollections.observableArrayList(OperationVehicleManager.getInstance().getOperationVehicles());
+		
 
 		this.obsListTVBaseData = FXCollections.observableArrayList();
 		this.obsListTVVehicles = FXCollections.observableArrayList();
