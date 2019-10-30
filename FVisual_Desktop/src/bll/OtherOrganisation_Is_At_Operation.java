@@ -3,13 +3,13 @@ package bll;
 public class OtherOrganisation_Is_At_Operation {
 	private Operation operation;
 	private OtherOrganisation otherOrganisation;
-	
+
 	public OtherOrganisation_Is_At_Operation(Operation operation, OtherOrganisation otherOrganisation) {
 		super();
 		this.operation = operation;
 		this.otherOrganisation = otherOrganisation;
 	}
-	
+
 	public OtherOrganisation_Is_At_Operation() {
 		super();
 	}

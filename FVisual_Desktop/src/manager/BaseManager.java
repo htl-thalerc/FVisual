@@ -20,29 +20,30 @@ public class BaseManager {
 	private String resource = "http://192.168.191.148:3030/";
 	private WebTarget webTarget = client.target(resource);
 	private WebTarget webTargetBaseService = webTarget.path("stuetzpunkte");
-	
+
 	public static BaseManager getInstance() {
-		if(baseManagerInstance == null) {
+		if (baseManagerInstance == null) {
 			baseManagerInstance = new BaseManager();
 		}
 		return baseManagerInstance;
 	}
-	
+
 	public ArrayList<Base> getBases() {
 		ArrayList<Base> collOfBases = null;
 
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
-			try {
-				invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).header("authorization", "{'username':'heinzi','flow':'management'}");
-				response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
-				collOfBases = response.readEntity(new GenericType<ArrayList<Base>>() {
-				});
-			} catch (JsonSyntaxException ex) {
-				ex.printStackTrace();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}	
+		try {
+			invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).header("authorization",
+					"{'username':'heinzi','flow':'management'}");
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			collOfBases = response.readEntity(new GenericType<ArrayList<Base>>() {
+			});
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return collOfBases;
 	}
 }

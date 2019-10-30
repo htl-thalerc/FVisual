@@ -3,7 +3,7 @@ package bll;
 public class TableViewRowData {
 	private Base base;
 	private OperationVehicle vehicle;
-	
+
 	public TableViewRowData(Base base, OperationVehicle vehicle) {
 		super();
 		this.base = base;

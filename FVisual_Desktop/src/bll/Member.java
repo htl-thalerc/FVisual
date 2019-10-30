@@ -9,7 +9,7 @@ public class Member {
 	private boolean isAdmin;
 	private Base base;
 	private Rank rank;
-	
+
 	public Member(int memberId, String firstname, String lastname, String username, String password, boolean isAdmin,
 			Base base, Rank rank) {
 		super();
@@ -93,6 +93,7 @@ public class Member {
 
 	@Override
 	public String toString() {
-		return memberId + " - [" + firstname + ", "+ lastname + "] - [" + username + ", " + password + "] - " + isAdmin + " - " + base + " - " + rank;
+		return memberId + " - [" + firstname + ", " + lastname + "] - [" + username + ", " + password + "] - " + isAdmin
+				+ " - " + base + " - " + rank;
 	}
 }

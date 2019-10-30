@@ -1,10 +1,9 @@
 package app;
-	
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
 public class Main extends Application {
@@ -17,11 +16,11 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("FVisual Management Tool");
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}

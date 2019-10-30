@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -47,7 +46,7 @@ public class ControllerMainframe implements Initializable {
 	private void onClickmItemBaseManagement(ActionEvent aE) {
 		this.loadContentIntoMainPane("/gui/BaseManagement.fxml");
 	}
-	
+
 	private void loadContentIntoMainPane(String fxmlRessourceURL) {
 		try {
 			this.middlePaneContent.clear();

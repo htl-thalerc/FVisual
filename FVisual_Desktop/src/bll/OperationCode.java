@@ -3,13 +3,13 @@ package bll;
 public class OperationCode {
 	private int operationCodeId;
 	private String code;
-	
+
 	public OperationCode(int operationCodeId, String code) {
 		super();
 		this.operationCodeId = operationCodeId;
 		this.code = code;
 	}
-	
+
 	public OperationCode() {
 		super();
 	}
