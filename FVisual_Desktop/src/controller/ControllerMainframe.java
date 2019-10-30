@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class ControllerMainframe implements Initializable {
 	@FXML
@@ -25,6 +26,11 @@ public class ControllerMainframe implements Initializable {
 	@FXML
 	private BorderPane mainPane;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
+	private static Stage currentStage;
+	
+	static void setStage(Stage stage) {
+		currentStage = stage;
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -59,6 +65,6 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemLogout(ActionEvent aE) {
-
+		currentStage.close();
 	}
 }

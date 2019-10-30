@@ -1,10 +1,10 @@
 'use strict';
 
-/*ALL QUERYSTRINGS FOR DB*/
+/* ALL QUERYSTRINGS FOR DB */
 
-module.exports.EARTEN_GET = "SELECT id, beschreibung FROM Einsatzarten";
-module.exports.ECODES_GET = "SELECT id, code FROM Einsatzcodes";
-module.exports.DG_GET = "SELECT id, kuerzel, bezeichnung FROM Dienstgrade";
+module.exports.EARTEN_GET = "SELECT id, beschreibung FROM Einsatzarten ORDER BY id";
+module.exports.ECODES_GET = "SELECT id, code FROM Einsatzcodes ORDER BY id";
+module.exports.DG_GET = "SELECT id, kuerzel, bezeichnung FROM Dienstgrade ORDER BY id";
 
 module.exports.AORGS_GET = "SELECT id, name FROM Andere_Organisationen";
 module.exports.AORGS_GETBY_AORGS_ID = "SELECT id, name FROM Andere_Organisationen WHERE id = :1";
@@ -20,15 +20,9 @@ module.exports.STPNKT_POST = "INSERT INTO Stuetzpunkte(id, name, ort, plz, stras
 module.exports.STPNKT_PUT = "UPDATE Stuetzpunkte SET name= :1, ort= :2, plz = :3, strasse = :4, hausnr = :5 WHERE id = :6";
 module.exports.STPNKT_DELETE = "DELETE FROM Stuetzpunkte WHERE id = :1";
 
-module.exports.MTGA_ADMIN_GET = "";
-module.exports.MTGA_ADMIN_GET_BY_MTGA_ID = "";
-module.exports.MTGA_ADMIN_GET_BY_MTGA_ACC_SEARCH = "";
-module.exports.MTGA_ADMIN_POST = "";
-module.exports.MTGA_ADMIN_PUT = "";
-module.exports.MTGA_ADMIN_DELETE = "";
-
+module.exports.MTG_GET_BY_USERNAME = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE username =: 1 ";
 module.exports.MTG_GETBY_STPNKT_ID = "";
-module.exports.MTG_GETBY_MTG_ID_AND_STPNKT_ID = "";
+module.exports.MTG_GETBY_MTG_ID = "";
 module.exports.MTG_POST = "";
 module.exports.MTG_PUT = "";
 module.exports.MTG_DELETE = "";

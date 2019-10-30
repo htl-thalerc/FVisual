@@ -243,13 +243,13 @@ INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsat
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 2, 'LFA');
 INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES (seq_Einsatzfahrzeuge.nextval, 2, 'Katastrophenschutzanhänger');
 
-SELECT Mitglieder.id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id = Mitglieder.id_dienstgrad WHERE id_stuetzpunkt = :1;
-SELECT Mitglieder.id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id = Mitglieder.id_dienstgrad WHERE id_stuetzpunkt = :1 AND Mitglieder.id = :2;
-INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin) VALUES(:1, :2, :3, :4, :5, :6, :7, :8);
-
+DELETE FROM Andere_Organisationen WHERE ID >5;
+/*
 UPDATE Mitglieder SET id_dienstgrad = :1, id_stuetzpunkt = :2, vorname = :3, nachname = :4;
 UPDATE Mitglieder SET password = :1 WHERE id = :2 AND id_stuetzpunkt = :3;
 UPDATE Mitglieder SET id = :1, id_dienstgrad = :1, id_stuetzpunkt = :1, vorname = :1, nachname = :1, isAdmin = :1 WHERE id = :2 AND id_stuetzpunkt = :3;
+*/
 
+SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE username = :1;
 
 COMMIT;
