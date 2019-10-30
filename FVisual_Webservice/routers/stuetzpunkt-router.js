@@ -78,7 +78,7 @@ stuetzpunktRouter.get('/:stuetzId/mitglieder', (req, res) => {
 
 // POST   | /stuetzpunkte/:stuetzId/mitglieder
 stuetzpunktRouter.post('/:stuetzId/mitglieder', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
+
 });
 
 // UPDATE Mitglieder SET id_dienstgrad = :1, id_stuetzpunkt = :2, vorname = :3, nachname = :4;
@@ -106,17 +106,20 @@ stuetzpunktRouter.get('/:stuetzId/fahrzeuge', (req, res) => {
 
 // POST   | /stuetzpunkte/:stuetzId/fahrzeuge
 stuetzpunktRouter.post('/:stuetzId/fahrzeuge', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
+    let params = [req.params.stuetzId, req.body.bezeichnung];
+    oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_POST, params, responseHandler.POST_DEFAULT(res, oracleQueryProvider.STPNKT_FZG_GET_BY_FZG_NAME, [req.params.stuetzId, req.body.bezeichnung], classNameParser.parseFahrzeug));
 });
 
 // PUT    | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId
 stuetzpunktRouter.put('/:stuetzId/fahrzeuge/:fzgId', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
+    let params = [req.body.bezeichnung, req.params.stuetzId, req.params.fzgId];
+    oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_PUT, params, responseHandler.PUT_DEFAULT(res, oracleQueryProvider.STPNKT_FZG_GET_BY_FZG_ID, [req.params.stuetzId, req.params.fzgId], classNameParser.parseFahrzeug));
 });
 
 // DELETE | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId
 stuetzpunktRouter.delete('/:stuetzId/fahrzeuge/:fzgId', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
+    let params = [req.params.stuetzId, req.params.fzgId];
+    oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_DELETE, params, responseHandler.DELETE_DEFAULT(res));
 });
 
 /* exports */
