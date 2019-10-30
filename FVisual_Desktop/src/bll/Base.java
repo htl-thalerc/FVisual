@@ -33,6 +33,10 @@ public class Base implements Comparable<Base> {
 		this.street = street;
 		this.houseNr = houseNr;
 	}
+	
+	public Base() {
+		super();
+	}
 
 	public int getBaseId() {
 		return baseId;

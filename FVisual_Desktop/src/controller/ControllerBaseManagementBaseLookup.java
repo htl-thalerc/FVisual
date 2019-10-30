@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import manager.BaseManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -107,9 +108,8 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void fillTableViews() {
-
-		// this.obsListTVBaseData =
-		// FXCollections.observableArrayList(BaseManager.getInstance().getBases());
+		//this.obsListTVBaseData =
+		//FXCollections.observableArrayList(BaseManager.getInstance().getBases());
 		// this.obsListTVVehicles =
 		// FXCollections.observableArrayList(OperationVehicleManager.getInstance().getOperationVehicles());
 
