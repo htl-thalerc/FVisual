@@ -17,9 +17,9 @@ import bll.Base;
 public class BaseManager {
 	private static BaseManager baseManagerInstance = null;
 	private Client client = ClientBuilder.newClient();
-	private String resource = "http://localhost:3030/";
+	private String resource = "http://192.168.191.148:3030/";
 	private WebTarget webTarget = client.target(resource);
-	private WebTarget webTargetBaseService = webTarget.path("01_Schulbedarf_Webservice_Assek/api/actiontypes");
+	private WebTarget webTargetBaseService = webTarget.path("stuetzpunkte");
 	
 	public static BaseManager getInstance() {
 		if(baseManagerInstance == null) {
@@ -34,7 +34,7 @@ public class BaseManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 			try {
-				invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON);
+				invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).header("authorization", "{'username':'heinzi','flow':'management'}");
 				response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 				collOfBases = response.readEntity(new GenericType<ArrayList<Base>>() {
 				});
