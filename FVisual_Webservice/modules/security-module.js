@@ -1,19 +1,30 @@
 'use strict';
 
+/* node modules */
+const log4js = require('log4js');
+
+/* local variables */
+const logger = log4js.getLogger("Security-Module");
+logger.level = 'debug';
+
 /* login */
 function login(req, res) {
-    if (req.headers.flow == "mobile")
+    if (req.headers.flow == "mobile") {
         res.status(200).send({
             "username": req.body.username,
             "flow": req.headers.flow
         });
-    else if (req.headers.flow == "management")
+        logger.debug('mobile login successful / ' + req.body.username);
+    } else if (req.headers.flow == "management") {
         res.status(200).send({
             "username": req.body.username,
             "flow": req.headers.flow
         });
-    else
+        logger.debug('desktop login successful / ' + req.body.username);
+    } else {
+        logger.warn("invalid flow: " + req.headers.flow);
         res.status(400).send("invalid flow");
+    }
 }
 
 /* authenticate */
@@ -22,6 +33,7 @@ function authenticate(req, res, next) {
 
     if (token == undefined || token == '') {
         res.status(401).send('Unauthorized');
+        logger.warn("Unauthorzized auth / " + token);
         return;
     }
 
