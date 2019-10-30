@@ -206,6 +206,10 @@ public class ControllerCreateBaseTabBase implements Initializable {
 			this.controllerCreateBase.setButtonNextDisability(false);
 			this.controllerCreateBase.setButtonFinishDisability(false);
 			this.controllerCreateBase.setTabOperationVehicleDisability(false);
+		} else {
+			this.controllerCreateBase.setButtonFinishDisability(true);
+			this.controllerCreateBase.setButtonNextDisability(true);
+			this.controllerCreateBase.setTabOperationVehicleDisability(true);
 		}
 	}
 

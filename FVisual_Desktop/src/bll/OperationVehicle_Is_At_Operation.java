@@ -4,14 +4,14 @@ public class OperationVehicle_Is_At_Operation {
 	private OperationVehicle operationVehicle;
 	private Base base;
 	private Operation operation;
-	
+
 	public OperationVehicle_Is_At_Operation(OperationVehicle operationVehicle, Base base, Operation operation) {
 		super();
 		this.operationVehicle = operationVehicle;
 		this.base = base;
 		this.operation = operation;
 	}
-	
+
 	public OperationVehicle_Is_At_Operation() {
 		super();
 	}

@@ -12,9 +12,9 @@ public class Operation {
 	private String shortDescription;
 	private Date date;
 	private Time time;
-	
-	public Operation(int operationId, OperationCode operationCode, OperationType operationType,
-			String address, String title, String shortDescription, Date date, Time time) {
+
+	public Operation(int operationId, OperationCode operationCode, OperationType operationType, String address,
+			String title, String shortDescription, Date date, Time time) {
 		super();
 		this.operationId = operationId;
 		this.operationCode = operationCode;
@@ -25,7 +25,7 @@ public class Operation {
 		this.date = date;
 		this.time = time;
 	}
-	
+
 	public Operation() {
 		super();
 	}
@@ -93,6 +93,5 @@ public class Operation {
 	public void setTime(Time time) {
 		this.time = time;
 	}
-	
-	
+
 }
