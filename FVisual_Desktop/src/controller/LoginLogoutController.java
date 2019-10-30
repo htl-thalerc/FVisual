@@ -1,5 +1,6 @@
 package controller;
 
+import app.CentralHandler;
 import dal.DatabaseHelperLoginLogout;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,6 +46,7 @@ public class LoginLogoutController {
     			Stage login = (Stage)((Button)me.getSource()).getScene().getWindow();
     			login.hide();
     			ControllerMainframe.setStage(stage);
+    			//CentralHandler.getInstance().setMember(dbHelper.getMemberByUsername(txtUsername.getText()));
     			stage.showAndWait();
         		txtUsername.clear();
         		txtPassword.clear();
