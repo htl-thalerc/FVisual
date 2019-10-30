@@ -11,8 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ControllerMainframe implements Initializable {
@@ -60,8 +62,16 @@ public class ControllerMainframe implements Initializable {
 	}
 
 	@FXML
-	private void onClickmItemProfileSettings(ActionEvent aE) {
-
+	private void onClickmItemProfileSettings(ActionEvent aE) throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		fxmlLoader.setLocation(getClass().getResource("/gui/EditProfile.fxml"));
+		fxmlLoader.setController(new ControllerEditProfile());
+		Scene scene = new Scene(fxmlLoader.load(), 476, 657);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		ControllerEditProfile.setStage(stage);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
 	}
 
 	@FXML
