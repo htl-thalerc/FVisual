@@ -21,14 +21,9 @@ module.exports.STPNKT_PUT = "UPDATE Stuetzpunkte SET name= :1, ort= :2, plz = :3
 module.exports.STPNKT_DELETE = "DELETE FROM Stuetzpunkte WHERE id = :1";
 
 module.exports.MTG_GET_BY_USERNAME = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE username =: 1 ";
-module.exports.MTG_GETBY_STPNKT_ID = "";
-module.exports.MTG_GETBY_MTG_ID = "";
-module.exports.MTG_POST = "";
-module.exports.MTG_PUT = "";
-module.exports.MTG_DELETE = "";
 
-module.exports.EFZG_GETBY_STPNKT_ID = "";
-module.exports.EFZG_GETBY_EFZG_ID_AND_STPNKT_ID = "";
-module.exports.EFZG_POST = "";
-module.exports.EFZG_PUT = "";
-module.exports.EFZG_DELETE = "";
+module.exports.STPNKT_MTG_GET = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1";
+module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 AND id=:2";
+
+module.exports.STPNKT_FZG_GET = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1";
+module.exports.STPNKT_FZG_GET_BY_FZG_ID = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id=:2";

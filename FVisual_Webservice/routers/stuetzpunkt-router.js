@@ -70,7 +70,10 @@ stuetzpunktRouter.delete('/:stuetzId', (req, res) => {
 // GET    | /stuetzpunkte/:stuetzId/mitglieder
 // GET    | /stuetzpunkte/:stuetzId/mitglieder?id=mitglId
 stuetzpunktRouter.get('/:stuetzId/mitglieder', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
+    if (req.query.id)
+        oracleJobs.execute(oracleQueryProvider.STPNKT_MTG_GET_BY_MTG_ID, [req.params.stuetzId, parseInt(req.query.id)], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
+    else
+        oracleJobs.execute(oracleQueryProvider.STPNKT_MTG_GET, [req.params.stuetzId], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
 });
 
 // POST   | /stuetzpunkte/:stuetzId/mitglieder
@@ -95,7 +98,10 @@ stuetzpunktRouter.delete('/:stuetzId/mitglieder/:mitglId', (req, res) => {
 // GET    | /stuetzpunkte/:stuetzId/fahrzeuge
 // GET    | /stuetzpunkte/:stuetzId/fahrzeuge?id=fzgId
 stuetzpunktRouter.get('/:stuetzId/fahrzeuge', (req, res) => {
-    res.status(200).send('{"working": "fine"}');
+    if (req.query.id)
+        oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_GET_BY_FZG_ID, [req.params.stuetzId, parseInt(req.query.id)], responseHandler.GET_DEFAULT(res, classNameParser.parseFahrzeug));
+    else
+        oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_GET, [req.params.stuetzId], responseHandler.GET_DEFAULT(res, classNameParser.parseFahrzeug));
 });
 
 // POST   | /stuetzpunkte/:stuetzId/fahrzeuge
