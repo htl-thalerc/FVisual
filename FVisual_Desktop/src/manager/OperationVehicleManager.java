@@ -19,30 +19,31 @@ public class OperationVehicleManager {
 	private Client client = ClientBuilder.newClient();
 	private String resource = "http://localhost:3030/";
 	private WebTarget webTarget = client.target(resource);
-	private WebTarget webTargetOperationVehicleService = webTarget.path("01_Schulbedarf_Webservice_Assek/api/actiontypes");
-	
+	private WebTarget webTargetOperationVehicleService = webTarget
+			.path("01_Schulbedarf_Webservice_Assek/api/actiontypes");
+
 	public static OperationVehicleManager getInstance() {
-		if(operationVehicleManagerInstance == null) {
+		if (operationVehicleManagerInstance == null) {
 			operationVehicleManagerInstance = new OperationVehicleManager();
 		}
 		return operationVehicleManagerInstance;
 	}
-	
+
 	public ArrayList<OperationVehicle> getOperationVehicles() {
 		ArrayList<OperationVehicle> collOfOperationVehicles = null;
 
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
-			try {
-				invocationBuilder = this.webTargetOperationVehicleService.request(MediaType.APPLICATION_JSON);
-				response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
-				collOfOperationVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
-				});
-			} catch (JsonSyntaxException ex) {
-				ex.printStackTrace();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}	
+		try {
+			invocationBuilder = this.webTargetOperationVehicleService.request(MediaType.APPLICATION_JSON);
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			collOfOperationVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
+			});
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return collOfOperationVehicles;
 	}
 }

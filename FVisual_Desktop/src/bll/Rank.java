@@ -4,14 +4,14 @@ public class Rank {
 	private int id;
 	private String contraction;
 	private String description;
-	
+
 	public Rank(int id, String contraction, String description) {
 		super();
 		this.id = id;
 		this.contraction = contraction;
 		this.description = description;
 	}
-	
+
 	public Rank() {
 		super();
 	}
@@ -39,9 +39,9 @@ public class Rank {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@Override
 	public String toString() {
-		return id + " - " + contraction + " - "+ description;
+		return id + " - " + contraction + " - " + description;
 	}
 }

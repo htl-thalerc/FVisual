@@ -5,13 +5,14 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 public class ControllerOperationManagement implements Initializable {
-	@FXML private BorderPane paneOperationManagement;
+	@FXML
+	private BorderPane paneOperationManagement;
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 }

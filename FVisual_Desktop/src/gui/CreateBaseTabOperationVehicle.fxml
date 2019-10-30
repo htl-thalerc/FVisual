@@ -121,6 +121,7 @@
                <contextMenu>
                   <ContextMenu>
                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onClickMItemRemoveVehicle" text="Remove Vehicle" />
                       <MenuItem mnemonicParsing="false" onAction="#onClickMItemUpdateVehicle" text="Update Vehicle" />
                     </items>
                   </ContextMenu>
