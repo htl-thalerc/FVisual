@@ -1,63 +1,33 @@
 'use strict';
 
-/**ALL QUERYSTRINGS FOR DB*/
+/* ALL QUERYSTRINGS FOR DB */
 
-module.exports.EINSAETZE_SELECT_ALL = "";
-module.exports.EINSAETZE_SELECT_FILTER = "";
-module.exports.EINSAETZE_SELECT_BYID = "";
-module.exports.EINSAETZE_INSERT = "";
-module.exports.EINSAETZE_UPDATE = "";
-module.exports.EINSAETZE_DELETE = "";
+module.exports.EARTEN_GET = "SELECT id, beschreibung FROM Einsatzarten ORDER BY id";
+module.exports.ECODES_GET = "SELECT id, code FROM Einsatzcodes ORDER BY id";
+module.exports.DG_GET = "SELECT id, kuerzel, bezeichnung FROM Dienstgrade ORDER BY id";
 
-module.exports.MITGLIEDER_SELECT_ALL = "";
-module.exports.MITGLIEDER_SELECT_FILTER = "";
-module.exports.MITGLIEDER_SELECT_BYID = "";
-module.exports.MITGLIEDER_INSERT = "";
-module.exports.MITGLIEDER_UPDATE = "";
-module.exports.MITGLIEDER_DELETE = "";
+module.exports.AORGS_GET = "SELECT id, name FROM Andere_Organisationen";
+module.exports.AORGS_GETBY_AORGS_ID = "SELECT id, name FROM Andere_Organisationen WHERE id = :1";
+module.exports.AORGS_GETBY_AORGS_NAME = "SELECT id, name FROM Andere_Organisationen WHERE name = :1";
+module.exports.AORGS_POST = "INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, :1)";
+module.exports.AORGS_PUT = "UPDATE Andere_Organisationen SET name = :1 WHERE id = :2";
+module.exports.AORGS_DELETE = "DELETE FROM Andere_Organisationen WHERE id = :1";
 
-module.exports.STUETZPUNKT_SELECT_ALL = "";
-module.exports.STUETZPUNKT_SELECT_FILTER = "";
-module.exports.STUETZPUNKT_SELECT_BYID = "";
-module.exports.STUETZPUNKT_INSERT = "";
-module.exports.STUETZPUNKT_UPDATE = "";
-module.exports.STUETZPUNKT_DELETE = "";
+module.exports.STPNKT_GET = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte";
+module.exports.STPNKT_GETBY_STPNKT_ID = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE id = :1";
+module.exports.STPNKT_GETBY_STPNKT_NAME = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE name = :1";
+module.exports.STPNKT_POST = "INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, :1, :2, :3,  :4, :5)";
+module.exports.STPNKT_PUT = "UPDATE Stuetzpunkte SET name= :1, ort= :2, plz = :3, strasse = :4, hausnr = :5 WHERE id = :6";
+module.exports.STPNKT_DELETE = "DELETE FROM Stuetzpunkte WHERE id = :1";
 
-module.exports.DIENSTGRADE_SELECT_ALL = "";
-module.exports.DIENSTGRADE_SELECT_BYID = "";
-module.exports.DIENSTGRADE_INSERT = "";
-module.exports.DIENSTGRADE_UPDATE = "";
-module.exports.DIENSTGRADE_DELETE = "";
+module.exports.MTG_GET_BY_USERNAME = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE username =: 1 ";
 
-module.exports.EINSATZFAHRZEUGE_SELECT_ALL = "";
-module.exports.EINSATZFAHRZEUGE_SELECT_FILTER = "";
-module.exports.EINSATZFAHRZEUGE_SELECT_BYID = "";
-module.exports.EINSATZFAHRZEUGE_INSERT = "";
-module.exports.EINSATZFAHRZEUGE_UPDATE = "";
-module.exports.EINSATZFAHRZEUGE_DELETE = "";
+module.exports.STPNKT_MTG_GET = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1";
+module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 AND id=:2";
 
-module.exports.EINSATZARTEN_SELECT_ALL = "";
-module.exports.EINSATZARTEN_SELECT_BYID = "";
-module.exports.EINSATZARTEN_INSERT = "";
-module.exports.EINSATZARTEN_UPDATE = "";
-module.exports.EINSATZARTEN_DELETE = "";
-
-module.exports.EINSATZCODES_SELECT_ALL = "";
-module.exports.EINSATZCODES_SELECT_BYID = "";
-module.exports.EINSATZCODES_INSERT = "";
-module.exports.EINSATZCODES_UPDATE = "";
-module.exports.EINSATZCODES_DELETE = "";
-
-module.exports.ANDERE_ORGANISATIONEN_SELECT_ALL = "";
-module.exports.ANDERE_ORGANISATIONEN_SELECT_FILTER = "";
-module.exports.ANDERE_ORGANISATIONEN_SELECT_BYID = "";
-module.exports.ANDERE_ORGANISATIONEN_INSERT = "";
-module.exports.ANDERE_ORGANISATIONEN_UPDATE = "";
-module.exports.ANDERE_ORGANISATIONEN_DELETE = "";
-
-module.exports.EINSATZORTE_SELECT_ALL = "";
-module.exports.EINSATZORTE_SELECT_FILTER = "";
-module.exports.EINSATZORTE_SELECT_BYID = "";
-module.exports.EINSATZORTE_INSERT = "";
-module.exports.EINSATZORTE_UPDATE = "";
-module.exports.EINSATZORTE_DELETE = "";
+module.exports.STPNKT_FZG_GET = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1";
+module.exports.STPNKT_FZG_GET_BY_FZG_ID = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
+module.exports.STPNKT_FZG_GET_BY_FZG_NAME = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND bezeichnung = :2"
+module.exports.STPNKT_FZG_POST = "INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES(seq_Einsatzfahrzeuge.nextval, :1, :2)";
+module.exports.STPNKT_FZG_PUT = "UPDATE Einsatzfahrzeuge SET bezeichnung = :1 WHERE id_stuetzpunkt = :2 AND id = :3";
+module.exports.STPNKT_FZG_DELETE = "DELETE FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
