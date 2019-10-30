@@ -1,6 +1,7 @@
 /* node modules */
 var express = require('express');
 var bodyParser = require('body-parser');
+var log4js = require('log4js');
 
 /* own modules */
 const centralErrorHandler = require('./public/central_error_handler');
@@ -14,6 +15,8 @@ const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
 const HOSTNAME = 'localhost';
 const PORT = 3030;
 var app = express();
+var logger = log4js.getLogger("Application");
+logger.level = 'info';
 
 /* central handlers for express */
 app.use(bodyParser.json());
@@ -36,5 +39,5 @@ app.use('/stuetzpunkte', stuetzpunktRouter);
 
 /* run app */
 app.listen(PORT, function () {
-    console.log(`API running on ${HOSTNAME}:${PORT}!`);
+    logger.info(`API running on ${HOSTNAME}:${PORT}!`);
 });

@@ -63,9 +63,18 @@ var parseMitglied = function (toParse) {
     return toParse;
 }
 
+var parseFahrzeug = function (toParse) {
+    toParse = toParse.replaceAll('"ID"', '"operationVehicleId"');
+    toParse = toParse.replaceAll('"ID_STUETZPUNKT"', '"baseId"');
+    toParse = toParse.replaceAll('"BEZEICHNUNG"', '"description"');
+
+    return toParse;
+}
+
 module.exports.parseStuetzpunkt = parseStuetzpunkt;
 module.exports.parseEinsatzcode = parseEinsatzcode;
 module.exports.parseEinsatzart = parseEinsatzart;
 module.exports.parseDienstgrad = parseDienstgrad;
 module.exports.parseAOrg = parseAOrg;
 module.exports.parseMitglied = parseMitglied;
+module.exports.parseFahrzeug = parseFahrzeug;

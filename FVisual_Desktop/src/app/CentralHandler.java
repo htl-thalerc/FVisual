@@ -2,6 +2,7 @@ package app;
 
 import java.io.IOException;
 
+import bll.Member;
 import javafx.fxml.FXMLLoader;
 import util.PropertyManager;
 
@@ -14,6 +15,8 @@ public class CentralHandler {
 	public static final String CONST_MEMBER_URL = "mitglieder";
 	public static final String CONST_VEHICLE = "fahrzeuge";
 
+	private Member member;
+
 	public static CentralHandler getInstance() {
 		if (helper == null) {
 			helper = new CentralHandler();
@@ -24,7 +27,7 @@ public class CentralHandler {
 	public static FXMLLoader loadFXML(final String path) {
 		return new FXMLLoader(Main.class.getResource(path));
 	}
-	
+
 	public String getRessource() {
 		PropertyManager pm = null;
 		try {
@@ -37,5 +40,13 @@ public class CentralHandler {
 	
 	public String getHeaderAuthorization() {
 		return "{'username':'heinzi','flow':'management'}";
+	}
+
+	public Member getMember() {
+		return this.member;
+	}
+	
+	public void setMember (Member member) {
+		this.member = member;
 	}
 }
