@@ -1,6 +1,8 @@
 package controller;
 
 import app.CentralHandler;
+import app.Main;
+import bll.User;
 import dal.DatabaseHelperLoginLogout;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class LoginLogoutController {
+public class ControllerLoginLogout {
 	DatabaseHelperLoginLogout dbHelper;
 
     @FXML
@@ -31,6 +33,8 @@ public class LoginLogoutController {
     private void onButtonLoginClicked(MouseEvent me) throws Exception {
     	try {
         	dbHelper = DatabaseHelperLoginLogout.newInstance();
+        	CentralHandler ch = CentralHandler.getInstance();
+        	
         	if(txtUsername.getText().equals("") || txtPassword.getText().equals("")) {
         		throw new Exception("Username or Password wrong");
         	}
@@ -45,8 +49,8 @@ public class LoginLogoutController {
     			stage.setScene(scene);
     			Stage login = (Stage)((Button)me.getSource()).getScene().getWindow();
     			login.hide();
+    			//ch.setMember(dbHelper.getMemberByUsername(txtUsername.getText()));
     			ControllerMainframe.setStage(stage);
-    			//CentralHandler.getInstance().setMember(dbHelper.getMemberByUsername(txtUsername.getText()));
     			stage.showAndWait();
         		txtUsername.clear();
         		txtPassword.clear();
