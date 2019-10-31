@@ -10,10 +10,13 @@ public class CentralHandler {
 	private static CentralHandler helper;
 	
 	public static final String CONST_AUTHORIZATION = "authorization";
-	//Consts for base URLs
+
 	public static final String CONST_BASE_URL = "stuetzpunkte";
+	public static final String CONST_OPERATION_URL = "einsaetze";
+	
 	public static final String CONST_MEMBER_URL = "mitglieder";
 	public static final String CONST_VEHICLE = "fahrzeuge";
+	public static final String CONST_OTHER_ORGANISATION = "andere_organisation";
 
 	private Member member;
 
