@@ -1,24 +1,32 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import app.CentralHandler;
 import bll.Base;
+import bll.CRUDOption;
 import bll.OperationVehicle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import manager.BaseManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
@@ -40,6 +48,10 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private Button btnSelectAllOrNone;
 	@FXML
 	private TableColumn<Base, String> columnSelection;
+	@FXML
+	private MenuItem mItemRemoveBase;
+	@FXML
+	private MenuItem mItemUpdateBase;
 
 	private ObservableList<Base> obsListTVBaseData = null;
 	private ObservableList<OperationVehicle> obsListTVVehicles = null;
@@ -118,9 +130,11 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.",
 				"2");
+		b1.getSelection().setId("checkBox_" + b1.getBaseId());
 		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg",
 				"17");
-
+		b2.getSelection().setId("checkBox_" + b2.getBaseId());
+		
 		this.obsListTVBaseData.add(b1);
 		this.obsListTVBaseData.add(b2);
 
@@ -197,5 +211,49 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 				collOfAllBases.get(i).getSelection().setSelected(false);
 			}
 		}
+	}
+	
+	@FXML
+	private void onClickMItemRemoveBase(ActionEvent aE) {
+		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
+		
+		if(selectedBase != null) {
+			FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseDialog.fxml");
+
+			ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, CRUDOption.DELETE);
+			loader.setController(controllerDialogSaveBase);
+
+			try {
+				Stage curStage = new Stage();
+				Scene scene = new Scene(loader.load(), 600, 300);
+				curStage.setScene(scene);
+				curStage.initModality(Modality.APPLICATION_MODAL);
+				curStage.setTitle("Would you like to remove your selected Base");
+				ArrayList<OperationVehicle> collOfVehicles = getVehiclesByBaseId(selectedBase.getBaseId());
+				controllerDialogSaveBase.setData(selectedBase, collOfVehicles);
+				curStage.showAndWait();
+				if (controllerDialogSaveBase.getButtonState()) {
+					//ToDo: Remove into DB
+				}
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@FXML 
+	private void onClickMItemUpdateBase(ActionEvent aE) {
+		
+	}
+	
+	private ArrayList<OperationVehicle> getVehiclesByBaseId(int baseId) {
+		ArrayList<OperationVehicle> collOfVehicles = new ArrayList<OperationVehicle>();
+		
+		for(int i=0;i<this.obsListTVVehicles.size();i++) {
+			if(this.obsListTVVehicles.get(i).getBase().getBaseId() == baseId) {
+				collOfVehicles.add(this.obsListTVVehicles.get(i));
+			}
+		}
+		return collOfVehicles;
 	}
 }

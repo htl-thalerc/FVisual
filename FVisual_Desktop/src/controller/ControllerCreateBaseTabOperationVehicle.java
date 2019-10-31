@@ -2,8 +2,10 @@ package controller;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -36,8 +38,6 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 	@FXML
 	private Button btnSelectAllOrNone;
 	@FXML
-	private Button btnRemoveVehicle;
-	@FXML
 	private TextField tfAddVehicleDescription;
 	@FXML
 	private TextField tfUpdateVehicleDescription;
@@ -58,6 +58,8 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 	private ObservableList<OperationVehicle> obsListOfOperationVehicles;
 	private ControllerCreateBase controllerCreateBase;
 	private OperationVehicle selectedVehicleToUpdate;
+
+	private Set<OperationVehicle> setOfAddedVehicles = new HashSet<>();
 
 	public ControllerCreateBaseTabOperationVehicle(ControllerCreateBase controllerCreateBase) {
 		this.controllerCreateBase = controllerCreateBase;
@@ -141,14 +143,10 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 
 		this.btnAddEnteredVehicle.setOnMouseClicked(event -> {
 			if (isValidDescriptionAddVehicle.get()) {
-				for (int i = 0; i < this.obsListOfOperationVehicles.size(); i++) {
-					if (!this.tfAddVehicleDescription.getText()
-							.equals(this.obsListOfOperationVehicles.get(i).getDescription())) {
-						this.obsListOfOperationVehicles.add(
-								new OperationVehicle(new CheckBox(), 0, this.tfAddVehicleDescription.getText().trim(),
-										this.controllerCreateBase.getCreatedBase()));
-					}
-				}
+				this.setOfAddedVehicles.add(new OperationVehicle(new CheckBox(), 0,
+						this.tfAddVehicleDescription.getText().trim(), this.controllerCreateBase.getCreatedBase()));
+				this.obsListOfOperationVehicles.clear();
+				this.obsListOfOperationVehicles.addAll(this.setOfAddedVehicles);
 				this.tvVehicleData.setItems(this.obsListOfOperationVehicles);
 				this.tvVehicleData.refresh();
 			}
@@ -219,21 +217,6 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 	}
 
 	@FXML
-	private void onClickBtnRemoveVehicle(ActionEvent aE) {
-		ObservableList<OperationVehicle> collOfAllVehicles = this.obsListOfOperationVehicles.sorted();
-		ArrayList<OperationVehicle> collOfRemovingVehicles = new ArrayList<OperationVehicle>();
-		for (int i = 0; i < collOfAllVehicles.size(); i++) {
-			if (collOfAllVehicles.get(i).getSelection().isSelected()) {
-				collOfRemovingVehicles.add(collOfAllVehicles.get(i));
-			}
-		}
-		for (int i = 0; i < collOfRemovingVehicles.size(); i++) {
-			this.obsListOfOperationVehicles.remove(collOfRemovingVehicles.get(i));
-		}
-		this.tvVehicleData.setItems(obsListOfOperationVehicles);
-	}
-
-	@FXML
 	private void onClickMItemRemoveVehicle(ActionEvent aE) {
 		OperationVehicle selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
 
@@ -254,5 +237,15 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 
 	public List<OperationVehicle> getCreatedVehicleData() {
 		return this.obsListOfOperationVehicles.stream().collect(Collectors.toList());
+	}
+
+	public void clearTextFields() {
+		this.tfAddVehicleDescription.clear();
+		this.tfUpdateVehicleDescription.clear();
+	}
+
+	public void clearTableView() {
+		this.obsListOfOperationVehicles.clear();
+		this.tvVehicleData.getItems().clear();
 	}
 }
