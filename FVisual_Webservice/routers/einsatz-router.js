@@ -30,8 +30,12 @@
 /* node modules */
 const express = require('express');
 
+/* own modules */
+const loggerModule = require('../modules/logger-module');
+
 /* local variables */
 const einsatzRouter = express.Router();
+const logger = loggerModule.loggers['Routing'];
 
 // GET     |  /einsaetze
 // GET     |  /einsaetze?id=eId

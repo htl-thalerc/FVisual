@@ -1,22 +1,24 @@
 /* node modules */
 var express = require('express');
 var bodyParser = require('body-parser');
-var log4js = require('log4js');
 
 /* own modules */
 const centralErrorHandler = require('./public/central_error_handler');
 const securityModule = require('./modules/security-module');
+const loggerModule = require('./modules/logger-module');
 
-const baseRouters = require('./routers/base-routers');
+const baseRouters = require('./routers/base-router');
 const einsatzRouter = require('./routers/einsatz-router');
 const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
+
+/* logger settings */
+loggerModule.settings.Development();
 
 /* local variables */
 const HOSTNAME = 'localhost';
 const PORT = 3030;
 var app = express();
-var logger = log4js.getLogger("Application");
-logger.level = 'info';
+var logger = loggerModule.loggers['Application'];
 
 /* central handlers for express */
 app.use(bodyParser.json());

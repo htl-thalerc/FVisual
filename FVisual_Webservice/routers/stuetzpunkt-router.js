@@ -34,11 +34,11 @@ const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
 const classNameParser = require('../modules/classname-parser');
+const loggerModule = require('../modules/logger-module');
 
 /* local variables */
 const stuetzpunktRouter = express.Router();
-const logger = log4js.getLogger("Stützpunkt-Router");
-logger.level = 'debug';
+const logger = loggerModule.loggers['Routing'];
 
 // GET    | /stuetzpunkte
 // GET    | /stuetzpunkte?id=stuetzId

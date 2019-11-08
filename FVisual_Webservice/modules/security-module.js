@@ -1,11 +1,10 @@
 'use strict';
 
-/* node modules */
-const log4js = require('log4js');
+/* own modules */
+const loggerModule = require('../modules/logger-module');
 
 /* local variables */
-const logger = log4js.getLogger("Security-Module");
-logger.level = 'debug';
+const logger = loggerModule.loggers['Security-Module'];
 
 /* login */
 function login(req, res) {

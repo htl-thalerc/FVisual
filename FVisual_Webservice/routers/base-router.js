@@ -20,18 +20,17 @@
 
 /* node modules */
 const express = require('express');
-const log4js = require('log4js');
 
 /* own modules */
 const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
 const classNameParser = require('../modules/classname-parser');
+const loggerModule = require('../modules/logger-module');
 
 /* local variables */
 const baseRoutes = express.Router();
-const logger = log4js.getLogger("Base-Router");
-logger.level = 'debug';
+const logger = loggerModule.loggers['Routing'];
 
 // GET    | /einsatzarten
 baseRoutes.get('/einsatzarten', (req, res) => {

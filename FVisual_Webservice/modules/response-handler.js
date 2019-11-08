@@ -1,14 +1,11 @@
 'use strict'
 
-/* node modules */
-const log4js = require('log4js');
-
 /* own modules */
 const oracleJobs = require('../database/oracle-jobs');
+const loggerModule = require('../modules/logger-module');
 
 /* local variables */
-const logger = log4js.getLogger("Response-Handler");
-logger.level = 'warn';
+const logger = loggerModule.loggers['Response-Handler'];
 
 var res_GET_DEFAULT = function (res, parser) {
   return function (err, result) {

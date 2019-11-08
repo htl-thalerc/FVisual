@@ -1,11 +1,10 @@
 'use strict';
 
-/* node modules */
-const log4js = require('log4js');
+/* own modules */
+const loggerModule = require('../modules/logger-module');
 
 /* local variables */
-const logger = log4js.getLogger("Central-Error-Handler");
-logger.level = 'error';
+const logger = loggerModule.loggers['Central-Error-Handler'];
 
 module.exports.errorHandler = function (err, req, res, next) {
     logger.fatal(err);
