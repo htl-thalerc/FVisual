@@ -121,6 +121,7 @@
                <contextMenu>
                   <ContextMenu>
                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onClickMItemRemoveVehicle" text="Remove Vehicle" />
                       <MenuItem mnemonicParsing="false" onAction="#onClickMItemUpdateVehicle" text="Update Vehicle" />
                     </items>
                   </ContextMenu>
@@ -135,32 +136,26 @@
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnRemoveVehicle" mnemonicParsing="false" onAction="#onClickBtnRemoveVehicle" text="Remove Vehicle" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Button>
-                  <TextField fx:id="tfUpdateVehicleDescription" GridPane.rowIndex="2">
+                  <TextField fx:id="tfUpdateVehicleDescription" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets right="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Button fx:id="btnUpdateVehicle" mnemonicParsing="false" text="Update Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Button fx:id="btnUpdateVehicle" mnemonicParsing="false" text="Update Vehicle" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Button>
-                  <CheckBox fx:id="checkBoxUpdateVehicle" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <CheckBox fx:id="checkBoxUpdateVehicle" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin>
                   </CheckBox>
-                  <Label fx:id="lbStatusbarUpdateVehicle" text="Invalid - No Description set" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                  <Label fx:id="lbStatusbarUpdateVehicle" text="Invalid - No Description set" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>

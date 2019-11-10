@@ -12,3 +12,26 @@
 	-fx-background-repeat: no-repeat;
 	-fx-background-position: 202 4, right center; 
 }
+
+.button:hover {
+	-fx-background-color: #9e2820 !important;
+}
+
+#paneEditProfile {
+	-fx-border-color: #e0e0e0;
+	-fx-border-width: 1; 
+	-fx-border-radius: 5 5 5 5;
+  	-fx-background-radius: 5 5 5 5;
+}
+
+#paneEditProfileHead {
+	-fx-border-radius: 5 5 0 0;
+  	-fx-background-radius: 5 5 0 0;
+}
+
+#panelEditPassword {
+	-fx-border-color: #e0e0e0;
+	-fx-border-width: 1; 
+	-fx-border-radius: 5 5 5 5;
+  	-fx-background-radius: 5 5 5 5;
+}

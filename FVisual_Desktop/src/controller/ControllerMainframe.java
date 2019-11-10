@@ -63,7 +63,15 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemProfileSettings(ActionEvent aE) throws IOException {
-		
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		fxmlLoader.setLocation(getClass().getResource("/gui/EditProfile.fxml"));
+		fxmlLoader.setController(new ControllerEditProfile());
+		Scene scene = new Scene(fxmlLoader.load(), 476, 657);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		ControllerEditProfile.setStage(stage);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
 	}
 
 	@FXML

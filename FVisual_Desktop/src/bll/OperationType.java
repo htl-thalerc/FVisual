@@ -3,13 +3,13 @@ package bll;
 public class OperationType {
 	private int operationTypeId;
 	private String description;
-	
+
 	public OperationType(int operationTypeId, String description) {
 		super();
 		this.operationTypeId = operationTypeId;
 		this.description = description;
 	}
-	
+
 	public OperationType() {
 		super();
 	}

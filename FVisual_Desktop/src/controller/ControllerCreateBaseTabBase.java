@@ -16,46 +16,32 @@ import javafx.scene.control.TextFormatter;
 public class ControllerCreateBaseTabBase implements Initializable {
 	@FXML
 	private TextField tfBaseName;
-
 	@FXML
 	private TextField tfPlace;
-
 	@FXML
 	private TextField tfPostCode;
-
 	@FXML
 	private TextField tfStreet;
-
 	@FXML
 	private TextField tfHouseNr;
-
 	@FXML
 	private Label lbStatusbarPlace;
-
 	@FXML
 	private Label lbStatusbarPostCode;
-
 	@FXML
 	private Label lbStatusbarStreet;
-
 	@FXML
 	private Label lbStatusbarHouseNr;
-
 	@FXML
 	private CheckBox checkBoxBaseName;
-
 	@FXML
 	private CheckBox checkBoxPlace;
-
 	@FXML
 	private CheckBox checkBoxPostCode;
-
 	@FXML
 	private CheckBox checkBoxStreet;
-
 	@FXML
 	private CheckBox checkBoxHouseNr;
-
 	@FXML
 	private Label lbStatusbarBaseName;
 
@@ -203,14 +189,28 @@ public class ControllerCreateBaseTabBase implements Initializable {
 	private void setControlDisability(boolean baseName, boolean houseNr, boolean place, boolean postCode,
 			boolean street) {
 		if (baseName && houseNr && place && postCode && street) {
+			this.controllerCreateBase.setButtonResetDisability(false);
 			this.controllerCreateBase.setButtonNextDisability(false);
 			this.controllerCreateBase.setButtonFinishDisability(false);
 			this.controllerCreateBase.setTabOperationVehicleDisability(false);
+		} else {
+			this.controllerCreateBase.setButtonResetDisability(true);
+			this.controllerCreateBase.setButtonFinishDisability(true);
+			this.controllerCreateBase.setButtonNextDisability(true);
+			this.controllerCreateBase.setTabOperationVehicleDisability(true);
 		}
 	}
 
 	public Base getCreatedBaseData() {
 		return new Base(0, this.tfBaseName.getText(), this.tfPlace.getText(),
 				Integer.parseInt(this.tfPostCode.getText()), this.tfStreet.getText(), this.tfHouseNr.getText());
+	}
+
+	public void clearTextFieds() {
+		this.tfBaseName.clear();
+		this.tfHouseNr.clear();
+		this.tfPlace.clear();
+		this.tfPostCode.clear();
+		this.tfStreet.clear();
 	}
 }

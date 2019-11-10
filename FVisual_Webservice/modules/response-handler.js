@@ -1,89 +1,81 @@
-'use strict';
+'use strict'
 
 /* own modules */
 const oracleJobs = require('../database/oracle-jobs');
-const oracleQueryProvider = require('../database/oracle-query-provider');
+const loggerModule = require('../modules/logger-module');
 
-var res_GET_DEFAULT = function (res) {
-    return function (err, result) {
-        if (err) {
-            console.warn(err);
-            res.status(500).send({
-                'code': err.errorNum,
-                'message': err.message,
-                'offset': err.offset
-            });
-        } else {
-            res.status(200).send(result.rows);
-        }
+/* local variables */
+const logger = loggerModule.loggers['Response-Handler'];
+
+var res_GET_DEFAULT = function (res, parser) {
+  return function (err, result) {
+    if (err) {
+      logger.error(err.stack);
+      res.status(500).send(err.stack);
+      logger.debug("execute error sent!");
+    } else {
+      res.header('content-type', 'application/json');
+      res.status(200).send(parser(JSON.stringify(result.rows)));
+      logger.debug("response sent!");
     }
+  };
+};
+
+var res_POST_DEFAULT = function (res, querystring, params, parser) {
+  return function (err, result) {
+    if (err) {
+      logger.error(err.stack);
+      res.status(500).send(err.stack);
+      logger.debug("execute error sent!");
+    } else {
+      oracleJobs.execute(querystring, params, (err, result) => {
+        if (err) {
+          logger.error(err.stack);
+          res.status(500).send(err.stack);
+          logger.debug("nested execute error sent!");
+        } else {
+          res.header('content-type', 'application/json');
+          res.status(201).send(parser(JSON.stringify(result.rows)));
+          logger.debug("response sent!");
+        }
+      });
+    }
+  };
 }
 
-var res_POST_DEFAULT = function (res, querystring, params) {
-    return function (err, result) {
+var res_PUT_DEFAULT = function (res, querystring, params, parser) {
+  return function (err, result) {
+    if (err) {
+      logger.error(err.stack);
+      res.status(500).send(err.stack);
+      logger.debug("execute error sent!");
+    } else {
+      oracleJobs.execute(querystring, params, (err, result) => {
         if (err) {
-            console.warn(err);
-            res.status(500).send({
-                'code': err.errorNum,
-                'message': err.message,
-                'offset': err.offset
-            });
+          logger.error(err.stack);
+          res.status(500).send(err.stack);
+          logger.debug("nested execute error sent!");
         } else {
-            oracleJobs.execute(querystring, params, (err, result) => {
-                if (err) {
-                    console.warn(err);
-                    res.status(500).send({
-                        'code': err.errorNum,
-                        'message': err.message,
-                        'offset': err.offset
-                    });
-                } else {
-                    res.status(201).send(result.rows);
-                }
-            });
+          res.header('content-type', 'application/json');
+          res.status(200).send(parser(JSON.stringify(result.rows)));
+          logger.debug("response sent!");
         }
+      })
     }
-}
-
-var res_PUT_DEFAULT = function (res, querystring, params) {
-    return function (err, result) {
-        if (err) {
-            console.warn(err);
-            res.status(500).send({
-                'code': err.errorNum,
-                'message': err.message,
-                'offset': err.offset
-            });
-        } else {
-            oracleJobs.execute(querystring, params, (err, result) => {
-                if (err) {
-                    console.warn(err);
-                    res.status(500).send({
-                        'code': err.errorNum,
-                        'message': err.message,
-                        'offset': err.offset
-                    });
-                } else {
-                    res.status(200).send(result.rows);
-                }
-            });
-        }
-    }
+  };
 }
 
 var res_DELETE_DEFAULT = function (res) {
-    return function (err, result) {
-        if (err) {
-            console.warn(err);
-            res.status(500).send({
-                'code': err.errorNum,
-                'message': err.message,
-                'offset': err.offset
-            });
-        } else {
-            res.status(204).send(result);
-        }
+  return function (err, result) {
+    if (err) {
+      logger.error(err.stack);
+      res.status(500).send(err.stack);
+      logger.debug("execute error sent!");
+    } else {
+      res.status(204).send(result);
+      logger.debug("response sent!");
     }
+  };
 }
 
 /* exports */

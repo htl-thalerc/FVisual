@@ -9,9 +9,9 @@ public class Base implements Comparable<Base> {
 	private int postCode;
 	private String street;
 	private String houseNr;
-	
+
 	private CheckBox selection;
-	
+
 	public Base(int baseId, String name, String place, int postCode, String street, String houseNr) {
 		super();
 		this.baseId = baseId;
@@ -21,8 +21,9 @@ public class Base implements Comparable<Base> {
 		this.street = street;
 		this.houseNr = houseNr;
 	}
-	
-	public Base(CheckBox selection, int baseId, String name, String place, int postCode, String street, String houseNr) {
+
+	public Base(CheckBox selection, int baseId, String name, String place, int postCode, String street,
+			String houseNr) {
 		super();
 		this.selection = selection;
 		this.baseId = baseId;
@@ -31,6 +32,10 @@ public class Base implements Comparable<Base> {
 		this.postCode = postCode;
 		this.street = street;
 		this.houseNr = houseNr;
+	}
+	
+	public Base() {
+		super();
 	}
 
 	public int getBaseId() {
@@ -80,18 +85,19 @@ public class Base implements Comparable<Base> {
 	public void setHouseNr(String houseNr) {
 		this.houseNr = houseNr;
 	}
-	
+
 	public CheckBox getSelection() {
 		return selection;
 	}
-	
+
 	@Override
 	public int compareTo(Base obj) {
 		return this.name.compareTo(obj.name);
 	}
-	
+
 	@Override
 	public String toString() {
-		return this.baseId + ", " + this.name + ", " + this.place + ", " + this.postCode + ", " + this.street + ", " + this.houseNr;
+		return this.baseId + ", " + this.name + ", " + this.place + ", " + this.postCode + ", " + this.street + ", "
+				+ this.houseNr;
 	}
 }

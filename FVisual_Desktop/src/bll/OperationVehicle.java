@@ -6,16 +6,16 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	private int operationVehicleId;
 	private String description;
 	private Base base;
-	
+
 	private CheckBox selection;
-	
+
 	public OperationVehicle(int operationVehicleId, String description, Base base) {
 		super();
 		this.operationVehicleId = operationVehicleId;
 		this.description = description;
 		this.base = base;
 	}
-	
+
 	public OperationVehicle(CheckBox selection, int operationVehicleId, String description, Base base) {
 		super();
 		this.selection = selection;
@@ -23,7 +23,7 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 		this.description = description;
 		this.base = base;
 	}
-	
+
 	public OperationVehicle() {
 		super();
 	}
@@ -51,22 +51,24 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	public void setBase(Base base) {
 		this.base = base;
 	}
-	
+
 	public CheckBox getSelection() {
 		return selection;
 	}
 
 	@Override
 	public int compareTo(OperationVehicle obj) {
-	    int i = this.base.getName().compareTo(obj.getBase().getName());
-	    if (i != 0) return i;
-	    
-	    i = this.description.compareTo(obj.description);
-	    if (i != 0) return i;
+		int i = this.base.getName().compareTo(obj.getBase().getName());
+		if (i != 0)
+			return i;
 
-	    return this.base.getName().compareTo(obj.getBase().getName());
+		i = this.description.compareTo(obj.description);
+		if (i != 0)
+			return i;
+
+		return this.base.getName().compareTo(obj.getBase().getName());
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.description;
