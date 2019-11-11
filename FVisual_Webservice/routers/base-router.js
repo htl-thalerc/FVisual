@@ -27,6 +27,7 @@ const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
 const classNameParser = require('../modules/classname-parser');
 const loggerModule = require('../modules/logger-module');
+const validatorModule = require('../modules/validator-module');
 
 /* local variables */
 const baseRoutes = express.Router();
@@ -57,19 +58,19 @@ baseRoutes.get('/andere_organisationen', (req, res) => {
 });
 
 // POST   | /andere_organisationen
-baseRoutes.post('/andere_organisationen', (req, res) => {
+baseRoutes.post('/andere_organisationen', validatorModule.body.POST_Stuetzpunkt, (req, res) => {
   logger.debug('POST /andere_organisationen');
   oracleJobs.execute(oracleQueryProvider.AORGS_POST, [req.body.name], responseHandler.POST_DEFAULT(res, oracleQueryProvider.AORGS_GETBY_AORGS_NAME, [req.body.name]));
 });
 
 // PUT    | /andere_organisationen/:aOrgId
-baseRoutes.put('/andere_organisationen/:aOrgId', (req, res) => {
+baseRoutes.put('/andere_organisationen/:aOrgId', validatorModule.paramIsInteger, validatorModule.body.PUT_Stuetzpunkt, (req, res) => {
   logger.debug('PUT /andere_organisationen');
-  oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [req.body.name, parseInt(req.params.aOrgId)], responseHandler.PUT_DEFAULT(res, oracleQueryProvider.AORGS_GETBY_AORGS_ID, [parseInt(req.params.aOrgId)]));
+  oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [req.body.name, parseInt(req.params.aOrgId)], responseHandler.PUT_DEFAULT(res, oracleQueryProvider.AORGS_GETBY_AORGS_ID, [parseInt(req.params.aOrgId)], classNameParser.parseAOrg));
 });
 
 // DELETE | /andere_organisationen/:aOrgId
-baseRoutes.delete('/andere_organisationen/:aOrgId', (req, res) => {
+baseRoutes.delete('/andere_organisationen/:aOrgId', validatorModule.paramIsInteger, (req, res) => {
   logger.debug('DELETE /andere_organisationen');
   oracleJobs.execute(oracleQueryProvider.AORGS_DELETE, [parseInt(req.params.aOrgId)], responseHandler.DELETE_DEFAULT(res));
 });

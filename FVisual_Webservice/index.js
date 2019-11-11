@@ -20,9 +20,8 @@ const PORT = 3030;
 var app = express();
 var logger = loggerModule.loggers['Application'];
 
-/* central handlers for express */
+/* middlewares */
 app.use(bodyParser.json());
-app.use(centralErrorHandler.errorHandler);
 
 /* public sector */
 app.get('/', function (req, res) {
@@ -38,6 +37,10 @@ app.use(securityModule.authenticate);
 app.use(baseRouters);
 app.use('/einsaetze', einsatzRouter);
 app.use('/stuetzpunkte', stuetzpunktRouter);
+
+/* central error handler */
+app.use(centralErrorHandler);
+
 
 /* run app */
 app.listen(PORT, function () {

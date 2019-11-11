@@ -6,9 +6,8 @@ const loggerModule = require('../modules/logger-module');
 /* local variables */
 const logger = loggerModule.loggers['Central-Error-Handler'];
 
-module.exports.errorHandler = function (err, req, res, next) {
-    logger.fatal(err);
-    logger.error(err.stack);
+module.exports = function (err, req, res, next) {
+    logger.fatal(err.message);
     if (err instanceof TypeError)
         res.status(400).send('400 Bad Request. ' + err.message);
     else if (err instanceof RangeError)
