@@ -5,19 +5,23 @@ var bodyParser = require('body-parser');
 /* own modules */
 const centralErrorHandler = require('./public/central_error_handler');
 const securityModule = require('./modules/security-module');
+const loggerModule = require('./modules/logger-module');
 
-const baseRouters = require('./routers/base-routers');
+const baseRouters = require('./routers/base-router');
 const einsatzRouter = require('./routers/einsatz-router');
 const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
+
+/* logger settings */
+loggerModule.settings.Development();
 
 /* local variables */
 const HOSTNAME = 'localhost';
 const PORT = 3030;
 var app = express();
+var logger = loggerModule.loggers['Application'];
 
-/* central handlers for express */
+/* middlewares */
 app.use(bodyParser.json());
-app.use(centralErrorHandler.errorHandler);
 
 /* public sector */
 app.get('/', function (req, res) {
@@ -34,7 +38,11 @@ app.use(baseRouters);
 app.use('/einsaetze', einsatzRouter);
 app.use('/stuetzpunkte', stuetzpunktRouter);
 
+/* central error handler */
+app.use(centralErrorHandler);
+
+
 /* run app */
 app.listen(PORT, function () {
-    console.log(`API running on ${HOSTNAME}:${PORT}!`);
+    logger.info(`API running on ${HOSTNAME}:${PORT}!`);
 });

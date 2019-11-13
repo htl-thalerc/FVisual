@@ -1,0 +1,2 @@
+Zu jedem Bild (JavaFX) entsprechende US hinzufügen
+Fußzeile mit Namen, Klasse

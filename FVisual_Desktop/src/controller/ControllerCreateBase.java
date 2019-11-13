@@ -3,17 +3,22 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import app.CentralHandler;
 import bll.Base;
+import bll.CRUDOption;
 import bll.OperationVehicle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
@@ -21,21 +26,19 @@ import javafx.stage.Stage;
 
 public class ControllerCreateBase implements Initializable {
 	@FXML
-	private Button btnCancel;
+	private Button btnReset;
 	@FXML
 	private Button btnBack;
 	@FXML
 	private Button btnNext;
 	@FXML
 	private Button btnFinish;
-
 	@FXML
 	private TabPane tabPaneBase;
 
 	private ControllerBaseManagement controllerBaseManagement;
 	private ControllerCreateBaseTabBase controllerCreateBaseTabBase;
 	private ControllerCreateBaseTabOperationVehicle controllerCreateBaseTabOperationVehicle;
-	private ControllerDialogSaveBase controllerDialogSaveBase;
 
 	private Tab tabBase;
 	private Tab tabOperationVehicle;
@@ -56,6 +59,7 @@ public class ControllerCreateBase implements Initializable {
 
 	private void initDisability() {
 		this.tabOperationVehicle.setDisable(true);
+		this.btnReset.setDisable(true);
 		this.btnBack.setDisable(true);
 		this.btnNext.setDisable(true);
 		this.btnFinish.setDisable(true);
@@ -93,19 +97,37 @@ public class ControllerCreateBase implements Initializable {
 
 	private void initTabPaneListeners() {
 		this.tabBase.setOnSelectionChanged(event -> {
+			this.btnReset.setDisable(false);
 			this.btnBack.setDisable(true);
 			this.btnNext.setDisable(false);
 		});
 
 		this.tabOperationVehicle.setOnSelectionChanged(event -> {
-			this.btnBack.setDisable(false);
+			this.btnReset.setDisable(false);
+			this.btnReset.setDisable(false);
 			this.btnNext.setDisable(true);
 		});
 	}
 
 	@FXML
-	private void onClickBtnCancel(ActionEvent aE) {
-		System.out.println("sdfsdf");
+	private void onClickBtnReset(ActionEvent aE) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Reset Input Fields");
+		alert.setHeaderText("Would you really reset your Basecreation");
+		alert.setContentText("Note: All your Inputs are not going to be saved");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			this.controllerCreateBaseTabBase.clearTextFieds();
+			this.controllerCreateBaseTabOperationVehicle.clearTextFields();
+			this.controllerCreateBaseTabOperationVehicle.clearTableView();
+			alert.close();
+			this.tabPaneBase.getSelectionModel().select(this.tabBase);
+			this.btnReset.setDisable(true);
+			this.btnNext.setDisable(true);
+		} else {
+			alert.close();
+		}
 	}
 
 	@FXML
@@ -135,10 +157,10 @@ public class ControllerCreateBase implements Initializable {
 			System.out.println(collOfCreatedVehicles.get(i).toString());
 		}
 
-		FXMLLoader loader = CentralHandler.loadFXML("/gui/DialogSaveBase.fxml");
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseDialog.fxml");
 
-		this.controllerDialogSaveBase = new ControllerDialogSaveBase(this);
-		loader.setController(this.controllerDialogSaveBase);
+		ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, CRUDOption.POST);
+		loader.setController(controllerDialogSaveBase);
 
 		try {
 			Stage curStage = new Stage();
@@ -146,9 +168,10 @@ public class ControllerCreateBase implements Initializable {
 			curStage.setScene(scene);
 			curStage.initModality(Modality.APPLICATION_MODAL);
 			curStage.setTitle("Would you like to save your created base");
-			this.controllerDialogSaveBase.setData(createdBase, collOfCreatedVehicles);
+			controllerDialogSaveBase.setData(createdBase, collOfCreatedVehicles);
 			curStage.showAndWait();
-			if (this.controllerDialogSaveBase.getButtonState()) {
+			if (controllerDialogSaveBase.getButtonState()) {
+				//ToDo: Insert into DB
 				System.out.println(createdBase.toString());
 				for (int i = 0; i < collOfCreatedVehicles.size(); i++) {
 					System.out.println(collOfCreatedVehicles.get(i).toString());
@@ -157,6 +180,10 @@ public class ControllerCreateBase implements Initializable {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setButtonResetDisability(boolean isDiabled) {
+		this.btnReset.setDisable(isDiabled);
 	}
 
 	public void setButtonNextDisability(boolean isDisabled) {

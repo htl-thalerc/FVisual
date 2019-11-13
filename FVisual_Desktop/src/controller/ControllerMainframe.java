@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import app.CentralHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,9 +72,6 @@ public class ControllerMainframe implements Initializable {
 		ControllerEditProfile.setStage(stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
-		if(CentralHandler.getInstance().getMember() == null) {
-			currentStage.close();
-		}
 	}
 
 	@FXML
