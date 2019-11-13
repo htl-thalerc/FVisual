@@ -14,8 +14,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.JsonSyntaxException;
 
 import app.CentralHandler;
-import bll.Base;
-import bll.Member;
 import bll.OperationVehicle;
 
 public class OperationVehicleManager {

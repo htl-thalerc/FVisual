@@ -243,7 +243,23 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	
 	@FXML 
 	private void onClickMItemUpdateBase(ActionEvent aE) {
-		
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/UpdateFullBaseDialog.fxml");
+
+		ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = new ControllerUpdateFullBaseDialog(this);
+		loader.setController(controllerUpdateFullBaseDialog);
+
+		try {
+			Stage curStage = new Stage();
+			Scene scene = new Scene(loader.load());
+			curStage.setScene(scene);
+			curStage.initModality(Modality.APPLICATION_MODAL);
+			curStage.setTitle("Update Base");
+			//controllerUpdateFullBaseDialog.setData(createdBase, collOfCreatedVehicles);
+			curStage.showAndWait();
+			
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private ArrayList<OperationVehicle> getVehiclesByBaseId(int baseId) {

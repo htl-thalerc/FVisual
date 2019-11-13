@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.JsonSyntaxException;
 
 import app.CentralHandler;
-import bll.OperationVehicle;
 import bll.OtherOrganisation;
 
 public class OtherOrganisationService {
