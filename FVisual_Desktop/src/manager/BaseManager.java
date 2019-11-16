@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
-import app.CentralHandler;
 import bll.Base;
+import helper.CentralHandler;
 
 public class BaseManager {
 	private static BaseManager baseManagerInstance = null;

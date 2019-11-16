@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
-import app.CentralHandler;
 import bll.Member;
+import helper.CentralHandler;
 
 public class MemberManager {
 	private static MemberManager memberManagerInstance = null;

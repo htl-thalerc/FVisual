@@ -5,10 +5,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import app.CentralHandler;
 import bll.Base;
-import bll.CRUDOption;
+import bll.EnumCRUDOption;
+import bll.EnumUpdateTabs;
 import bll.OperationVehicle;
+import helper.CentralHandler;
+import helper.CentralUpdateHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -220,7 +222,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		if(selectedBase != null) {
 			FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseDialog.fxml");
 
-			ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, CRUDOption.DELETE);
+			ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, EnumCRUDOption.DELETE);
 			loader.setController(controllerDialogSaveBase);
 
 			try {
@@ -233,7 +235,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 				controllerDialogSaveBase.setData(selectedBase, collOfVehicles);
 				curStage.showAndWait();
 				if (controllerDialogSaveBase.getButtonState()) {
-					//ToDo: Remove into DB
+					//ToDo: Remove from DB
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -243,22 +245,22 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	
 	@FXML 
 	private void onClickMItemUpdateBase(ActionEvent aE) {
-		FXMLLoader loader = CentralHandler.loadFXML("/gui/UpdateFullBaseDialog.fxml");
-
-		ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = new ControllerUpdateFullBaseDialog(this);
-		loader.setController(controllerUpdateFullBaseDialog);
-
-		try {
-			Stage curStage = new Stage();
-			Scene scene = new Scene(loader.load());
-			curStage.setScene(scene);
-			curStage.initModality(Modality.APPLICATION_MODAL);
-			curStage.setTitle("Update Base");
-			//controllerUpdateFullBaseDialog.setData(createdBase, collOfCreatedVehicles);
-			curStage.showAndWait();
-			
-		} catch (final IOException e) {
-			e.printStackTrace();
+		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
+		if(selectedBase != null) {
+			CentralUpdateHandler.getInstance().initUpdateBaseDialog(selectedBase);	
+		}
+	}
+	
+	@FXML 
+	private void onClickMItemRemoveVehicle(ActionEvent aE) {
+		
+	}
+	
+	@FXML
+	private void onClickMItemUpdateVehicle(ActionEvent aE) {
+		OperationVehicle selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
+		if(selectedVehicle != null) {
+			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedVehicle);
 		}
 	}
 	

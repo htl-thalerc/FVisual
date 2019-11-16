@@ -3,8 +3,8 @@ package controller;
 import java.beans.Visibility;
 import java.io.IOException;
 
-import app.CentralHandler;
 import bll.Member;
+import helper.CentralHandler;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

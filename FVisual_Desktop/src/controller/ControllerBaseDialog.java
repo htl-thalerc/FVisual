@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import bll.Base;
-import bll.CRUDOption;
+import bll.EnumCRUDOption;
 import bll.OperationVehicle;
 
 public class ControllerBaseDialog implements Initializable {
@@ -34,25 +34,25 @@ public class ControllerBaseDialog implements Initializable {
 
 	private ControllerCreateBase controllerCreateBase = null;
 	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup = null;
-	private boolean buttonState = false;
-	private CRUDOption crudOption;
+	private boolean btnSaveState = false;
+	private EnumCRUDOption crudOption;
 
-	public ControllerBaseDialog(ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup, CRUDOption crudOption) {
+	public ControllerBaseDialog(ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup, EnumCRUDOption crudOption) {
 		this.controllerBaseManagementBaseLookup = controllerBaseManagementBaseLookup;
 		this.crudOption = crudOption;
 	}
 	
-	public ControllerBaseDialog(ControllerCreateBase controllerCreateBase, CRUDOption crudOption) {
+	public ControllerBaseDialog(ControllerCreateBase controllerCreateBase, EnumCRUDOption crudOption) {
 		this.controllerCreateBase = controllerCreateBase;
 		this.crudOption = crudOption;
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		if(this.crudOption.equals(CRUDOption.POST)) {
+		if(this.crudOption.equals(EnumCRUDOption.POST)) {
 			this.btnOk.setText("Save");
 			this.lbStatusMessage.setText("Note: When creating Base all associated Vehicles are also going to be created");
-		} else if(this.crudOption.equals(CRUDOption.DELETE)) {
+		} else if(this.crudOption.equals(EnumCRUDOption.DELETE)) {
 			this.btnOk.setText("Remove");
 			this.lbStatusMessage.setText("Note: When removing Base all associated Vehicles are also going to be removed");
 		}
@@ -61,14 +61,14 @@ public class ControllerBaseDialog implements Initializable {
 	@FXML
 	private void onClickBtnCancel(ActionEvent aE) {
 		Stage stage = (Stage) ((Button) aE.getSource()).getScene().getWindow();
-		this.buttonState = false;
+		this.btnSaveState = false;
 		stage.close();
 	}
 
 	@FXML
 	private void onClickBtnOk(ActionEvent aE) {
 		Stage stage = (Stage) ((Button) aE.getSource()).getScene().getWindow();
-		this.buttonState = true;
+		this.btnSaveState = true;
 		stage.close();
 	}
 
@@ -82,6 +82,6 @@ public class ControllerBaseDialog implements Initializable {
 	}
 
 	public boolean getButtonState() {
-		return this.buttonState;
+		return this.btnSaveState;
 	}
 }

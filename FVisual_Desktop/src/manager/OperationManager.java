@@ -13,9 +13,9 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
-import app.CentralHandler;
 import bll.Base;
 import bll.Operation;
+import helper.CentralHandler;
 
 public class OperationManager {
 	private static BaseManager baseManagerInstance = null;
