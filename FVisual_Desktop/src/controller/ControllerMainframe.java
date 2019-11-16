@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import helper.CentralHandler;
+import handler.CentralHandler;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,6 +33,7 @@ public class ControllerMainframe implements Initializable {
 	@FXML
 	private Label lblMessage;
 	private CentralHandler ch;
+	@FXML
 	private BorderPane mainPane;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 	private static Stage currentStage;

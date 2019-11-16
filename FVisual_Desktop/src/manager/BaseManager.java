@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
-import helper.CentralHandler;
+import handler.CentralHandler;
 
 public class BaseManager {
 	private static BaseManager baseManagerInstance = null;

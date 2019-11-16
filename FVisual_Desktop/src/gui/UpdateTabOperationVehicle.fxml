@@ -98,10 +98,13 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="lbStatusbar" alignment="BOTTOM_LEFT" />
+            <Label fx:id="lbStatusbar" alignment="BOTTOM_LEFT">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></Label>
          </children>
          <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" />
+            <Insets bottom="5.0" />
          </BorderPane.margin>
       </GridPane>
    </bottom>

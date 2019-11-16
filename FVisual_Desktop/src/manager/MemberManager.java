@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.JsonSyntaxException;
 
 import bll.Member;
-import helper.CentralHandler;
+import handler.CentralHandler;
 
 public class MemberManager {
 	private static MemberManager memberManagerInstance = null;

@@ -9,8 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -35,9 +33,39 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
-		this.initListeners();
+		this.initListViewListeners();
+		this.initTextFieldListeners();
 	}
-
+	
+	private void initListViewListeners() {
+		this.lvVehicles.setOnMouseClicked(event -> {
+			OperationVehicle selectedOperationVehicle = this.lvVehicles.getSelectionModel().getSelectedItem();
+			if(selectedOperationVehicle != null) {
+				this.lbOldVehiclename.setText(selectedOperationVehicle.getDescription());
+			} else {
+				this.lbOldVehiclename.setText("No Operationvehicle selected");
+			}
+		});
+	}
+	
+	private void initTextFieldListeners() {
+		this.tfNewVehiclename.textProperty().addListener((obj, oldVal, newVal) -> {
+			if(newVal.length() >= 3) {
+				this.isValidVehiclename.set(true);
+				this.lbStatusbar.setText("Valid Inputvalue for Vehiclename");
+				this.tfNewVehiclename.setStyle("-fx-text-box-border: green;");
+				this.tfNewVehiclename.setStyle("-fx-focus-color: green;");
+				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
+			} else {
+				this.isValidVehiclename.set(false);
+				this.lbStatusbar.setText("Invalid Inputvalue for Vehiclename is too short (length >= 3)");
+				this.tfNewVehiclename.setStyle("-fx-text-box-border: red;");
+				this.tfNewVehiclename.setStyle("-fx-focus-color: red;");
+				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
+			}
+		});
+	}
+	
 	public void setOperationVehicleData(OperationVehicle oldOperationVehicleData) {
 		ObservableList<OperationVehicle> obsListOfVehicleData = FXCollections.observableArrayList();
 		obsListOfVehicleData.add(oldOperationVehicleData);
@@ -53,32 +81,5 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 				vehicle.setDescription(this.tfNewVehiclename.getText());	
 		} 
 		return vehicle;
-	}
-	
-	private void initListeners() {
-		this.lvVehicles.setOnMouseClicked(event -> {
-			OperationVehicle selectedOperationVehicle = this.lvVehicles.getSelectionModel().getSelectedItem();
-			if(selectedOperationVehicle != null) {
-				this.lbOldVehiclename.setText(selectedOperationVehicle.getDescription());
-			} else {
-				this.lbOldVehiclename.setText("No Operationvehicle selected");
-			}
-		});
-		
-		this.tfNewVehiclename.textProperty().addListener((obj, oldVal, newVal) -> {
-			if(newVal.length() >= 3) {
-				this.isValidVehiclename.set(true);
-				this.lbStatusbar.setText("Valid Inputvalue for Vehiclename");
-				this.tfNewVehiclename.setStyle("-fx-text-box-border: green;");
-				this.tfNewVehiclename.setStyle("-fx-focus-color: green;");
-				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
-			} else {
-				this.isValidVehiclename.set(false);
-				this.lbStatusbar.setText("InValid Inputvalue for Vehiclename is too short (length >= 3)");
-				this.tfNewVehiclename.setStyle("-fx-text-box-border: red;");
-				this.tfNewVehiclename.setStyle("-fx-focus-color: red;");
-				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
-			}
-		});
 	}
 }

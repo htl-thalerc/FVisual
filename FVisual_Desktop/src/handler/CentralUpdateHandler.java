@@ -1,4 +1,4 @@
-package helper;
+package handler;
 
 import java.io.IOException;
 
@@ -28,6 +28,8 @@ public class CentralUpdateHandler {
 		Stage stage = this.initUpdateFullBaseDialog();
 		this.controllerUpdateFullBaseDialog.selectTabUpdateBase();
 		this.controllerUpdateFullBaseDialog.setOldBaseData(selectedBase);
+		/*this.controllerUpdateFullBaseDialog.setOldOperationVehicleData();
+		this.controllerUpdateFullBaseDialog.setOldMemberData();*/
 		stage.showAndWait();
 		
 		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {

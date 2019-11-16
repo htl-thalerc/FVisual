@@ -1,7 +1,7 @@
 package controller;
 
 import dal.DatabaseHelperLoginLogout;
-import helper.CentralHandler;
+import handler.CentralHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
