@@ -1,9 +1,9 @@
 package controller;
 
-import app.CentralHandler;
 import app.Main;
 import bll.User;
 import dal.DatabaseHelperLoginLogout;
+import handler.CentralHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,6 +32,7 @@ public class ControllerLoginLogout {
     @FXML
     private void onButtonLoginClicked(MouseEvent me) throws Exception {
     	try {
+    		System.out.println("hey hi");
         	dbHelper = DatabaseHelperLoginLogout.newInstance();
         	CentralHandler ch = CentralHandler.getInstance();
         	
@@ -61,6 +62,7 @@ public class ControllerLoginLogout {
         		throw new Exception("Username or Password wrong");
         	}
     	}catch(Exception ex) {
+    		ex.printStackTrace();
     		lblMessage.setText(ex.getMessage());
     	}
     }

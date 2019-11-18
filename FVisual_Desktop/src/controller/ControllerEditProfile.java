@@ -3,8 +3,8 @@ package controller;
 import java.beans.Visibility;
 import java.io.IOException;
 
-import app.CentralHandler;
 import bll.Member;
+import handler.CentralHandler;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,6 +28,9 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class ControllerEditProfile {
+	@FXML
+	private Label lblErrorPassword;
+	
     @FXML
     private Pane paneEditProfile;
 
@@ -44,10 +47,11 @@ public class ControllerEditProfile {
     private PasswordField txtNewPassword;
     
     @FXML
+    private PasswordField txtRepeatPassword;
+    
+    @FXML
     private CheckBox ckAdminRights;
 
-    @FXML
-    private PasswordField txtRepeatPassword;
     private Popup popup;
     private static Stage stage;
     private Group group;
@@ -95,6 +99,7 @@ public class ControllerEditProfile {
             public void handle(ActionEvent e) 
             { 
             	// change User in Database
+            	CentralHandler.getInstance().setMember(null);
             	stage.close();
             } 
         });
@@ -119,21 +124,32 @@ public class ControllerEditProfile {
     
     @FXML
 	private void onEditProfileClicked(MouseEvent me) {
-    	Rectangle rect = new Rectangle(476, 657, Color.GRAY);
-    	rect.opacityProperty().set(0.5);
-    	
-    	group = new Group();
-    	group.getChildren().addAll(stage.getScene().getRoot(), rect);
-    	
-    	Scene scene = new Scene(group, 476, 657);
-    	stage.setScene(scene);
-    	stage.show();
-    	
-		popup.show(stage);
+    	if(!ckAdminRights.isSelected()) {
+        	Rectangle rect = new Rectangle(476, 657, Color.GRAY);
+        	rect.opacityProperty().set(0.5);
+        	
+        	group = new Group();
+        	group.getChildren().addAll(stage.getScene().getRoot(), rect);
+        	
+        	Scene scene = new Scene(group, 476, 657);
+        	stage.setScene(scene);
+        	stage.show();
+        	
+    		popup.show(stage);
+    	}
+    	else {
+    		// edit firstname and Lastname in database
+    		stage.close();
+    	}
 	}
 	
     @FXML
 	private void onChangePasswordClicked(MouseEvent me) {
-		
+		if(txtNewPassword.getText() != txtRepeatPassword.getText() || txtNewPassword.getText().equals("") || txtRepeatPassword.getText().equals("")) {
+			lblErrorPassword.setText("Passwords are not equal or empty");
+		}
+		else {
+			// change Password in database
+		}
 	}
 }

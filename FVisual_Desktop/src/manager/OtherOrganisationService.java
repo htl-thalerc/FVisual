@@ -13,9 +13,8 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
-import app.CentralHandler;
-import bll.OperationVehicle;
 import bll.OtherOrganisation;
+import handler.CentralHandler;
 
 public class OtherOrganisationService {
 	private static OperationVehicleManager operationVehicleManagerInstance = null;

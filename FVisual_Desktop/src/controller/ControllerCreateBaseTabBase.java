@@ -33,16 +33,6 @@ public class ControllerCreateBaseTabBase implements Initializable {
 	@FXML
 	private Label lbStatusbarHouseNr;
 	@FXML
-	private CheckBox checkBoxBaseName;
-	@FXML
-	private CheckBox checkBoxPlace;
-	@FXML
-	private CheckBox checkBoxPostCode;
-	@FXML
-	private CheckBox checkBoxStreet;
-	@FXML
-	private CheckBox checkBoxHouseNr;
-	@FXML
 	private Label lbStatusbarBaseName;
 
 	private ControllerCreateBase controllerCreateBase;
@@ -53,17 +43,8 @@ public class ControllerCreateBaseTabBase implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		this.initCheckBoxDisability();
 		this.initTextFieldPatterns();
 		this.initTextFieldListeners();
-	}
-
-	private void initCheckBoxDisability() {
-		this.checkBoxBaseName.setDisable(true);
-		this.checkBoxHouseNr.setDisable(true);
-		this.checkBoxPlace.setDisable(true);
-		this.checkBoxPostCode.setDisable(true);
-		this.checkBoxStreet.setDisable(true);
 	}
 
 	private void initTextFieldPatterns() {
@@ -79,109 +60,99 @@ public class ControllerCreateBaseTabBase implements Initializable {
 	}
 
 	private void initTextFieldListeners() {
-		AtomicBoolean isValidBaseName = new AtomicBoolean(false);
+		AtomicBoolean isValidBasename = new AtomicBoolean(false);
 		AtomicBoolean isValidHouseNr = new AtomicBoolean(false);
 		AtomicBoolean isValidPlace = new AtomicBoolean(false);
 		AtomicBoolean isValidPostCode = new AtomicBoolean(false);
 		AtomicBoolean isValidStreet = new AtomicBoolean(false);
 
 		this.tfBaseName.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (!newVal.isEmpty() && newVal != null && newVal != "") {
-				if (newVal.length() >= 12) {
-					this.lbStatusbarBaseName.setText("Valid Base Name");
-					this.checkBoxBaseName.setSelected(true);
-					isValidBaseName.set(true);
-				} else {
-					this.lbStatusbarBaseName.setText("Invalid - Base Name is too short");
-					this.checkBoxBaseName.setSelected(false);
-					isValidBaseName.set(false);
-				}
+			if (newVal.length() >= 12) {
+				isValidBasename.set(true);
+				this.lbStatusbarBaseName.setText("Valid Inputvalue for Basename");
+				this.tfBaseName.setStyle("-fx-text-box-border: green;");
+				this.tfBaseName.setStyle("-fx-focus-color: green;");
+				this.tfBaseName.setStyle("-fx-border-color: green;");
 			} else {
-				this.lbStatusbarBaseName.setText("Invalid - Inputfield is empty");
-				this.checkBoxBaseName.setSelected(false);
-				isValidBaseName.set(false);
+				isValidBasename.set(false);
+				this.lbStatusbarBaseName.setText("Invalid Inputvalue for Basename - Inputvalue is too short (length >= 12)");
+				this.tfBaseName.setStyle("-fx-text-box-border: red;");
+				this.tfBaseName.setStyle("-fx-focus-color: red;");
+				this.tfBaseName.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidBaseName.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
+			setControlDisability(isValidBasename.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
 					isValidStreet.get());
 		});
 
 		this.tfHouseNr.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (!newVal.isEmpty() && newVal != null && newVal != "") {
-				if (newVal.length() >= 1) {
-					this.lbStatusbarHouseNr.setText("Valid House Number");
-					this.checkBoxHouseNr.setSelected(true);
-					isValidHouseNr.set(true);
-				} else {
-					this.lbStatusbarHouseNr.setText("Invalid - House Number is too short");
-					this.checkBoxHouseNr.setSelected(false);
-					isValidHouseNr.set(false);
-				}
+			if (newVal.length() >= 1) {
+				isValidHouseNr.set(true);
+				this.lbStatusbarHouseNr.setText("Valid Inputvalue for HouseNr");
+				this.tfHouseNr.setStyle("-fx-text-box-border: green;");
+				this.tfHouseNr.setStyle("-fx-focus-color: green;");
+				this.tfHouseNr.setStyle("-fx-border-color: green;");
 			} else {
-				this.lbStatusbarHouseNr.setText("Invalid - Inputfield is empty");
-				this.checkBoxHouseNr.setSelected(false);
 				isValidHouseNr.set(false);
+				this.lbStatusbarHouseNr.setText("Invalid Inputvalue for HouseNr - Inputvalue is too short (length >= 1)");
+				this.tfHouseNr.setStyle("-fx-text-box-border: red;");
+				this.tfHouseNr.setStyle("-fx-focus-color: red;");
+				this.tfHouseNr.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidBaseName.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
+			setControlDisability(isValidBasename.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
 					isValidStreet.get());
 		});
 
 		this.tfPlace.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (!newVal.isEmpty() && newVal != null && newVal != "") {
-				if (newVal.length() >= 3) {
-					this.lbStatusbarPlace.setText("Valid Place");
-					this.checkBoxPlace.setSelected(true);
-					isValidPlace.set(true);
-				} else {
-					this.lbStatusbarPlace.setText("Invalid - Placename is too short");
-					this.checkBoxPlace.setSelected(false);
-					isValidPlace.set(false);
-				}
+			if (newVal.length() >= 3) {
+				isValidPlace.set(true);
+				this.lbStatusbarPlace.setText("Valid Inputvalue for Place");
+				this.tfPlace.setStyle("-fx-text-box-border: green;");
+				this.tfPlace.setStyle("-fx-focus-color: green;");
+				this.tfPlace.setStyle("-fx-border-color: green;");
 			} else {
-				this.lbStatusbarPlace.setText("Invalid - Inputfield is empty");
-				this.checkBoxPlace.setSelected(false);
 				isValidPlace.set(false);
+				this.lbStatusbarPlace.setText("Invalid Inputvalue for Place - Inputvalue is too short (length >= 3)");
+				this.tfPlace.setStyle("-fx-text-box-border: red;");
+				this.tfPlace.setStyle("-fx-focus-color: red;");
+				this.tfPlace.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidBaseName.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
+			setControlDisability(isValidBasename.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
 					isValidStreet.get());
 		});
 
 		this.tfPostCode.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (!newVal.isEmpty() && newVal != null && newVal != "") {
-				if (newVal.length() == 4) {
-					this.lbStatusbarPostCode.setText("Valid Postcode");
-					this.checkBoxPostCode.setSelected(true);
-					isValidPostCode.set(true);
-				} else {
-					this.lbStatusbarPostCode.setText("Invalid - Post Code must have a length of 4");
-					this.checkBoxPostCode.setSelected(false);
-					isValidPostCode.set(false);
-				}
+			if (newVal.length() == 4) {
+				isValidPostCode.set(true);
+				this.lbStatusbarPostCode.setText("Valid Inputvalue for PostCode");
+				this.tfPostCode.setStyle("-fx-text-box-border: green;");
+				this.tfPostCode.setStyle("-fx-focus-color: green;");
+				this.tfPostCode.setStyle("-fx-border-color: green;");
 			} else {
-				this.lbStatusbarPostCode.setText("Invalid - Inputfield is empty");
-				this.checkBoxPostCode.setSelected(false);
 				isValidPostCode.set(false);
+				this.lbStatusbarPostCode.setText("Invalid Inputvalue for PostCode - Inputvalue is too short (length = 4)");
+				this.tfPostCode.setStyle("-fx-text-box-border: red;");
+				this.tfPostCode.setStyle("-fx-focus-color: red;");
+				this.tfPostCode.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidBaseName.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
+			setControlDisability(isValidBasename.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
 					isValidStreet.get());
 		});
 
 		this.tfStreet.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (!newVal.isEmpty() && newVal != null && newVal != "") {
-				if (newVal.length() >= 3) {
-					this.lbStatusbarStreet.setText("Valid Streetname");
-					this.checkBoxStreet.setSelected(true);
-					isValidStreet.set(true);
-				} else {
-					this.lbStatusbarStreet.setText("Invalid - Streetname is too short");
-					this.checkBoxStreet.setSelected(false);
-					isValidStreet.set(false);
-				}
+			if (newVal.length() >= 3) {
+				isValidStreet.set(true);
+				this.lbStatusbarStreet.setText("Valid Inputvalue for Street");
+				this.tfStreet.setStyle("-fx-text-box-border: green;");
+				this.tfStreet.setStyle("-fx-focus-color: green;");
+				this.tfStreet.setStyle("-fx-border-color: green;");
 			} else {
-				this.lbStatusbarStreet.setText("Invalid - Inputfield is empty");
-				this.checkBoxStreet.setSelected(false);
 				isValidStreet.set(false);
+				this.lbStatusbarStreet.setText("Invalid Inputvalue for Street - Inputvalue is too short (length >= 3)");
+				this.tfStreet.setStyle("-fx-text-box-border: red;");
+				this.tfStreet.setStyle("-fx-focus-color: red;");
+				this.tfStreet.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidBaseName.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
+			setControlDisability(isValidBasename.get(), isValidHouseNr.get(), isValidPlace.get(), isValidPostCode.get(),
 					isValidStreet.get());
 		});
 	}

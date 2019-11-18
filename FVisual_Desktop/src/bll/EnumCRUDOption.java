@@ -1,5 +1,5 @@
 package bll;
 
-public enum CRUDOption {
+public enum EnumCRUDOption {
 	GET, POST, DELETE, PUT
 }

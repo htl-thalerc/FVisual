@@ -5,17 +5,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import handler.CentralHandler;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class ControllerMainframe implements Initializable {
 	@FXML
@@ -27,17 +31,26 @@ public class ControllerMainframe implements Initializable {
 	@FXML
 	private MenuItem mItemLogout;
 	@FXML
+	private Label lblMessage;
+	private CentralHandler ch;
+	@FXML
 	private BorderPane mainPane;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 	private static Stage currentStage;
 	
 	static void setStage(Stage stage) {
 		currentStage = stage;
+		
+		currentStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	              System.exit(0);
+	          }
+	      });   
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+     
 	}
 
 	@FXML
@@ -72,7 +85,12 @@ public class ControllerMainframe implements Initializable {
 		ControllerEditProfile.setStage(stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
+		if(ch.getMember() == null) {
+			currentStage.close();
+		}
 	}
+	
+	
 
 	@FXML
 	private void onClickmItemLogout(ActionEvent aE) {

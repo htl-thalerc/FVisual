@@ -10,21 +10,27 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import bll.Base;
+import bll.EditingCell;
 import bll.OperationVehicle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 
 public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 	@FXML
@@ -34,30 +40,18 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 	@FXML
 	private Button btnAddEnteredVehicle;
 	@FXML
-	private Button btnUpdateVehicle;
-	@FXML
 	private Button btnSelectAllOrNone;
 	@FXML
 	private TextField tfAddVehicleDescription;
 	@FXML
-	private TextField tfUpdateVehicleDescription;
-	@FXML
 	private Label lbStatusbarAddVehicle;
-	@FXML
-	private Label lbStatusbarUpdateVehicle;
 	@FXML
 	private CheckBox checkBoxAddVehicle;
 	@FXML
-	private CheckBox checkBoxUpdateVehicle;
-
-	@FXML
 	private TableView<OperationVehicle> tvVehicleData;
-	@FXML
-	private TableColumn<OperationVehicle, String> columnSelection;
 
 	private ObservableList<OperationVehicle> obsListOfOperationVehicles;
 	private ControllerCreateBase controllerCreateBase;
-	private OperationVehicle selectedVehicleToUpdate;
 
 	private Set<OperationVehicle> setOfAddedVehicles = new HashSet<>();
 
@@ -76,27 +70,38 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 
 	private void initDisability() {
 		this.checkBoxAddVehicle.setDisable(true);
-		this.checkBoxUpdateVehicle.setDisable(true);
-		this.btnUpdateVehicle.setDisable(true);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void initTableView() {
-		TableColumn<OperationVehicle, String> columnBaseName = new TableColumn<OperationVehicle, String>("Base Name");
+		this.tvVehicleData.setEditable(true);
+        Callback<TableColumn<OperationVehicle, String>, TableCell<OperationVehicle, String>> cellFactory =
+             new Callback<TableColumn<OperationVehicle, String>, TableCell<OperationVehicle, String>>() {
+                 public TableCell<OperationVehicle, String> call(TableColumn<OperationVehicle, String> p) {
+                    return new EditingCell();
+                 }
+             };
+		
 		TableColumn<OperationVehicle, String> columnVehicleDescription = new TableColumn<OperationVehicle, String>(
 				"Vehicle Description");
 
-		this.columnSelection.setCellValueFactory(new PropertyValueFactory<OperationVehicle, String>("selection"));
-		columnBaseName
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
 		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<OperationVehicle, String>("description"));
 
 		this.tvVehicleData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		this.columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 10);
-		columnBaseName.setMaxWidth(1f * Integer.MAX_VALUE * 40);
-		columnVehicleDescription.setMaxWidth(1f * Integer.MAX_VALUE * 50);
-
-		this.tvVehicleData.getColumns().addAll(columnBaseName, columnVehicleDescription);
+		
+		columnVehicleDescription.setCellFactory(cellFactory);
+		columnVehicleDescription.setOnEditCommit(
+            new EventHandler<CellEditEvent<OperationVehicle, String>>() {
+                @Override
+                public void handle(CellEditEvent<OperationVehicle, String> t) {
+                    ((OperationVehicle) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())
+                        ).setDescription(t.getNewValue());
+                }
+            }
+        );
+		
+		this.tvVehicleData.getColumns().addAll(columnVehicleDescription);
 	}
 
 	private void initComboBox() {
@@ -121,7 +126,7 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 
 	private void initListeners() {
 		AtomicBoolean isValidDescriptionAddVehicle = new AtomicBoolean(false);
-		AtomicBoolean isValidDescriptionUpdateVehicle = new AtomicBoolean(false);
+		AtomicBoolean vehicleExists = new AtomicBoolean(false);
 
 		this.tfAddVehicleDescription.textProperty().addListener((obj, oldVal, newVal) -> {
 			if (!newVal.isEmpty() && newVal != null && newVal != "") {
@@ -143,50 +148,22 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 
 		this.btnAddEnteredVehicle.setOnMouseClicked(event -> {
 			if (isValidDescriptionAddVehicle.get()) {
-				this.setOfAddedVehicles.add(new OperationVehicle(new CheckBox(), 0,
-						this.tfAddVehicleDescription.getText().trim(), this.controllerCreateBase.getCreatedBase()));
-				this.obsListOfOperationVehicles.clear();
+				for(OperationVehicle currVehicle : this.setOfAddedVehicles) {
+					if(currVehicle.getDescription().equals(this.tfAddVehicleDescription.getText().trim())) {
+						vehicleExists.set(true);
+						break;
+					} else {
+						vehicleExists.set(false);
+					}
+				}
+				if(!vehicleExists.get()) {
+					this.setOfAddedVehicles.add(new OperationVehicle(new CheckBox(), 0,
+							this.tfAddVehicleDescription.getText().trim(), this.controllerCreateBase.getCreatedBase()));
+				}
 				this.obsListOfOperationVehicles.addAll(this.setOfAddedVehicles);
 				this.tvVehicleData.setItems(this.obsListOfOperationVehicles);
 				this.tvVehicleData.refresh();
 			}
-		});
-
-		this.tfUpdateVehicleDescription.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (!newVal.isEmpty() && newVal != null && newVal != "") {
-				if (newVal.length() >= 3) {
-					this.lbStatusbarUpdateVehicle.setText("Valid Vehicle Description");
-					this.checkBoxUpdateVehicle.setSelected(true);
-					isValidDescriptionUpdateVehicle.set(true);
-				} else {
-					this.lbStatusbarUpdateVehicle.setText("Invalid - Vehicle Description is too short");
-					this.checkBoxUpdateVehicle.setSelected(false);
-					isValidDescriptionUpdateVehicle.set(false);
-				}
-			} else {
-				this.lbStatusbarUpdateVehicle.setText("Invalid - Inputfield is empty");
-				this.checkBoxUpdateVehicle.setSelected(false);
-				isValidDescriptionUpdateVehicle.set(false);
-			}
-		});
-
-		this.btnUpdateVehicle.setOnMouseClicked(event -> {
-			if (isValidDescriptionUpdateVehicle.get()) {
-				OperationVehicle updatedVehicle = selectedVehicleToUpdate;
-				updatedVehicle.setDescription(this.tfUpdateVehicleDescription.getText());
-
-				if (updatedVehicle.getDescription() != null) {
-					for (OperationVehicle currVehicle : this.obsListOfOperationVehicles) {
-						if (currVehicle.equals(updatedVehicle)) {
-							currVehicle = updatedVehicle;
-						}
-					}
-					this.tvVehicleData.setItems(this.obsListOfOperationVehicles);
-					this.tvVehicleData.refresh();
-				}
-			}
-			this.tfUpdateVehicleDescription.setText("");
-			this.btnUpdateVehicle.setDisable(true);
 		});
 	}
 
@@ -226,22 +203,17 @@ public class ControllerCreateBaseTabOperationVehicle implements Initializable {
 		}
 	}
 
-	@FXML
-	private void onClickMItemUpdateVehicle(ActionEvent aE) {
-		this.selectedVehicleToUpdate = this.tvVehicleData.getSelectionModel().getSelectedItem();
-		if (this.selectedVehicleToUpdate != null) {
-			this.btnUpdateVehicle.setDisable(false);
-			this.tfUpdateVehicleDescription.setText(this.selectedVehicleToUpdate.getDescription());
-		}
-	}
-
 	public List<OperationVehicle> getCreatedVehicleData() {
 		return this.obsListOfOperationVehicles.stream().collect(Collectors.toList());
+	}
+	
+	@FXML
+	private void onClickMItemUpdateVehicle(ActionEvent aE) {
+		//ToDo: Build update dialog
 	}
 
 	public void clearTextFields() {
 		this.tfAddVehicleDescription.clear();
-		this.tfUpdateVehicleDescription.clear();
 	}
 
 	public void clearTableView() {

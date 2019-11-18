@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import app.CentralHandler;
 import bll.Base;
-import bll.CRUDOption;
+import bll.EnumCRUDOption;
 import bll.OperationVehicle;
+import handler.CentralHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -159,7 +159,7 @@ public class ControllerCreateBase implements Initializable {
 
 		FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseDialog.fxml");
 
-		ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, CRUDOption.POST);
+		ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, EnumCRUDOption.POST);
 		loader.setController(controllerDialogSaveBase);
 
 		try {
