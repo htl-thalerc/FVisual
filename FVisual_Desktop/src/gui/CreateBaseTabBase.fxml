@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -10,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="537.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="537.0" prefWidth="1100.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <ListView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -23,7 +22,6 @@
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="150.0" prefWidth="150.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="350.0" prefWidth="250.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="25.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
@@ -47,52 +45,27 @@
             <TextField fx:id="tfPostCode" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="tfStreet" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="tfHouseNr" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="lbStatusbarPlace" text="Invalid - No Place selected" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <Label fx:id="lbStatusbarPlace" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="lbStatusbarPostCode" text="Invalid - No Post Code selected" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <Label fx:id="lbStatusbarPostCode" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="lbStatusbarStreet" text="Invalid - No Street selected" GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <Label fx:id="lbStatusbarStreet" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="lbStatusbarHouseNr" text="Invalid - No House Number selected" GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <Label fx:id="lbStatusbarHouseNr" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
             </Label>
-            <CheckBox fx:id="checkBoxBaseName" mnemonicParsing="false" GridPane.columnIndex="2">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </CheckBox>
-            <CheckBox fx:id="checkBoxPlace" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </CheckBox>
-            <CheckBox fx:id="checkBoxPostCode" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </CheckBox>
-            <CheckBox fx:id="checkBoxStreet" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </CheckBox>
-            <CheckBox fx:id="checkBoxHouseNr" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </CheckBox>
-            <Label fx:id="lbStatusbarBaseName" text="Invalid - No Base Name selected" GridPane.columnIndex="3">
+            <Label fx:id="lbStatusbarBaseName" GridPane.columnIndex="2">
                <padding>
                   <Insets left="5.0" />
                </padding>
