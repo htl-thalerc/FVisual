@@ -1,7 +1,35 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/map"
-    tools:context=".MapsActivity"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Heyo"
+    xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="603dp"
+        tools:context=".MapsActivity" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="58dp"
+        android:layout_height="29dp"
+        android:text="Einsatz"
+        android:background="@drawable/einsaetze_circle"
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="87dp"
+        android:layout_height="29dp"
+        android:background="@drawable/stuetzpunkte_circle"
+        android:text="Stuetzpunkt" />
+
+</LinearLayout>
+
