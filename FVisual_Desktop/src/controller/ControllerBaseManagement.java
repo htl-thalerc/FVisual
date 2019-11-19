@@ -16,7 +16,7 @@ public class ControllerBaseManagement implements Initializable {
 	private TabPane mainTabPaneBaseManagement;
 
 	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup;
-	private ControllerCreateBase controllerCreateBase;
+	private ControllerCreateBaseManagement controllerCreateBase;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -46,10 +46,10 @@ public class ControllerBaseManagement implements Initializable {
 	 * Loads for Tab 'Create New Base' the Content
 	 */
 	private void initTabCreateNewBase() {
-		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBase.fxml");
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBaseManagement.fxml");
 		Tab tabCreateBase = new Tab();
-		tabCreateBase.setText("Create Base");
-		this.controllerCreateBase = new ControllerCreateBase(this);
+		tabCreateBase.setText("Create Base Management");
+		this.controllerCreateBase = new ControllerCreateBaseManagement(this);
 		loader.setController(this.controllerCreateBase);
 
 		try {

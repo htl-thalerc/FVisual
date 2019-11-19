@@ -8,12 +8,11 @@ import java.util.regex.Pattern;
 import bll.Base;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-public class ControllerCreateBaseTabBase implements Initializable {
+public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	@FXML
 	private TextField tfBaseName;
 	@FXML
@@ -35,9 +34,9 @@ public class ControllerCreateBaseTabBase implements Initializable {
 	@FXML
 	private Label lbStatusbarBaseName;
 
-	private ControllerCreateBase controllerCreateBase;
+	private ControllerCreateBaseManagement controllerCreateBase;
 
-	public ControllerCreateBaseTabBase(ControllerCreateBase controllerCreateBase) {
+	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBase) {
 		this.controllerCreateBase = controllerCreateBase;
 	}
 
@@ -163,12 +162,16 @@ public class ControllerCreateBaseTabBase implements Initializable {
 			this.controllerCreateBase.setButtonResetDisability(false);
 			this.controllerCreateBase.setButtonNextDisability(false);
 			this.controllerCreateBase.setButtonFinishDisability(false);
-			this.controllerCreateBase.setTabOperationVehicleDisability(false);
+			this.controllerCreateBase.setTabOperationVehicleManagementDisability(false);
+			this.controllerCreateBase.setTabOtherOrganisationManagementDisability(false);
+			this.controllerCreateBase.setTabMemberManagementDisability(false);
 		} else {
 			this.controllerCreateBase.setButtonResetDisability(true);
 			this.controllerCreateBase.setButtonFinishDisability(true);
 			this.controllerCreateBase.setButtonNextDisability(true);
-			this.controllerCreateBase.setTabOperationVehicleDisability(true);
+			this.controllerCreateBase.setTabOperationVehicleManagementDisability(true);
+			this.controllerCreateBase.setTabOtherOrganisationManagementDisability(true);
+			this.controllerCreateBase.setTabMemberManagementDisability(true);
 		}
 	}
 
@@ -177,7 +180,7 @@ public class ControllerCreateBaseTabBase implements Initializable {
 				Integer.parseInt(this.tfPostCode.getText()), this.tfStreet.getText(), this.tfHouseNr.getText());
 	}
 
-	public void clearTextFieds() {
+	public void reset() {
 		this.tfBaseName.clear();
 		this.tfHouseNr.clear();
 		this.tfPlace.clear();

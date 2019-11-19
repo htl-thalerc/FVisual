@@ -7,8 +7,9 @@ import java.util.ResourceBundle;
 
 import bll.Base;
 import bll.EnumCRUDOption;
-import bll.EnumUpdateTabs;
+import bll.Member;
 import bll.OperationVehicle;
+import bll.OtherOrganisation;
 import handler.CentralHandler;
 import handler.CentralUpdateHandler;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,7 +30,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import manager.BaseManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -220,19 +220,22 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		
 		if(selectedBase != null) {
-			FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseDialog.fxml");
+			FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseManagementDialog.fxml");
 
-			ControllerBaseDialog controllerDialogSaveBase = new ControllerBaseDialog(this, EnumCRUDOption.DELETE);
+			ControllerBaseManagementDialog controllerDialogSaveBase = new ControllerBaseManagementDialog(this, EnumCRUDOption.DELETE);
 			loader.setController(controllerDialogSaveBase);
-
+			
 			try {
 				Stage curStage = new Stage();
-				Scene scene = new Scene(loader.load(), 600, 300);
+				Scene scene = new Scene(loader.load());
 				curStage.setScene(scene);
 				curStage.initModality(Modality.APPLICATION_MODAL);
 				curStage.setTitle("Would you like to remove your selected Base");
-				ArrayList<OperationVehicle> collOfVehicles = getVehiclesByBaseId(selectedBase.getBaseId());
-				controllerDialogSaveBase.setData(selectedBase, collOfVehicles);
+				
+				controllerDialogSaveBase.setBaseData(selectedBase);
+				controllerDialogSaveBase.setListViewOperationVehicleData(new ArrayList<OperationVehicle>());
+				controllerDialogSaveBase.setListViewOtherOrganisationData(new ArrayList<OtherOrganisation>());
+				controllerDialogSaveBase.setListViewMemberData(new ArrayList<Member>());
 				curStage.showAndWait();
 				if (controllerDialogSaveBase.getButtonState()) {
 					//ToDo: Remove from DB
@@ -262,16 +265,5 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		if(selectedVehicle != null) {
 			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedVehicle);
 		}
-	}
-	
-	private ArrayList<OperationVehicle> getVehiclesByBaseId(int baseId) {
-		ArrayList<OperationVehicle> collOfVehicles = new ArrayList<OperationVehicle>();
-		
-		for(int i=0;i<this.obsListTVVehicles.size();i++) {
-			if(this.obsListTVVehicles.get(i).getBase().getBaseId() == baseId) {
-				collOfVehicles.add(this.obsListTVVehicles.get(i));
-			}
-		}
-		return collOfVehicles;
 	}
 }

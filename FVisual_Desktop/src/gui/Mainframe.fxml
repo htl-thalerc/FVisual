@@ -6,26 +6,35 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMainframe">
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-            <Menu mnemonicParsing="false" text="Management">
-              <items>
-                <MenuItem fx:id="mItemOperationManagement" mnemonicParsing="false" onAction="#onClickmItemOperationManagement" text="Operation Management" />
-                  <MenuItem fx:id="mItemBaseManagement" mnemonicParsing="false" onAction="#onClickmItemBaseManagement" text="Base Management" />
-              </items>
-            </Menu>
-          <Menu mnemonicParsing="false" text="Profile">
-            <items>
-              <MenuItem fx:id="mItemProfileSettings" mnemonicParsing="false" onAction="#onClickmItemProfileSettings" text="Profile Setting" />
-                  <MenuItem fx:id="mItemLogout" mnemonicParsing="false" onAction="#onClickmItemLogout" text="Logout" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
-   <center>
-      <BorderPane fx:id="mainPane" prefHeight="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
-   </center>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+	prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.ControllerMainframe">
+	<top>
+		<MenuBar BorderPane.alignment="CENTER">
+			<menus>
+				<Menu mnemonicParsing="false" text="Management">
+					<items>
+						<MenuItem fx:id="mItemOperationManagement"
+							mnemonicParsing="false" onAction="#onClickmItemOperationManagement"
+							text="Operation Management" />
+						<MenuItem fx:id="mItemBaseManagement" mnemonicParsing="false"
+							onAction="#onClickmItemBaseManagement" text="Base Management" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Profile">
+					<items>
+						<MenuItem fx:id="mItemProfileSettings" mnemonicParsing="false"
+							onAction="#onClickmItemProfileSettings" text="Profile Setting" />
+						<MenuItem fx:id="mItemLogout" mnemonicParsing="false"
+							onAction="#onClickmItemLogout" text="Logout" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+	</top>
+	<center>
+		<BorderPane fx:id="mainPane" prefHeight="600.0" prefWidth="1000.0"
+			BorderPane.alignment="CENTER" />
+	</center>
 </BorderPane>

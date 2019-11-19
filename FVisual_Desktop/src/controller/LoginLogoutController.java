@@ -1,7 +1,6 @@
 package controller;
 
 import dal.DatabaseHelperLoginLogout;
-import handler.CentralHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +26,8 @@ public class LoginLogoutController {
     @FXML
     private Label lblMessage;
     
-    @FXML
+    @SuppressWarnings("unused")
+	@FXML
     private void onButtonLoginClicked(MouseEvent me) throws Exception {
     	try {
         	dbHelper = DatabaseHelperLoginLogout.newInstance();

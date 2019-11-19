@@ -11,76 +11,95 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="657.0" prefWidth="476.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ImageView fitHeight="95.0" fitWidth="105.0" layoutX="16.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@pictures/logo_transparent.png" />
-         </image>
-      </ImageView>
-      <Pane fx:id="paneEditProfile" layoutX="59.0" layoutY="131.0" prefHeight="241.0" prefWidth="359.0" stylesheets="@application.css">
-         <children>
-            <Pane fx:id="paneEditProfileHead" layoutY="1.0" prefHeight="27.0" prefWidth="359.0" style="-fx-background-color: #e0e0e0;">
-               <children>
-                  <Label layoutX="8.0" text="Change Personal Data">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Label layoutX="14.0" layoutY="56.0" prefHeight="17.0" prefWidth="105.0" text="Firstname">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label layoutX="14.0" layoutY="102.0" text="LastName">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtFirstName" layoutX="162.0" layoutY="54.0" />
-            <TextField fx:id="txtLastName" layoutX="162.0" layoutY="100.0" />
-            <CheckBox fx:id="ckAdminRights" layoutX="162.0" layoutY="148.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="16.0" />
-            <Label layoutX="191.0" layoutY="146.0" text="Admin Rights">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Button layoutX="162.0" layoutY="193.0" mnemonicParsing="false" onMouseClicked="#onEditProfileClicked" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Change" />
-         </children>
-      </Pane>
-      <Pane fx:id="panelEditPassword" layoutX="59.0" layoutY="404.0" prefHeight="208.0" prefWidth="359.0" stylesheets="@application.css">
-         <children>
-            <Pane fx:id="paneEditProfileHead1" layoutY="1.0" prefHeight="27.0" prefWidth="359.0" style="-fx-background-color: #e0e0e0;">
-               <children>
-                  <Label layoutX="8.0" text="Change Password">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Label layoutX="14.0" layoutY="56.0" prefHeight="17.0" prefWidth="105.0" text="New Password">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label layoutX="10.0" layoutY="110.0" text="Repeat Password">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Button layoutX="162.0" layoutY="143.0" mnemonicParsing="false" onMouseClicked="#onChangePasswordClicked" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Change" />
-            <PasswordField fx:id="txtNewPassword" layoutX="162.0" layoutY="54.0" />
-            <PasswordField fx:id="txtRepeatPassword" layoutX="162.0" layoutY="105.0" />
-            <Label fx:id="lblErrorPassword" layoutX="10.0" layoutY="180.0" prefHeight="17.0" prefWidth="301.0" textFill="RED" />
-         </children>
-      </Pane>
-      <Label layoutX="160.0" layoutY="67.0" prefHeight="32.0" prefWidth="157.0" text="Change Profile">
-         <font>
-            <Font name="System Bold" size="22.0" />
-         </font>
-      </Label>
-   </children>
+<AnchorPane prefHeight="657.0" prefWidth="476.0"
+	style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<ImageView fitHeight="95.0" fitWidth="105.0" layoutX="16.0"
+			layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@pictures/logo_transparent.png" />
+			</image>
+		</ImageView>
+		<Pane fx:id="paneEditProfile" layoutX="59.0" layoutY="131.0"
+			prefHeight="241.0" prefWidth="359.0" stylesheets="@application.css">
+			<children>
+				<Pane fx:id="paneEditProfileHead" layoutY="1.0" prefHeight="27.0"
+					prefWidth="359.0" style="-fx-background-color: #e0e0e0;">
+					<children>
+						<Label layoutX="8.0" text="Change Personal Data">
+							<font>
+								<Font size="18.0" />
+							</font>
+						</Label>
+					</children>
+				</Pane>
+				<Label layoutX="14.0" layoutY="56.0" prefHeight="17.0"
+					prefWidth="105.0" text="Firstname">
+					<font>
+						<Font size="15.0" />
+					</font>
+				</Label>
+				<Label layoutX="14.0" layoutY="102.0" text="LastName">
+					<font>
+						<Font size="15.0" />
+					</font>
+				</Label>
+				<TextField fx:id="txtFirstName" layoutX="162.0" layoutY="54.0" />
+				<TextField fx:id="txtLastName" layoutX="162.0" layoutY="100.0" />
+				<CheckBox fx:id="ckAdminRights" layoutX="162.0" layoutY="148.0"
+					mnemonicParsing="false" prefHeight="17.0" prefWidth="16.0" />
+				<Label layoutX="191.0" layoutY="146.0" text="Admin Rights">
+					<font>
+						<Font size="15.0" />
+					</font>
+				</Label>
+				<Button layoutX="162.0" layoutY="193.0" mnemonicParsing="false"
+					onMouseClicked="#onEditProfileClicked" prefHeight="25.0" prefWidth="86.0"
+					style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Change" />
+			</children>
+		</Pane>
+		<Pane fx:id="panelEditPassword" layoutX="59.0" layoutY="404.0"
+			prefHeight="208.0" prefWidth="359.0" stylesheets="@application.css">
+			<children>
+				<Pane fx:id="paneEditProfileHead1" layoutY="1.0" prefHeight="27.0"
+					prefWidth="359.0" style="-fx-background-color: #e0e0e0;">
+					<children>
+						<Label layoutX="8.0" text="Change Password">
+							<font>
+								<Font size="18.0" />
+							</font>
+						</Label>
+					</children>
+				</Pane>
+				<Label layoutX="14.0" layoutY="56.0" prefHeight="17.0"
+					prefWidth="105.0" text="New Password">
+					<font>
+						<Font size="15.0" />
+					</font>
+				</Label>
+				<Label layoutX="10.0" layoutY="110.0" text="Repeat Password">
+					<font>
+						<Font size="15.0" />
+					</font>
+				</Label>
+				<Button layoutX="162.0" layoutY="143.0" mnemonicParsing="false"
+					onMouseClicked="#onChangePasswordClicked" prefHeight="25.0"
+					prefWidth="86.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;"
+					text="Change" />
+				<PasswordField fx:id="txtNewPassword" layoutX="162.0"
+					layoutY="54.0" />
+				<PasswordField fx:id="txtRepeatPassword" layoutX="162.0"
+					layoutY="105.0" />
+				<Label fx:id="lblErrorPassword" layoutX="10.0" layoutY="180.0"
+					prefHeight="17.0" prefWidth="301.0" textFill="RED" />
+			</children>
+		</Pane>
+		<Label layoutX="160.0" layoutY="67.0" prefHeight="32.0"
+			prefWidth="157.0" text="Change Profile">
+			<font>
+				<Font name="System Bold" size="22.0" />
+			</font>
+		</Label>
+	</children>
 </AnchorPane>

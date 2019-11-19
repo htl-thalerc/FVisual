@@ -93,7 +93,6 @@ public class Member {
 
 	@Override
 	public String toString() {
-		return memberId + " - [" + firstname + ", " + lastname + "] - [" + username + ", " + password + "] - " + isAdmin
-				+ " - " + base + " - " + rank;
+		return username + "[" + firstname + " " + lastname + "]";
 	}
 }
