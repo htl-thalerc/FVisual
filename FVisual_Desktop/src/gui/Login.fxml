@@ -10,29 +10,42 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="362.0" prefWidth="417.0" style="-fx-background-color: #f5f5f5;" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerLoginLogout">
-   <children>
-      <ImageView fitHeight="91.0" fitWidth="141.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@pictures/logo_transparent.png" />
-         </image>
-      </ImageView>
-      <Pane layoutX="59.0" layoutY="109.0" prefHeight="211.0" prefWidth="321.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
-         <children>
-            <Label layoutX="126.0" layoutY="10.0" text="Login">
-               <font>
-                  <Font name="Constantia" size="28.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtUsername" layoutX="50.0" layoutY="57.0" prefHeight="25.0" prefWidth="221.0" promptText="Username" />
-            <PasswordField fx:id="txtPassword" layoutX="50.0" layoutY="106.0" prefHeight="25.0" prefWidth="221.0" promptText="Password" />
-            <Button fx:id="btnLogin" layoutX="50.0" layoutY="153.0" mnemonicParsing="false" onMouseClicked="#onButtonLoginClicked" prefHeight="25.0" prefWidth="221.0" style="-fx-background-color: #BF463E; -fx-text-fill: white; -fx-font-size: 12px;" text="Login" />
-         </children>
-      </Pane>
-      <Label fx:id="lblMessage" layoutX="68.0" layoutY="331.0" prefHeight="17.0" prefWidth="321.0" textFill="#e10000">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-   </children>
+<AnchorPane prefHeight="362.0" prefWidth="417.0"
+	style="-fx-background-color: #f5f5f5;" stylesheets="@application.css"
+	xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.ControllerLoginLogout">
+	<children>
+		<ImageView fitHeight="91.0" fitWidth="141.0" layoutX="14.0"
+			layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@pictures/logo_transparent.png" />
+			</image>
+		</ImageView>
+		<Pane layoutX="59.0" layoutY="109.0" prefHeight="211.0"
+			prefWidth="321.0"
+			style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: black; -fx-border-radius: 10;">
+			<children>
+				<Label layoutX="126.0" layoutY="10.0" text="Login">
+					<font>
+						<Font name="Constantia" size="28.0" />
+					</font>
+				</Label>
+				<TextField fx:id="txtUsername" layoutX="50.0" layoutY="57.0"
+					prefHeight="25.0" prefWidth="221.0" promptText="Username" />
+				<PasswordField fx:id="txtPassword" layoutX="50.0"
+					layoutY="106.0" prefHeight="25.0" prefWidth="221.0" promptText="Password" />
+				<Button fx:id="btnLogin" layoutX="50.0" layoutY="153.0"
+					mnemonicParsing="false" onMouseClicked="#onButtonLoginClicked"
+					prefHeight="25.0" prefWidth="221.0"
+					style="-fx-background-color: #BF463E; -fx-text-fill: white; -fx-font-size: 12px;"
+					text="Login" />
+			</children>
+		</Pane>
+		<Label fx:id="lblMessage" layoutX="68.0" layoutY="331.0"
+			prefHeight="17.0" prefWidth="321.0" textFill="#e10000">
+			<font>
+				<Font size="14.0" />
+			</font>
+		</Label>
+	</children>
 </AnchorPane>

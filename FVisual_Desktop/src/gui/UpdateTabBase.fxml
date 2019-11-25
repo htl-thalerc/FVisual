@@ -8,90 +8,122 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label style="-fx-font-weight: bold;" text="Basename" GridPane.rowIndex="1" />
-                  <Label style="-fx-font-weight: bold;" text="Place" GridPane.rowIndex="2" />
-                  <Label style="-fx-font-weight: bold;" text="PostCode" GridPane.rowIndex="3" />
-                  <Label style="-fx-font-weight: bold;" text="Street" GridPane.rowIndex="4" />
-                  <Label style="-fx-font-weight: bold;" text="HouseNr" GridPane.rowIndex="5" />
-                  <Label style="-fx-font-weight: bold;" text="Old Base Data" GridPane.columnIndex="1" />
-                  <Label style="-fx-font-weight: bold;" text="New Base Data" GridPane.columnIndex="2" />
-                  <Label fx:id="lbOldBasename" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="lbOldPlace" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="lbOldPostCode" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label fx:id="lbOldStreet" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label fx:id="lbOldHouseNr" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <TextField fx:id="tfNewBasename" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets right="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="tfNewPlace" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets right="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="tfNewPostCode" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                     <GridPane.margin>
-                        <Insets right="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="tfNewStreet" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                     <GridPane.margin>
-                        <Insets right="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="tfNewHouseNr" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                     <GridPane.margin>
-                        <Insets right="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-               </children>
-            </GridPane>
-         </children>
-      </GridPane>
-   </center>
-   <padding>
-      <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
-   </padding>
-   <bottom>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label fx:id="lbStatusbar" alignment="BOTTOM_LEFT" />
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="5.0" />
-         </BorderPane.margin>
-      </GridPane>
-   </bottom>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+	prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+	<center>
+		<GridPane BorderPane.alignment="CENTER">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+					prefWidth="100.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<GridPane>
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity"
+							minWidth="10.0" prefWidth="100.0" />
+						<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+							prefWidth="70.0" />
+						<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+							prefWidth="100.0" />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+						<Label style="-fx-font-weight: bold;" text="Basename"
+							GridPane.rowIndex="1" />
+						<Label style="-fx-font-weight: bold;" text="Place"
+							GridPane.rowIndex="2" />
+						<Label style="-fx-font-weight: bold;" text="PostCode"
+							GridPane.rowIndex="3" />
+						<Label style="-fx-font-weight: bold;" text="Street"
+							GridPane.rowIndex="4" />
+						<Label style="-fx-font-weight: bold;" text="HouseNr"
+							GridPane.rowIndex="5" />
+						<Label style="-fx-font-weight: bold;" text="Old Base Data"
+							GridPane.columnIndex="1" />
+						<Label style="-fx-font-weight: bold;" text="New Base Data"
+							GridPane.columnIndex="2" />
+						<Label fx:id="lbOldBasename" text="Label"
+							GridPane.columnIndex="1" GridPane.rowIndex="1" />
+						<Label fx:id="lbOldPlace" text="Label" GridPane.columnIndex="1"
+							GridPane.rowIndex="2" />
+						<Label fx:id="lbOldPostCode" text="Label"
+							GridPane.columnIndex="1" GridPane.rowIndex="3" />
+						<Label fx:id="lbOldStreet" text="Label"
+							GridPane.columnIndex="1" GridPane.rowIndex="4" />
+						<Label fx:id="lbOldHouseNr" text="Label"
+							GridPane.columnIndex="1" GridPane.rowIndex="5" />
+						<TextField fx:id="tfNewBasename" GridPane.columnIndex="2"
+							GridPane.rowIndex="1">
+							<GridPane.margin>
+								<Insets right="5.0" />
+							</GridPane.margin>
+						</TextField>
+						<TextField fx:id="tfNewPlace" GridPane.columnIndex="2"
+							GridPane.rowIndex="2">
+							<GridPane.margin>
+								<Insets right="5.0" />
+							</GridPane.margin>
+						</TextField>
+						<TextField fx:id="tfNewPostCode" GridPane.columnIndex="2"
+							GridPane.rowIndex="3">
+							<GridPane.margin>
+								<Insets right="5.0" />
+							</GridPane.margin>
+						</TextField>
+						<TextField fx:id="tfNewStreet" GridPane.columnIndex="2"
+							GridPane.rowIndex="4">
+							<GridPane.margin>
+								<Insets right="5.0" />
+							</GridPane.margin>
+						</TextField>
+						<TextField fx:id="tfNewHouseNr" GridPane.columnIndex="2"
+							GridPane.rowIndex="5">
+							<GridPane.margin>
+								<Insets right="5.0" />
+							</GridPane.margin>
+						</TextField>
+					</children>
+				</GridPane>
+			</children>
+		</GridPane>
+	</center>
+	<padding>
+		<Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
+	</padding>
+	<bottom>
+		<GridPane BorderPane.alignment="CENTER">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+					prefWidth="100.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Label fx:id="lbStatusbar" alignment="BOTTOM_LEFT" />
+			</children>
+			<BorderPane.margin>
+				<Insets bottom="5.0" />
+			</BorderPane.margin>
+		</GridPane>
+	</bottom>
 </BorderPane>

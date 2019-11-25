@@ -1,7 +1,5 @@
 package controller;
 
-import app.Main;
-import bll.User;
 import dal.DatabaseHelperLoginLogout;
 import handler.CentralHandler;
 import javafx.fxml.FXML;
