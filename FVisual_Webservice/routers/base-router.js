@@ -87,17 +87,17 @@ baseRoutes.get('/mitglieder/:username', (req, res) => {
 
 // POST    | /mitglieder
 baseRoutes.post('/mitglieder', (req, res) => {
-  res.status(404).send("not implemented yet");
+  res.status(501).send("not implemented yet");
 });
 
 // PUT    | /mitglieder/:username
 baseRoutes.put('/mitglieder/:username', (req, res) => {
-  res.status(404).send("not implemented yet");
+  res.status(501).send("not implemented yet");
 });
 
 // DELETE    | /mitglieder/:username
 baseRoutes.delete('/mitglieder/:username', (req, res) => {
-  res.status(404).send("not implemented yet");
+  res.status(501).send("not implemented yet");
 });
 
 // GET    | /admins
