@@ -1,3 +1,4 @@
 express
 body-parser
 oracledb
+crypto-js
