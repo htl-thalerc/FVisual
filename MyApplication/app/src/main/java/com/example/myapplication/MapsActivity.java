@@ -1,21 +1,17 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.util.MapUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +22,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -53,11 +54,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.7525, 14))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
-                .title("Stützpunkt")
-        );
+        List<Stuetzpunkt> stuetzpunktList = new ArrayList<>();
+        // = getStuetzpunkte();
+        stuetzpunktList.add(new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3"));
+        stuetzpunktList.add(new Stuetzpunkt(2,"Latschach Feuerwehrhaus","Latschach", 9582, "Kulturhausstraße ", "13"));
+
+        List<Einsatz> einsatzList = getEinsaetze();
+
+        Geocoder gc = new Geocoder(this);
+        try {
+            for (Stuetzpunkt stuetzpunkt : stuetzpunktList){
+                List<Address> list = gc.getFromLocationName(stuetzpunkt.getAddress(), 1);
+                Address add = list.get(0);
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                        .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
+                        .title(stuetzpunkt.getName())
+                );
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
         googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(46.7525, 14.88))
@@ -89,27 +111,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .title("Personensuche")
         );
 
-
-        /*
-        Drawable circleDrawable = getResources().getDrawable(R.drawable.einsaetze_circle);
-        Bi
-
-        mMap.addMarker(new MarkerOptions()
-                .snippet("E")
-                .position()
-                .title("Einsatz")
-                .icon(markerIcon));
-
-
-        circleDrawable = getResources().getDrawable(R.drawable.stuetzpunkte_circle);
-        markerIcon = getMarkerIconFromDrawable(circleDrawable);
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.7525, 14))
-                .title("Stuetzpunkt")
-                .icon(markerIcon));
-*/
         CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(46.7525, 13.8617)).zoom(7.5f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
+    }
+
+    private List<Stuetzpunkt> getStuetzpunkte() {
+        return null;
+    }
+
+    private List<Einsatz> getEinsaetze() {
+
+        return null;
     }
 }
