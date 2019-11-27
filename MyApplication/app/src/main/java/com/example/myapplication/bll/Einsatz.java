@@ -1,9 +1,11 @@
-package com.example.myapplication;
+package com.example.myapplication.bll;
 
+
+import com.example.myapplication.bll.Einsatzart;
 
 public class Einsatz {
     private int id ;
-    private String einsatzart ;
+    private Einsatzart einsatzart ;
     private String einsatzcode ;
     private String einsatzort ;
     private String titel;
@@ -12,7 +14,7 @@ public class Einsatz {
     private String zeit;
     private String feuerwehren;
 
-    public Einsatz(int id, String einsatzart, String einsatzcode, String einsatzort, String titel, String kurzbeschreibung, String datum, String zeit, String feuerwehren) {
+    public Einsatz(int id, Einsatzart einsatzart, String einsatzcode, String einsatzort, String titel, String kurzbeschreibung, String datum, String zeit, String feuerwehren) {
         this.id = id;
         this.einsatzart = einsatzart;
         this.einsatzcode = einsatzcode;
@@ -22,5 +24,9 @@ public class Einsatz {
         this.datum = datum;
         this.zeit = zeit;
         this.feuerwehren = feuerwehren;
+    }
+
+    public Einsatz() {
+
     }
 }

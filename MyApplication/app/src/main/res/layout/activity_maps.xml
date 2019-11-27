@@ -5,6 +5,35 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="51dp">
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioGroupFilter">
+
+            <RadioButton
+                android:id="@+id/radioButtonStuetzpunktFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stützpunkt" />
+
+            <RadioButton
+                android:id="@+id/radioButtonEinsatzFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Einsatz" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset Filter" />
+    </TableRow>
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -17,28 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="51dp">
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <RadioButton
-                    android:id="@+id/radioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Stützüunkt" />
-
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Einsatz" />
-            </RadioGroup>
-        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
