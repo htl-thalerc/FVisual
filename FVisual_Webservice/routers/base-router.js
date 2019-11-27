@@ -14,7 +14,11 @@
 /*  PUT     |  /andere_organisationen/:aOrgId                                */
 /*  DELETE  |  /andere_organisationen/:aOrgId                                */
 /*  GET     |  /mitglieder/:username                                         */
+/*  POST    |  /mitglieder                                                   */
+/*  PUT     |  /mitglieder/:username                                         */
+/*  DELETE  |  /mitglieder/:username                                         */
 /*  GET     |  /admins                                                       */
+/*  GET     |  /mitglieder/baseless                                          */
 /*                                                                           */
 /* ************************************************************************* */
 
@@ -81,9 +85,30 @@ baseRoutes.get('/mitglieder/:username', (req, res) => {
   oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_USERNAME, [req.params.username], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
 });
 
-// GET    | /mitglieder/admins
-baseRoutes.get('/mitglieder/admins', (req, res) => {
-  res.status(200).send('ok');
+// POST    | /mitglieder
+baseRoutes.post('/mitglieder', (req, res) => {
+  res.status(501).send("not implemented yet");
+});
+
+// PUT    | /mitglieder/:username
+baseRoutes.put('/mitglieder/:username', (req, res) => {
+  res.status(501).send("not implemented yet");
+});
+
+// DELETE    | /mitglieder/:username
+baseRoutes.delete('/mitglieder/:username', (req, res) => {
+  res.status(501).send("not implemented yet");
+});
+
+// GET    | /admins
+baseRoutes.get('/admins', (req, res) => {
+  logger.debug('GET /admins');
+  oracleJobs.execute(oracleQueryProvider.ADMINS_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
+});
+// GET    |/mitglieder/baseless
+baseRoutes.get('/mitglieder/baseless', (req, res) => {
+  logger.debug('GET /mitglieder/baseless');
+  oracleJobs.execute(oracleQueryProvider.MTG_GET_BASELESS, [], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
 });
 
 /* exports */

@@ -11,8 +11,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			PropertyManager pm = PropertyManager.getInstance();
-			pm.writeBasicProperties();
+			//PropertyManager pm = PropertyManager.getInstance();
+			//pm.writeBasicProperties();
 			
 			AnchorPane root = (AnchorPane)FXMLLoader.load(getClass().getResource("/gui/Login.fxml"));
 			Scene scene = new Scene(root,417,353);
