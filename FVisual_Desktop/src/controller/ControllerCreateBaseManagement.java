@@ -21,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
@@ -37,16 +38,16 @@ public class ControllerCreateBaseManagement implements Initializable {
 	private Button btnFinish;
 	@FXML
 	private TabPane tabPaneBase;
+	@FXML
+	private Label lbStatusbar;
 
 	private ControllerBaseManagement controllerBaseManagement;
 	private ControllerCreateBaseTabBaseManagement controllerCreateBaseTabBaseManagement;
 	private ControllerCreateBaseTabOperationVehicleManagement controllerCreateBaseTabOperationVehicleManagement;
-	private ControllerCreateBaseTabOtherOrganisationManagement controllerCreateBaseTabOtherOrganisationManagement;
 	private ControllerCreateBaseTabMemberManagement controllerCreateBaseTabMemberManagement;
 
 	private Tab tabBaseManagement;
 	private Tab tabOperationVehicleManagement;
-	private Tab tabOtherOrganisationManagement;
 	private Tab tabMemberManagement;
 
 	private Base createdBase = null;
@@ -59,7 +60,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initPaneBase();
 		this.initPaneOperationVehicle();
-		this.initPaneOtherOrganisation();
 		this.initPaneMember();
 		this.initTabPaneListeners();
 		this.initDisability();
@@ -67,7 +67,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 
 	private void initDisability() {
 		this.tabOperationVehicleManagement.setDisable(true);
-		this.tabOtherOrganisationManagement.setDisable(true);
 		this.tabMemberManagement.setDisable(true);
 		this.btnReset.setDisable(true);
 		this.btnBack.setDisable(true);
@@ -105,21 +104,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 		this.tabPaneBase.getTabs().add(this.tabOperationVehicleManagement);
 	}
 	
-	private void initPaneOtherOrganisation() {
-		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBaseTabOtherOrganisationManagement.fxml");
-		this.tabOtherOrganisationManagement = new Tab();
-		this.tabOtherOrganisationManagement.setText("Other Organisation Management");
-		this.controllerCreateBaseTabOtherOrganisationManagement = new ControllerCreateBaseTabOtherOrganisationManagement(this);
-		loader.setController(this.controllerCreateBaseTabOtherOrganisationManagement);
-
-		try {
-			this.tabOtherOrganisationManagement.setContent(loader.load());
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-		this.tabPaneBase.getTabs().add(this.tabOtherOrganisationManagement);
-	}
-	
 	private void initPaneMember() {
 		FXMLLoader loader = CentralHandler.loadFXML("/gui/CreateBaseTabMemberManagement.fxml");
 		this.tabMemberManagement = new Tab();
@@ -147,11 +131,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 			this.btnNext.setDisable(false);
 		});
 		
-		this.tabOtherOrganisationManagement.setOnSelectionChanged(event -> {
-			this.btnBack.setDisable(false);
-			this.btnNext.setDisable(false);
-		});
-		
 		this.tabMemberManagement.setOnSelectionChanged(event -> {
 			this.btnBack.setDisable(false);
 			this.btnNext.setDisable(true);
@@ -169,7 +148,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 		if (result.get() == ButtonType.OK){
 			this.controllerCreateBaseTabBaseManagement.reset();
 			this.controllerCreateBaseTabOperationVehicleManagement.reset();
-			this.controllerCreateBaseTabOtherOrganisationManagement.reset();
 			this.controllerCreateBaseTabMemberManagement.reset();
 			alert.close();
 			this.tabPaneBase.getSelectionModel().select(this.tabBaseManagement);
@@ -184,10 +162,8 @@ public class ControllerCreateBaseManagement implements Initializable {
 	private void onClickBtnBack(ActionEvent aE) {
 		if(this.tabOperationVehicleManagement.isSelected()) {
 			this.tabPaneBase.getSelectionModel().select(this.tabBaseManagement);
-		} else if(this.tabOtherOrganisationManagement.isSelected()) {
-			this.tabPaneBase.getSelectionModel().select(this.tabOperationVehicleManagement);
 		} else if(this.tabMemberManagement.isSelected()) {
-			this.tabPaneBase.getSelectionModel().select(this.tabOtherOrganisationManagement);
+			this.tabPaneBase.getSelectionModel().select(this.tabOperationVehicleManagement);
 		}
 	}
 
@@ -197,8 +173,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 		if(this.tabBaseManagement.isSelected()) {
 			this.tabPaneBase.getSelectionModel().select(this.tabOperationVehicleManagement);
 		} else if(this.tabOperationVehicleManagement.isSelected()) {
-			this.tabPaneBase.getSelectionModel().select(this.tabOtherOrganisationManagement);
-		} else if(this.tabOtherOrganisationManagement.isSelected()) {
 			this.tabPaneBase.getSelectionModel().select(this.tabMemberManagement);
 		}
 	}
@@ -214,7 +188,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 		Base createdBase = this.getCreatedBase();
 		List<OperationVehicle> collOfOperationVehiclesToAddToBase = this.controllerCreateBaseTabOperationVehicleManagement
 				.getOperationVehcilesToCreate();
-		List<OtherOrganisation> collOfOtherOrganisationsToAddToBase = this.controllerCreateBaseTabOtherOrganisationManagement.getOrganisationsToCreate();
 		List<Member> collOfMembersToAddToBase = this.controllerCreateBaseTabMemberManagement.getMembersToCreate();
 		
 		try {
@@ -225,7 +198,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 			curStage.setTitle("Would you like to save your created base");
 			controllerDialogSaveBase.setBaseData(createdBase);
 			controllerDialogSaveBase.setListViewOperationVehicleData(collOfOperationVehiclesToAddToBase);
-			controllerDialogSaveBase.setListViewOtherOrganisationData(collOfOtherOrganisationsToAddToBase);
 			controllerDialogSaveBase.setListViewMemberData(collOfMembersToAddToBase);
 			curStage.showAndWait();
 			if (controllerDialogSaveBase.getButtonState()) {
@@ -236,8 +208,8 @@ public class ControllerCreateBaseManagement implements Initializable {
 		}
 	}
 	
-	public void setButtonResetDisability(boolean isDiabled) {
-		this.btnReset.setDisable(isDiabled);
+	public void setButtonResetDisability(boolean isDisabled) {
+		this.btnReset.setDisable(isDisabled);
 	}
 
 	public void setButtonNextDisability(boolean isDisabled) {
@@ -251,13 +223,16 @@ public class ControllerCreateBaseManagement implements Initializable {
 	public void setButtonBackDisability(boolean isDisabled) {
 		this.btnBack.setDisable(isDisabled);
 	}
+	
+	public void setAllOptionButtonsDisability(boolean isDisabled) {
+		this.setButtonResetDisability(isDisabled);
+		this.setButtonBackDisability(isDisabled);
+		this.setButtonNextDisability(isDisabled);
+		this.setButtonFinishDisability(isDisabled);
+	}
 
 	public void setTabOperationVehicleManagementDisability(boolean isDiabled) {
 		this.tabOperationVehicleManagement.setDisable(isDiabled);
-	}
-	
-	public void setTabOtherOrganisationManagementDisability(boolean isDisabled) {
-		this.tabOtherOrganisationManagement.setDisable(isDisabled);
 	}
 	
 	public void setTabMemberManagementDisability(boolean isDisabled) {
@@ -266,6 +241,10 @@ public class ControllerCreateBaseManagement implements Initializable {
 
 	private void setCreatedBase(Base createdBase) {
 		this.createdBase = createdBase;
+	}
+	
+	public void setStatusbarValue(String text) {
+		this.lbStatusbar.setText(text);
 	}
 
 	public Base getCreatedBase() {

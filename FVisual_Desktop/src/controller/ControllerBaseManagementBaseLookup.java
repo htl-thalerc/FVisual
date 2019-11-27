@@ -234,7 +234,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 				
 				controllerDialogSaveBase.setBaseData(selectedBase);
 				controllerDialogSaveBase.setListViewOperationVehicleData(new ArrayList<OperationVehicle>());
-				controllerDialogSaveBase.setListViewOtherOrganisationData(new ArrayList<OtherOrganisation>());
 				controllerDialogSaveBase.setListViewMemberData(new ArrayList<Member>());
 				curStage.showAndWait();
 				if (controllerDialogSaveBase.getButtonState()) {

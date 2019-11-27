@@ -34,10 +34,10 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	@FXML
 	private Label lbStatusbarBaseName;
 
-	private ControllerCreateBaseManagement controllerCreateBase;
+	private ControllerCreateBaseManagement controllerCreateBaseManagement;
 
-	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBase) {
-		this.controllerCreateBase = controllerCreateBase;
+	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBaseManagement) {
+		this.controllerCreateBaseManagement = controllerCreateBaseManagement;
 	}
 
 	@Override
@@ -159,19 +159,17 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	private void setControlDisability(boolean baseName, boolean houseNr, boolean place, boolean postCode,
 			boolean street) {
 		if (baseName && houseNr && place && postCode && street) {
-			this.controllerCreateBase.setButtonResetDisability(false);
-			this.controllerCreateBase.setButtonNextDisability(false);
-			this.controllerCreateBase.setButtonFinishDisability(false);
-			this.controllerCreateBase.setTabOperationVehicleManagementDisability(false);
-			this.controllerCreateBase.setTabOtherOrganisationManagementDisability(false);
-			this.controllerCreateBase.setTabMemberManagementDisability(false);
+			this.controllerCreateBaseManagement.setButtonResetDisability(false);
+			this.controllerCreateBaseManagement.setButtonNextDisability(false);
+			this.controllerCreateBaseManagement.setButtonFinishDisability(false);
+			this.controllerCreateBaseManagement.setTabOperationVehicleManagementDisability(false);
+			this.controllerCreateBaseManagement.setTabMemberManagementDisability(false);
 		} else {
-			this.controllerCreateBase.setButtonResetDisability(true);
-			this.controllerCreateBase.setButtonFinishDisability(true);
-			this.controllerCreateBase.setButtonNextDisability(true);
-			this.controllerCreateBase.setTabOperationVehicleManagementDisability(true);
-			this.controllerCreateBase.setTabOtherOrganisationManagementDisability(true);
-			this.controllerCreateBase.setTabMemberManagementDisability(true);
+			this.controllerCreateBaseManagement.setButtonResetDisability(true);
+			this.controllerCreateBaseManagement.setButtonFinishDisability(true);
+			this.controllerCreateBaseManagement.setButtonNextDisability(true);
+			this.controllerCreateBaseManagement.setTabOperationVehicleManagementDisability(true);
+			this.controllerCreateBaseManagement.setTabMemberManagementDisability(true);
 		}
 	}
 
