@@ -5,6 +5,13 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+
 import bll.Base;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-public class ControllerCreateBaseTabBaseManagement implements Initializable {
+public class ControllerCreateBaseTabBaseManagement implements Initializable, MapComponentInitializedListener {
+	@FXML
+	private GoogleMapView mapView;
 	@FXML
 	private TextField tfBaseName;
 	@FXML
@@ -35,6 +44,7 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	private Label lbStatusbarBaseName;
 
 	private ControllerCreateBaseManagement controllerCreateBaseManagement;
+    private GoogleMap map;
 
 	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBaseManagement) {
 		this.controllerCreateBaseManagement = controllerCreateBaseManagement;
@@ -44,6 +54,13 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initTextFieldPatterns();
 		this.initTextFieldListeners();
+		this.initGoogleMaps();
+
+	}
+	
+	private void initGoogleMaps() {
+		mapView.addMapInializedListener(this);
+		System.out.println("initializing google maps");
 	}
 
 	private void initTextFieldPatterns() {
@@ -184,5 +201,23 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 		this.tfPlace.clear();
 		this.tfPostCode.clear();
 		this.tfStreet.clear();
+	}
+
+	@Override
+	public void mapInitialized() {
+		MapOptions mapOptions = new MapOptions();
+        
+        mapOptions.center(new LatLong(46.6103, 13.8558))
+                .mapType(MapTypeIdEnum.ROADMAP)
+                .overviewMapControl(false)
+                .panControl(false)
+                .rotateControl(false)
+                .scaleControl(false)
+                .streetViewControl(false)
+                .zoomControl(false)
+                .zoom(12);
+
+        map = mapView.createMap(mapOptions);
+        System.out.println("map initialized");
 	}
 }
