@@ -71,6 +71,29 @@ var parseFahrzeug = function (toParse) {
     return toParse;
 }
 
+var parseFahrzeugGrouped = function(toParse){
+    toParse = toParse.replaceAll('{"BEZEICHNUNG":', '');
+    toParse = toParse.replaceAll('}','');
+
+    return toParse;
+}
+
+var parseEinsatz = function(tempToParse){
+
+    let test = tempToParse.split('{');
+    test = test.split('}');
+    test = test.split(',');
+
+    console.log(test);
+
+    let retObject = {};
+    retObject.id = toParse.ID;
+    retObject.Einsatzart = {'id': toParse.ID_EINSATZART, 'bezeichnung':toParse.BESCHREIBUNG};
+    console.log(retObject);
+    
+    return tempToParse;
+}
+
 module.exports.parseStuetzpunkt = parseStuetzpunkt;
 module.exports.parseEinsatzcode = parseEinsatzcode;
 module.exports.parseEinsatzart = parseEinsatzart;
@@ -78,3 +101,5 @@ module.exports.parseDienstgrad = parseDienstgrad;
 module.exports.parseAOrg = parseAOrg;
 module.exports.parseMitglied = parseMitglied;
 module.exports.parseFahrzeug = parseFahrzeug;
+module.exports.parseEinsatz = parseEinsatz;
+module.exports.parseFahrzeugGrouped = parseFahrzeugGrouped;

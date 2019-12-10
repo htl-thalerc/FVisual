@@ -1,50 +1,56 @@
 {
 	"info": {
-		"_postman_id": "9da980f5-c66d-46d6-abad-9c550b2dc41f",
+		"_postman_id": "934eda03-7f2d-4f3f-8dcc-d53d589365f8",
 		"name": "FVisual",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
-	"item": [{
+	"item": [
+		{
 			"name": "Basic",
-			"item": [{
+			"item": [
+				{
 					"name": "Einsatzarten",
-					"event": [{
-						"listen": "prerequest",
-						"script": {
-							"id": "76395462-d390-4117-879e-969887774779",
-							"exec": [
-								"pm.sendRequest({\r",
-								"    url:'http://localhost:3030/login',\r",
-								"    method: 'POST',\r",
-								"    header: {\r",
-								"        'content-type': 'application/json',\r",
-								"        'flow': 'mobile'\r",
-								"    },\r",
-								"    \r",
-								"    body:{\r",
-								"    mode:'raw',\r",
-								"    raw:JSON.stringify({\r",
-								"        username:'Hanis',\r",
-								"        password:'1234'\r",
-								"    })\r",
-								"    }\r",
-								"}, function(err, res){\r",
-								"console.log(res);\r",
-								"var  token = res.text();\r",
-								"postman.setGlobalVariable(\"token\", token);\r",
-								"console.log(token);\r",
-								"});"
-							],
-							"type": "text/javascript"
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "76395462-d390-4117-879e-969887774779",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url:'http://localhost:3030/login',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'content-type': 'application/json',\r",
+									"        'flow': 'mobile'\r",
+									"    },\r",
+									"    \r",
+									"    body:{\r",
+									"    mode:'raw',\r",
+									"    raw:JSON.stringify({\r",
+									"        username:'Hanis',\r",
+									"        password:'1234'\r",
+									"    })\r",
+									"    }\r",
+									"}, function(err, res){\r",
+									"console.log(res);\r",
+									"var  token = res.text();\r",
+									"postman.setGlobalVariable(\"token\", token);\r",
+									"console.log(token);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
-					}],
+					],
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"value": "{{token}}",
-							"type": "text"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/einsatzarten",
 							"host": [
@@ -62,11 +68,13 @@
 					"name": "Einsatzcodes",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/einsatzcodes",
 							"host": [
@@ -84,11 +92,13 @@
 					"name": "Dienstgrade",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/dienstgrade",
 							"host": [
@@ -106,11 +116,13 @@
 					"name": "Andere_Organisationen",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/andere_organisationen",
 							"host": [
@@ -128,7 +140,8 @@
 					"name": "Andere_Organisationen",
 					"request": {
 						"method": "POST",
-						"header": [{
+						"header": [
+							{
 								"key": "authorization",
 								"type": "text",
 								"value": "lol"
@@ -160,7 +173,8 @@
 					"name": "Andere_Organisationen",
 					"request": {
 						"method": "PUT",
-						"header": [{
+						"header": [
+							{
 								"key": "authorization",
 								"type": "text",
 								"value": "lol"
@@ -193,7 +207,8 @@
 					"name": "Andere_Organisationen",
 					"request": {
 						"method": "DELETE",
-						"header": [{
+						"header": [
+							{
 								"key": "authorization",
 								"type": "text",
 								"value": "lol"
@@ -226,11 +241,13 @@
 					"name": "Mitglieder - BY Username",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/mitglieder/thalerc",
 							"host": [
@@ -244,23 +261,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Fahrzeuge Grouped",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "53616c7465645f5fcbca7b3e91b4cf10c69c168a31af6d68ad0382e288622e6a6499e8e95564be7e9a8eebae30018af93ca1bda1f656c97201c8e51268ba13a9",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/fahrzeuge/grouped",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"fahrzeuge",
+								"grouped"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Stützpunkte",
-			"item": [{
+			"item": [
+				{
 					"name": "Mitglieder",
-					"item": [{
+					"item": [
+						{
 							"name": "Mitglieder",
 							"request": {
 								"method": "GET",
-								"header": [{
-									"key": "authorization",
-									"type": "text",
-									"value": "lol"
-								}],
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
 								"url": {
 									"raw": "localhost:3030/stuetzpunkte/2/mitglieder",
 									"host": [
@@ -280,11 +326,13 @@
 							"name": "Mitglieder - By Id",
 							"request": {
 								"method": "GET",
-								"header": [{
-									"key": "authorization",
-									"type": "text",
-									"value": "lol"
-								}],
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
 								"url": {
 									"raw": "localhost:3030/stuetzpunkte/2/mitglieder?id=4",
 									"host": [
@@ -296,10 +344,12 @@
 										"2",
 										"mitglieder"
 									],
-									"query": [{
-										"key": "id",
-										"value": "4"
-									}]
+									"query": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
 								}
 							},
 							"response": []
@@ -310,15 +360,18 @@
 				},
 				{
 					"name": "Fahrzeuge",
-					"item": [{
+					"item": [
+						{
 							"name": "Fahrzeuge",
 							"request": {
 								"method": "GET",
-								"header": [{
-									"key": "authorization",
-									"type": "text",
-									"value": "lol"
-								}],
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
 								"url": {
 									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge",
 									"host": [
@@ -338,11 +391,13 @@
 							"name": "Fahrzeug - By Id",
 							"request": {
 								"method": "GET",
-								"header": [{
-									"key": "authorization",
-									"type": "text",
-									"value": "lol"
-								}],
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
 								"url": {
 									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge?id=8",
 									"host": [
@@ -354,10 +409,12 @@
 										"2",
 										"fahrzeuge"
 									],
-									"query": [{
-										"key": "id",
-										"value": "8"
-									}]
+									"query": [
+										{
+											"key": "id",
+											"value": "8"
+										}
+									]
 								}
 							},
 							"response": []
@@ -366,7 +423,8 @@
 							"name": "Fahrzeug",
 							"request": {
 								"method": "POST",
-								"header": [{
+								"header": [
+									{
 										"key": "authorization",
 										"type": "text",
 										"value": "lol"
@@ -406,7 +464,8 @@
 							"name": "Fahrzeug",
 							"request": {
 								"method": "PUT",
-								"header": [{
+								"header": [
+									{
 										"key": "authorization",
 										"type": "text",
 										"value": "lol"
@@ -447,11 +506,13 @@
 							"name": "Fahrzeug",
 							"request": {
 								"method": "DELETE",
-								"header": [{
-									"key": "authorization",
-									"type": "text",
-									"value": "lol"
-								}],
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
 								"url": {
 									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge/21",
 									"host": [
@@ -476,11 +537,13 @@
 					"name": "Stützpunkte",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/stuetzpunkte",
 							"host": [
@@ -498,11 +561,13 @@
 					"name": "Stützpunkte - By Name",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/stuetzpunkte?name=Feuerwehr Olsach-Molzbichl",
 							"host": [
@@ -512,10 +577,12 @@
 							"path": [
 								"stuetzpunkte"
 							],
-							"query": [{
-								"key": "name",
-								"value": "Feuerwehr Olsach-Molzbichl"
-							}]
+							"query": [
+								{
+									"key": "name",
+									"value": "Feuerwehr Olsach-Molzbichl"
+								}
+							]
 						}
 					},
 					"response": []
@@ -524,11 +591,13 @@
 					"name": "Stützpunkte - By Id",
 					"request": {
 						"method": "GET",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"url": {
 							"raw": "localhost:3030/stuetzpunkte?id=1",
 							"host": [
@@ -538,10 +607,12 @@
 							"path": [
 								"stuetzpunkte"
 							],
-							"query": [{
-								"key": "id",
-								"value": "1"
-							}]
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
 						}
 					},
 					"response": []
@@ -550,7 +621,8 @@
 					"name": "Stützpunkte",
 					"request": {
 						"method": "POST",
-						"header": [{
+						"header": [
+							{
 								"key": "authorization",
 								"type": "text",
 								"value": "lol"
@@ -588,7 +660,8 @@
 					"name": "Stützpunkte",
 					"request": {
 						"method": "PUT",
-						"header": [{
+						"header": [
+							{
 								"key": "authorization",
 								"type": "text",
 								"value": "lol"
@@ -627,11 +700,13 @@
 					"name": "Stützpunkte",
 					"request": {
 						"method": "DELETE",
-						"header": [{
-							"key": "authorization",
-							"type": "text",
-							"value": "lol"
-						}],
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -662,7 +737,8 @@
 			"name": "Login",
 			"request": {
 				"method": "POST",
-				"header": [{
+				"header": [
+					{
 						"key": "Content-Type",
 						"type": "text",
 						"value": "application/json"
@@ -686,11 +762,13 @@
 					"path": [
 						"login"
 					],
-					"query": [{
-						"key": "",
-						"value": "",
-						"disabled": true
-					}]
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
 				}
 			},
 			"response": []

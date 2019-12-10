@@ -27,21 +27,27 @@
 /*                                                                           */
 /* ************************************************************************* */
 
+
 /* node modules */
 const express = require('express');
 
 /* own modules */
+const oracleJobs = require('../database/oracle-jobs');
+const oracleQueryProvider = require('../database/oracle-query-provider');
+const responseHandler = require('../modules/response-handler');
+const classNameParser = require('../modules/classname-parser');
 const loggerModule = require('../modules/logger-module');
+const validatorModule = require('../modules/validator-module');
 
 /* local variables */
 const einsatzRouter = express.Router();
 const logger = loggerModule.loggers['Routing'];
-
 // GET     |  /einsaetze
 // GET     |  /einsaetze?id=eId
 // GET     |  /einsaetze?id=eName&eZeit
 einsatzRouter.get('/', (req, res) => {
-  res.status(501).send('not implemented yet');
+  logger.debug('GET /einsaetze');
+  oracleJobs.execute(oracleQueryProvider.EINSATZ_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
 });
 
 // POST   |  /einsaetze

@@ -13,10 +13,10 @@ const SECRET = 'jdlsjflksajflkjflksjeflaskjflkdflkasjflks';
 /* login */
 function login(req, res) {
     if (req.headers.flow == "mobile") {
-        res.status(200).send(generateToken("grafiboyjesussexyboy", "69696931", "mobile"));
+        res.status(200).send(generateToken(req.body.username, "mobile"));
         logger.debug('mobile login successful / ' + req.body.username);
     } else if (req.headers.flow == "management") {
-        res.status(200).send(generateToken("grafiboyjesussexyboy", "69696931", "management"));
+        res.status(200).send(generateToken(req.body.username, "management"));
         logger.debug('management login successful / ' + req.body.username);
     } else {
         logger.warn("invalid flow: " + req.headers.flow);
@@ -32,17 +32,22 @@ function authenticate(req, res, next) {
         res.status(401).send('Unauthorized');
         return;
     }
-    var userObject = decryptToken(token);
+    try{
+        var userObject = decryptToken(token);
+    }catch(ex){
+        logger.warn(ex.message);
+        res.status(401).send('Unauthorized');
+        return;
+    }
     req.login = userObject.username;
     req.flow = userObject.flow;
 
     next();
 }
 
-function generateToken(username, password, flow) {
+function generateToken(username, flow) {
     let userObject = {
         'username': username,
-        'password': password,
         'flow': flow
     }
     return encrypt(JSON.stringify(userObject));
