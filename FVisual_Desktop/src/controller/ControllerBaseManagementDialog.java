@@ -16,21 +16,18 @@ import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
-import bll.OtherOrganisation;
 
 public class ControllerBaseManagementDialog implements Initializable {
 	@FXML
-	private Label lbBaseName;
+	private Label lbBasename;
 	@FXML
-	private Label lbPostcodePlace;
+	private Label lbPostcodeAndPlace;
 	@FXML
-	private Label lbAddress;
+	private Label lbStreetAndHouseNr;
 	@FXML
 	private Label lbStatusMessage;
 	@FXML
 	private ListView<OperationVehicle> lvOperationVehicleData;
-	@FXML
-	private ListView<OtherOrganisation> lvOtherOrganisationData;
 	@FXML
 	private ListView<Member> lvMemberData;
 	@FXML
@@ -57,10 +54,10 @@ public class ControllerBaseManagementDialog implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		if(this.crudOption.equals(EnumCRUDOption.POST)) {
 			this.btnOk.setText("Save");
-			this.lbStatusMessage.setText("Note: When creating Base all associated Vehicles are also going to be created");
+			this.lbStatusMessage.setText("Note: When creating Base all associated Vehicles and Members will be created");
 		} else if(this.crudOption.equals(EnumCRUDOption.DELETE)) {
 			this.btnOk.setText("Remove");
-			this.lbStatusMessage.setText("Note: When removing Base all associated Vehicles are also going to be removed");
+			this.lbStatusMessage.setText("Note: When removing Base all associated Vehicles and Members will be removed");
 		}
 	}
 
@@ -79,19 +76,14 @@ public class ControllerBaseManagementDialog implements Initializable {
 	}
 	
 	public void setBaseData(Base createdBase) {
-		this.lbBaseName.setText(createdBase.getName());
-		this.lbPostcodePlace.setText(createdBase.getPostCode() + ", " + createdBase.getPlace());
-		this.lbAddress.setText(createdBase.getStreet() + ", " + createdBase.getHouseNr());
+		this.lbBasename.setText(createdBase.getName());
+		this.lbPostcodeAndPlace.setText(createdBase.getPostCode() + ", " + createdBase.getPlace());
+		this.lbStreetAndHouseNr.setText(createdBase.getStreet() + ", " + createdBase.getHouseNr());
 	}
 
 	public void setListViewOperationVehicleData(List<OperationVehicle> collOfoperationVehicles) {
 		ObservableList<OperationVehicle> obsListOfVehicles = FXCollections.observableArrayList(collOfoperationVehicles);
 		this.lvOperationVehicleData.setItems(obsListOfVehicles);
-	}
-	
-	public void setListViewOtherOrganisationData(List<OtherOrganisation> collOfOtherOrganisations) {
-		ObservableList<OtherOrganisation> obsListOfVehicles = FXCollections.observableArrayList(collOfOtherOrganisations);
-		this.lvOtherOrganisationData.setItems(obsListOfVehicles);
 	}
 	
 	public void setListViewMemberData(List<Member> collOfMembers) {

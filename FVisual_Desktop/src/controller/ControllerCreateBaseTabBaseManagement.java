@@ -5,6 +5,13 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+
 import bll.Base;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-public class ControllerCreateBaseTabBaseManagement implements Initializable {
+public class ControllerCreateBaseTabBaseManagement implements Initializable, MapComponentInitializedListener {
+	@FXML
+	private GoogleMapView mapView;
 	@FXML
 	private TextField tfBaseName;
 	@FXML
@@ -34,16 +43,24 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	@FXML
 	private Label lbStatusbarBaseName;
 
-	private ControllerCreateBaseManagement controllerCreateBase;
+	private ControllerCreateBaseManagement controllerCreateBaseManagement;
+    private GoogleMap map;
 
-	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBase) {
-		this.controllerCreateBase = controllerCreateBase;
+	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBaseManagement) {
+		this.controllerCreateBaseManagement = controllerCreateBaseManagement;
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initTextFieldPatterns();
 		this.initTextFieldListeners();
+		this.initGoogleMaps();
+
+	}
+	
+	private void initGoogleMaps() {
+		mapView.addMapInializedListener(this);
+		System.out.println("initializing google maps");
 	}
 
 	private void initTextFieldPatterns() {
@@ -159,19 +176,17 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 	private void setControlDisability(boolean baseName, boolean houseNr, boolean place, boolean postCode,
 			boolean street) {
 		if (baseName && houseNr && place && postCode && street) {
-			this.controllerCreateBase.setButtonResetDisability(false);
-			this.controllerCreateBase.setButtonNextDisability(false);
-			this.controllerCreateBase.setButtonFinishDisability(false);
-			this.controllerCreateBase.setTabOperationVehicleManagementDisability(false);
-			this.controllerCreateBase.setTabOtherOrganisationManagementDisability(false);
-			this.controllerCreateBase.setTabMemberManagementDisability(false);
+			this.controllerCreateBaseManagement.setButtonResetDisability(false);
+			this.controllerCreateBaseManagement.setButtonNextDisability(false);
+			this.controllerCreateBaseManagement.setButtonFinishDisability(false);
+			this.controllerCreateBaseManagement.setTabOperationVehicleManagementDisability(false);
+			this.controllerCreateBaseManagement.setTabMemberManagementDisability(false);
 		} else {
-			this.controllerCreateBase.setButtonResetDisability(true);
-			this.controllerCreateBase.setButtonFinishDisability(true);
-			this.controllerCreateBase.setButtonNextDisability(true);
-			this.controllerCreateBase.setTabOperationVehicleManagementDisability(true);
-			this.controllerCreateBase.setTabOtherOrganisationManagementDisability(true);
-			this.controllerCreateBase.setTabMemberManagementDisability(true);
+			this.controllerCreateBaseManagement.setButtonResetDisability(true);
+			this.controllerCreateBaseManagement.setButtonFinishDisability(true);
+			this.controllerCreateBaseManagement.setButtonNextDisability(true);
+			this.controllerCreateBaseManagement.setTabOperationVehicleManagementDisability(true);
+			this.controllerCreateBaseManagement.setTabMemberManagementDisability(true);
 		}
 	}
 
@@ -186,5 +201,23 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable {
 		this.tfPlace.clear();
 		this.tfPostCode.clear();
 		this.tfStreet.clear();
+	}
+
+	@Override
+	public void mapInitialized() {
+		MapOptions mapOptions = new MapOptions();
+        
+        mapOptions.center(new LatLong(46.6103, 13.8558))
+                .mapType(MapTypeIdEnum.ROADMAP)
+                .overviewMapControl(false)
+                .panControl(false)
+                .rotateControl(false)
+                .scaleControl(false)
+                .streetViewControl(false)
+                .zoomControl(false)
+                .zoom(12);
+
+        map = mapView.createMap(mapOptions);
+        System.out.println("map initialized");
 	}
 }

@@ -75,6 +75,7 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemProfileSettings(ActionEvent aE) throws IOException {
+		ch = CentralHandler.getInstance();
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		fxmlLoader.setLocation(getClass().getResource("/gui/EditProfile.fxml"));
 		fxmlLoader.setController(new ControllerEditProfile());

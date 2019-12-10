@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.bll;
 
 public class Stuetzpunkt {
     private int id;
@@ -15,6 +15,10 @@ public class Stuetzpunkt {
         this.plz = plz;
         this.strasse = strasse;
         this.hausnr = hausnr;
+    }
+
+    public Stuetzpunkt() {
+
     }
 
     public String getAddress(){
