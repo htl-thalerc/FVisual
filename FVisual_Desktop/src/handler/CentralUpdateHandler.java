@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import bll.Base;
 import bll.OperationVehicle;
+import bll.TableViewRowData;
 import controller.ControllerUpdateFullBaseDialog;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -42,16 +43,16 @@ public class CentralUpdateHandler {
 		}
 	}
 	
-	public void initUpdateOperationVehicleDialog(OperationVehicle selectedVehicle) {
+	public void initUpdateOperationVehicleDialog(TableViewRowData selectedVehicle) {
 		Stage stage = this.initUpdateFullBaseDialog();
 		this.controllerUpdateFullBaseDialog.selectTabUpdateOperationVehicle();
-		this.controllerUpdateFullBaseDialog.setOldOperationVehicleData(selectedVehicle);
+		this.controllerUpdateFullBaseDialog.setOldOperationVehicleData(selectedVehicle.getVehicle());
 		stage.showAndWait();
 		
 		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
 			OperationVehicle updatedOperationVehicle = this.controllerUpdateFullBaseDialog.getUpdatedOperationVehicleData();
 			if(updatedOperationVehicle != null) {
-				updatedOperationVehicle.setOperationVehicleId(selectedVehicle.getOperationVehicleId());
+				updatedOperationVehicle.setOperationVehicleId(selectedVehicle.getVehicle().getOperationVehicleId());
 				this.setUpdatedOperationVehicleData(updatedOperationVehicle);
 				System.out.println(updatedOperationVehicle);
 			}

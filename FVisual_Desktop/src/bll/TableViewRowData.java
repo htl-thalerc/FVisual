@@ -3,11 +3,27 @@ package bll;
 public class TableViewRowData {
 	private Base base;
 	private OperationVehicle vehicle;
+	
+	private Member member;
+	private Rank rank;
 
 	public TableViewRowData(Base base, OperationVehicle vehicle) {
 		super();
 		this.base = base;
 		this.vehicle = vehicle;
+	}
+	
+	public TableViewRowData(Member member, Rank rank) {
+		this.member = member;
+		this.rank = rank;
+	}
+	
+	public TableViewRowData(OperationVehicle operationVehicle) {
+		this.vehicle = operationVehicle;
+	}
+	
+	public TableViewRowData(Member member) {
+		this.member = member;
 	}
 
 	public Base getBase() {
@@ -24,5 +40,21 @@ public class TableViewRowData {
 
 	public void setVehicle(OperationVehicle vehicle) {
 		this.vehicle = vehicle;
+	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	public Rank getRank() {
+		return rank;
+	}
+
+	public void setRank(Rank rank) {
+		this.rank = rank;
 	}
 }

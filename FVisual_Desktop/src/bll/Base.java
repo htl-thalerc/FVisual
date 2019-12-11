@@ -34,8 +34,17 @@ public class Base implements Comparable<Base> {
 		this.houseNr = houseNr;
 	}
 	
+	public Base(CheckBox selection, Base base) {
+		this.selection = selection;
+		this.baseId = base.getBaseId();
+		this.name = base.getName();
+		this.place = base.getPlace();
+		this.postCode = base.getPostCode();
+		this.street = base.getStreet();
+		this.houseNr = base.getHouseNr();
+	}
+	
 	public Base() {
-		super();
 	}
 
 	public int getBaseId() {
