@@ -8,7 +8,7 @@
 /*  Method  |  URL                                                           */
 /*  GET     |  /einsaetze                                                    */
 /*  GET     |  /einsaetze?id=eId                                             */
-/*  GET     |  /einsaetze?id=eName&eZeit                                     */
+/*  GET     |  /einsaetze?name=eName&zeit=eZeit                              */
 /*  POST    |  /einsaetze                                                    */
 /*  PUT     |  /einsaetze/:eId                                               */
 /*  DELETE  |  /einsaetze/:eId                                               */
@@ -42,12 +42,21 @@ const validatorModule = require('../modules/validator-module');
 /* local variables */
 const einsatzRouter = express.Router();
 const logger = loggerModule.loggers['Routing'];
-// GET     |  /einsaetze
-// GET     |  /einsaetze?id=eId
-// GET     |  /einsaetze?id=eName&eZeit
+
+//  GET     |  /einsaetze
+//  GET     |  /einsaetze?id=eId
+//  GET     |  /einsaetze?name=eName&zeit=eZeit
 einsatzRouter.get('/', (req, res) => {
-  logger.debug('GET /einsaetze');
-  oracleJobs.execute(oracleQueryProvider.EINSATZ_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
+  if (req.query.id) {
+    logger.debug('GET /einsaetze?id=eId');
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_BY_ID, [req.query.id], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
+} else if (req.query.zeit) {
+    logger.debug('GET /einsaetze?name=eName&zeit=eZeit');
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_BY_NAME_ZEIT, [parseInt(req.query.id)], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
+} else {
+    logger.debug('GET /einsaetze');
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
+}
 });
 
 // POST   |  /einsaetze
