@@ -22,6 +22,7 @@ public class OperationVehicleManager {
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetOperationVehicleServiceForBase = this.webTarget.path(CentralHandler.CONST_BASE_URL);
 	private WebTarget webTargetOperationVehicleServiceForOperations = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
+	private WebTarget webTargetOperationVehilceService = this.webTarget.path(CentralHandler.CONST_VEHICLE); //.../fahrzeuge
 	
 	public static OperationVehicleManager getInstance() {
 		if (operationVehicleManagerInstance == null) {
@@ -29,6 +30,25 @@ public class OperationVehicleManager {
 		}
 		return operationVehicleManagerInstance;
 	}
+	//Basic
+	public ArrayList<OperationVehicle> getVehicles() {
+		ArrayList<OperationVehicle> collOfVehicles = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		try {
+			invocationBuilder = this.webTargetOperationVehicleServiceForBase.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
+					CentralHandler.getInstance().getHeaderAuthorization()); 
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			if(response.getStatus() == 200) {
+				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
+				});
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfVehicles;
+	}
+	
 	//Base Services
 	public ArrayList<OperationVehicle> getVehiclesFromBase(int baseId) {
 		ArrayList<OperationVehicle> collOfVehicles = null;

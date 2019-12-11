@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import bll.Member;
+import bll.Rank;
+import bll.TableViewRowData;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +16,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	@FXML
@@ -27,10 +33,15 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	private Button btnAddAllMembers;
 	@FXML
 	private Button btnRemoveAllMembers;
+	@FXML
+	private Button btnAddNewMember;
+	@FXML
+	private TableView<TableViewRowData> tvAddNewMember;
 
 	private ControllerCreateBaseManagement controllerCreateBase;
 	private ObservableList<Member> obsListLVAvailableMembers;
 	private ObservableList<Member> obsListLVSelectedMembers;
+	private ObservableList<TableViewRowData> obsListTVAddNewMember;
 	private boolean isLVAvailableMembersSelected = false;
 	private int nrOfTotalOrganisations = 0;
 
@@ -49,6 +60,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		this.initAvailableMembers();
 		this.initSelecetedMembers();
 		this.initListViewListeners();
+		this.initTableViewColumns();
 	}
 	
 	private void initAvailableMembers() {
@@ -89,6 +101,31 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 				this.isLVAvailableMembersSelected = false;
 			}
 		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void initTableViewColumns() {
+		TableColumn<TableViewRowData, String> colNameBlock = new TableColumn<TableViewRowData, String>("Name");
+		TableColumn<TableViewRowData, String> colFirstname = new TableColumn<TableViewRowData, String>("Firstname");
+		TableColumn<TableViewRowData, String> colLastname = new TableColumn<TableViewRowData, String>("Lastname");
+		TableColumn<TableViewRowData, String> colUsername = new TableColumn<TableViewRowData, String>("Username");
+		TableColumn<TableViewRowData, String> colRank = new TableColumn<TableViewRowData, String>("Rank");
+		
+		colFirstname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("firstname"));
+		colLastname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("lastname"));
+		colUsername.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("username"));
+		
+		colRank.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("rank"));
+	    
+		colFirstname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMember().getFirstname()));
+		colLastname.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMember().getLastname()));
+	    colUsername.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMember().getUsername()));
+	    
+	    colRank.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRank().getDescription()));
+	    
+	    colNameBlock.getColumns().addAll(colFirstname, colLastname, colUsername);
+	    this.tvAddNewMember.getColumns().addAll(colNameBlock, colRank);
+	    this.tvAddNewMember.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
 
 	@FXML
@@ -177,6 +214,12 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 		this.btnAddAllMembers.setDisable(false);
 		this.btnRemoveAllMembers.setDisable(true);
+	}
+	
+	@FXML
+	private void onClickBtnAddNewMember(ActionEvent event) {
+		this.obsListTVAddNewMember = FXCollections.observableArrayList();
+		this.obsListTVAddNewMember.add(new TableViewRowData(new Member(), new Rank()));
 	}
 
 	public List<Member> getMembersToCreate() {

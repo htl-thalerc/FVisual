@@ -22,6 +22,7 @@ public class MemberManager {
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetMemberServiceForBase = this.webTarget.path(CentralHandler.CONST_BASE_URL);
 	private WebTarget webTargetMemberServiceForOperation = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
+	private WebTarget webTargetMemberService = this.webTarget.path(CentralHandler.CONST_MEMBER_URL); //.../mitglieder
 
 	public static MemberManager getInstance() {
 		if (memberManagerInstance == null) {
@@ -29,6 +30,25 @@ public class MemberManager {
 		}
 		return memberManagerInstance;
 	}
+	//Basic Service
+	public ArrayList<Member> getMembers() {
+		ArrayList<Member> collOfMembers = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		try {
+			invocationBuilder = this.webTargetMemberService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
+					CentralHandler.getInstance().getHeaderAuthorization()); 
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			if(response.getStatus() == 200) {
+				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
+				});
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfMembers;
+	}
+	
 	//Base Services
 	public ArrayList<Member> getMembersFromBase(int baseId) {
 		ArrayList<Member> collOfMembers = null;

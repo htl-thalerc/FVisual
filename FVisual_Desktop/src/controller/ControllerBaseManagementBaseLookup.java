@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 import bll.Base;
@@ -10,6 +11,7 @@ import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
 import bll.OtherOrganisation;
+import bll.TableViewRowData;
 import handler.CentralHandler;
 import handler.CentralUpdateHandler;
 import javafx.beans.property.SimpleStringProperty;
@@ -30,6 +32,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import manager.BaseManager;
+import manager.MemberManager;
+import manager.OperationVehicleManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -37,7 +42,9 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
 	private TableView<Base> tvBaseData;
 	@FXML
-	private TableView<OperationVehicle> tvVehicleData;
+	private TableView<TableViewRowData> tvVehicleData;
+	@FXML
+	private TableView<TableViewRowData> tvMemberData;
 	@FXML
 	private Label lbShowNameData;
 	@FXML
@@ -56,7 +63,8 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private MenuItem mItemUpdateBase;
 
 	private ObservableList<Base> obsListTVBaseData = null;
-	private ObservableList<OperationVehicle> obsListTVVehicles = null;
+	private ObservableList<TableViewRowData> obsListTVVehicles = null;
+	private ObservableList<TableViewRowData> obsListTVMembers = null;
 
 	private ControllerBaseManagement controllerBaseManagement;
 
@@ -68,6 +76,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initTableViewBase();
 		this.initTableViewVehicle();
+		this.initTableViewMember();
 		this.fillTableViews();
 		this.initTableViewBaseListener();
 		this.initTableViewVehicleListener();
@@ -101,15 +110,16 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewVehicle() {
-		TableColumn<OperationVehicle, CheckBox> columnSelection = new TableColumn<OperationVehicle, CheckBox>("");
-		TableColumn<OperationVehicle, String> columnVehicleDescription = new TableColumn<OperationVehicle, String>(
+		TableColumn<TableViewRowData, String> columnVehicleDescription = new TableColumn<TableViewRowData, String>(
 				"Description");
-		TableColumn<OperationVehicle, String> columnCorrespondingBase = new TableColumn<OperationVehicle, String>(
+		TableColumn<TableViewRowData, String> columnCorrespondingBase = new TableColumn<TableViewRowData, String>(
 				"Corresponding Base");
 
-		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<OperationVehicle, String>("description"));
-		columnVehicleDescription
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
+		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("description"));
+		columnCorrespondingBase.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("rank"));
+
+		columnVehicleDescription.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getVehicle().getDescription()));
 		columnCorrespondingBase
 				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
 
@@ -118,40 +128,75 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		columnVehicleDescription.setMaxWidth(1f * Integer.MAX_VALUE * 51.5);
 		columnCorrespondingBase.setMaxWidth(1f * Integer.MAX_VALUE * 45);
 
-		this.tvVehicleData.getColumns().addAll(columnSelection, columnVehicleDescription, columnCorrespondingBase);
+		this.tvVehicleData.getColumns().addAll(columnVehicleDescription, columnCorrespondingBase);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void initTableViewMember() {
+		TableColumn<TableViewRowData, String> colNameBlock = new TableColumn<TableViewRowData, String>("Name");
+		TableColumn<TableViewRowData, String> colFirstname = new TableColumn<TableViewRowData, String>("Firstname");
+		TableColumn<TableViewRowData, String> colLastname = new TableColumn<TableViewRowData, String>("Lastname");
+		TableColumn<TableViewRowData, String> colUsername = new TableColumn<TableViewRowData, String>("Username");
+		TableColumn<TableViewRowData, String> colRank = new TableColumn<TableViewRowData, String>("Rank");
+
+		colFirstname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("firstname"));
+		colLastname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("lastname"));
+		colUsername.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("username"));
+
+		colRank.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("rank"));
+
+		colFirstname.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getFirstname()));
+		colLastname.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getLastname()));
+		colUsername.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getUsername()));
+
+		colRank.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getRank().getDescription()));
+
+		colNameBlock.getColumns().addAll(colFirstname, colLastname, colUsername);
+		this.tvMemberData.getColumns().addAll(colNameBlock, colRank);
+		this.tvMemberData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+	}
+
+	private void fillTableViewBases() {
+		this.obsListTVBaseData = FXCollections.observableArrayList();
+		// Fill Base table
+		ArrayList<Base> listOfBases = BaseManager.getInstance().getBases();
+		for (int i = 0; i < listOfBases.size(); i++) {
+			this.obsListTVBaseData.add(new Base(new CheckBox(), listOfBases.get(i)));
+		}
+		this.tvBaseData.setItems(this.obsListTVBaseData.sorted());
+	}
+
+	private void fillTableViewVehicles() {
+		this.obsListTVVehicles = FXCollections.observableArrayList();
+		// Fill Operationvehicle table
+		/*
+		 * ArrayList<OperationVehicle> listOfOperationVehicles =
+		 * OperationVehicleManager.getInstance().getVehicles(); for(int
+		 * i=0;i<listOfOperationVehicles.size();i++) { this.obsListTVVehicles.addAll(new
+		 * TableViewRowData(listOfOperationVehicles.get(i))); }
+		 * this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
+		 */
+	}
+
+	private void fillTableViewMembers() {
+		this.obsListTVMembers = FXCollections.observableArrayList();
+		// Fill Members table
+		/*
+		 * ArrayList<Member> listOfMembers = MemberManager.getInstance().getMembers();
+		 * for(int i=0;i<listOfMembers.size();i++) { this.obsListTVMembers.addAll(new
+		 * TableViewRowData(listOfMembers.get(i))); }
+		 * this.tvMemberData.setItems(this.obsListTVMembers.sorted());
+		 */
 	}
 
 	private void fillTableViews() {
-		//this.obsListTVBaseData =
-		//FXCollections.observableArrayList(BaseManager.getInstance().getBases());
-		// this.obsListTVVehicles =
-		// FXCollections.observableArrayList(OperationVehicleManager.getInstance().getOperationVehicles());
-
-		this.obsListTVBaseData = FXCollections.observableArrayList();
-		this.obsListTVVehicles = FXCollections.observableArrayList();
-
-		Base b1 = new Base(new CheckBox(), 1, "Feuerwehr St. Peter Spittal", "Spittal", 9080, "Auer v. Welsbachstr.",
-				"2");
-		b1.getSelection().setId("checkBox_" + b1.getBaseId());
-		Base b2 = new Base(new CheckBox(), 2, "Feuerwehr Olsach-Molzbichl", "Olsach-Molzbichl", 9180, "Lastenweg",
-				"17");
-		b2.getSelection().setId("checkBox_" + b2.getBaseId());
-		
-		this.obsListTVBaseData.add(b1);
-		this.obsListTVBaseData.add(b2);
-
-		this.tvBaseData.setItems(this.obsListTVBaseData);
-
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 1, "KRFA", b1));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 2, "TLFA-2000", b1));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 3, "LF-A", b1));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 4, "RTB-50", b1));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 5, "Ölwehranhänger", b1));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 6, "TLFA-4000", b2));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 7, "LFA", b2));
-		this.obsListTVVehicles.add(new OperationVehicle(new CheckBox(), 8, "Katastrophenschutzanhänger", b2));
-
-		this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
+		this.fillTableViewBases();
+		this.fillTableViewVehicles();
+		this.fillTableViewMembers();
 	}
 
 	private void initTableViewBaseListener() {
@@ -174,10 +219,10 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	@FXML
-	private void onClickBtnLoadVehicles(ActionEvent aE) {
+	private void onClickBtnLoadVehicles(ActionEvent event) {
 		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
-		ObservableList<OperationVehicle> collOfAllVehicles = this.obsListTVVehicles.sorted();
-		ObservableList<OperationVehicle> filteredCollOfVehicles = FXCollections.observableArrayList();
+		ObservableList<TableViewRowData> collOfAllVehicles = this.obsListTVVehicles.sorted();
+		ObservableList<TableViewRowData> filteredCollOfVehicles = FXCollections.observableArrayList();
 		ArrayList<Base> collOfAllSelectedBases = new ArrayList<Base>();
 
 		for (int i = 0; i < collOfAllBases.size(); i++) {
@@ -200,7 +245,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	@FXML
-	private void onClickBtnSelectAllOrNone(ActionEvent aE) {
+	private void onClickBtnSelectAllOrNone(ActionEvent event) {
 		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
 		if (this.btnSelectAllOrNone.getText().equals("All")) {
 			this.btnSelectAllOrNone.setText("None");
@@ -214,55 +259,81 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 			}
 		}
 	}
-	
+
 	@FXML
-	private void onClickMItemRemoveBase(ActionEvent aE) {
+	private void onClickMItemRemoveBase(ActionEvent event) {
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
-		
-		if(selectedBase != null) {
+
+		if (selectedBase != null) {
 			FXMLLoader loader = CentralHandler.loadFXML("/gui/BaseManagementDialog.fxml");
 
-			ControllerBaseManagementDialog controllerDialogSaveBase = new ControllerBaseManagementDialog(this, EnumCRUDOption.DELETE);
+			ControllerBaseManagementDialog controllerDialogSaveBase = new ControllerBaseManagementDialog(this,
+					EnumCRUDOption.DELETE);
 			loader.setController(controllerDialogSaveBase);
-			
+
 			try {
 				Stage curStage = new Stage();
 				Scene scene = new Scene(loader.load());
 				curStage.setScene(scene);
 				curStage.initModality(Modality.APPLICATION_MODAL);
 				curStage.setTitle("Would you like to remove your selected Base");
-				
+
 				controllerDialogSaveBase.setBaseData(selectedBase);
 				controllerDialogSaveBase.setListViewOperationVehicleData(new ArrayList<OperationVehicle>());
 				controllerDialogSaveBase.setListViewMemberData(new ArrayList<Member>());
 				curStage.showAndWait();
 				if (controllerDialogSaveBase.getButtonState()) {
-					//ToDo: Remove from DB
+					BaseManager.getInstance().deleteBase(selectedBase.getBaseId());
+					this.fillTableViews();
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	@FXML 
-	private void onClickMItemUpdateBase(ActionEvent aE) {
+
+	@FXML
+	private void onClickMItemUpdateBase(ActionEvent event) {
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
-		if(selectedBase != null) {
-			CentralUpdateHandler.getInstance().initUpdateBaseDialog(selectedBase);	
+		if (selectedBase != null) {
+			CentralUpdateHandler.getInstance().initUpdateBaseDialog(selectedBase);
+			this.fillTableViews();
 		}
 	}
-	
-	@FXML 
-	private void onClickMItemRemoveVehicle(ActionEvent aE) {
-		
-	}
-	
+
 	@FXML
-	private void onClickMItemUpdateVehicle(ActionEvent aE) {
-		OperationVehicle selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
-		if(selectedVehicle != null) {
+	private void onClickMItemRemoveVehicle(ActionEvent event) {
+		TableViewRowData selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
+		if (selectedVehicle != null) {
+			OperationVehicleManager.getInstance().deleteVehicleFromBase(selectedVehicle.getBase().getBaseId(), selectedVehicle.getVehicle().getOperationVehicleId());
+			this.fillTableViewVehicles();
+		}
+	}
+
+	@FXML
+	private void onClickMItemUpdateVehicle(ActionEvent event) {
+		TableViewRowData selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
+		if (selectedVehicle != null) {
 			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedVehicle);
+			this.fillTableViewVehicles();
+		}
+	}
+
+	@FXML
+	private void onClickMItemRemoveMember(ActionEvent event) {
+		TableViewRowData selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
+		if (selectedMember != null) {
+			MemberManager.getInstance().deleteMemberFromBase(selectedMember.getBase().getBaseId(), selectedMember.getMember().getMemberId());
+			this.fillTableViewMembers();
+		}
+	}
+
+	@FXML
+	private void onClickMItemUpdateMember(ActionEvent event) {
+		TableViewRowData selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
+		if (selectedMember != null) {
+			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedMember);
+			this.fillTableViewMembers();
 		}
 	}
 }
