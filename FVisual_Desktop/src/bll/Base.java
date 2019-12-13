@@ -26,6 +26,7 @@ public class Base implements Comparable<Base> {
 			String houseNr) {
 		super();
 		this.selection = selection;
+		this.selection.setId("checkboxBase" + this.baseId);
 		this.baseId = baseId;
 		this.name = name;
 		this.place = place;

@@ -29,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,33 +39,25 @@ import manager.OperationVehicleManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
-	private Accordion dropMenuFilter;
+	private Accordion dropMenuFilter, accordionSubTables;
+	@FXML
+	private TitledPane tpOperationVehcile, tpMember;
 	@FXML
 	private TableView<Base> tvBaseData;
 	@FXML
-	private TableView<TableViewRowData> tvVehicleData;
+	private TableView<OperationVehicle> tvVehicleData;
 	@FXML
-	private TableView<TableViewRowData> tvMemberData;
+	private TableView<Member> tvMemberData;
 	@FXML
-	private Label lbShowNameData;
+	private Label lbShowNameData, lbShowPostcodeAndPlaceData, lbShowAddressData;
 	@FXML
-	private Label lbShowPostcodeAndPlaceData;
+	private Button btnLoadVehicles, btnLoadMembers;
 	@FXML
-	private Label lbShowAddressData;
-	@FXML
-	private Button btnLoadVehicles;
-	@FXML
-	private Button btnSelectAllOrNone;
-	@FXML
-	private TableColumn<Base, String> columnSelection;
-	@FXML
-	private MenuItem mItemRemoveBase;
-	@FXML
-	private MenuItem mItemUpdateBase;
+	private MenuItem mItemRemoveBase, mItemUpdateBase;
 
 	private ObservableList<Base> obsListTVBaseData = null;
-	private ObservableList<TableViewRowData> obsListTVVehicles = null;
-	private ObservableList<TableViewRowData> obsListTVMembers = null;
+	private ObservableList<OperationVehicle> obsListTVVehicles = null;
+	private ObservableList<Member> obsListTVMembers = null;
 
 	private ControllerBaseManagement controllerBaseManagement;
 
@@ -74,12 +67,20 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		this.defaultSettings();
 		this.initTableViewBase();
 		this.initTableViewVehicle();
 		this.initTableViewMember();
 		this.fillTableViews();
 		this.initTableViewBaseListener();
 		this.initTableViewVehicleListener();
+	}
+	
+	private void defaultSettings() {
+		this.btnLoadVehicles.setDisable(true);
+		this.btnLoadMembers.setDisable(true);
+		
+		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -90,7 +91,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		TableColumn<Base, String> columnStreet = new TableColumn<Base, String>("Street");
 		TableColumn<Base, Number> columnHouseNr = new TableColumn<Base, Number>("Nr");
 
-		this.columnSelection.setCellValueFactory(new PropertyValueFactory<Base, String>("selection"));
 		columnName.setCellValueFactory(new PropertyValueFactory<Base, String>("name"));
 		columnPlace.setCellValueFactory(new PropertyValueFactory<Base, String>("place"));
 		columnPostCode.setCellValueFactory(new PropertyValueFactory<Base, Number>("postCode"));
@@ -98,7 +98,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		columnHouseNr.setCellValueFactory(new PropertyValueFactory<Base, Number>("houseNr"));
 
 		this.tvBaseData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		this.columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 10);
 		columnName.setMaxWidth(1f * Integer.MAX_VALUE * 32.5);
 		columnPlace.setMaxWidth(1f * Integer.MAX_VALUE * 31);
 		columnPostCode.setMaxWidth(1f * Integer.MAX_VALUE * 8);
@@ -110,59 +109,54 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewVehicle() {
-		TableColumn<TableViewRowData, String> columnVehicleDescription = new TableColumn<TableViewRowData, String>(
+		TableColumn<OperationVehicle, String> columnVehicleDescription = new TableColumn<OperationVehicle, String>(
 				"Description");
-		TableColumn<TableViewRowData, String> columnCorrespondingBase = new TableColumn<TableViewRowData, String>(
-				"Corresponding Base");
 
-		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("description"));
-		columnCorrespondingBase.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("rank"));
-
-		columnVehicleDescription.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getVehicle().getDescription()));
-		columnCorrespondingBase
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
-
+		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<OperationVehicle, String>("description"));
+		
 		this.tvVehicleData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		columnSelection.setMaxWidth(1f * Integer.MAX_VALUE * 3.5);
 		columnVehicleDescription.setMaxWidth(1f * Integer.MAX_VALUE * 51.5);
-		columnCorrespondingBase.setMaxWidth(1f * Integer.MAX_VALUE * 45);
-
-		this.tvVehicleData.getColumns().addAll(columnVehicleDescription, columnCorrespondingBase);
+		
+		this.tvVehicleData.getColumns().addAll(columnVehicleDescription);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewMember() {
-		TableColumn<TableViewRowData, String> colNameBlock = new TableColumn<TableViewRowData, String>("Name");
-		TableColumn<TableViewRowData, String> colFirstname = new TableColumn<TableViewRowData, String>("Firstname");
-		TableColumn<TableViewRowData, String> colLastname = new TableColumn<TableViewRowData, String>("Lastname");
-		TableColumn<TableViewRowData, String> colUsername = new TableColumn<TableViewRowData, String>("Username");
-		TableColumn<TableViewRowData, String> colRank = new TableColumn<TableViewRowData, String>("Rank");
+		TableColumn<Member, String> colNameBlock = new TableColumn<Member, String>("Name");
+		TableColumn<Member, String> colFirstname = new TableColumn<Member, String>("Firstname");
+		TableColumn<Member, String> colLastname = new TableColumn<Member, String>("Lastname");
+		TableColumn<Member, String> colUsername = new TableColumn<Member, String>("Username");
+		TableColumn<Member, String> colContraction = new TableColumn<Member, String>("Rank");
+		
+		colFirstname.setCellValueFactory(new PropertyValueFactory<Member, String>("firstname"));
+		colLastname.setCellValueFactory(new PropertyValueFactory<Member, String>("lastname"));
+		colUsername.setCellValueFactory(new PropertyValueFactory<Member, String>("username"));
+		
+		colContraction.setCellValueFactory(new PropertyValueFactory<Member, String>("rank"));
 
-		colFirstname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("firstname"));
-		colLastname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("lastname"));
-		colUsername.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("username"));
-
-		colRank.setCellValueFactory(new PropertyValueFactory<TableViewRowData, String>("rank"));
-
-		colFirstname.setCellValueFactory(
+		/*colFirstname.setCellValueFactory(
 				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getFirstname()));
 		colLastname.setCellValueFactory(
 				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getLastname()));
 		colUsername.setCellValueFactory(
 				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getUsername()));
-
-		colRank.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getRank().getDescription()));
+		colContraction.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getContraction()));*/
 
 		colNameBlock.getColumns().addAll(colFirstname, colLastname, colUsername);
-		this.tvMemberData.getColumns().addAll(colNameBlock, colRank);
+		this.tvMemberData.getColumns().addAll(colNameBlock, colContraction);
 		this.tvMemberData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
 
+	private void fillTableViews() {
+		this.fillTableViewBases();
+		this.fillTableViewVehicles();
+		this.fillTableViewMembers();
+	}
+	
 	private void fillTableViewBases() {
 		this.obsListTVBaseData = FXCollections.observableArrayList();
-		// Fill Base table
+
 		ArrayList<Base> listOfBases = BaseManager.getInstance().getBases();
 		for (int i = 0; i < listOfBases.size(); i++) {
 			this.obsListTVBaseData.add(new Base(new CheckBox(), listOfBases.get(i)));
@@ -172,31 +166,27 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	private void fillTableViewVehicles() {
 		this.obsListTVVehicles = FXCollections.observableArrayList();
-		// Fill Operationvehicle table
-		/*
-		 * ArrayList<OperationVehicle> listOfOperationVehicles =
-		 * OperationVehicleManager.getInstance().getVehicles(); for(int
-		 * i=0;i<listOfOperationVehicles.size();i++) { this.obsListTVVehicles.addAll(new
-		 * TableViewRowData(listOfOperationVehicles.get(i))); }
-		 * this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
-		 */
+
+		ArrayList<String> listOfOperationVehiclesAsStringArray = OperationVehicleManager.getInstance().getVehicles();
+		ArrayList<OperationVehicle> listOfOperationVehiclesAsObjects = new ArrayList<OperationVehicle>();
+		
+		for(String s : listOfOperationVehiclesAsStringArray) {
+			listOfOperationVehiclesAsObjects.add(new OperationVehicle(s));
+		}
+		for (int i = 0; i < listOfOperationVehiclesAsObjects.size(); i++) {
+			this.obsListTVVehicles.add(listOfOperationVehiclesAsObjects.get(i));
+		}
+		this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
 	}
 
 	private void fillTableViewMembers() {
 		this.obsListTVMembers = FXCollections.observableArrayList();
-		// Fill Members table
-		/*
-		 * ArrayList<Member> listOfMembers = MemberManager.getInstance().getMembers();
-		 * for(int i=0;i<listOfMembers.size();i++) { this.obsListTVMembers.addAll(new
-		 * TableViewRowData(listOfMembers.get(i))); }
-		 * this.tvMemberData.setItems(this.obsListTVMembers.sorted());
-		 */
-	}
 
-	private void fillTableViews() {
-		this.fillTableViewBases();
-		this.fillTableViewVehicles();
-		this.fillTableViewMembers();
+		ArrayList<Member> listOfMembers = MemberManager.getInstance().getMembers();
+		for (int i = 0; i < listOfMembers.size(); i++) {
+			this.obsListTVMembers.addAll(listOfMembers.get(i));
+		}
+		this.tvMemberData.setItems(this.obsListTVMembers.sorted());
 	}
 
 	private void initTableViewBaseListener() {
@@ -204,6 +194,11 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 			Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 			if (selectedBase != null) {
 				this.showBaseData(selectedBase);
+				this.btnLoadVehicles.setDisable(false);
+				this.btnLoadMembers.setDisable(false);
+			} else {
+				this.btnLoadVehicles.setDisable(true);
+				this.btnLoadMembers.setDisable(true);
 			}
 		});
 	}
@@ -220,43 +215,27 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@FXML
 	private void onClickBtnLoadVehicles(ActionEvent event) {
-		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
-		ObservableList<TableViewRowData> collOfAllVehicles = this.obsListTVVehicles.sorted();
-		ObservableList<TableViewRowData> filteredCollOfVehicles = FXCollections.observableArrayList();
-		ArrayList<Base> collOfAllSelectedBases = new ArrayList<Base>();
-
-		for (int i = 0; i < collOfAllBases.size(); i++) {
-			if (collOfAllBases.get(i).getSelection().isSelected()) {
-				collOfAllSelectedBases.add(collOfAllBases.get(i));
-			}
-		}
-		if (collOfAllSelectedBases.size() >= 1) {
-			for (int j = 0; j < collOfAllSelectedBases.size(); j++) {
-				for (int i = 0; i < collOfAllVehicles.size(); i++) {
-					if (collOfAllVehicles.get(i).getBase().getBaseId() == collOfAllSelectedBases.get(j).getBaseId()) {
-						filteredCollOfVehicles.add(collOfAllVehicles.get(i));
-					}
-				}
-			}
-			this.tvVehicleData.setItems(filteredCollOfVehicles);
-		} else {
-			this.tvVehicleData.setItems(collOfAllVehicles);
+		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
+		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
+		if(selectedBase != null) {
+			ArrayList<OperationVehicle> listOfOperationVehiclesFilteredByBase = OperationVehicleManager.getInstance().getVehiclesFromBase(selectedBase.getBaseId());
+			this.obsListTVVehicles.clear();
+			this.obsListTVVehicles.addAll(listOfOperationVehiclesFilteredByBase);
+			this.tvVehicleData.setItems(this.obsListTVVehicles);
+			this.btnLoadVehicles.setDisable(true);
 		}
 	}
-
+	
 	@FXML
-	private void onClickBtnSelectAllOrNone(ActionEvent event) {
-		ObservableList<Base> collOfAllBases = this.obsListTVBaseData.sorted();
-		if (this.btnSelectAllOrNone.getText().equals("All")) {
-			this.btnSelectAllOrNone.setText("None");
-			for (int i = 0; i < collOfAllBases.size(); i++) {
-				collOfAllBases.get(i).getSelection().setSelected(true);
-			}
-		} else {
-			this.btnSelectAllOrNone.setText("All");
-			for (int i = 0; i < collOfAllBases.size(); i++) {
-				collOfAllBases.get(i).getSelection().setSelected(false);
-			}
+	private void onClickBtnLoadMembers(ActionEvent event) {
+		this.accordionSubTables.setExpandedPane(this.tpMember);
+		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
+		if(selectedBase != null) {
+			ArrayList<Member> listOfOperationVehiclesFilteredByBase = MemberManager.getInstance().getMembersFromBase(selectedBase.getBaseId());
+			this.obsListTVMembers.clear();
+			this.obsListTVMembers.addAll(listOfOperationVehiclesFilteredByBase);
+			this.tvMemberData.setItems(this.obsListTVMembers);
+			this.btnLoadMembers.setDisable(true);
 		}
 	}
 
@@ -303,16 +282,17 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@FXML
 	private void onClickMItemRemoveVehicle(ActionEvent event) {
-		TableViewRowData selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
+		OperationVehicle selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
 		if (selectedVehicle != null) {
-			OperationVehicleManager.getInstance().deleteVehicleFromBase(selectedVehicle.getBase().getBaseId(), selectedVehicle.getVehicle().getOperationVehicleId());
+			OperationVehicleManager.getInstance().deleteVehicleFromBase(selectedVehicle.getBase().getBaseId(),
+					selectedVehicle.getOperationVehicleId());
 			this.fillTableViewVehicles();
 		}
 	}
 
 	@FXML
 	private void onClickMItemUpdateVehicle(ActionEvent event) {
-		TableViewRowData selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
+		OperationVehicle selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
 		if (selectedVehicle != null) {
 			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedVehicle);
 			this.fillTableViewVehicles();
@@ -321,18 +301,19 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@FXML
 	private void onClickMItemRemoveMember(ActionEvent event) {
-		TableViewRowData selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
+		Member selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
 		if (selectedMember != null) {
-			MemberManager.getInstance().deleteMemberFromBase(selectedMember.getBase().getBaseId(), selectedMember.getMember().getMemberId());
+			MemberManager.getInstance().deleteMemberFromBase(selectedMember.getBase().getBaseId(),
+					selectedMember.getMemberId());
 			this.fillTableViewMembers();
 		}
 	}
 
 	@FXML
 	private void onClickMItemUpdateMember(ActionEvent event) {
-		TableViewRowData selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
+		Member selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
 		if (selectedMember != null) {
-			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedMember);
+			CentralUpdateHandler.getInstance().initUpdateMemberDialog(selectedMember);
 			this.fillTableViewMembers();
 		}
 	}

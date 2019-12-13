@@ -18,6 +18,7 @@ public class CentralHandler {
 	public static final String CONST_MEMBER_URL = "mitglieder";
 	public static final String CONST_VEHICLE = "fahrzeuge";
 	public static final String CONST_OTHER_ORGANISATION = "andere_organisation";
+	public static final String CONST_RANK = "dienstgrade";
 
 	private Member member;
 		

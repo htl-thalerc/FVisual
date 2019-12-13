@@ -20,8 +20,6 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	private Label lbOldVehiclename;
 	@FXML
 	private TextField tfNewVehiclename;
-	@FXML
-	private Label lbStatusbar;
 	
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	private AtomicBoolean isValidVehiclename = new AtomicBoolean(false);
@@ -52,13 +50,11 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 		this.tfNewVehiclename.textProperty().addListener((obj, oldVal, newVal) -> {
 			if(newVal.length() >= 3) {
 				this.isValidVehiclename.set(true);
-				this.lbStatusbar.setText("Valid Inputvalue for Vehiclename");
 				this.tfNewVehiclename.setStyle("-fx-text-box-border: green;");
 				this.tfNewVehiclename.setStyle("-fx-focus-color: green;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
 			} else {
 				this.isValidVehiclename.set(false);
-				this.lbStatusbar.setText("Invalid Inputvalue for Vehiclename is too short (length >= 3)");
 				this.tfNewVehiclename.setStyle("-fx-text-box-border: red;");
 				this.tfNewVehiclename.setStyle("-fx-focus-color: red;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
@@ -78,7 +74,7 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 		OperationVehicle vehicle = new OperationVehicle();
 		
 		if(this.isValidVehiclename.get()) {
-				vehicle.setDescription(this.tfNewVehiclename.getText());	
+			vehicle.setDescription(this.tfNewVehiclename.getText());	
 		} 
 		return vehicle;
 	}

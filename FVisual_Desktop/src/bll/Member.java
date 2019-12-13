@@ -9,9 +9,10 @@ public class Member {
 	private boolean isAdmin;
 	private Base base;
 	private Rank rank;
+	private String contraction;
 
 	public Member(int memberId, String firstname, String lastname, String username, String password, boolean isAdmin,
-			Base base, Rank rank) {
+			Base base, Rank rank, String contraction) {
 		super();
 		this.memberId = memberId;
 		this.firstname = firstname;
@@ -21,6 +22,7 @@ public class Member {
 		this.isAdmin = isAdmin;
 		this.base = base;
 		this.rank = rank;
+		this.contraction = contraction;
 	}
 
 	public Member() {
@@ -90,9 +92,21 @@ public class Member {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 	}
+	
+	public String getContraction() {
+		return contraction;
+	}
+
+	public void setContraction(String contraction) {
+		this.contraction = contraction;
+	}
 
 	@Override
 	public String toString() {
 		return username + "[" + firstname + " " + lastname + "]";
+	}
+	
+	public String toFullString() {
+		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", " + base + ", " + rank;
 	}
 }

@@ -2,7 +2,7 @@ package bll;
 
 import javafx.scene.control.CheckBox;
 
-public class OperationVehicle implements Comparable<OperationVehicle> {
+public class OperationVehicle {
 	private int operationVehicleId;
 	private String description;
 	private Base base;
@@ -22,6 +22,11 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 		this.operationVehicleId = operationVehicleId;
 		this.description = description;
 		this.base = base;
+	}
+	
+	public OperationVehicle(String description) {
+		super();
+		this.description = description;
 	}
 
 	public OperationVehicle() {
@@ -54,19 +59,6 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 
 	public CheckBox getSelection() {
 		return selection;
-	}
-
-	@Override
-	public int compareTo(OperationVehicle obj) {
-		int i = this.base.getName().compareTo(obj.getBase().getName());
-		if (i != 0)
-			return i;
-
-		i = this.description.compareTo(obj.description);
-		if (i != 0)
-			return i;
-
-		return this.base.getName().compareTo(obj.getBase().getName());
 	}
 
 	@Override

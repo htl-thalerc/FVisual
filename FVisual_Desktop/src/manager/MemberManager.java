@@ -87,7 +87,7 @@ public class MemberManager {
 		return foundedMember;
 	}
 	
-	public boolean postMemberToBase(int baseId, Member memberObj) {
+	public boolean addMemberToBase(int baseId, Member memberObj) {
 		WebTarget webTargetAddMember = this.webTargetMemberServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_MEMBER_URL);
 		Invocation.Builder invocationBuilder = webTargetAddMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 					CentralHandler.getInstance().getHeaderAuthorization());
@@ -113,7 +113,7 @@ public class MemberManager {
 		}
 	}
 	
-	public boolean putMemberToBase(int baseId, Member memberObj) {
+	public boolean updateMemberFromBase(int baseId, Member memberObj) {
 		WebTarget webTargetUpdateMember = this.webTargetMemberServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_MEMBER_URL + "/" + memberObj.getMemberId());
 		Invocation.Builder invocationBuilder = webTargetUpdateMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 				CentralHandler.getInstance().getHeaderAuthorization());
@@ -163,7 +163,7 @@ public class MemberManager {
 		return foundedMember;
 	}
 	
-	public boolean postMemberToOperation(int operationId, Member memberObj) {
+	public boolean addMemberToOperation(int operationId, Member memberObj) {
 		WebTarget webTargetAddMember = this.webTargetMemberServiceForOperation.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_MEMBER_URL);
 		Invocation.Builder invocationBuilder = webTargetAddMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 					CentralHandler.getInstance().getHeaderAuthorization());
@@ -189,7 +189,7 @@ public class MemberManager {
 		}
 	}
 	
-	public boolean putMemberToOperation(int operationId, Member memberObj) {
+	public boolean updateMemberFromOperation(int operationId, Member memberObj) {
 		WebTarget webTargetUpdateMember = this.webTargetMemberServiceForOperation.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_MEMBER_URL + "/" + memberObj.getMemberId());
 		Invocation.Builder invocationBuilder = webTargetUpdateMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 				CentralHandler.getInstance().getHeaderAuthorization());
