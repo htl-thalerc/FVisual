@@ -59,6 +59,7 @@ var parseMitglied = function (toParse) {
     toParse = toParse.replaceAll('"NACHNAME"', '"lastname"');
     toParse = toParse.replaceAll('"USERNAME"', '"username"');
     toParse = toParse.replaceAll('"ISADMIN"', '"isAdmin"');
+    toParse = toParse.replaceAll('"KUERZEL"', '"contraction"');
 
     return toParse;
 }
@@ -80,16 +81,6 @@ var parseFahrzeugGrouped = function(toParse){
 
 var parseEinsatz = function(tempToParse){
 
-    let test = tempToParse.split('{');
-    test = test.split('}');
-    test = test.split(',');
-
-    console.log(test);
-
-    let retObject = {};
-    retObject.id = toParse.ID;
-    retObject.Einsatzart = {'id': toParse.ID_EINSATZART, 'bezeichnung':toParse.BESCHREIBUNG};
-    console.log(retObject);
     
     return tempToParse;
 }
