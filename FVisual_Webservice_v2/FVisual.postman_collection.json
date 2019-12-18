@@ -1,0 +1,778 @@
+{
+	"info": {
+		"_postman_id": "934eda03-7f2d-4f3f-8dcc-d53d589365f8",
+		"name": "FVisual",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basic",
+			"item": [
+				{
+					"name": "Einsatzarten",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "76395462-d390-4117-879e-969887774779",
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url:'http://localhost:3030/login',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'content-type': 'application/json',\r",
+									"        'flow': 'mobile'\r",
+									"    },\r",
+									"    \r",
+									"    body:{\r",
+									"    mode:'raw',\r",
+									"    raw:JSON.stringify({\r",
+									"        username:'Hanis',\r",
+									"        password:'1234'\r",
+									"    })\r",
+									"    }\r",
+									"}, function(err, res){\r",
+									"console.log(res);\r",
+									"var  token = res.text();\r",
+									"postman.setGlobalVariable(\"token\", token);\r",
+									"console.log(token);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/einsatzarten",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"einsatzarten"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Einsatzcodes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/einsatzcodes",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"einsatzcodes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dienstgrade",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/dienstgrade",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"dienstgrade"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Andere_Organisationen",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/andere_organisationen",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"andere_organisationen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Andere_Organisationen",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"Test\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:3030/andere_organisationen",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"andere_organisationen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Andere_Organisationen",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"Test2\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:3030/andere_organisationen/7",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"andere_organisationen",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Andere_Organisationen",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"Test\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:3030/andere_organisationen/6",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"andere_organisationen",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mitglieder - BY Username",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/mitglieder/thalerc",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"mitglieder",
+								"thalerc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fahrzeuge Grouped",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "53616c7465645f5fcbca7b3e91b4cf10c69c168a31af6d68ad0382e288622e6a6499e8e95564be7e9a8eebae30018af93ca1bda1f656c97201c8e51268ba13a9",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/fahrzeuge/grouped",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"fahrzeuge",
+								"grouped"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Stützpunkte",
+			"item": [
+				{
+					"name": "Mitglieder",
+					"item": [
+						{
+							"name": "Mitglieder",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/mitglieder",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"mitglieder"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mitglieder - By Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/mitglieder?id=4",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"mitglieder"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Fahrzeuge",
+					"item": [
+						{
+							"name": "Fahrzeuge",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"fahrzeuge"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fahrzeug - By Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge?id=8",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"fahrzeuge"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "8"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fahrzeug",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"bezeichnung\":\"sick\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"fahrzeuge"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fahrzeug",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"bezeichnung\":\"lol\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge/21",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"fahrzeuge",
+										"21"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fahrzeug",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "authorization",
+										"type": "text",
+										"value": "lol"
+									}
+								],
+								"url": {
+									"raw": "localhost:3030/stuetzpunkte/2/fahrzeuge/21",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"stuetzpunkte",
+										"2",
+										"fahrzeuge",
+										"21"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Stützpunkte",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/stuetzpunkte",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"stuetzpunkte"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stützpunkte - By Name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/stuetzpunkte?name=Feuerwehr Olsach-Molzbichl",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"stuetzpunkte"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Feuerwehr Olsach-Molzbichl"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stützpunkte - By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"url": {
+							"raw": "localhost:3030/stuetzpunkte?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"stuetzpunkte"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stützpunkte",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"FF Spittal/Drau\",\r\n\t\"ort\": \"Spittal/Drau\",\r\n\t\"plz\": 9800,\r\n\t\"strasse\": \"Ortenburger Str.\",\r\n\t\"hausnr\": 21\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3030/stuetzpunkte",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"stuetzpunkte"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stützpunkte",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"FF Spittal/Drau - Test\",\r\n\t\"ort\": \"Spittal/Drau\",\r\n\t\"plz\": 9800,\r\n\t\"strasse\": \"Ortenburger Str.\",\r\n\t\"hausnr\": 21\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3030/stuetzpunkte/23",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"stuetzpunkte",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Stützpunkte",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"type": "text",
+								"value": "lol"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3030/stuetzpunkte/23",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"stuetzpunkte",
+								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "flow",
+						"value": "mobile",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"heinzi\",\n\t\"password\": \"heinzi1234\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3030/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
