@@ -42,6 +42,6 @@ public class Rank {
 
 	@Override
 	public String toString() {
-		return id + " - " + contraction + " - " + description;
+		return contraction + " [" + description + "]";
 	}
 }

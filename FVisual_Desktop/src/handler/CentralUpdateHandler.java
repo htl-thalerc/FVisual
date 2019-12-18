@@ -3,17 +3,21 @@ package handler;
 import java.io.IOException;
 
 import bll.Base;
+import bll.Member;
 import bll.OperationVehicle;
 import controller.ControllerUpdateFullBaseDialog;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import manager.MemberManager;
+import manager.OperationVehicleManager;
 
 public class CentralUpdateHandler {
 	private static CentralUpdateHandler helper;
 	private Base updatedBaseData;
 	private OperationVehicle updatedOperationVehicleData;
+	private Member updatedMemberData;
 
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	
@@ -53,13 +57,34 @@ public class CentralUpdateHandler {
 			if(updatedOperationVehicle != null) {
 				updatedOperationVehicle.setOperationVehicleId(selectedVehicle.getOperationVehicleId());
 				this.setUpdatedOperationVehicleData(updatedOperationVehicle);
-				System.out.println(updatedOperationVehicle);
+				OperationVehicleManager.getInstance().updateVehicleFromBase(updatedOperationVehicle.getOperationVehicleId(), updatedOperationVehicle);
 			}
 		}
 	}
-
-	public void initUpdateMemberDialog() {
+	
+	public void initUpdateMemberDialog(Member selectedMember) {
+		Stage stage = this.initUpdateFullBaseDialog();
 		this.controllerUpdateFullBaseDialog.selectTabUpdateMember();
+		this.controllerUpdateFullBaseDialog.setOldMemberData(selectedMember);
+		stage.showAndWait();
+		
+		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
+			Member updatedMember = this.controllerUpdateFullBaseDialog.getUpdatedMemberData();
+			if(updatedMember != null) {
+				updatedMember.setMemberId(selectedMember.getMemberId());
+				updatedMember.setUsername(updatedMember.getLastname().substring(0, 4).toLowerCase() + updatedMember.getFirstname().substring(0, 1).toLowerCase());
+				updatedMember.setAdmin(selectedMember.isAdmin());
+				if(selectedMember.getBase() != null) {
+					updatedMember.setBase(selectedMember.getBase());
+				} else {
+					updatedMember.setBase(null);
+				}
+				updatedMember.setPassword(selectedMember.getPassword());
+				this.setUpdatedMemberData(updatedMember);
+				System.out.println(selectedMember.getBase());
+				MemberManager.getInstance().updateMemberFromBase(selectedMember.getBase().getBaseId(), updatedMember);
+			}
+		}
 	}
 
 	public Stage initUpdateFullBaseDialog() {
@@ -88,11 +113,19 @@ public class CentralUpdateHandler {
 		return this.updatedBaseData;
 	}
 	
+	public OperationVehicle getUpdatedOperationVehicleData() {
+		return this.updatedOperationVehicleData;
+	}
+	
 	private void setUpdatedOperationVehicleData(OperationVehicle updatedOperationVehicle) {
 		this.updatedOperationVehicleData = updatedOperationVehicle;
 	}
 	
-	public OperationVehicle getUpdatedOperationVehicleData() {
-		return this.updatedOperationVehicleData;
+	public Member getUpdatedMemberData() {
+		return this.updatedMemberData;
+	}
+	
+	public void setUpdatedMemberData(Member updatedMemberData) {
+		this.updatedMemberData = updatedMemberData;
 	}
 }

@@ -7,8 +7,8 @@
 /*                                                                           */
 /*  Method  |  URL                                                           */
 /*  GET     |  /einsaetze                                                    */
-/*  GET     |  /einsaetze?id=eId                                             */
-/*  GET     |  /einsaetze?id=eName&eZeit                                     */
+/*  GET     |  /einsaetze/:Id                                             */
+/*  GET     |  /einsaetze?name=eName&zeit=eZeit                              */
 /*  POST    |  /einsaetze                                                    */
 /*  PUT     |  /einsaetze/:eId                                               */
 /*  DELETE  |  /einsaetze/:eId                                               */
@@ -27,21 +27,37 @@
 /*                                                                           */
 /* ************************************************************************* */
 
+
 /* node modules */
 const express = require('express');
 
 /* own modules */
+const oracleJobs = require('../database/oracle-jobs');
+const oracleQueryProvider = require('../database/oracle-query-provider');
+const responseHandler = require('../modules/response-handler');
+const classNameParser = require('../modules/classname-parser');
 const loggerModule = require('../modules/logger-module');
+const validatorModule = require('../modules/validator-module');
 
 /* local variables */
 const einsatzRouter = express.Router();
 const logger = loggerModule.loggers['Routing'];
 
-// GET     |  /einsaetze
-// GET     |  /einsaetze?id=eId
-// GET     |  /einsaetze?id=eName&eZeit
+//  GET     |  /einsaetze
+//  GET     |  /einsaetze?name=eName&zeit=eZeit
 einsatzRouter.get('/', (req, res) => {
-  res.status(501).send('not implemented yet');
+  if (req.query.name && req.query.zeit) {
+    logger.debug('GET /einsaetze?name=eName&zeit=eZeit');
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_BY_NAME_ZEIT, [req.query.name, req.query.zeit], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
+} else {
+    logger.debug('GET /einsaetze');
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
+}
+});
+//  GET     |  /einsaetze/:eId
+einsatzRouter.get('/:eId', (req, res) => {
+    logger.debug('GET /einsaetze?id=eId');
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_BY_ID, [req.params.eId], responseHandler.GET_DEFAULT(res, classNameParser.parseEinsatz));
 });
 
 // POST   |  /einsaetze

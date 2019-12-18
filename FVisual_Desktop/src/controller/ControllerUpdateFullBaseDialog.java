@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import bll.Base;
+import bll.Member;
 import bll.OperationVehicle;
 import handler.CentralHandler;
 import handler.CentralUpdateHandler;
@@ -31,6 +32,7 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 	
 	private ControllerUpdateTabBase controllerUpdateTabBase;
 	private ControllerUpdateTabOperationVehicle controllerUpdateTabOperationVehicle;
+	private ControllerUpdateTabMember controllerUpdateTabMember;
 	private CentralUpdateHandler centralUpdateHandler;
 	
 	public ControllerUpdateFullBaseDialog(CentralUpdateHandler centralUpdateHandler) {
@@ -69,7 +71,15 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 	}
 	
 	private void setTabUpdateMemberContent() {
-		//todo: Implement Controller + FXML File
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/UpdateTabMember.fxml");
+		this.controllerUpdateTabMember = new ControllerUpdateTabMember(this);
+		loader.setController(this.controllerUpdateTabMember);
+
+		try {
+			this.tabUpdateMember.setContent(loader.load());
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void initTabListeners() {
@@ -106,7 +116,11 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 	}
 
 	public void selectTabUpdateMember() {
-	
+		this.tabPaneUpdateTabs.getSelectionModel().select(this.tabUpdateMember);
+		this.tabUpdateBase.setDisable(true);
+		this.tabUpdateOperationVehicle.setDisable(true);
+		this.btnBackUpdate.setDisable(true);
+		this.btnNextUpdate.setDisable(true);
 	}
 	
 	@FXML
@@ -159,6 +173,14 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 
 	public void setOldOperationVehicleData(OperationVehicle oldOperationVehicleData) {
 		this.controllerUpdateTabOperationVehicle.setOperationVehicleData(oldOperationVehicleData);
+	}
+	
+	public Member getUpdatedMemberData() {
+		return this.controllerUpdateTabMember.getNewMemberData();
+	}
+
+	public void setOldMemberData(Member oldMemberData) {
+		this.controllerUpdateTabMember.setMemberData(oldMemberData);
 	}
 	
 	public void setSaveBtnDisability(boolean isDisable) {

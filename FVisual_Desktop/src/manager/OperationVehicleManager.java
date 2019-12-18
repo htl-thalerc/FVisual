@@ -22,6 +22,7 @@ public class OperationVehicleManager {
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetOperationVehicleServiceForBase = this.webTarget.path(CentralHandler.CONST_BASE_URL);
 	private WebTarget webTargetOperationVehicleServiceForOperations = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
+	private WebTarget webTargetOperationVehilceService = this.webTarget.path(CentralHandler.CONST_VEHICLE); //.../fahrzeuge
 	
 	public static OperationVehicleManager getInstance() {
 		if (operationVehicleManagerInstance == null) {
@@ -29,6 +30,26 @@ public class OperationVehicleManager {
 		}
 		return operationVehicleManagerInstance;
 	}
+	//Basic
+	public ArrayList<String> getVehicles() {
+		ArrayList<String> collOfVehicles = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		WebTarget webTargetGetAllVehicles = this.webTargetOperationVehilceService.path("/grouped");
+		try {
+			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
+					CentralHandler.getInstance().getHeaderAuthorization()); 
+			response = invocationBuilder.accept(MediaType.TEXT_HTML).get();
+			if(response.getStatus() == 200) {
+				collOfVehicles = response.readEntity(new GenericType<ArrayList<String>>() {
+				});
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfVehicles;
+	}
+	
 	//Base Services
 	public ArrayList<OperationVehicle> getVehiclesFromBase(int baseId) {
 		ArrayList<OperationVehicle> collOfVehicles = null;
@@ -93,7 +114,7 @@ public class OperationVehicleManager {
 		}
 	}
 	
-	public boolean putVehicleToBase(int baseId, OperationVehicle vehicleObj) {
+	public boolean updateVehicleFromBase(int baseId, OperationVehicle vehicleObj) {
 		WebTarget webTargetUpdateVehicle = this.webTargetOperationVehicleServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_VEHICLE + "/" + vehicleObj.getOperationVehicleId());
 		Invocation.Builder invocationBuilder = webTargetUpdateVehicle.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 				CentralHandler.getInstance().getHeaderAuthorization());
@@ -143,7 +164,7 @@ public class OperationVehicleManager {
 		return foundedVehicle;
 	}
 	
-	public boolean postVehicleToOperation(int operationId, OperationVehicle vehicleObj) {
+	public boolean addVehicleToOperation(int operationId, OperationVehicle vehicleObj) {
 		WebTarget webTargetAddVehicle = this.webTargetOperationVehicleServiceForOperations.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_VEHICLE);
 		Invocation.Builder invocationBuilder = webTargetAddVehicle.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 					CentralHandler.getInstance().getHeaderAuthorization());
@@ -169,7 +190,7 @@ public class OperationVehicleManager {
 		}
 	}
 	
-	public boolean putVehicleToOperation(int operationId, OperationVehicle vehicleObj) {
+	public boolean updateVehicleFromOperation(int operationId, OperationVehicle vehicleObj) {
 		WebTarget webTargetUpdateVehicle = this.webTargetOperationVehicleServiceForOperations.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_VEHICLE + "/" + vehicleObj.getOperationVehicleId());
 		Invocation.Builder invocationBuilder = webTargetUpdateVehicle.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 				CentralHandler.getInstance().getHeaderAuthorization());

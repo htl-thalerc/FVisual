@@ -59,6 +59,7 @@ var parseMitglied = function (toParse) {
     toParse = toParse.replaceAll('"NACHNAME"', '"lastname"');
     toParse = toParse.replaceAll('"USERNAME"', '"username"');
     toParse = toParse.replaceAll('"ISADMIN"', '"isAdmin"');
+    toParse = toParse.replaceAll('"KUERZEL"', '"contraction"');
 
     return toParse;
 }
@@ -71,6 +72,19 @@ var parseFahrzeug = function (toParse) {
     return toParse;
 }
 
+var parseFahrzeugGrouped = function(toParse){
+    toParse = toParse.replaceAll('{"BEZEICHNUNG":', '');
+    toParse = toParse.replaceAll('}','');
+
+    return toParse;
+}
+
+var parseEinsatz = function(tempToParse){
+
+    
+    return tempToParse;
+}
+
 module.exports.parseStuetzpunkt = parseStuetzpunkt;
 module.exports.parseEinsatzcode = parseEinsatzcode;
 module.exports.parseEinsatzart = parseEinsatzart;
@@ -78,3 +92,5 @@ module.exports.parseDienstgrad = parseDienstgrad;
 module.exports.parseAOrg = parseAOrg;
 module.exports.parseMitglied = parseMitglied;
 module.exports.parseFahrzeug = parseFahrzeug;
+module.exports.parseEinsatz = parseEinsatz;
+module.exports.parseFahrzeugGrouped = parseFahrzeugGrouped;

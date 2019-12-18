@@ -15,7 +15,11 @@ var res_GET_DEFAULT = function (res, parser) {
       logger.debug("execute error sent!");
     } else {
       res.header('content-type', 'application/json');
-      res.status(200).send(parser(JSON.stringify(result.rows)));
+      if(parser)
+        res.status(200).send(parser(JSON.stringify(result.rows)));
+      else
+        res.status(200).send(JSON.stringify(result.rows));
+      
       logger.debug("response sent!");
     }
   };
@@ -35,7 +39,10 @@ var res_POST_DEFAULT = function (res, querystring, params, parser) {
           logger.debug("nested execute error sent!");
         } else {
           res.header('content-type', 'application/json');
-          res.status(201).send(parser(JSON.stringify(result.rows)));
+          if(parser)
+            res.status(201).send(parser(JSON.stringify(result.rows)));
+          else
+            res.status(201).send(JSON.stringify(result.rows));
           logger.debug("response sent!");
         }
       });
@@ -61,7 +68,11 @@ var res_PUT_DEFAULT = function (res, querystring, params, parser) {
             logger.debug("nested execute error sent!");
           } else {
             res.header('content-type', 'application/json');
-            res.status(200).send(parser(JSON.stringify(result.rows)));
+            if(parser)
+              res.status(200).send(parser(JSON.stringify(result.rows)));
+            else
+              res.status(200).send(JSON.stringify(result.rows));
+            
             logger.debug("response sent!");
           }
         });

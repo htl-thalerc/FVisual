@@ -22,6 +22,7 @@ public class MemberManager {
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetMemberServiceForBase = this.webTarget.path(CentralHandler.CONST_BASE_URL);
 	private WebTarget webTargetMemberServiceForOperation = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
+	private WebTarget webTargetMemberService = this.webTarget.path(CentralHandler.CONST_MEMBER_URL); //.../mitglieder
 
 	public static MemberManager getInstance() {
 		if (memberManagerInstance == null) {
@@ -29,6 +30,25 @@ public class MemberManager {
 		}
 		return memberManagerInstance;
 	}
+	//Basic Service
+	public ArrayList<Member> getMembers() {
+		ArrayList<Member> collOfMembers = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		try {
+			invocationBuilder = this.webTargetMemberService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
+					CentralHandler.getInstance().getHeaderAuthorization()); 
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			if(response.getStatus() == 200) {
+				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
+				});
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfMembers;
+	}
+	
 	//Base Services
 	public ArrayList<Member> getMembersFromBase(int baseId) {
 		ArrayList<Member> collOfMembers = null;
@@ -67,7 +87,7 @@ public class MemberManager {
 		return foundedMember;
 	}
 	
-	public boolean postMemberToBase(int baseId, Member memberObj) {
+	public boolean addMemberToBase(int baseId, Member memberObj) {
 		WebTarget webTargetAddMember = this.webTargetMemberServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_MEMBER_URL);
 		Invocation.Builder invocationBuilder = webTargetAddMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 					CentralHandler.getInstance().getHeaderAuthorization());
@@ -93,7 +113,7 @@ public class MemberManager {
 		}
 	}
 	
-	public boolean putMemberToBase(int baseId, Member memberObj) {
+	public boolean updateMemberFromBase(int baseId, Member memberObj) {
 		WebTarget webTargetUpdateMember = this.webTargetMemberServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_MEMBER_URL + "/" + memberObj.getMemberId());
 		Invocation.Builder invocationBuilder = webTargetUpdateMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 				CentralHandler.getInstance().getHeaderAuthorization());
@@ -143,7 +163,7 @@ public class MemberManager {
 		return foundedMember;
 	}
 	
-	public boolean postMemberToOperation(int operationId, Member memberObj) {
+	public boolean addMemberToOperation(int operationId, Member memberObj) {
 		WebTarget webTargetAddMember = this.webTargetMemberServiceForOperation.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_MEMBER_URL);
 		Invocation.Builder invocationBuilder = webTargetAddMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 					CentralHandler.getInstance().getHeaderAuthorization());
@@ -169,7 +189,7 @@ public class MemberManager {
 		}
 	}
 	
-	public boolean putMemberToOperation(int operationId, Member memberObj) {
+	public boolean updateMemberFromOperation(int operationId, Member memberObj) {
 		WebTarget webTargetUpdateMember = this.webTargetMemberServiceForOperation.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_MEMBER_URL + "/" + memberObj.getMemberId());
 		Invocation.Builder invocationBuilder = webTargetUpdateMember.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 				CentralHandler.getInstance().getHeaderAuthorization());

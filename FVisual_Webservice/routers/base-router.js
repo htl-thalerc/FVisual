@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /* ************************************************************************* */
 /*                                base-router.js                             */
@@ -13,12 +13,14 @@
 /*  POST    |  /andere_organisationen                                        */
 /*  PUT     |  /andere_organisationen/:aOrgId                                */
 /*  DELETE  |  /andere_organisationen/:aOrgId                                */
+/*  GET     |  /mitglieder                                                   */
 /*  GET     |  /mitglieder/:username                                         */
 /*  POST    |  /mitglieder                                                   */
 /*  PUT     |  /mitglieder/:username                                         */
 /*  DELETE  |  /mitglieder/:username                                         */
 /*  GET     |  /admins                                                       */
 /*  GET     |  /mitglieder/baseless                                          */
+/*  GET     |  /fahrzeuge/grouped                                            */
 /*                                                                           */
 /* ************************************************************************* */
 
@@ -79,6 +81,12 @@ baseRoutes.delete('/andere_organisationen/:aOrgId', validatorModule.paramIsInteg
   oracleJobs.execute(oracleQueryProvider.AORGS_DELETE, [parseInt(req.params.aOrgId)], responseHandler.DELETE_DEFAULT(res));
 });
 
+// GET    | /mitglieder
+baseRoutes.get('/mitglieder', (req, res) => {
+  logger.debug('GET /mitglieder');
+  oracleJobs.execute(oracleQueryProvider.MGT_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
+});
+
 // GET    | /mitglieder/:username
 baseRoutes.get('/mitglieder/:username', (req, res) => {
   logger.debug('GET /mitglieder/:username');
@@ -105,10 +113,17 @@ baseRoutes.get('/admins', (req, res) => {
   logger.debug('GET /admins');
   oracleJobs.execute(oracleQueryProvider.ADMINS_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
 });
+
 // GET    |/mitglieder/baseless
 baseRoutes.get('/mitglieder/baseless', (req, res) => {
   logger.debug('GET /mitglieder/baseless');
   oracleJobs.execute(oracleQueryProvider.MTG_GET_BASELESS, [], responseHandler.GET_DEFAULT(res, classNameParser.parseMitglied));
+});
+
+// GET    |/fahrzeuge/grouped
+baseRoutes.get('/fahrzeuge/grouped', (req, res) => {
+  logger.debug('GET /fahrzeuge/grouped');
+  oracleJobs.execute(oracleQueryProvider.FZG_GET_GROUPED, [], responseHandler.GET_DEFAULT(res, classNameParser.parseFahrzeugGrouped));
 });
 
 /* exports */
