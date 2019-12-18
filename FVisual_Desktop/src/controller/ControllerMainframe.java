@@ -85,9 +85,9 @@ public class ControllerMainframe implements Initializable {
 		ControllerEditProfile.setStage(stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
-		if(ch.getMember() == null) {
-			currentStage.close();
-		}
+//		if(ch.getMember() == null) {
+//			currentStage.close();
+//		}
 	}
 	
 	

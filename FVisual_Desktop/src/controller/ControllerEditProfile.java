@@ -50,6 +50,10 @@ public class ControllerEditProfile {
     
     static void setStage(Stage stage2) {
     	stage = stage2;
+    	
+        stage.setOnCloseRequest((e) -> {
+            stage.close();
+        });
     }
     
     @FXML

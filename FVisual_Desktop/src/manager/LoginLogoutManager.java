@@ -1,4 +1,4 @@
-package dal;
+package manager;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ import com.google.gson.JsonSyntaxException;
 import bll.Member;
 import bll.User;
 
-public class DatabaseHelperLoginLogout {
-	private static DatabaseHelperLoginLogout instance = null;
+public class LoginLogoutManager {
+	private static LoginLogoutManager instance = null;
 	
-	public static DatabaseHelperLoginLogout newInstance() {
+	public static LoginLogoutManager newInstance() {
 		
 		if (instance == null) {
-			instance = new DatabaseHelperLoginLogout();
+			instance = new LoginLogoutManager();
 		}
 		return instance;
 	}

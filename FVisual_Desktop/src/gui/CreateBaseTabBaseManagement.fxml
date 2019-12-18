@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -64,6 +65,11 @@
 						<Insets left="5.0" />
 					</padding>
 				</Label>
+            <Button fx:id="btnChangeMarker" mnemonicParsing="false" onMouseClicked="#btnChangeMarkerClicked" text="Change Marker" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="200.0" />
+               </GridPane.margin>
+            </Button>
 			</children>
          <padding>
             <Insets left="10.0" />
@@ -72,7 +78,7 @@
 	</left>
    <bottom>
   	 	<AnchorPane prefHeight="200" prefWidth="1000">
-  	 	<GoogleMapView fx:id="mapView" prefHeight="300.0" prefWidth="1075.0" />
+  	 	<GoogleMapView fx:id="mapView" prefHeight="300.0" prefWidth="1075.0"/>
          <BorderPane.margin>
             <Insets left="10.0" />
          </BorderPane.margin>

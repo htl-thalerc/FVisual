@@ -2,6 +2,7 @@ package app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import manager.GeoLocationsManager;
 import util.PropertyManager;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;

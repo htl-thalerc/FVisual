@@ -13,7 +13,7 @@
 	-fx-background-position: 202 4, right center; 
 }
 
-.button:hover {
+#btnLogin:hover {
 	-fx-background-color: #9e2820 !important;
 }
 

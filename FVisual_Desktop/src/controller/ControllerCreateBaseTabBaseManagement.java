@@ -6,11 +6,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.javascript.event.GMapMouseEvent;
 import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
 import bll.Base;
 import javafx.fxml.FXML;
@@ -18,6 +22,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.MouseEvent;
+import manager.GeoLocationsManager;
 
 public class ControllerCreateBaseTabBaseManagement implements Initializable, MapComponentInitializedListener {
 	@FXML
@@ -44,7 +50,9 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 	private Label lbStatusbarBaseName;
 
 	private ControllerCreateBaseManagement controllerCreateBaseManagement;
+	private GeoLocationsManager geoCodingService;
     private GoogleMap map;
+    private Marker currentMarker;
 
 	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBaseManagement) {
 		this.controllerCreateBaseManagement = controllerCreateBaseManagement;
@@ -216,8 +224,58 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
                 .streetViewControl(false)
                 .zoomControl(false)
                 .zoom(12);
+        
 
         map = mapView.createMap(mapOptions);
+        
+
+        map.addMouseEventHandler(UIEventType.click, (GMapMouseEvent event) -> {
+	        try {
+	        	LatLong latLong = event.getLatLong();
+		        geoCodingService = GeoLocationsManager.newInstance();
+		        
+	        	// no Marker on MAP
+	        	if(currentMarker == null) {
+	        		LatLong currentPosition = new LatLong(latLong.getLatitude(),latLong.getLongitude());
+	        		setMarkerOnMap(currentPosition);
+	        		changeTextFields(geoCodingService.reverseGeoCoding(currentPosition));
+	        	}
+	        	// there is already a marker on the map placed
+	        	else {
+	        		map.removeMarker(this.currentMarker);
+	        		LatLong currentPosition = new LatLong(latLong.getLatitude(),latLong.getLongitude());
+	        		setMarkerOnMap(currentPosition);
+	        		changeTextFields(geoCodingService.reverseGeoCoding(currentPosition));
+	        	}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    });
         System.out.println("map initialized");
+	}
+	private void setMarkerOnMap(LatLong currentPosition) {
+		MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
+    	markerOptionsCurrentMarker.position(currentPosition);
+    	this.currentMarker = new Marker(markerOptionsCurrentMarker);
+    	map.addMarker(this.currentMarker);
+	}
+	
+	private void changeTextFields(String Adress) {
+		String[] temp = Adress.split(",");
+		tfPostCode.setText(temp[1].split(" ")[1]);
+		tfPlace.setText(temp[1].split(" ")[2]);
+		tfStreet.setText(temp[0].split(" ")[0]);
+		tfHouseNr.setText(temp[0].split(" ")[1]);
+	}
+	
+	@FXML
+	public void btnChangeMarkerClicked(MouseEvent event) {
+		try {
+			geoCodingService = GeoLocationsManager.newInstance();
+			String adress = tfStreet.getText() + "," + tfHouseNr.getText() + "," + tfPostCode.getText() + "," + tfPlace.getText();
+			System.out.println(geoCodingService.GeoCoding(adress));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
