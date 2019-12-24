@@ -30,7 +30,6 @@ const log4js = require('log4js');
 const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
-const classNameParser = require('../modules/classname-parser');
 const loggerModule = require('../modules/logger-module');
 
 /* local variables */
@@ -76,7 +75,7 @@ stuetzpunktRouter.delete('/:stuetzId', (req, res) => {
 
 // GET    | /stuetzpunkte/:stuetzId/mitglieder
 // GET    | /stuetzpunkte/:stuetzId/mitglieder?id=mitglId
-baseRoutes.get('/stuetzpunkte/:stuetzId/mitglieder', (req, res) => {
+stuetzpunktRouter.get('/stuetzpunkte/:stuetzId/mitglieder', (req, res) => {
     if (req.query.id) {
         logger.debug('GET /stuetzpunkte/:stuetzId/mitglieder?id=mitglId');
         oracleJobs.execute(oracleQueryProvider.STPNKT_MTG_GET_BY_MTG_ID, [req.params.stuetzId, parseInt(req.query.id)], (err, result) => {
