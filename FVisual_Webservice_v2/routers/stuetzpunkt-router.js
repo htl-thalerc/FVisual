@@ -42,13 +42,52 @@ const logger = loggerModule.loggers['Routing'];
 stuetzpunktRouter.get('/', (req, res) => {
     if (req.query.name) {
         logger.debug('GET /stuetzpunkte?name=stuetzName');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.query.name], responseHandler.GET_DEFAULT(res, classNameParser.parseStuetzpunkt));
+        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.query.name], (err, result) => {
+          if (err) {
+            responseHandler.internalServerError(res, err);
+          }
+          else if (req.headers.metadata) {
+            let data = converterModule.convertResult(req.headers.metadata, result);
+            if (data)
+              responseHandler.get(res, data);
+            else
+              responseHandler.invalidMetaData(res, null);
+          } else {
+            responseHandler.get(res, result.rows);
+          }
+        });
     } else if (req.query.id) {
         logger.debug('GET /stuetzpunkte?name=stuetzId');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.query.id)], responseHandler.GET_DEFAULT(res, classNameParser.parseStuetzpunkt));
+        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.query.id)], (err, result) => {
+          if (err) {
+            responseHandler.internalServerError(res, err);
+          }
+          else if (req.headers.metadata) {
+            let data = converterModule.convertResult(req.headers.metadata, result);
+            if (data)
+              responseHandler.get(res, data);
+            else
+              responseHandler.invalidMetaData(res, null);
+          } else {
+            responseHandler.get(res, result.rows);
+          }
+        });
     } else {
         logger.debug('GET /stuetzpunkte');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GET, [], responseHandler.GET_DEFAULT(res, classNameParser.parseStuetzpunkt));
+        oracleJobs.execute(oracleQueryProvider.STPNKT_GET, [], (err, result) => {
+          if (err) {
+            responseHandler.internalServerError(res, err);
+          }
+          else if (req.headers.metadata) {
+            let data = converterModule.convertResult(req.headers.metadata, result);
+            if (data)
+              responseHandler.get(res, data);
+            else
+              responseHandler.invalidMetaData(res, null);
+          } else {
+            responseHandler.get(res, result.rows);
+          }
+        });
     }
 });
 
