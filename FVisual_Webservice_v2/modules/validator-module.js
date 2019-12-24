@@ -61,7 +61,18 @@ var isValidBody = function (body, pattern) {
 var getAOrgsPattern = function () {
     return {
         "length": 1, "data": {
-            "id": {"isMandatory":false},
+            "id": {"isMandatory": false},
+            "name": {
+                "isMandatory":true, "type": "string", "min-length": "3"
+            }
+        }
+    };
+}
+
+var getAdminsPattern = function () {
+    return {
+        "length": 1, "data": {
+            "id": {"isMandatory": false},
             "name": {
                 "isMandatory":true, "type": "string", "min-length": "3"
             }
@@ -73,6 +84,7 @@ module.exports = {
     'isValidParamId': paramIsInteger,
     'isValidBody': isValidBody,
     'patterns': {
-        'getAOrgsPattern': getAOrgsPattern
+        'getAOrgsPattern': getAOrgsPattern,
+        'getAdminsPattern': getAdminsPattern
     }
 }

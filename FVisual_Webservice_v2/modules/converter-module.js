@@ -31,18 +31,23 @@ var convertResult = function (metaData, result) {
     return '[' + toReturn.toString() + ']';
 }
 
-function generateFilledRow(curMetaData, curRow) {
+function generateFilledRow(curMetaData, curRow, isNested = false) {
     for (let idx2 in curMetaData[0]) {
         let val = curRow[curMetaData[0][idx2]];
-        if (typeof curRow[curMetaData[0][idx2]] === 'undefined') {
+        if (typeof curMetaData[0][idx2] === 'object') {
+            let arr = [];
+            arr.push(curMetaData[0][idx2])
+            curMetaData[0][idx2] = generateFilledRow(arr, curRow, true);
+        } else if (typeof val === 'undefined') {
             throw { message: "invalid metadata supplied", stack: "typeof metadata === undefined" };
-        } else if (typeof val === 'object') {
-            curMetaData[0][idx2] = generateFilledRow(val, curRow);
         } else {
             curMetaData[0][idx2] = val;
         }
     }
-    return JSON.stringify(curMetaData);
+    if (isNested)
+        return curMetaData[0];
+    else
+        return JSON.stringify(curMetaData);
 }
 
 var convertSimpleInput = function (metaData, curBody) {
@@ -56,12 +61,12 @@ var convertSimpleInput = function (metaData, curBody) {
     }
 }
 
-function generateInputRow(metaData, curBody){
+function generateInputRow(metaData, curBody) {
     var result = {};
     Object.keys(metaData).forEach((element) => {
-        if (typeof curBody[element] === 'object'){
+        if (typeof curBody[element] === 'object') {
             generateInputRow(metaData[element], curBody[element]);
-        } else if(typeof curBody[element] !== 'undefined') {
+        } else if (typeof curBody[element] !== 'undefined') {
             result[metaData[element]] = curBody[element];
         }
     });
@@ -72,7 +77,7 @@ var convertValuesToUpper = function (metadata) {
     for (var key in metadata) {
         metadata[key] = metadata[key].toUpperCase();
     }
-    return '['+JSON.stringify(metadata)+']';
+    return '[' + JSON.stringify(metadata) + ']';
 }
 
 module.exports.convertResult = convertResult;

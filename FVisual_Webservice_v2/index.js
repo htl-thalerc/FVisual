@@ -8,6 +8,7 @@ const securityModule = require('./modules/security-module');
 const loggerModule = require('./modules/logger-module');
 
 const baseRouters = require('./routers/base-router');
+const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
 
 /* logger settings */
 loggerModule.settings.Development();
@@ -33,6 +34,7 @@ app.use(securityModule.authenticate);
 
 /*private sector */
 app.use(baseRouters);
+app.use('/stuetzpunkte', stuetzpunktRouter);
 
 /* central error handler */
 app.use(centralErrorHandler);
