@@ -31,6 +31,7 @@ const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
 const loggerModule = require('../modules/logger-module');
+const converterModule = require('../modules/converter-module');
 
 /* local variables */
 const stuetzpunktRouter = express.Router();
