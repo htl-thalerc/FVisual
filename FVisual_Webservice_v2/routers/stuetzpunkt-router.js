@@ -7,24 +7,23 @@
 /*                                                                           */
 /*  Method  |  URL                                                           */
 /*  GET     | /stuetzpunkte                                                  */
-/*  GET     | /stuetzpunkte?id=stuetzId                                      */
 /*  GET     | /stuetzpunkte?name=stuetzName                                  */
-/*  POST    | /stuetzpunkte                                                  */
-/*  PUT     | /stuetzpunkte/:stuetzId                                        */
-/*  DELETE  | /stuetzpunkte/:stuetzId                                        */
-/*  GET     | /stuetzpunkte/:stuetzId/mitglieder                             */
-/*  GET     | /stuetzpunkte/:stuetzId/mitglieder?id=mitglId                  */
-/*  GET     | /stuetzpunkte/:stuetzId/fahrzeuge                              */
-/*  GET     | /stuetzpunkte/:stuetzId/fahrzeuge?id=fzgId                     */
-/*  POST    | /stuetzpunkte/:stuetzId/fahrzeuge                              */
-/*  PUT     | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId                       */
-/*  DELETE  | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId                       */
+/*  GET     | /stuetzpunkte/:stuetzId                                        */
+/*  POST    | /stuetzpunkte                                                  */ //notImplementedYet
+/*  PUT     | /stuetzpunkte/:stuetzId                                        */ //notImplementedYet
+/*  DELETE  | /stuetzpunkte/:stuetzId                                        */ //notImplementedYet
+/*  GET     | /stuetzpunkte/:stuetzId/mitglieder                             */ //notImplementedYet
+/*  GET     | /stuetzpunkte/:stuetzId/mitglieder/:mitglId                    */ //notImplementedYet
+/*  GET     | /stuetzpunkte/:stuetzId/fahrzeuge                              */ //notImplementedYet
+/*  GET     | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId                       */ //notImplementedYet
+/*  POST    | /stuetzpunkte/:stuetzId/fahrzeuge                              */ //notImplementedYet
+/*  PUT     | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId                       */ //notImplementedYet
+/*  DELETE  | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId                       */ //notImplementedYet
 /*                                                                           */
 /* ************************************************************************* */
 
 /* node modules */
 const express = require('express');
-const log4js = require('log4js');
 
 /* own modules */
 const oracleJobs = require('../database/oracle-jobs');
@@ -32,182 +31,128 @@ const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
 const loggerModule = require('../modules/logger-module');
 const converterModule = require('../modules/converter-module');
+const validatorModule = require('../modules/validator-module');
 
 /* local variables */
 const stuetzpunktRouter = express.Router();
 const logger = loggerModule.loggers['Routing'];
 
 // GET    | /stuetzpunkte
-// GET    | /stuetzpunkte?id=stuetzId
 // GET    | /stuetzpunkte?name=stuetzName
 stuetzpunktRouter.get('/', (req, res) => {
-    if (req.query.name) {
-        logger.debug('GET /stuetzpunkte?name=stuetzName');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.query.name], (err, result) => {
-          if (err) {
-            responseHandler.internalServerError(res, err);
-          }
-          else if (req.headers.metadata) {
-            let data = converterModule.convertResult(req.headers.metadata, result);
-            if (data)
-              responseHandler.get(res, data);
-            else
-              responseHandler.invalidMetaData(res, null);
-          } else {
-            responseHandler.get(res, result.rows);
-          }
-        });
-    } else if (req.query.id) {
-        logger.debug('GET /stuetzpunkte?name=stuetzId');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.query.id)], (err, result) => {
-          if (err) {
-            responseHandler.internalServerError(res, err);
-          }
-          else if (req.headers.metadata) {
-            let data = converterModule.convertResult(req.headers.metadata, result);
-            if (data)
-              responseHandler.get(res, data);
-            else
-              responseHandler.invalidMetaData(res, null);
-          } else {
-            responseHandler.get(res, result.rows);
-          }
-        });
-    } else {
-        logger.debug('GET /stuetzpunkte');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GET, [], (err, result) => {
-          if (err) {
-            responseHandler.internalServerError(res, err);
-          }
-          else if (req.headers.metadata) {
-            let data = converterModule.convertResult(req.headers.metadata, result);
-            if (data)
-              responseHandler.get(res, data);
-            else
-              responseHandler.invalidMetaData(res, null);
-          } else {
-            responseHandler.get(res, result.rows);
-          }
-        });
-    }
+  logger.debug('GET /stuetzpunkte');
+  if (!validatorModule.isValidSubQuery(req.query, validatorModule.patterns.getSubQueryNamePattern(), true)) {
+    responseHandler.invalidSubQuery(res, null);
+    return;
+  } else if (req.query.name) {
+    logger.debug('-- search: stuetzName');
+    oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.query.name], (err, result) => {
+      if (err) {
+        responseHandler.internalServerError(res, err);
+      }
+      else if (req.headers.metadata) {
+        let data = converterModule.convertResult(req.headers.metadata, result);
+        if (data)
+          responseHandler.get(res, data);
+        else
+          responseHandler.invalidMetaData(res, null);
+      } else {
+        responseHandler.get(res, result.rows);
+      }
+    });
+  } else {
+    logger.debug('-- all');
+    oracleJobs.execute(oracleQueryProvider.STPNKT_GET, [], (err, result) => {
+      if (err) {
+        responseHandler.internalServerError(res, err);
+      }
+      else if (req.headers.metadata) {
+        let data = converterModule.convertResult(req.headers.metadata, result);
+        if (data)
+          responseHandler.get(res, data);
+        else
+          responseHandler.invalidMetaData(res, null);
+      } else {
+        responseHandler.get(res, result.rows);
+      }
+    });
+  }
 });
 
-// POST   | /stuetzpunkte
-stuetzpunktRouter.post('/', (req, res) => {
-    logger.debug('POST /stuetzpunkte');
-    let params = [req.body.name, req.body.ort, parseInt(req.body.plz), req.body.strasse, req.body.hausnr];
-    oracleJobs.execute(oracleQueryProvider.STPNKT_POST, params, responseHandler.POST_DEFAULT(res, oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.body.name], classNameParser.parseStuetzpunkt));
-});
+// GET    | /stuetzpunkte/stuetzId
+stuetzpunktRouter.get('/stuetzpunkte/:stuetzId', (req, res) => {
+  logger.debug('GET /stuetzpunkte/:stuetzId');
+  if (!validatorModule.isValidParamId(req.params.stuetzId)) {
+    responseHandler.invalidParamId(res, null);
+  }
+  oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.params.stuetzId)], (err, result) => {
+    if (err) {
+      responseHandler.internalServerError(res, err);
+    } else{
+      if(result.rows.length == 0){
+        responseHandler.notFound(res,err);
+        return;
+      }
 
-// PUT    | /stuetzpunkte/:stuetzId
-stuetzpunktRouter.put('/:stuetzId', (req, res) => {
-    logger.debug('PUT /stuetzpunkte');
-    let params = [req.body.name, req.body.ort, parseInt(req.body.plz), req.body.strasse, req.body.hausnr, req.params.stuetzId];
-    oracleJobs.execute(oracleQueryProvider.STPNKT_PUT, params, responseHandler.PUT_DEFAULT(res, oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.params.stuetzId)], classNameParser.parseStuetzpunkt));
-});
-
-// DELETE | /stuetzpunkte/:stuetzId
-stuetzpunktRouter.delete('/:stuetzId', (req, res) => {
-    logger.debug('DELETE /stuetzpunkte');
-    oracleJobs.execute(oracleQueryProvider.STPNKT_DELETE, [parseInt(req.params.stuetzId)], responseHandler.DELETE_DEFAULT(res));
-
-});
-
-// GET    | /stuetzpunkte/:stuetzId/mitglieder
-// GET    | /stuetzpunkte/:stuetzId/mitglieder?id=mitglId
-stuetzpunktRouter.get('/stuetzpunkte/:stuetzId/mitglieder', (req, res) => {
-    if (req.query.id) {
-        logger.debug('GET /stuetzpunkte/:stuetzId/mitglieder?id=mitglId');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_MTG_GET_BY_MTG_ID, [req.params.stuetzId, parseInt(req.query.id)], (err, result) => {
-            if (err) {
-              responseHandler.internalServerError(res, err);
-            }
-            else if (req.headers.metadata) {
-              let data = converterModule.convertResult(req.headers.metadata, result);
-              if (data)
-                responseHandler.get(res, data);
-              else
-                responseHandler.invalidMetaData(res, null);
-            } else {
-              responseHandler.get(res, result.rows);
-            }
-          });
-    } else {
-        logger.debug('GET /stuetzpunkte/:stuetzId/mitglieder');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_MTG_GET, [req.params.stuetzId], (err, result) => {
-            if (err) {
-              responseHandler.internalServerError(res, err);
-            }
-            else if (req.headers.metadata) {
-              let data = converterModule.convertResult(req.headers.metadata, result);
-              if (data)
-                responseHandler.get(res, data);
-              else
-                responseHandler.invalidMetaData(res, null);
-            } else {
-              responseHandler.get(res, result.rows);
-            }
-          });
+      if (req.headers.metadata) {
+        let data = converterModule.convertResult(req.headers.metadata, result);
+        if (data)
+          responseHandler.get(res, data);
+        else
+          responseHandler.invalidMetaData(res, null);
+      } else {
+        responseHandler.get(res, result.rows);
+      }
     }
   });
+});
 
-// GET    | /stuetzpunkte/:stuetzId/fahrzeuge
-// GET    | /stuetzpunkte/:stuetzId/fahrzeuge?id=fzgId
+// POST   | /stuetzpunkte //notImplementedYet
+stuetzpunktRouter.post('/', (req, res) => {
+  logger.debug('POST /stuetzpunkte');
+  responseHandler.notImplementedYet(res, null);
+});
+
+// PUT    | /stuetzpunkte/:stuetzId //notImplementedYet
+stuetzpunktRouter.put('/:stuetzId', (req, res) => {
+  logger.debug('PUT /stuetzpunkte');
+  responseHandler.notImplementedYet(res, null);
+});
+
+// DELETE | /stuetzpunkte/:stuetzId //notImplementedYet
+stuetzpunktRouter.delete('/:stuetzId', (req, res) => {
+  logger.debug('DELETE /stuetzpunkte');
+  responseHandler.notImplementedYet(res, null);
+});
+
+// GET    | /stuetzpunkte/:stuetzId/mitglieder //notImplementedYet
+// GET    | /stuetzpunkte/:stuetzId/mitglieder?id=mitglId //notImplementedYet
+stuetzpunktRouter.get('/stuetzpunkte/:stuetzId/mitglieder', (req, res) => {
+  responseHandler.notImplementedYet(res, null);
+});
+
+// GET    | /stuetzpunkte/:stuetzId/fahrzeuge //notImplementedYet
+// GET    | /stuetzpunkte/:stuetzId/fahrzeuge?id=fzgId //notImplementedYet
 stuetzpunktRouter.get('/:stuetzId/fahrzeuge', (req, res) => {
-    if (req.query.id) {
-        logger.debug('GET /stuetzpunkte/:stuetzId/fahrzeuge?id=fzgId');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_GET_BY_FZG_ID, [req.params.stuetzId, parseInt(req.query.id)], (err, result) => {
-            if (err) {
-              responseHandler.internalServerError(res, err);
-            }
-            else if (req.headers.metadata) {
-              let data = converterModule.convertResult(req.headers.metadata, result);
-              if (data)
-                responseHandler.get(res, data);
-              else
-                responseHandler.invalidMetaData(res, null);
-            } else {
-              responseHandler.get(res, result.rows);
-            }
-          });
-    } else {
-        logger.debug('GET /stuetzpunkte/:stuetzId/fahrzeuge');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_GET, [req.params.stuetzId], (err, result) => {
-            if (err) {
-              responseHandler.internalServerError(res, err);
-            }
-            else if (req.headers.metadata) {
-              let data = converterModule.convertResult(req.headers.metadata, result);
-              if (data)
-                responseHandler.get(res, data);
-              else
-                responseHandler.invalidMetaData(res, null);
-            } else {
-              responseHandler.get(res, result.rows);
-            }
-          });
-    }
+  responseHandler.notImplementedYet(res, null);
 });
 
-// POST   | /stuetzpunkte/:stuetzId/fahrzeuge
+// POST   | /stuetzpunkte/:stuetzId/fahrzeuge //notImplementedYet
 stuetzpunktRouter.post('/:stuetzId/fahrzeuge', (req, res) => {
-    logger.debug('POST /stuetzpunkte/:stuetzId/fahrzeuge');
-    let params = [req.params.stuetzId, req.body.bezeichnung];
-    oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_POST, params, responseHandler.POST_DEFAULT(res, oracleQueryProvider.STPNKT_FZG_GET_BY_FZG_NAME, [req.params.stuetzId, req.body.bezeichnung], classNameParser.parseFahrzeug));
+  logger.debug('POST /stuetzpunkte/:stuetzId/fahrzeuge');
+  responseHandler.notImplementedYet(res, null);
 });
 
-// PUT    | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId
+// PUT    | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId //notImplementedYet
 stuetzpunktRouter.put('/:stuetzId/fahrzeuge/:fzgId', (req, res) => {
-    logger.debug('PUT /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId');
-    let params = [req.body.bezeichnung, req.params.stuetzId, req.params.fzgId];
-    oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_PUT, params, responseHandler.PUT_DEFAULT(res, oracleQueryProvider.STPNKT_FZG_GET_BY_FZG_ID, [req.params.stuetzId, req.params.fzgId], classNameParser.parseFahrzeug));
+  logger.debug('PUT /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId');
+  responseHandler.notImplementedYet(res, null);
 });
 
-// DELETE | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId
+// DELETE | /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId //notImplementedYet
 stuetzpunktRouter.delete('/:stuetzId/fahrzeuge/:fzgId', (req, res) => {
-    logger.debug('DELETE /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId');
-    let params = [req.params.stuetzId, req.params.fzgId];
-    oracleJobs.execute(oracleQueryProvider.STPNKT_FZG_DELETE, params, responseHandler.DELETE_DEFAULT(res));
+  logger.debug('DELETE /stuetzpunkte/:stuetzId/fahrzeuge/:fzgId');
+  responseHandler.notImplementedYet(res, null);
 });
 
 /* exports */

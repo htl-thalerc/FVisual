@@ -20,6 +20,13 @@ var post = function(res, data){
   res.status(201).send(data);
 }
 
+var put = function(res, data){
+  res.header('content-type', 'application/json');
+  logger.debug('responded with {200}: valid');
+  loggerModule.lineFeed();
+  res.status(200).send(data);
+}
+
 var del = function(res){
   logger.debug('responded with {204}: valid');
   loggerModule.lineFeed();
@@ -45,9 +52,9 @@ var invalidMetaData = function(res, err){
   loggerModule.lineFeed();
 }
 
-var invalidItemId = function(res, err){
-  res.status(400).send('invalid metadata supplied');
-  logger.debug('responded with {400}: invalidMetaData');
+var invalidParamId = function(res, err){
+  res.status(400).send('invalid param id supplied');
+  logger.debug('responded with {400}: invalidParamId');
   loggerModule.lineFeed();
 }
 
@@ -57,12 +64,27 @@ var invalidBody = function(res, err){
   loggerModule.lineFeed();
 }
 
+var invalidSubQuery = function(res, err){
+  res.status(400).send('invalid subquery supplied');
+  logger.debug('responded with {400}: invalidSubQuery');
+  loggerModule.lineFeed();
+}
+
+var notImplementedYet = function (res, err){
+  res.status(501).send('url not implemented yet');
+  logger.debug('responded with {501}: notImplementedYet');
+  loggerModule.lineFeed();
+}
+
 /* exports */
 module.exports.internalServerError = internalServerError;
 module.exports.invalidMetaData = invalidMetaData;
-module.exports.invalidItemId = invalidItemId;
+module.exports.invalidParamId = invalidParamId;
 module.exports.invalidBody = invalidBody;
+module.exports.invalidSubQuery = invalidSubQuery;
+module.exports.notImplementedYet = notImplementedYet;
 module.exports.notFound = notFound;
 module.exports.get = get;
-module.exports.delete = del;
 module.exports.post = post;
+module.exports.put = put;
+module.exports.delete = del;

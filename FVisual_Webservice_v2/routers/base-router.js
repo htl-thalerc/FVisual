@@ -15,13 +15,12 @@
 /*  PUT     |  /andere_organisationen/:aOrgId                                */
 /*  DELETE  |  /andere_organisationen/:aOrgId                                */
 /*  GET     |  /mitglieder                                                   */
-/*  GET     |  /mitglieder/:username                                         */
-/*  POST    |  /mitglieder                                                   */
-/*  PUT     |  /mitglieder/:username                                         */
-/*  DELETE  |  /mitglieder/:username                                         */
+/*  GET     |  /mitglieder/:mitglId                                          */
+/*  POST    |  /mitglieder                                                   */ //notImplementedYet
+/*  PUT     |  /mitglieder/:mitglId                                          */ //notImplementedYet
+/*  DELETE  |  /mitglieder/:mitglId                                          */ //notTested
 /*  GET     |  /admins                                                       */
 /*  GET     |  /mitglieder/baseless                                          */
-/*  GET     |  /fahrzeuge/grouped                                            */
 /*                                                                           */
 /* ************************************************************************* */
 
@@ -154,7 +153,9 @@ baseRoutes.post('/andere_organisationen', (req, res) => {
       return;
     }
   } else {
-    data = { "name": req.body.name };
+    data = {
+      "NAME": req.body.name
+    };
   }
 
   if (!validatorModule.isValidBody(data, validatorModule.patterns.getAOrgsPattern())) {
@@ -162,12 +163,12 @@ baseRoutes.post('/andere_organisationen', (req, res) => {
     return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.AORGS_POST, [data.name], (err, result) => {
+  oracleJobs.execute(oracleQueryProvider.AORGS_POST, [data.NAME], (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }
     else {
-      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_NAME, [data.name], (err, result) => {
+      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_NAME, [data.NAME], (err, result) => {
         if (err) {
           responseHandler.internalServerError(res.err);
         } else {
@@ -189,12 +190,63 @@ baseRoutes.post('/andere_organisationen', (req, res) => {
 // PUT    | /andere_organisationen/:aOrgId
 baseRoutes.put('/andere_organisationen/:aOrgId', (req, res) => {
   logger.debug('PUT /andere_organisationen');
+  var data;
+  var metaData;
 
   if (!validatorModule.isValidParamId(req.params.aOrgId)) {
-    responseHandler.invalidItemId(res, null);
+    responseHandler.invalidParamId(res, null);
+    return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [req.body.name, parseInt(req.params.aOrgId)], responseHandler.PUT_DEFAULT(res, oracleQueryProvider.AORGS_GETBY_AORGS_ID, [parseInt(req.params.aOrgId)], classNameParser.parseAOrg));
+  if (req.headers.metadata) {
+    try {
+      metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+      data = converterModule.convertSimpleInput(metaData, req.body);
+      if (!data) {
+        responseHandler.invalidMetaData(res, null);
+        return;
+      }
+    } catch (ex) {
+      responseHandler.invalidMetaData(res, null);
+      return;
+    }
+  } else {
+    data = {
+      "NAME": req.body.name
+    };
+  }
+
+  if (!validatorModule.isValidBody(data, validatorModule.patterns.getAOrgsPattern())) {
+    responseHandler.invalidBody(res, null);
+    return;
+  }
+
+  oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [data.NAME, parseInt(req.params.aOrgId)], (err, result) => {
+    if (err) {
+      responseHandler.internalServerError(res, err);
+    }
+    else {
+      if (result.rowsAffected == 0) {
+        responseHandler.notFound(res, null);
+        return;
+      }
+      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_ID, [req.params.aOrgId], (err, result) => {
+        if (err) {
+          responseHandler.internalServerError(res.err);
+        } else {
+          if (metaData) {
+            let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
+            if (data)
+              responseHandler.put(res, data);
+            else
+              responseHandler.invalidMetaData(res, null);
+          } else {
+            responseHandler.put(res, result.rows);
+          }
+        }
+      });
+    }
+  });
 });
 
 // DELETE | /andere_organisationen/:aOrgId
@@ -202,7 +254,8 @@ baseRoutes.delete('/andere_organisationen/:aOrgId', (req, res) => {
   logger.debug('DELETE /andere_organisationen');
 
   if (!validatorModule.isValidParamId(req.params.aOrgId)) {
-    responseHandler.invalidItemId(res, null);
+    responseHandler.invalidParamId(res, null);
+    return;
   }
 
   oracleJobs.execute(oracleQueryProvider.AORGS_DELETE, [parseInt(req.params.aOrgId)], (err, result) => {
@@ -217,7 +270,6 @@ baseRoutes.delete('/andere_organisationen/:aOrgId', (req, res) => {
     }
   });
 });
-
 
 // GET    | /mitglieder
 baseRoutes.get('/mitglieder', (req, res) => {
@@ -238,28 +290,122 @@ baseRoutes.get('/mitglieder', (req, res) => {
   });
 });
 
-// GET    | /mitglieder/:username
-baseRoutes.get('/mitglieder/:username', (req, res) => {
-  logger.debug('GET /mitglieder/:username');
-  oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_USERNAME, [req.params.username], (err, result) => {
+// GET    | /mitglieder/:mitglId
+baseRoutes.get('/mitglieder/:mitglId', (req, res) => {
+  logger.debug('GET /mitglieder/:mitglId');
+  if (!validatorModule.isValidParamId(req.params.mitglId)) {
+    responseHandler.invalidParamId(res, null);
+    return;
+  }
+  oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, [parseInt(req.params.mitglId)], (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
-    }
-    else if (req.headers.metadata) {
-      let data = converterModule.convertResult(req.headers.metadata, result);
-      if (data)
-        responseHandler.get(res, data);
-      else
-        responseHandler.invalidMetaData(res, null);
-    } else {
-      responseHandler.get(res, result.rows);
+    } else{
+      if(result.rows.length == 0){
+        responseHandler.notFound(res,err);
+        return;
+      }
+
+      if (req.headers.metadata) {
+        let data = converterModule.convertResult(req.headers.metadata, result);
+        if (data)
+          responseHandler.get(res, data);
+        else
+          responseHandler.invalidMetaData(res, null);
+      } else {
+        responseHandler.get(res, result.rows);
+      }
     }
   });
 });
 
-/*  POST    |  /mitglieder                                                   */
-/*  PUT     |  /mitglieder/:username                                         */
-/*  DELETE  |  /mitglieder/:username                                         */
+// POST   |  /mitglieder //notImplementedYet
+baseRoutes.post('/mitglieder', (req, res) => {
+  logger.debug('POST /mitglieder');
+
+  var data;
+  var metaData;
+  if (req.headers.metadata) {
+    try {
+      metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+      data = converterModule.convertSimpleInput(metaData, req.body);
+      console.log(JSON.stringify(data));
+      if (!data) {
+        responseHandler.invalidMetaData(res, null);
+        return;
+      }
+    } catch (ex) {
+      responseHandler.invalidMetaData(res, null);
+      return;
+    }
+  } else {
+    data = {
+      "ID_DIENSTGRAD": req.body.id_dienstgrad,
+      "ID_STUETZPUNKT": req.body.id_stuetzpunkt,
+      "VORNAME": req.body.vorname,
+      "NACHNAME": req.body.nachname,
+      "USERNAME": req.body.username,
+      "PASSWORD": req.body.password,
+      "ISADMIN": req.body.isAdmin
+    };
+  }
+
+  if (!validatorModule.isValidBody(data, validatorModule.patterns.getMitgliedPattern())) {
+    responseHandler.invalidBody(res, null);
+    return;
+  }
+
+  oracleJobs.execute(oracleQueryProvider.MTG_POST, [parseInt(data.ID_DIENSTGRAD), parseInt(data.ID_STUETZPUNKT), data.VORNAME, data.NACHNAME, data.USERNAME, data.PASSWORD, data.ISADMIN], (err, result) => {
+    if (err) {
+      responseHandler.internalServerError(res, err);
+    }
+    else {
+      oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_USERNAME, [data.USERNAME], (err, result) => {
+        if (err) {
+          responseHandler.internalServerError(res.err);
+        } else {
+          if (metaData) {
+            let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
+            if (data)
+              responseHandler.post(res, data);
+            else
+              responseHandler.invalidMetaData(res, null);
+          } else {
+            responseHandler.post(res, result.rows);
+          }
+        }
+      });
+    }
+  });
+});
+
+// PUT    |  /mitglieder/:mitglId //notImplementedYet
+baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
+  logger.debug('PUT /mitglieder/:username');
+  responseHandler.notImplementedYet(res, null);
+});
+
+// DELETE |  /mitglieder/:mitglId
+baseRoutes.delete('/mitglieder/:mitglId', (req, res) => {
+  logger.debug('DELETE /mitglieder/:mitglId');
+
+  if (!validatorModule.isValidParamId(req.params.mitglId)) {
+    responseHandler.invalidParamId(res, null);
+    return;
+  }
+
+  oracleJobs.execute(oracleQueryProvider.MTG_DELETE, [parseInt(req.params.mitglId)], (err, result) => {
+    if (err) {
+      responseHandler.internalServerError(res, err);
+    } else {
+      if (result.rowsAffected == 0) {
+        responseHandler.notFound(res, null);
+      } else {
+        responseHandler.delete(res);
+      }
+    }
+  });
+});
 
 // GET    | /admins
 baseRoutes.get('/admins', (req, res) => {
@@ -284,25 +430,6 @@ baseRoutes.get('/admins', (req, res) => {
 baseRoutes.get('/mitglieder/baseless', (req, res) => {
   logger.debug('GET /mitglieder/baseless');
   oracleJobs.execute(oracleQueryProvider.MTG_GET_BASELESS, [], (err, result) => {
-    if (err) {
-      responseHandler.internalServerError(res, err);
-    }
-    else if (req.headers.metadata) {
-      let data = converterModule.convertResult(req.headers.metadata, result);
-      if (data)
-        responseHandler.get(res, data);
-      else
-        responseHandler.invalidMetaData(res, null);
-    } else {
-      responseHandler.get(res, result.rows);
-    }
-  });
-});
-
-// GET    | /fahrzeuge/grouped
-baseRoutes.get('/fahrzeuge/grouped', (req, res) => {
-  logger.debug('GET /fahrzeuge/grouped');
-  oracleJobs.execute(oracleQueryProvider.FZG_GET_GROUPED, [], (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }

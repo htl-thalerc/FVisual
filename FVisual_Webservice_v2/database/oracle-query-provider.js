@@ -21,7 +21,10 @@ module.exports.STPNKT_PUT = "UPDATE Stuetzpunkte SET name= :1, ort= :2, plz = :3
 module.exports.STPNKT_DELETE = "DELETE FROM Stuetzpunkte WHERE id = :1";
 
 module.exports.MGT_GET = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad ORDER BY isAdmin DESC, username ASC";
-module.exports.MTG_GET_BY_USERNAME = "SELECT id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE username =: 1 ";
+module.exports.MTG_GET_BY_MTG_ID = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE Mitglieder.id = :1 ORDER BY isAdmin DESC, username ASC";
+module.exports.MTG_GET_BY_USERNAME = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE username = :1 ORDER BY isAdmin DESC, username ASC";
+module.exports.MTG_POST = "INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin ) VALUES ( seq_Mitglieder.nextval, :1, :2, :3, :4, :5, :6, :7 )";
+module.exports.MTG_DELETE = "DELETE FROM Mitglieder WHERE id = :1";
 module.exports.ADMINS_GET = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN dienstgrade ON dienstgrade.id = id_dienstgrad WHERE isAdmin = 'true'";
 module.exports.MTG_GET_BASELESS = "SELECT id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE id_stuetzpunkt = -1";
 
