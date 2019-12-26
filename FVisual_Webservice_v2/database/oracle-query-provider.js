@@ -40,4 +40,4 @@ module.exports.EINSATZ_GET_BY_ID = "SELECT E.id, E.id_einsatzart, EA.beschreibun
 module.exports.EINSATZ_GET_BY_NAME_ZEIT = "";
 
 /* IS support */
-module.exports.FZG_GET_GROUPED = "SELECT bezeichnung FROM Einsatzfahrzeuge GROUP BY bezeichnung ORDER BY bezeichnung";
+module.exports.FZG_GET = "SELECT * FROM Einsatzfahrzeuge ORDER BY bezeichnung";

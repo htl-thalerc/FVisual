@@ -9,6 +9,7 @@
 /*  GET     |  /einsatzarten                                                 */
 /*  GET     |  /einsatzcodes                                                 */
 /*  GET     |  /dienstgrade                                                  */
+/*  GET     |  /fahrzeuge                                                    */
 /*  GET     |  /andere_organisationen                                        */
 /*  POST    |  /andere_organisationen                                        */
 /*  PUT     |  /andere_organisationen/:aOrgId                                */
@@ -81,6 +82,25 @@ baseRoutes.get('/einsatzcodes', (req, res) => {
 baseRoutes.get('/dienstgrade', (req, res) => {
   logger.debug('GET /dienstgrade');
   oracleJobs.execute(oracleQueryProvider.DG_GET, [], (err, result) => {
+    if (err) {
+      responseHandler.internalServerError(res, err);
+    }
+    else if (req.headers.metadata) {
+      let data = converterModule.convertResult(req.headers.metadata, result);
+      if (data)
+        responseHandler.get(res, data);
+      else
+        responseHandler.invalidMetaData(res, null);
+    } else {
+      responseHandler.get(res, result.rows);
+    }
+  });
+});
+
+// GET    | /fahrzeuge
+baseRoutes.get('/fahrzeuge', (req, res) => {
+  logger.debug('GET /fahrzeuge');
+  oracleJobs.execute(oracleQueryProvider.FZG_GET, [], (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }
