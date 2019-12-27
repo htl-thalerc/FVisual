@@ -3,17 +3,19 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.ResourceBundle;
 
 import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
-import bll.OtherOrganisation;
-import bll.TableViewRowData;
+import bll.Rank;
+import handler.BaseHandler;
 import handler.CentralHandler;
 import handler.CentralUpdateHandler;
+import handler.MemberHandler;
+import handler.OperationVehicleHandler;
+import handler.RankHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,6 +38,7 @@ import javafx.stage.Stage;
 import manager.BaseManager;
 import manager.MemberManager;
 import manager.OperationVehicleManager;
+import manager.RankManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -111,13 +114,17 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private void initTableViewVehicle() {
 		TableColumn<OperationVehicle, String> columnVehicleDescription = new TableColumn<OperationVehicle, String>(
 				"Description");
+		TableColumn<OperationVehicle, String> columnBaseName = new TableColumn<OperationVehicle, String>(
+				"Base");
 
 		columnVehicleDescription.setCellValueFactory(new PropertyValueFactory<OperationVehicle, String>("description"));
+		columnBaseName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
 		
 		this.tvVehicleData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		columnVehicleDescription.setMaxWidth(1f * Integer.MAX_VALUE * 51.5);
+		columnVehicleDescription.setMaxWidth(1f * Integer.MAX_VALUE * 40);
+		columnBaseName.setMaxWidth(1f * Integer.MAX_VALUE * 60);
 		
-		this.tvVehicleData.getColumns().addAll(columnVehicleDescription);
+		this.tvVehicleData.getColumns().addAll(columnVehicleDescription, columnBaseName);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -134,18 +141,17 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		
 		colContraction.setCellValueFactory(new PropertyValueFactory<Member, String>("rank"));
 
-		/*colFirstname.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getFirstname()));
-		colLastname.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getLastname()));
-		colUsername.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getUsername()));
-		colContraction.setCellValueFactory(
-				cellData -> new SimpleStringProperty(cellData.getValue().getMember().getContraction()));*/
-
 		colNameBlock.getColumns().addAll(colFirstname, colLastname, colUsername);
-		this.tvMemberData.getColumns().addAll(colNameBlock, colContraction);
+		
 		this.tvMemberData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		colFirstname.setMaxWidth(1f * Integer.MAX_VALUE * 40);
+		colContraction.setMaxWidth(1f * Integer.MAX_VALUE * 60);
+		
+		colFirstname.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+		colLastname.setMaxWidth(1f * Integer.MAX_VALUE * 25);
+		colUsername.setMaxWidth(1f * Integer.MAX_VALUE * 50);
+		
+		this.tvMemberData.getColumns().addAll(colNameBlock, colContraction);
 	}
 
 	private void fillTableViews() {
@@ -156,36 +162,51 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	
 	private void fillTableViewBases() {
 		this.obsListTVBaseData = FXCollections.observableArrayList();
+		ArrayList<Base> tempList = new ArrayList<Base>();
 
 		ArrayList<Base> listOfBases = BaseManager.getInstance().getBases();
 		for (int i = 0; i < listOfBases.size(); i++) {
 			this.obsListTVBaseData.add(new Base(new CheckBox(), listOfBases.get(i)));
+			tempList.add(listOfBases.get(i));
 		}
 		this.tvBaseData.setItems(this.obsListTVBaseData.sorted());
+		BaseHandler.getInstance().setBaseList(tempList);
 	}
 
 	private void fillTableViewVehicles() {
 		this.obsListTVVehicles = FXCollections.observableArrayList();
-
-		ArrayList<String> listOfOperationVehiclesAsStringArray = OperationVehicleManager.getInstance().getVehicles();
-		ArrayList<OperationVehicle> listOfOperationVehiclesAsObjects = new ArrayList<OperationVehicle>();
+		ArrayList<OperationVehicle> tempListVehicles = new ArrayList<OperationVehicle>();
 		
-		for(String s : listOfOperationVehiclesAsStringArray) {
-			listOfOperationVehiclesAsObjects.add(new OperationVehicle(s));
+		ArrayList<OperationVehicle> listOfVehicles = OperationVehicleManager.getInstance().getVehicles();
+		for (int i = 0; i < listOfVehicles.size(); i++) {
+			tempListVehicles.add(listOfVehicles.get(i));
 		}
-		for (int i = 0; i < listOfOperationVehiclesAsObjects.size(); i++) {
-			this.obsListTVVehicles.add(listOfOperationVehiclesAsObjects.get(i));
-		}
+		OperationVehicleHandler.getInstance().setVehicleList(tempListVehicles);
+		CentralHandler.getInstance().mergeFullVehicleObject();
+		
+		this.obsListTVVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleList());
 		this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
 	}
 
 	private void fillTableViewMembers() {
 		this.obsListTVMembers = FXCollections.observableArrayList();
+		ArrayList<Member> tempListMembers = new ArrayList<Member>();
 
 		ArrayList<Member> listOfMembers = MemberManager.getInstance().getMembers();
 		for (int i = 0; i < listOfMembers.size(); i++) {
-			this.obsListTVMembers.addAll(listOfMembers.get(i));
+			tempListMembers.add(listOfMembers.get(i));
 		}
+		MemberHandler.getInstance().setMemberList(tempListMembers);
+		
+		ArrayList<Rank> tempListRank = new ArrayList<Rank>();
+		ArrayList<Rank> listOfRanks = RankManager.getInstance().getRanks();
+		for(int i=0;i<listOfRanks.size();i++) {
+			tempListRank.add(listOfRanks.get(i));
+		}
+		RankHandler.getInstance().setRankList(tempListRank);
+		CentralHandler.getInstance().mergeFullMemberObject();
+		
+		this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberList());
 		this.tvMemberData.setItems(this.obsListTVMembers.sorted());
 	}
 
@@ -219,8 +240,12 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if(selectedBase != null) {
 			ArrayList<OperationVehicle> listOfOperationVehiclesFilteredByBase = OperationVehicleManager.getInstance().getVehiclesFromBase(selectedBase.getBaseId());
+			
+			OperationVehicleHandler.getInstance().setVehicleListByBaseId(listOfOperationVehiclesFilteredByBase);
+			
 			this.obsListTVVehicles.clear();
-			this.obsListTVVehicles.addAll(listOfOperationVehiclesFilteredByBase);
+			this.obsListTVVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleListByBaseId());
+			
 			this.tvVehicleData.setItems(this.obsListTVVehicles);
 			this.btnLoadVehicles.setDisable(true);
 		}
@@ -231,9 +256,12 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.accordionSubTables.setExpandedPane(this.tpMember);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if(selectedBase != null) {
-			ArrayList<Member> listOfOperationVehiclesFilteredByBase = MemberManager.getInstance().getMembersFromBase(selectedBase.getBaseId());
+			ArrayList<Member> listOfMembersFilteredByBase = MemberManager.getInstance().getMembersFromBase(selectedBase.getBaseId());
+			
+			MemberHandler.getInstance().setMemberListByBaseId(listOfMembersFilteredByBase);
+			
 			this.obsListTVMembers.clear();
-			this.obsListTVMembers.addAll(listOfOperationVehiclesFilteredByBase);
+			this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberListByBaseId());
 			this.tvMemberData.setItems(this.obsListTVMembers);
 			this.btnLoadMembers.setDisable(true);
 		}

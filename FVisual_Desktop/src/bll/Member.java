@@ -7,22 +7,40 @@ public class Member {
 	private String username;
 	private String password;
 	private boolean isAdmin;
+	private int baseId;
 	private Base base;
+	private int rankId;
 	private Rank rank;
-	private String contraction;
 
-	public Member(int memberId, String firstname, String lastname, String username, String password, boolean isAdmin,
-			Base base, Rank rank, String contraction) {
+	// DB Attribut names
+	public static final String CONST_DB_MEMBERID = "ID";
+	public static final String CONST_DB_FIRSTNAME = "VORNAME";
+	public static final String CONST_DB_LASTNAME = "NACHNAME";
+	public static final String CONST_DB_USERNAME = "USERNAME";
+	public static final String CONST_DB_PASSWORD = "PASSWORD";
+	public static final String CONST_DB_ISADMIN = "ISADMIN";
+	public static final String CONST_DB_BASEID = "ID_STUETZPUNKT";
+	public static final String CONST_DB_RANKID = "ID_DIENSTGRAD";
+
+	private static Member memberObj = null;
+
+	public static Member getInstance() {
+		if (memberObj == null) {
+			memberObj = new Member();
+		}
+		return memberObj;
+	}
+
+	public Member(int memberId, Base base, Rank rank, String firstname, String lastname, String username, String password, boolean isAdmin) {
 		super();
 		this.memberId = memberId;
+		this.base = base;
+		this.rank = rank;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
 		this.password = password;
 		this.isAdmin = isAdmin;
-		this.base = base;
-		this.rank = rank;
-		this.contraction = contraction;
 	}
 
 	public Member() {
@@ -77,12 +95,28 @@ public class Member {
 		this.isAdmin = isAdmin;
 	}
 
+	public int getBaseId() {
+		return baseId;
+	}
+
+	public void setBaseId(int baseId) {
+		this.baseId = baseId;
+	}
+
 	public Base getBase() {
 		return base;
 	}
 
 	public void setBase(Base base) {
 		this.base = base;
+	}
+
+	public int getRankId() {
+		return rankId;
+	}
+
+	public void setRankId(int rankId) {
+		this.rankId = rankId;
 	}
 
 	public Rank getRank() {
@@ -92,21 +126,16 @@ public class Member {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 	}
-	
-	public String getContraction() {
-		return contraction;
-	}
-
-	public void setContraction(String contraction) {
-		this.contraction = contraction;
-	}
 
 	@Override
 	public String toString() {
 		return username + "[" + firstname + " " + lastname + "]";
 	}
-	
+
 	public String toFullString() {
-		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", " + base + ", " + rank;
+		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
+				+ base + ", " + rank;
+//		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
+//				+ this.base.getBaseId() + ", " + this.rank.getRankId();
 	}
 }
