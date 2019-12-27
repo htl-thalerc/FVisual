@@ -376,6 +376,23 @@ VALUES ( seq_Mitglieder.nextval, 4, 6, 'User', 'Normal', 'user_toeplitsch', 'use
 INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
 VALUES ( seq_Mitglieder.nextval, 5, 6, 'User', 'Admin', 'admin_toeplitsch', 'admin', 'true' );
 
+/*Baseless members*/
+INSERT INTO Stuetzpunkte( id, name, ort, plz, strasse, hausnr )
+VALUES ( -1, 'Baseless Mitglieder', 'Spittal/Drau', 9800, 'St. Baseless', 47 );
+
+INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
+VALUES ( seq_Mitglieder.nextval, 1, -1, 'User', 'Admin', 'admin_st_veit', 'admin', 'true' );
+INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
+VALUES ( seq_Mitglieder.nextval, 1, -1, 'User', 'Normal', 'user_st_stefan', 'user', 'false' );
+INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
+VALUES ( seq_Mitglieder.nextval, 4, -1, 'User', 'Normal', 'user_rosental', 'user', 'false' );
+INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
+VALUES ( seq_Mitglieder.nextval, 5, -1, 'User', 'Normal', 'user_wolfsberg', 'user', 'false' );
+INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
+VALUES ( seq_Mitglieder.nextval, 5, -1, 'User', 'Normal', 'user_wolfburg', 'user', 'false' );
+INSERT INTO Mitglieder( id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin )
+VALUES ( seq_Mitglieder.nextval, 3, -1, 'User', 'Normal', 'user_klagenfurt', 'user', 'false' );
+
 /* FF St. Peter */
 INSERT INTO Einsatzfahrzeuge( id, id_stuetzpunkt, bezeichnung )
 VALUES ( seq_Einsatzfahrzeuge.nextval, 1, 'KRFA' );

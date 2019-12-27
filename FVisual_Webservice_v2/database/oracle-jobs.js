@@ -7,17 +7,17 @@ const oracledb = require('oracledb');
 oracledb.autoCommit = true;
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 oracledb.queueTimeout = 3000;
-const usn = `d5a20`;
-const pwd = `d5a`;
+const usn = `scott`;
+const pwd = `tiger`;
 
 //intern
 //const cStr = `10.0.6.111:1521/ora11g`;
 
 //extern
-const cStr = `212.152.179.117:1521/ora11g`;
+const cStr = `192.168.43.205:1521/ora11g`;
 
 /* single execute */
-var execute = async function (querystring, params, cbf) {
+var execute = async function(querystring, params, cbf) {
     let connection;
     try {
         connection = await oracledb.getConnection({
