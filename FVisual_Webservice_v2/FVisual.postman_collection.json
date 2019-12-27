@@ -1,0 +1,461 @@
+{
+	"info": {
+		"_postman_id": "06731dcc-e7b6-4982-9710-b688201994f3",
+		"name": "FVisual v2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Einsatzarten",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aa82b099-1631-4f9f-a0e8-43f18a77c93d",
+						"exec": [
+							"if(pm.globals.get(\"do_request_scripts\")){",
+							"    pm.sendRequest({",
+							"    url:'http://localhost:3030/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'flow': 'mobile'",
+							"    },",
+							"    ",
+							"    body:{",
+							"    mode:'raw',",
+							"    raw:JSON.stringify({",
+							"        username:'Hansi',",
+							"        password:'1234'",
+							"    })",
+							"    }",
+							"}, function(err, res){",
+							"console.log(res);",
+							"var  token = res.text();",
+							"postman.setGlobalVariable(\"token\", token);",
+							"console.log(token);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{token}}",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "authorization",
+						"value": "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3",
+						"type": "text"
+					},
+					{
+						"key": "metadata",
+						"value": "[{\"id\":\"ID\", \"description\":\"BESCHREIBUNG\"}]",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3030/einsatzarten",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"einsatzarten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Einsatzcodes",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aa82b099-1631-4f9f-a0e8-43f18a77c93d",
+						"exec": [
+							"if(pm.globals.get(\"do_request_scripts\")){",
+							"    pm.sendRequest({",
+							"    url:'http://localhost:3030/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'flow': 'mobile'",
+							"    },",
+							"    ",
+							"    body:{",
+							"    mode:'raw',",
+							"    raw:JSON.stringify({",
+							"        username:'Hansi',",
+							"        password:'1234'",
+							"    })",
+							"    }",
+							"}, function(err, res){",
+							"console.log(res);",
+							"var  token = res.text();",
+							"postman.setGlobalVariable(\"token\", token);",
+							"console.log(token);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{token}}",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "authorization",
+						"value": "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3",
+						"type": "text"
+					},
+					{
+						"key": "metadata",
+						"value": "[{\"id\":\"ID\", \"code\":\"CODE\"}]",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3030/einsatzcodes",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"einsatzcodes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dienstgrade",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aa82b099-1631-4f9f-a0e8-43f18a77c93d",
+						"exec": [
+							"if(pm.globals.get(\"do_request_scripts\")){",
+							"    pm.sendRequest({",
+							"    url:'http://localhost:3030/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'flow': 'mobile'",
+							"    },",
+							"    ",
+							"    body:{",
+							"    mode:'raw',",
+							"    raw:JSON.stringify({",
+							"        username:'Hansi',",
+							"        password:'1234'",
+							"    })",
+							"    }",
+							"}, function(err, res){",
+							"console.log(res);",
+							"var  token = res.text();",
+							"postman.setGlobalVariable(\"token\", token);",
+							"console.log(token);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "{{token}}",
+						"disabled": true
+					},
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3"
+					},
+					{
+						"key": "metadata",
+						"type": "text",
+						"value": "[{\"id\":\"ID\", \"contraction\":\"KUERZEL\",\"description\":\"BEZEICHNUNG\"}]"
+					}
+				],
+				"url": {
+					"raw": "localhost:3030/dienstgrade",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"dienstgrade"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Andere Organisationen",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aa82b099-1631-4f9f-a0e8-43f18a77c93d",
+						"exec": [
+							"if(pm.globals.get(\"do_request_scripts\")){",
+							"    pm.sendRequest({",
+							"    url:'http://localhost:3030/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'flow': 'mobile'",
+							"    },",
+							"    ",
+							"    body:{",
+							"    mode:'raw',",
+							"    raw:JSON.stringify({",
+							"        username:'Hansi',",
+							"        password:'1234'",
+							"    })",
+							"    }",
+							"}, function(err, res){",
+							"console.log(res);",
+							"var  token = res.text();",
+							"postman.setGlobalVariable(\"token\", token);",
+							"console.log(token);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "{{token}}",
+						"disabled": true
+					},
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3"
+					},
+					{
+						"key": "metadata",
+						"type": "text",
+						"value": "[{\"id\":\"ID\",\"name\":\"NAME\"}]"
+					}
+				],
+				"url": {
+					"raw": "localhost:3030/andere_organisationen",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"andere_organisationen"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Andere Organisationen",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aa82b099-1631-4f9f-a0e8-43f18a77c93d",
+						"exec": [
+							"if(pm.globals.get(\"do_request_scripts\")){",
+							"    pm.sendRequest({",
+							"    url:'http://localhost:3030/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'flow': 'mobile'",
+							"    },",
+							"    ",
+							"    body:{",
+							"    mode:'raw',",
+							"    raw:JSON.stringify({",
+							"        username:'Hansi',",
+							"        password:'1234'",
+							"    })",
+							"    }",
+							"}, function(err, res){",
+							"console.log(res);",
+							"var  token = res.text();",
+							"postman.setGlobalVariable(\"token\", token);",
+							"console.log(token);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "{{token}}",
+						"disabled": true
+					},
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3"
+					},
+					{
+						"key": "metadata",
+						"type": "text",
+						"value": "[{\"aorgsId\":\"id\",\"lol\":\"name\"}]"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"lol\": \"Test8\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3030/andere_organisationen",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"andere_organisationen"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Andere Organisationen",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "aa82b099-1631-4f9f-a0e8-43f18a77c93d",
+						"exec": [
+							"if(pm.globals.get(\"do_request_scripts\")){",
+							"    pm.sendRequest({",
+							"    url:'http://localhost:3030/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json',",
+							"        'flow': 'mobile'",
+							"    },",
+							"    ",
+							"    body:{",
+							"    mode:'raw',",
+							"    raw:JSON.stringify({",
+							"        username:'Hansi',",
+							"        password:'1234'",
+							"    })",
+							"    }",
+							"}, function(err, res){",
+							"console.log(res);",
+							"var  token = res.text();",
+							"postman.setGlobalVariable(\"token\", token);",
+							"console.log(token);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "{{token}}",
+						"disabled": true
+					},
+					{
+						"key": "authorization",
+						"type": "text",
+						"value": "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3"
+					},
+					{
+						"key": "metadata",
+						"type": "text",
+						"value": "[{\"aorgsId\":\"id\",\"lol\":\"name\"}]"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"lol\": \"Test8\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3030/andere_organisationen/20",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"andere_organisationen",
+						"20"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
