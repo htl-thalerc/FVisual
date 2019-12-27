@@ -1,13 +1,26 @@
 package bll;
 
 public class Rank {
-	private int id;
 	private String contraction;
 	private String description;
+	private int rankId;
+	
+	public static final String CONST_DB_ID = "ID";
+	public static final String CONST_DB_CONTRACTION = "KUERZEL";
+	public static final String CONST_DB_DESCRIPTION = "BEZEICHNUNG";
+	
+	private static Rank rankObj = null;
+	
+	public static Rank getInstance() {
+		if(rankObj == null) {
+			rankObj = new Rank();
+		}
+		return rankObj;
+	}
 
-	public Rank(int id, String contraction, String description) {
+	public Rank(int rankId, String contraction, String description) {
 		super();
-		this.id = id;
+		this.rankId = rankId;
 		this.contraction = contraction;
 		this.description = description;
 	}
@@ -15,13 +28,13 @@ public class Rank {
 	public Rank() {
 		super();
 	}
-
-	public int getId() {
-		return id;
+	
+	public int getRankId() {
+		return rankId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setRankId(int rankId) {
+		this.rankId = rankId;
 	}
 
 	public String getContraction() {
@@ -42,6 +55,7 @@ public class Rank {
 
 	@Override
 	public String toString() {
+		//return rankId + " - " + contraction + " - " + description;
 		return contraction + " [" + description + "]";
 	}
 }

@@ -1,6 +1,8 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,10 +11,12 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
+import bll.ClassTypes;
 import bll.OperationVehicle;
 import handler.CentralHandler;
 
@@ -31,17 +35,27 @@ public class OperationVehicleManager {
 		return operationVehicleManagerInstance;
 	}
 	//Basic
-	public ArrayList<String> getVehicles() {
-		ArrayList<String> collOfVehicles = null;
+	public ArrayList<OperationVehicle> getVehicles() {
+		ArrayList<OperationVehicle> collOfVehicles = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
-		WebTarget webTargetGetAllVehicles = this.webTargetOperationVehilceService.path("/grouped");
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.OPERATION_VEHICLE, new ArrayList<String>(
+					Arrays.asList("operationVehicleId", "description")));
+		
+		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
+		
+		HashMap<String, String> subMetadataBase = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+				Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		
+		subMetadata.put(ClassTypes.BASE, subMetadataBase);
 		try {
-			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
-			response = invocationBuilder.accept(MediaType.TEXT_HTML).get();
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, subMetadata));
+			invocationBuilder = this.webTargetOperationVehilceService.request(MediaType.APPLICATION_JSON).headers(headers); 
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
-				collOfVehicles = response.readEntity(new GenericType<ArrayList<String>>() {
+				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
 				});
 			}
 		} catch (JsonSyntaxException ex) {
@@ -55,10 +69,20 @@ public class OperationVehicleManager {
 		ArrayList<OperationVehicle> collOfVehicles = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.OPERATION_VEHICLE, new ArrayList<String>(
+					Arrays.asList("operationVehicleId", "description")));
+		
+		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
+		
+		HashMap<String, String> subMetadataBase = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+				Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		subMetadata.put(ClassTypes.BASE, subMetadataBase);
 		WebTarget webTargetGetAllVehicles = this.webTargetOperationVehicleServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_VEHICLE);
 		try {
-			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, subMetadata));
+			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).headers(headers); 
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {

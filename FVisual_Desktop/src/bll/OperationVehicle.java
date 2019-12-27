@@ -2,12 +2,26 @@ package bll;
 
 import javafx.scene.control.CheckBox;
 
-public class OperationVehicle {
+public class OperationVehicle implements Comparable<OperationVehicle> {
 	private int operationVehicleId;
 	private String description;
 	private Base base;
-
+	private int baseId;
+	
 	private CheckBox selection;
+	
+	private static OperationVehicle operationVehicleObj = null;
+	
+	public static final String CONST_DB_ID = "ID";
+	public static final String CONST_DB_DESCRIPTION = "BEZEICHNUNG";
+	public static final String CONST_DB_BASEID = "ID_STUETZPUNKT";
+	
+	public static OperationVehicle getInstance() {
+		if(operationVehicleObj == null) {
+			operationVehicleObj = new OperationVehicle();
+		}
+		return operationVehicleObj;
+	}
 
 	public OperationVehicle(int operationVehicleId, String description, Base base) {
 		super();
@@ -56,6 +70,14 @@ public class OperationVehicle {
 	public void setBase(Base base) {
 		this.base = base;
 	}
+	
+	public int getBaseId() {
+		return baseId;
+	}
+
+	public void setBaseId(int baseId) {
+		this.baseId = baseId;
+	}
 
 	public CheckBox getSelection() {
 		return selection;
@@ -64,5 +86,14 @@ public class OperationVehicle {
 	@Override
 	public String toString() {
 		return this.description;
+	}
+	
+	public String toFullString() {
+		return operationVehicleId + ", " + description + ", " + base;
+	}
+
+	@Override
+	public int compareTo(OperationVehicle o1) {
+		return this.description.compareTo(o1.description);
 	}
 }

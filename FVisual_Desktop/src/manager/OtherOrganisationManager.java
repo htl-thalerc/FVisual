@@ -16,7 +16,7 @@ import com.google.gson.JsonSyntaxException;
 import bll.OtherOrganisation;
 import handler.CentralHandler;
 
-public class OtherOrganisationService {
+public class OtherOrganisationManager {
 	private static OperationVehicleManager operationVehicleManagerInstance = null;
 	private Client client = ClientBuilder.newClient();
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());

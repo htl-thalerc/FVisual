@@ -1,6 +1,9 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,11 +12,14 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
+import bll.ClassTypes;
 import handler.CentralHandler;
 
 public class BaseManager {
@@ -33,9 +39,15 @@ public class BaseManager {
 		ArrayList<Base> collOfBases = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+					Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		
 		try {
-			invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+			invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).headers(headers); 
+			
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				collOfBases = response.readEntity(new GenericType<ArrayList<Base>>() {

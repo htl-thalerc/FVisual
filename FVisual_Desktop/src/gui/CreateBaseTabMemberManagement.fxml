@@ -25,14 +25,14 @@
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<ListView fx:id="lvAvailableMembers" prefHeight="402.0" prefWidth="277.0" GridPane.rowIndex="1">
+				<ListView fx:id="lvAvailableMembers" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="402.0" prefWidth="277.0" GridPane.rowIndex="1">
 					<GridPane.margin>
-						<Insets bottom="50.0" left="20.0" />
+						<Insets bottom="50.0" left="20.0" top="-25.0" />
 					</GridPane.margin>
 				</ListView>
-				<ListView fx:id="lvSelectedMembers" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+				<ListView fx:id="lvSelectedMembers" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="402.0" prefWidth="277.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
 					<GridPane.margin>
-						<Insets bottom="50.0" right="20.0" />
+						<Insets bottom="50.0" right="20.0" top="-25.0" />
 					</GridPane.margin>
 				</ListView>
 				<GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">

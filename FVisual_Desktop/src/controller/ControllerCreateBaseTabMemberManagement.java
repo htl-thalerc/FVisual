@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import bll.Member;
 import bll.Rank;
 import bll.TableViewRowData;
+import handler.MemberHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,13 +20,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
-import manager.BaseManager;
-import manager.MemberManager;
 import manager.RankManager;
 
 public class ControllerCreateBaseTabMemberManagement implements Initializable {
@@ -72,15 +69,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	}
 
 	private void initAvailableMembers() {
-		ArrayList<Member> list = new ArrayList<Member>();
-
-		list.add(new Member(1, "Sandro", "Assek", "asseks", "lauch", true, null, null, null));
-		list.add(new Member(2, "Florian", "Graf", "graff", "lauch", true, null, null, null));
-		list.add(new Member(3, "Christoph", "Thaler", "thalerc", "lauch", true, null, null, null));
-		list.add(new Member(4, "Andreas", "Drabe", "drabosea", "lauch", true, null, null, null));
-		list.add(new Member(5, "User", "1", "user1", "lauch", false, null, null, null));
-		list.add(new Member(6, "User", "2", "user2", "lauch", false, null, null, null));
-		list.add(new Member(7, "User", "3", "user3", "lauch", false, null, null, null));
+		ArrayList<Member> list = MemberHandler.getInstance().getMemberList();
 
 		this.obsListLVAvailableMembers = FXCollections.observableArrayList(list);
 		this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);
@@ -212,6 +201,10 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	@FXML
 	private void onClickBtnAddNewMember(ActionEvent event) {
+		this.lvAvailableMembers.setDisable(true);
+		this.lvSelectedMembers.setDisable(true);
+		this.btnAddAllMembers.setDisable(true);
+		
 		this.btnAddNewMember.setDisable(true);
 		this.tvAddNewMember.setEditable(true);
 		this.obsListTVAddNewMember = FXCollections.observableArrayList();
@@ -301,6 +294,10 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	@FXML
 	private void onClickBtnSaveNewMember(ActionEvent event) {
+		this.lvAvailableMembers.setDisable(false);
+		this.lvSelectedMembers.setDisable(false);
+		this.btnAddAllMembers.setDisable(false);
+		
 		TableViewRowData memberData = this.tvAddNewMember.getItems().get(0);
 
 		Member member = new Member();
@@ -309,7 +306,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		// baseId
 		// MemberManager.getInstance().addMemberToBase(this.controllerCreateBase.getCreatedBase().getBaseId(),
 		// member);
-
+		member.setBaseId(-1);
 		member.setFirstname(memberData.getMember().getFirstname());
 		member.setLastname(memberData.getMember().getLastname());
 		member.setUsername(memberData.getMember().getUsername());

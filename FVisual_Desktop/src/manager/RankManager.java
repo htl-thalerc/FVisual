@@ -1,6 +1,8 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -8,10 +10,12 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
+import bll.ClassTypes;
 import bll.Rank;
 import handler.CentralHandler;
 
@@ -32,9 +36,13 @@ public class RankManager {
 		ArrayList<Rank> collOfRanks = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.RANK, new ArrayList<String>(
+				Arrays.asList("rankId", "contraction", "description")));
 		try {
-			invocationBuilder = this.webTargetRankService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+			invocationBuilder = this.webTargetRankService.request(MediaType.APPLICATION_JSON).headers(headers);
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				collOfRanks = response.readEntity(new GenericType<ArrayList<Rank>>() {

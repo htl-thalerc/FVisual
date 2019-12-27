@@ -120,7 +120,7 @@ public class ControllerUpdateTabMember implements Initializable {
 		this.lvMembers.getSelectionModel().select(oldMemberData);
 		this.lbOldFirstname.setText(oldMemberData.getFirstname());
 		this.lbOldLastname.setText(oldMemberData.getLastname());
-		this.lbOldContraction.setText(oldMemberData.getContraction());
+		//this.lbOldContraction.setText(oldMemberData.getContraction());
 	}
 
 	public Member getNewMemberData() {
@@ -139,10 +139,10 @@ public class ControllerUpdateTabMember implements Initializable {
 		if(this.isValidContraction.get()) {
 			Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
 			member.setRank(selectedRank);
-			member.setContraction(selectedRank.getContraction());
+			//member.setContraction(selectedRank.getContraction());
 		} else {
 			member.setRank(this.currSelectedMember.getRank());
-			member.setContraction(this.currSelectedMember.getRank().getContraction());
+			//member.setContraction(this.currSelectedMember.getRank().getContraction());
 		}
 		return member;
 	}

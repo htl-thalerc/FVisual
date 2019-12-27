@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import bll.OperationVehicle;
 import handler.EditingListCellOperationVehicle;
+import handler.OperationVehicleHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,19 +18,9 @@ import javafx.scene.control.ListView;
 
 public class ControllerCreateBaseTabOperationVehicleManagement implements Initializable {
 	@FXML
-	private ListView<OperationVehicle> lvAvailableOperationVehicles;
+	private ListView<OperationVehicle> lvAvailableOperationVehicles, lvSelectedOperationVehciles;
 	@FXML
-	private ListView<OperationVehicle> lvSelectedOperationVehciles;
-	@FXML
-	private Button btnAddOneOperationVehicle;
-	@FXML
-	private Button btnRemoveOneOperationVehicle;
-	@FXML
-	private Button btnAddAllOperationVehicles;
-	@FXML
-	private Button btnRemoveAllOperationVehicles;
-	@FXML
-	private Button btnAddNewOperationVehicle;
+	private Button btnAddOneOperationVehicle, btnRemoveOneOperationVehicle, btnAddAllOperationVehicles, btnRemoveAllOperationVehicles, btnAddNewOperationVehicle;
 
 	private final String CONST_NAME_FOR_NEW_VEHICLE = "Name for new Vehicle";
 	private final String CONST_BTN_TEXT_ADD_NEW_VEHICLE = "Add new Vehicle";
@@ -59,15 +50,7 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 	}
 
 	private void initAvailableOperationVehicles() {
-		ArrayList<OperationVehicle> list = new ArrayList<OperationVehicle>();
-		list.add(new OperationVehicle(1, "KRFA", null));
-		list.add(new OperationVehicle(2, "TLFA-2000", null));
-		list.add(new OperationVehicle(3, "LF-A", null));
-		list.add(new OperationVehicle(4, "RTB-50", null));
-		list.add(new OperationVehicle(5, "Ölwehranhänger", null));
-		list.add(new OperationVehicle(6, "TLFA-4000", null));
-		list.add(new OperationVehicle(7, "LFA", null));
-		list.add(new OperationVehicle(8, "Katastrophenschutzanhänger", null));
+		ArrayList<OperationVehicle> list = OperationVehicleHandler.getInstance().getGroupedVehicleList();
 
 		this.obsListLVAvailableOperationVehicles = FXCollections.observableArrayList(list);
 		this.lvAvailableOperationVehicles.setItems(obsListLVAvailableOperationVehicles);

@@ -9,8 +9,24 @@ public class Base implements Comparable<Base> {
 	private int postCode;
 	private String street;
 	private String houseNr;
-
+	
 	private CheckBox selection;
+	//DB Attribut names
+	public static final String CONST_DB_BASEID = "ID";
+	public static final String CONST_DB_NAME = "NAME";
+	public static final String CONST_DB_PLACE = "ORT";
+	public static final String CONST_DB_POSTCODE = "PLZ";
+	public static final String CONST_DB_STREET = "STRASSE";
+	public static final String CONST_DB_HOUSENR = "HAUSNR";	
+	
+	private static Base baseObj = null;
+	
+	public static Base getInstance() {
+		if(baseObj == null) {
+			baseObj = new Base();
+		}
+		return baseObj;
+	}
 
 	public Base(int baseId, String name, String place, int postCode, String street, String houseNr) {
 		super();
