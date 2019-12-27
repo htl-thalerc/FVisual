@@ -68,6 +68,39 @@ public class MemberManager {
 		return collOfMembers;
 	}
 	
+	public ArrayList<Member> getBaselessMembers() {
+		ArrayList<Member> collOfMembers = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.MEMBER, new ArrayList<String>(
+					Arrays.asList("memberId", "username", "firstname", "lastname")));
+		
+		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
+		
+		HashMap<String, String> subMetadataBase = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+				Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		HashMap<String, String> subMetadataRank = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.RANK, new ArrayList<String>(
+				Arrays.asList("rankId", "contraction", "description")));
+		
+		subMetadata.put(ClassTypes.BASE, subMetadataBase);
+		subMetadata.put(ClassTypes.RANK, subMetadataRank);
+		WebTarget webTargetGetAllBaselessMembers = this.webTargetMemberService.path("baseless");
+		try {
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, subMetadata));
+			invocationBuilder = webTargetGetAllBaselessMembers.request(MediaType.APPLICATION_JSON).headers(headers);
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			if(response.getStatus() == 200) {
+				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
+				});
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfMembers;
+	}
+	
 	//Base Services
 	public ArrayList<Member> getMembersFromBase(int baseId) {
 		ArrayList<Member> collOfMembers = null;

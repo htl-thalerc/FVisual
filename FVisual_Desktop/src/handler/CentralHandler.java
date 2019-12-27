@@ -67,8 +67,8 @@ public class CentralHandler {
 		HashMap<String, String> retVal = new HashMap<String, String>();
 		switch (objType) {
 		case BASE:
-			for(int i=0;i<listOfAttributes.size();i++) {
-				switch(listOfAttributes.get(i)) {
+			for (int i = 0; i < listOfAttributes.size(); i++) {
+				switch (listOfAttributes.get(i)) {
 				case "baseId":
 					retVal.put(listOfAttributes.get(i), Base.CONST_DB_BASEID);
 					break;
@@ -90,8 +90,8 @@ public class CentralHandler {
 				}
 			}
 		case MEMBER:
-			for(int i=0;i<listOfAttributes.size();i++) {
-				switch(listOfAttributes.get(i)) {
+			for (int i = 0; i < listOfAttributes.size(); i++) {
+				switch (listOfAttributes.get(i)) {
 				case "memberId":
 					retVal.put(listOfAttributes.get(i), Member.CONST_DB_MEMBERID);
 					break;
@@ -126,8 +126,8 @@ public class CentralHandler {
 		case OPERATION_TYPE:
 			break;
 		case OPERATION_VEHICLE:
-			for(int i=0;i<listOfAttributes.size();i++) {
-				switch(listOfAttributes.get(i)) {
+			for (int i = 0; i < listOfAttributes.size(); i++) {
+				switch (listOfAttributes.get(i)) {
 				case "operationVehicleId":
 					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_ID);
 					break;
@@ -142,8 +142,8 @@ public class CentralHandler {
 		case OTHER_ORG:
 			break;
 		case RANK:
-			for(int i=0;i<listOfAttributes.size();i++) {
-				switch(listOfAttributes.get(i)) {
+			for (int i = 0; i < listOfAttributes.size(); i++) {
+				switch (listOfAttributes.get(i)) {
 				case "rankId":
 					retVal.put(listOfAttributes.get(i), Rank.CONST_DB_ID);
 					break;
@@ -161,7 +161,8 @@ public class CentralHandler {
 		return retVal;
 	}
 
-	public String getHeaderMetadataString(HashMap<String, String> mainMetadataMap, HashMap<ClassTypes, HashMap<String, String>> subMetadata) {
+	public String getHeaderMetadataString(HashMap<String, String> mainMetadataMap,
+			HashMap<ClassTypes, HashMap<String, String>> subMetadata) {
 		int nrOfAttributes = 0;
 		String headerMetadataString = "[{";
 
@@ -172,19 +173,19 @@ public class CentralHandler {
 				headerMetadataString += ", ";
 			}
 		}
-		
-		if(subMetadata != null) {
-			for(Entry<ClassTypes, HashMap<String, String>> key : subMetadata.entrySet()) {
-				switch(key.getKey()) {
+
+		if (subMetadata != null) {
+			for (Entry<ClassTypes, HashMap<String, String>> key : subMetadata.entrySet()) {
+				switch (key.getKey()) {
 				case BASE:
 					String baseId = null;
 					HashMap<String, String> subMetadataBase = subMetadata.get(ClassTypes.BASE);
 					for (Entry<String, String> currBaseAttr : subMetadataBase.entrySet()) {
-						if(currBaseAttr.getKey().equals("baseId")) {
+						if (currBaseAttr.getKey().equals("baseId")) {
 							baseId = Member.CONST_DB_BASEID;
 						}
 					}
-					if(baseId != null) {
+					if (baseId != null) {
 						headerMetadataString += ", 'base':{'baseId':'" + baseId + "'}";
 					}
 					break;
@@ -204,11 +205,11 @@ public class CentralHandler {
 					String rankId = null;
 					HashMap<String, String> subMetadataRank = subMetadata.get(ClassTypes.RANK);
 					for (Entry<String, String> currRankAttr : subMetadataRank.entrySet()) {
-						if(currRankAttr.getKey().equals("rankId")) {
+						if (currRankAttr.getKey().equals("rankId")) {
 							rankId = Member.CONST_DB_RANKID;
 						}
 					}
-					if(rankId != null) {
+					if (rankId != null) {
 						headerMetadataString += ", 'rank':{'rankId':'" + rankId + "'}";
 					}
 					break;
@@ -223,36 +224,42 @@ public class CentralHandler {
 		return headerMetadataString;
 	}
 
-	public void mergeFullMemberObject() {
-		//Add base to MemberObj
-		ArrayList<Member> tempListOfMembers = MemberHandler.getInstance().getMemberList();
+	public void mergeFullMemberObject(boolean isBaselessMemberList) {
+		// Add base to MemberObj
+		ArrayList<Member> tempListOfMembers = null;
+
+		if (isBaselessMemberList) {
+			tempListOfMembers = MemberHandler.getInstance().getBaselessMemberList();
+		} else {
+			tempListOfMembers = MemberHandler.getInstance().getMemberList();
+		}
 		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
 		ArrayList<Rank> tempListOfRanks = RankHandler.getInstance().getRankList();
-		
-		for(int i=0;i<tempListOfMembers.size();i++) {
-			for(int j=0;j<tempListOfBases.size();j++) {
-				if(tempListOfMembers.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+
+		for (int i = 0; i < tempListOfMembers.size(); i++) {
+			for (int j = 0; j < tempListOfBases.size(); j++) {
+				if (tempListOfMembers.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
 					tempListOfMembers.get(i).setBase(tempListOfBases.get(j));
 				}
 			}
 		}
-		//Add rank to MemberObj
-		for(int i=0;i<tempListOfMembers.size();i++) {
-			for(int j=0;j<tempListOfRanks.size();j++) {
-				if(tempListOfMembers.get(i).getRank().getRankId() == tempListOfRanks.get(j).getRankId()) {
+		// Add rank to MemberObj
+		for (int i = 0; i < tempListOfMembers.size(); i++) {
+			for (int j = 0; j < tempListOfRanks.size(); j++) {
+				if (tempListOfMembers.get(i).getRank().getRankId() == tempListOfRanks.get(j).getRankId()) {
 					tempListOfMembers.get(i).setRank(tempListOfRanks.get(j));
 				}
 			}
 		}
 	}
-	
+
 	public void mergeFullVehicleObject() {
 		ArrayList<OperationVehicle> tempListOfVehciles = OperationVehicleHandler.getInstance().getVehicleList();
 		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
-		//add base to vehicleobj
-		for(int i=0;i<tempListOfVehciles.size();i++) {
-			for(int j=0;j<tempListOfBases.size();j++) {
-				if(tempListOfVehciles.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+		// add base to vehicleobj
+		for (int i = 0; i < tempListOfVehciles.size(); i++) {
+			for (int j = 0; j < tempListOfBases.size(); j++) {
+				if (tempListOfVehciles.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
 					tempListOfVehciles.get(i).setBase(tempListOfBases.get(j));
 				}
 			}

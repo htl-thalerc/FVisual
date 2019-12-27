@@ -44,6 +44,7 @@ public class OperationVehicleHandler {
 	}
 
 	public void setVehicleListByBaseId(ArrayList<OperationVehicle> listOfOperationVehiclesFilteredByBase) {
+		System.out.println(listOfOperationVehiclesFilteredByBase.size());
 		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
 		this.listOfVehiclesByBaseId = listOfOperationVehiclesFilteredByBase;
 		

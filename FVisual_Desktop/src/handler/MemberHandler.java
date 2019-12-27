@@ -10,6 +10,7 @@ public class MemberHandler {
 	
 	private ArrayList<Member> listOfMembers = new ArrayList<Member>();
 	private ArrayList<Member> listOfMembersByBaseId = new ArrayList<Member>();
+	private ArrayList<Member> listOfBaselessMembers = new ArrayList<Member>();
 	
 	public static MemberHandler getInstance() {
 		if(memberHandler == null) {
@@ -43,5 +44,14 @@ public class MemberHandler {
 				}
 			}
 		}
+	}
+	
+	public ArrayList<Member> getBaselessMemberList() {
+		return this.listOfBaselessMembers;
+	}
+	
+	public void setBaselessMemberList(ArrayList<Member> memberList) {
+		this.listOfBaselessMembers.clear();
+		this.listOfBaselessMembers = memberList;
 	}
 }

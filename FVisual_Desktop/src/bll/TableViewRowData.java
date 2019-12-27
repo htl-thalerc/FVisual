@@ -11,11 +11,6 @@ public class TableViewRowData {
 	private Member member;
 	private Rank rank;
 
-	private TextField tfFirstname;
-	private TextField tfLastname;
-	private Label lbUsername;
-	private ComboBox<Rank> cbRank;
-
 	public TableViewRowData(Base base, OperationVehicle vehicle) {
 		super();
 		this.base = base;
@@ -33,13 +28,6 @@ public class TableViewRowData {
 
 	public TableViewRowData(Member member) {
 		this.member = member;
-	}
-
-	public TableViewRowData(TextField tfFirstname, TextField tfLastname, Label lbUsername, ComboBox<Rank> cb) {
-		this.tfFirstname = tfFirstname;
-		this.tfLastname = tfLastname;
-		this.lbUsername = lbUsername;
-		this.cbRank = cb;
 	}
 
 	public Base getBase() {
@@ -72,43 +60,5 @@ public class TableViewRowData {
 
 	public void setRank(Rank rank) {
 		this.rank = rank;
-	}
-
-	public TextField getTfFirstname() {
-		return tfFirstname;
-	}
-
-	public void setTfFirstname(TextField tfFirstname) {
-		this.tfFirstname = tfFirstname;
-	}
-
-	public TextField getTfLastname() {
-		return tfLastname;
-	}
-
-	public void setTfLastname(TextField tfLastname) {
-		this.tfLastname = tfLastname;
-	}
-
-	public Label getLbUsername() {
-		return lbUsername;
-	}
-
-	public void setLbUsername(Label lbUsername) {
-		this.lbUsername = lbUsername;
-	}
-
-	public ComboBox<Rank> getCbRank() {
-		return cbRank;
-	}
-
-	public void setCbRank(ComboBox<Rank> cbRank) {
-		this.cbRank = cbRank;
-	}
-
-	@Override
-	public String toString() {
-		return tfFirstname.getText() + ", " + tfLastname.getText() + ", " + lbUsername.getText() + ", "
-				+ cbRank.getSelectionModel().getSelectedItem().toString();
 	}
 }

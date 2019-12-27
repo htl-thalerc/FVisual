@@ -1,5 +1,9 @@
 package bll;
 
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
 public class Member {
 	private int memberId;
 	private String firstname;
@@ -11,6 +15,11 @@ public class Member {
 	private Base base;
 	private int rankId;
 	private Rank rank;
+	
+	private TextField tfFirstname;
+	private TextField tfLastname;
+	private Label lbUsername;
+	private ComboBox<Rank> cbRank;
 
 	// DB Attribut names
 	public static final String CONST_DB_MEMBERID = "ID";
@@ -41,6 +50,13 @@ public class Member {
 		this.username = username;
 		this.password = password;
 		this.isAdmin = isAdmin;
+	}
+	
+	public Member(TextField tfFirstname, TextField tfLastname, Label lbUsername, ComboBox<Rank> cb) {
+		this.tfFirstname = tfFirstname;
+		this.tfLastname = tfLastname;
+		this.lbUsername = lbUsername;
+		this.cbRank = cb;
 	}
 
 	public Member() {
@@ -126,6 +142,38 @@ public class Member {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 	}
+	
+	public TextField getTfFirstname() {
+		return tfFirstname;
+	}
+
+	public void setTfFirstname(TextField tfFirstname) {
+		this.tfFirstname = tfFirstname;
+	}
+
+	public TextField getTfLastname() {
+		return tfLastname;
+	}
+
+	public void setTfLastname(TextField tfLastname) {
+		this.tfLastname = tfLastname;
+	}
+
+	public Label getLbUsername() {
+		return lbUsername;
+	}
+
+	public void setLbUsername(Label lbUsername) {
+		this.lbUsername = lbUsername;
+	}
+
+	public ComboBox<Rank> getCbRank() {
+		return cbRank;
+	}
+
+	public void setCbRank(ComboBox<Rank> cbRank) {
+		this.cbRank = cbRank;
+	}
 
 	@Override
 	public String toString() {
@@ -137,5 +185,10 @@ public class Member {
 				+ base + ", " + rank;
 //		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
 //				+ this.base.getBaseId() + ", " + this.rank.getRankId();
+	}
+	
+	public String toNewMemberString() {
+		return tfFirstname.getText() + ", " + tfLastname.getText() + ", " + lbUsername.getText() + ", "
+				+ cbRank.getSelectionModel().getSelectedItem().toString();
 	}
 }

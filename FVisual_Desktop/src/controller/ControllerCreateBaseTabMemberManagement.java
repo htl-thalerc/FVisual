@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import bll.Member;
 import bll.Rank;
 import bll.TableViewRowData;
+import handler.CentralHandler;
 import handler.MemberHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import manager.MemberManager;
 import manager.RankManager;
 
 public class ControllerCreateBaseTabMemberManagement implements Initializable {
@@ -32,11 +34,11 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	private Button btnAddOneMember, btnRemoveOneMember, btnAddAllMembers, btnRemoveAllMembers, btnAddNewMember,
 			btnSaveNewMember;
 	@FXML
-	private TableView<TableViewRowData> tvAddNewMember;
+	private TableView<Member> tvAddNewMember;
 
 	private ControllerCreateBaseManagement controllerCreateBase;
 	private ObservableList<Member> obsListLVAvailableMembers, obsListLVSelectedMembers;
-	private ObservableList<TableViewRowData> obsListTVAddNewMember;
+	private ObservableList<Member> obsListTVAddNewMember;
 	private boolean isLVAvailableMembersSelected = false;
 	private int nrOfTotalOrganisations = 0;
 
@@ -69,9 +71,13 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	}
 
 	private void initAvailableMembers() {
-		ArrayList<Member> list = MemberHandler.getInstance().getMemberList();
+		ArrayList<Member> listOfAllBaselessMembers = MemberManager.getInstance().getBaselessMembers();
+		System.out.println("b" + listOfAllBaselessMembers.size());
+		MemberHandler.getInstance().setBaselessMemberList(listOfAllBaselessMembers);
+		
+		CentralHandler.getInstance().mergeFullMemberObject(true);
 
-		this.obsListLVAvailableMembers = FXCollections.observableArrayList(list);
+		this.obsListLVAvailableMembers = FXCollections.observableArrayList(MemberHandler.getInstance().getBaselessMemberList());
 		this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);
 
 		this.nrOfTotalOrganisations = this.lvAvailableMembers.getItems().size();
@@ -102,19 +108,19 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewColumns() {
-		TableColumn<TableViewRowData, String> colNameBlock = new TableColumn<TableViewRowData, String>("Name");
-		TableColumn<TableViewRowData, TextField> colFirstname = new TableColumn<TableViewRowData, TextField>(
+		TableColumn<Member, String> colNameBlock = new TableColumn<Member, String>("Name");
+		TableColumn<Member, TextField> colFirstname = new TableColumn<Member, TextField>(
 				"Firstname");
-		TableColumn<TableViewRowData, TextField> colLastname = new TableColumn<TableViewRowData, TextField>("Lastname");
-		TableColumn<TableViewRowData, Label> colUsername = new TableColumn<TableViewRowData, Label>("Username");
-		TableColumn<TableViewRowData, ComboBox<Rank>> colRank = new TableColumn<TableViewRowData, ComboBox<Rank>>(
+		TableColumn<Member, TextField> colLastname = new TableColumn<Member, TextField>("Lastname");
+		TableColumn<Member, Label> colUsername = new TableColumn<Member, Label>("Username");
+		TableColumn<Member, ComboBox<Rank>> colRank = new TableColumn<Member, ComboBox<Rank>>(
 				"Rank");
 
-		colFirstname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, TextField>("tfFirstname"));
-		colLastname.setCellValueFactory(new PropertyValueFactory<TableViewRowData, TextField>("tfLastname"));
-		colUsername.setCellValueFactory(new PropertyValueFactory<TableViewRowData, Label>("lbUsername"));
+		colFirstname.setCellValueFactory(new PropertyValueFactory<Member, TextField>("tfFirstname"));
+		colLastname.setCellValueFactory(new PropertyValueFactory<Member, TextField>("tfLastname"));
+		colUsername.setCellValueFactory(new PropertyValueFactory<Member, Label>("lbUsername"));
 
-		colRank.setCellValueFactory(new PropertyValueFactory<TableViewRowData, ComboBox<Rank>>("cbRank"));
+		colRank.setCellValueFactory(new PropertyValueFactory<Member, ComboBox<Rank>>("cbRank"));
 
 		colNameBlock.getColumns().addAll(colFirstname, colLastname, colUsername);
 		this.tvAddNewMember.getColumns().addAll(colNameBlock, colRank);
@@ -219,7 +225,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		ComboBox<Rank> cbRanks = new ComboBox<Rank>();
 		cbRanks.setItems(obsListOfRanks);
 
-		this.obsListTVAddNewMember.add(new TableViewRowData(tfFirstname, tfLastname, lbUsername, cbRanks));
+		this.obsListTVAddNewMember.add(new Member(tfFirstname, tfLastname, lbUsername, cbRanks));
 		this.tvAddNewMember.setItems(this.obsListTVAddNewMember);
 
 		this.initTextFieldListeners(tfFirstname, tfLastname);
@@ -298,27 +304,22 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		this.lvSelectedMembers.setDisable(false);
 		this.btnAddAllMembers.setDisable(false);
 		
-		TableViewRowData memberData = this.tvAddNewMember.getItems().get(0);
+		Member memberData = this.tvAddNewMember.getItems().get(0);
 
 		Member member = new Member();
-		// ToDo: Post member to Database
-		// Doesn't work bec. selected base is not created and therefore there is no
-		// baseId
-		// MemberManager.getInstance().addMemberToBase(this.controllerCreateBase.getCreatedBase().getBaseId(),
-		// member);
 		member.setBaseId(-1);
-		member.setFirstname(memberData.getMember().getFirstname());
-		member.setLastname(memberData.getMember().getLastname());
-		member.setUsername(memberData.getMember().getUsername());
+		member.setFirstname(memberData.getTfFirstname().getText().trim());
+		member.setLastname(memberData.getTfLastname().getText().trim());
+		member.setUsername(memberData.getLbUsername().getText().trim());
 		member.setBase(null);
-		member.setRank(member.getRank());
+		member.setRank(memberData.getCbRank().getValue());
 
 		this.tvAddNewMember.getItems().remove(0);
 		this.tvAddNewMember.refresh();
 		this.obsListLVAvailableMembers.add(member);
 		this.lvAvailableMembers.refresh();
 
-		System.out.println(memberData.toString());
+		System.out.println(member.toFullString());
 
 		this.btnAddNewMember.setDisable(false);
 	}

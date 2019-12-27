@@ -204,7 +204,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 			tempListRank.add(listOfRanks.get(i));
 		}
 		RankHandler.getInstance().setRankList(tempListRank);
-		CentralHandler.getInstance().mergeFullMemberObject();
+		CentralHandler.getInstance().mergeFullMemberObject(false);
 		
 		this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberList());
 		this.tvMemberData.setItems(this.obsListTVMembers.sorted());
@@ -214,6 +214,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.tvBaseData.setOnMouseClicked(event -> {
 			Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 			if (selectedBase != null) {
+				System.out.println("Selected base: " + selectedBase.toString());
 				this.showBaseData(selectedBase);
 				this.btnLoadVehicles.setDisable(false);
 				this.btnLoadMembers.setDisable(false);
@@ -262,6 +263,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 			
 			this.obsListTVMembers.clear();
 			this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberListByBaseId());
+			
 			this.tvMemberData.setItems(this.obsListTVMembers);
 			this.btnLoadMembers.setDisable(true);
 		}
