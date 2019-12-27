@@ -16,11 +16,11 @@
 /*  DELETE  |  /andere_organisationen/:aOrgId                                */
 /*  GET     |  /mitglieder                                                   */
 /*  GET     |  /mitglieder/:mitglId                                          */
+/*  GET     |  /mitglieder/baseless                                          */
 /*  POST    |  /mitglieder                                                   */ //notImplementedYet
 /*  PUT     |  /mitglieder/:mitglId                                          */ //notImplementedYet
 /*  DELETE  |  /mitglieder/:mitglId                                          */ //notTested
 /*  GET     |  /admins                                                       */
-/*  GET     |  /mitglieder/baseless                                          */
 /*                                                                           */
 /* ************************************************************************* */
 
