@@ -26,7 +26,7 @@ function login(req, res) {
 
 /* authenticate */
 function authenticate(req, res, next) {
-    /*var token = req.headers['authorization'];
+    var token = req.headers['authorization'];
 
     if (token == undefined || token == '') {
         logger.warn('Unauthorized login');
@@ -34,16 +34,16 @@ function authenticate(req, res, next) {
         res.status(401).send('Unauthorized');
         return;
     }
-    try{
+    try {
         var userObject = decryptToken(token);
-    }catch(ex){
+    } catch (ex) {
         logger.error(ex.message);
         loggerModule.lineFeed();
         res.status(401).send('Unauthorized');
         return;
     }
     req.login = userObject.username;
-    req.flow = userObject.flow;*/
+    req.flow = userObject.flow;
 
     next();
 }

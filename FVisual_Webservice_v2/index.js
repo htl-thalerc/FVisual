@@ -14,7 +14,7 @@ const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
 loggerModule.settings.Development();
 
 /* local variables */
-const HOSTNAME = '192.168.178.28';
+const HOSTNAME = 'locahost';
 const PORT = 3030;
 var app = express();
 var logger = loggerModule.loggers['Application'];
