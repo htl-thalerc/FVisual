@@ -13,7 +13,7 @@ module.exports.AORGS_POST = "INSERT INTO Andere_Organisationen(id, name) VALUES(
 module.exports.AORGS_PUT = "UPDATE Andere_Organisationen SET name = :1 WHERE id = :2";
 module.exports.AORGS_DELETE = "DELETE FROM Andere_Organisationen WHERE id = :1";
 
-module.exports.STPNKT_GET = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte ORDER BY name";
+module.exports.STPNKT_GET = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE id >=0 ORDER BY name";
 module.exports.STPNKT_GETBY_STPNKT_ID = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE id = :1";
 module.exports.STPNKT_GETBY_STPNKT_NAME = "SELECT id, name, ort, plz, strasse, hausnr FROM Stuetzpunkte WHERE name = :1";
 module.exports.STPNKT_POST = "INSERT INTO Stuetzpunkte(id, name, ort, plz, strasse, hausnr) VALUES(seq_Stuetzpunkte.nextval, :1, :2, :3,  :4, :5)";
@@ -26,7 +26,7 @@ module.exports.MTG_GET_BY_USERNAME = "SELECT Mitglieder.id, id_dienstgrad, kuerz
 module.exports.MTG_POST = "INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin ) VALUES ( seq_Mitglieder.nextval, :1, :2, :3, :4, :5, :6, :7 )";
 module.exports.MTG_DELETE = "DELETE FROM Mitglieder WHERE id = :1";
 module.exports.ADMINS_GET = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN dienstgrade ON dienstgrade.id = id_dienstgrad WHERE isAdmin = 'true'";
-module.exports.MTG_GET_BASELESS = "SELECT id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder WHERE id_stuetzpunkt = -1";
+module.exports.MTG_GET_BASELESS = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE id_stuetzpunkt = -1 ORDER BY isAdmin DESC, username ASC";
 
 module.exports.STPNKT_MTG_GET = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 ORDER BY id_dienstgrad, nachname";
 module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 AND id=:2";
