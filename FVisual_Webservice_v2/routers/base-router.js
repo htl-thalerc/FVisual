@@ -290,23 +290,16 @@ baseRoutes.get('/mitglieder', (req, res) => {
   });
 });
 
+// GET    | /mitglieder/baseless
 // GET    | /mitglieder/:mitglId
 baseRoutes.get('/mitglieder/:mitglId', (req, res) => {
-  logger.debug('GET /mitglieder/:mitglId');
-  if (!validatorModule.isValidParamId(req.params.mitglId)) {
-    responseHandler.invalidParamId(res, null);
-    return;
-  }
-  oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, [parseInt(req.params.mitglId)], (err, result) => {
-    if (err) {
-      responseHandler.internalServerError(res, err);
-    } else{
-      if(result.rows.length == 0){
-        responseHandler.notFound(res,err);
-        return;
+  if (req.params.mitglId == 'baseless') {
+    logger.debug('GET /mitglieder/baseless');
+    oracleJobs.execute(oracleQueryProvider.MTG_GET_BASELESS, [], (err, result) => {
+      if (err) {
+        responseHandler.internalServerError(res, err);
       }
-
-      if (req.headers.metadata) {
+      else if (req.headers.metadata) {
         let data = converterModule.convertResult(req.headers.metadata, result);
         if (data)
           responseHandler.get(res, data);
@@ -315,8 +308,34 @@ baseRoutes.get('/mitglieder/:mitglId', (req, res) => {
       } else {
         responseHandler.get(res, result.rows);
       }
+    });
+  } else {
+    logger.debug('GET /mitglieder/:mitglId');
+    if (!validatorModule.isValidParamId(req.params.mitglId)) {
+      responseHandler.invalidParamId(res, null);
+      return;
     }
-  });
+    oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, [parseInt(req.params.mitglId)], (err, result) => {
+      if (err) {
+        responseHandler.internalServerError(res, err);
+      } else {
+        if (result.rows.length == 0) {
+          responseHandler.notFound(res, err);
+          return;
+        }
+
+        if (req.headers.metadata) {
+          let data = converterModule.convertResult(req.headers.metadata, result);
+          if (data)
+            responseHandler.get(res, data);
+          else
+            responseHandler.invalidMetaData(res, null);
+        } else {
+          responseHandler.get(res, result.rows);
+        }
+      }
+    });
+  }
 });
 
 // POST   |  /mitglieder //notImplementedYet
@@ -411,25 +430,6 @@ baseRoutes.delete('/mitglieder/:mitglId', (req, res) => {
 baseRoutes.get('/admins', (req, res) => {
   logger.debug('GET /admins');
   oracleJobs.execute(oracleQueryProvider.ADMINS_GET, [], (err, result) => {
-    if (err) {
-      responseHandler.internalServerError(res, err);
-    }
-    else if (req.headers.metadata) {
-      let data = converterModule.convertResult(req.headers.metadata, result);
-      if (data)
-        responseHandler.get(res, data);
-      else
-        responseHandler.invalidMetaData(res, null);
-    } else {
-      responseHandler.get(res, result.rows);
-    }
-  });
-});
-
-// GET    | /mitglieder/baseless
-baseRoutes.get('/mitglieder/baseless', (req, res) => {
-  logger.debug('GET /mitglieder/baseless');
-  oracleJobs.execute(oracleQueryProvider.MTG_GET_BASELESS, [], (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }
