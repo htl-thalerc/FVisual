@@ -140,7 +140,7 @@ CREATE TABLE Einsaetze
   titel            VARCHAR(50),
   kurzbeschreibung VARCHAR(250),
   adresse          VARCHAR(100),
-  datum            DATE,
+  plz              INTEGER,
   zeit             TIMESTAMP,
   CONSTRAINT pk_Einsaetze PRIMARY KEY (id),
   CONSTRAINT fk_Einsatz_Einsatzart FOREIGN KEY (id_einsatzart) REFERENCES Einsatzarten (id),
@@ -158,8 +158,8 @@ CREATE TABLE AOrg_wb_Einsatz
 
 CREATE TABLE EKraft_wb_Einsatz
 (
-  id_Stuetzpunkt INTEGER,
-  id_Einsatz     INTEGER,
+  id_einsatz     INTEGER,
+  id_stuetzpunkt INTEGER,
   CONSTRAINT pk_EKraft_wb_Einsatz PRIMARY KEY (id_Stuetzpunkt, id_Einsatz),
   CONSTRAINT fk_EKraft_wb_E_refEinsatz FOREIGN KEY (id_Einsatz) REFERENCES Einsaetze (id),
   CONSTRAINT fk_EKraft_wb_E_refStpnkt FOREIGN KEY (id_Stuetzpunkt) REFERENCES Stuetzpunkte (id)
@@ -167,9 +167,9 @@ CREATE TABLE EKraft_wb_Einsatz
 
 CREATE TABLE Mtg_wb_Einsatz
 (
-  id_Mitglied    INTEGER,
-  id_Stuetzpunkt INTEGER,
-  id_Einsatz     INTEGER,
+  id_einsatz     INTEGER,
+  id_stuetzpunkt INTEGER,
+  id_mitglied    INTEGER,
   CONSTRAINT pk_Mtg_wb_Einsatz PRIMARY KEY (id_Mitglied, id_Stuetzpunkt, id_einsatz),
   CONSTRAINT fk_Mtg_wb_Einsatz_refMtg FOREIGN KEY (id_Mitglied, id_Stuetzpunkt) REFERENCES Mitglieder (id, id_Stuetzpunkt),
   CONSTRAINT fk_Mtg_wb_Einsatz_refEinsatz FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
@@ -177,9 +177,9 @@ CREATE TABLE Mtg_wb_Einsatz
 
 CREATE TABLE FZG_wb_Einsatz
 (
-  id_Einsatzfahrzeug INTEGER,
-  id_Stuetzpunkt     INTEGER,
-  id_Einsatz         INTEGER,
+  id_einsatz         INTEGER,
+  id_stuetzpunkt     INTEGER,
+  id_einsatzfahrzeug INTEGER,
   CONSTRAINT pk_FZG_wb_Einsatz PRIMARY KEY (id_Einsatzfahrzeug, id_Stuetzpunkt, id_einsatz),
   CONSTRAINT fk_FZG_wb_Einsatz_FZG FOREIGN KEY (id_Einsatzfahrzeug, id_Stuetzpunkt) REFERENCES Einsatzfahrzeuge (id, id_Stuetzpunkt),
   CONSTRAINT fk_FZG_wb_Einsatz_EKraft FOREIGN KEY (id_Stuetzpunkt, id_Einsatz) REFERENCES EKraft_wb_Einsatz (id_Stuetzpunkt, id_Einsatz)
@@ -404,7 +404,7 @@ INSERT INTO Einsatzfahrzeuge( id, id_stuetzpunkt, bezeichnung )
 VALUES ( seq_Einsatzfahrzeuge.nextval, 1, 'RTB-50' );
 INSERT INTO Einsatzfahrzeuge( id, id_stuetzpunkt, bezeichnung )
 VALUES ( seq_Einsatzfahrzeuge.nextval, 1, 'Ölwehranhänger' );
-/* FF St. Olsach Molzbichl */
+/* FF Olsach Molzbichl */
 INSERT INTO Einsatzfahrzeuge( id, id_stuetzpunkt, bezeichnung )
 VALUES ( seq_Einsatzfahrzeuge.nextval, 2, 'TLFA-4000' );
 INSERT INTO Einsatzfahrzeuge( id, id_stuetzpunkt, bezeichnung )
@@ -476,4 +476,38 @@ VALUES ( seq_Einsatzfahrzeuge.nextval, 6, 'LF' );
 INSERT INTO Einsatzfahrzeuge( id, id_stuetzpunkt, bezeichnung )
 VALUES ( seq_Einsatzfahrzeuge.nextval, 6, 'MBT' );
 
+alter session set nls_timestamp_format='YYYY-MM-DD HH24:MI:SS.FF6';
+
+INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
+VALUES(seq_Einsaetze.nextval, 32, 2 ,'Mein Herz es brennt', 'Mein Herz es brennt, wenn ich dich seh ...', 'Villacher Straße 12', 9800, TO_TIMESTAMP('1984-08-05 13:40:12', 'YYYY-MM-DD HH24:MI:SS'));
+
+INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
+VALUES(seq_Einsaetze.nextval, 34, 2 ,'Kerth sei Orsch brennt', 'Kerthi hat zu viel Chilli gessn', 'Oktoberstraße', 9800, TO_TIMESTAMP('2020-01-08 08:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+
+INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
+VALUES(seq_Einsaetze.nextval, 2, 3 ,'Unglück im Focknstoll', 'Drabse hot nit auf de Hildegard aufgepasst', 'Bahnhofsstraße', 9800, TO_TIMESTAMP('2019-03-23 21:33:00', 'YYYY-MM-DD HH24:MI:SS'));
+
+INSERT INTO AORG_WB_EINSATZ(id_einsatz, id_andere_org)
+VALUES(2, 1);
+INSERT INTO AORG_WB_EINSATZ(id_einsatz, id_andere_org)
+VALUES(2, 3);
+
+INSERT INTO EKRAFT_WB_EINSATZ(id_einsatz, id_stuetzpunkt)
+VALUES(2, 1);
+
+INSERT INTO FZG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_einsatzfahrzeug)
+VALUES(2, 1, 2);
+INSERT INTO FZG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_einsatzfahrzeug)
+VALUES(2, 1, 1);
+
+INSERT INTO MTG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_mitglied)
+VALUES(2,1,2);
+
+SELECT * FROM Einsatzcodes;
+SELECT * FROM Einsatzarten;
+SELECT * FROM Einsaetze;
+
 COMMIT;
+
+SELECT 'drop table '||table_name||' cascade constraints;' FROM tabs;
+
