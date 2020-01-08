@@ -26,6 +26,9 @@ import com.example.myapplication.bll.Dienstgrad;
 import com.example.myapplication.bll.Einsatz;
 import com.example.myapplication.bll.Mitglied;
 import com.example.myapplication.bll.Stuetzpunkt;
+import com.example.myapplication.database.DatabaseManager;
+import com.example.myapplication.service.ServiceGetEinsaetzeList;
+import com.example.myapplication.service.ServiceGetMitgliederList;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,60 +47,83 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     GoogleMap googleMap;
-    List<Stuetzpunkt> stuetzpunktList;
     Mitglied currentMitglied;
-    List<Einsatz> einsatzList;
+    Stuetzpunkt currentStuetzpunkt;
+    ArrayList<Einsatz> einsatzList;
     Geocoder gc;
     RadioButton radioButtonStuetzpunkt;
     RadioButton radioButtonEinsatz;
     RadioGroup radioGroupFilter;
     Button resetButton;
+    DatabaseManager db;
+    String username;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_maps);
 
-        //TODO get logged in User ==> currentMitglied
-        currentMitglied = new Mitglied(1, Dienstgrad.Brandinspektor,"Andreas", "Drabosenig",
-                new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3")
-                ,"andi","andi123");
-        stuetzpunktList = new ArrayList<>();
-        einsatzList = new ArrayList<>();
 
-        radioButtonStuetzpunkt = findViewById(R.id.radioButtonStuetzpunktFilter);
-        radioButtonEinsatz = findViewById(R.id.radioButtonEinsatzFilter);
-        radioGroupFilter = findViewById(R.id.radioGroupFilter);
-        resetButton = findViewById(R.id.buttonReset);
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleMap.clear();
-                radioButtonStuetzpunkt.setChecked(false);
-                radioButtonEinsatz.setChecked(false);
-                showEinsaetze();
-                showStuetzpunkte();
-            }
-        });
+            //TODO get logged in User ==> currentMitglied. Von Login Activity get username und password
+            //getCurrentMitglied();
 
-        radioGroupFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                googleMap.clear();
-                if(checkedId == radioButtonEinsatz.getId()){
+            //Des isada nur zum Testen
+            currentMitglied = new Mitglied(1, Dienstgrad.Brandinspektor,"Andreas", "Drabosenig",
+                    new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3")
+                    ,"andi","andi123");
+            currentStuetzpunkt = currentMitglied.getStuetzpunkt();
+            getEinsaetzeFromMitglied();
+
+            radioButtonStuetzpunkt = findViewById(R.id.radioButtonStuetzpunktFilter);
+            radioButtonEinsatz = findViewById(R.id.radioButtonEinsatzFilter);
+            radioGroupFilter = findViewById(R.id.radioGroupFilter);
+            resetButton = findViewById(R.id.buttonReset);
+
+            resetButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    googleMap.clear();
+                    radioButtonStuetzpunkt.setChecked(false);
+                    radioButtonEinsatz.setChecked(false);
                     showEinsaetze();
-                }else if(checkedId == radioButtonStuetzpunkt.getId()){
-                    showStuetzpunkte();
+                    showStuetzpunkt();
                 }
+            });
+
+            radioGroupFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+            {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    googleMap.clear();
+                    if(checkedId == radioButtonEinsatz.getId()){
+                        showEinsaetze();
+                    }else if(checkedId == radioButtonStuetzpunkt.getId()){
+                        showStuetzpunkt();
+                    }
+                }
+            });
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+
+            mapFragment.getMapAsync(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getCurrentMitglied() throws Exception {
+        ArrayList<Mitglied> mitgliedList = db.getAllMitglieder();
+        //TODO mit dem zeugs was i von login bekomme des current Mitglied holen
+        for(Mitglied m : mitgliedList){
+            if(m.getUsername().equals(username) && m.getPassword().equals(password))
+            {
+                currentMitglied = m;
             }
-        });
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-
-        mapFragment.getMapAsync(this);
+        }
     }
 
 
@@ -110,14 +136,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
 
-        //TODO stuetzpunktList = getStuetzpunkteFromDatabase();
-        stuetzpunktList.add(new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3"));
-        stuetzpunktList.add(new Stuetzpunkt(2,"Latschach Feuerwehrhaus","Latschach", 9582, "Kulturhausstraße ", "13"));
-        
-        //TODO einsatzList = getEinsaetzeFromDatabase();
+        //TODO einsatzList = getEinsaetzeFromDatabase(); Aber nur Einsätze von currentMitglied
 
-
-        showStuetzpunkte();
+        showStuetzpunkt();
         showEinsaetze();
     }
 
@@ -177,37 +198,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         );
     }
 
-    private void showStuetzpunkte() {
+    private void showStuetzpunkt() {
         try {
-            for (Stuetzpunkt stuetzpunkt : stuetzpunktList){
-                if(currentMitglied.getStuetzpunkt().getId() == stuetzpunkt.getId()){
-                    List<Address> list = gc.getFromLocationName(stuetzpunkt.getAddress(), 1);
-                    Address add = list.get(0);
-
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
-                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
-                            .title(stuetzpunkt.getName())
-                            .snippet(stuetzpunkt.getClass().getName())
-                    );
-                }
-            }
+            List<Address> list = gc.getFromLocationName(currentStuetzpunkt.getAddress(), 1);
+            Address add = list.get(0);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
+                    .title(currentStuetzpunkt.getName())
+                    .snippet(currentStuetzpunkt.getClass().getName())
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private List<Stuetzpunkt> getStuetzpunkteFromDatabase() {
-        return null;
-    }
+    private void getEinsaetzeFromMitglied() throws Exception {
 
-    private List<Einsatz> getEinsaetzeFromDatabase() {
-        return null;
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         if(marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())){
             showPopupStuetzpunkt(this);
         }else if(marker.getSnippet().equals(new Einsatz().getClass().getName())){
@@ -216,7 +227,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         return true;
     }
-
 
     private void showPopupStuetzpunkt(final Activity context) {
         int popupWidth = 550;
@@ -248,10 +258,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TextView txtPLZ = (TextView) layout.findViewById(R.id.txtPLZ);
         TextView txtStrasse = (TextView) layout.findViewById(R.id.txtStrasse);
 
-        txtName.setText("Name: " + currentMitglied.getStuetzpunkt().getName());
-        txtOrt.setText("Ort: " + currentMitglied.getStuetzpunkt().getOrt());
-        txtPLZ.setText("PLZ: " + currentMitglied.getStuetzpunkt().getPlz());
-        txtStrasse.setText("Straße: " + currentMitglied.getStuetzpunkt().getStrasse() + " " + currentMitglied.getStuetzpunkt().getHausnr());
+        txtName.setText("Name: " + currentStuetzpunkt.getName());
+        txtOrt.setText("Ort: " + currentStuetzpunkt.getOrt());
+        txtPLZ.setText("PLZ: " + currentStuetzpunkt.getPlz());
+        txtStrasse.setText("Straße: " + currentStuetzpunkt.getStrasse() + " " + currentStuetzpunkt.getHausnr());
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override

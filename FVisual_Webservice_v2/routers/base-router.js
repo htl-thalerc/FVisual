@@ -17,6 +17,7 @@
 /*  GET     |  /mitglieder                                                   */
 /*  GET     |  /mitglieder/:mitglId                                          */
 /*  GET     |  /mitglieder/baseless                                          */
+/*  GET     |  /mitglieder/:mitglId/einsaetze                                */
 /*  POST    |  /mitglieder                                                   */ //notImplementedYet
 /*  PUT     |  /mitglieder/:mitglId                                          */ //notImplementedYet
 /*  DELETE  |  /mitglieder/:mitglId                                          */ //notTested
@@ -336,6 +337,35 @@ baseRoutes.get('/mitglieder/:mitglId', (req, res) => {
       }
     });
   }
+});
+
+// GET    | /mitglieder/:mitglId/einsaetze
+baseRoutes.get('/mitglieder/:mitglId/einsaetze', (req, res) => {
+  logger.debug('GET /mitglieder/:mitglId/einsaetze');
+    if (!validatorModule.isValidParamId(req.params.mitglId)) {
+      responseHandler.invalidParamId(res, null);
+      return;
+    }
+    oracleJobs.execute(oracleQueryProvider.MTG_GET_EINSAETZE, [parseInt(req.params.mitglId)], (err, result) => {
+      if (err) {
+        responseHandler.internalServerError(res, err);
+      } else {
+        if (result.rows.length == 0) {
+          responseHandler.notFound(res, err);
+          return;
+        }
+
+        if (req.headers.metadata) {
+          let data = converterModule.convertResult(req.headers.metadata, result);
+          if (data)
+            responseHandler.get(res, data);
+          else
+            responseHandler.invalidMetaData(res, null);
+        } else {
+          responseHandler.get(res, result.rows);
+        }
+      }
+    });
 });
 
 // POST   |  /mitglieder //notImplementedYet

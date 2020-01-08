@@ -28,6 +28,8 @@ module.exports.MTG_DELETE = "DELETE FROM Mitglieder WHERE id = :1";
 module.exports.ADMINS_GET = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN dienstgrade ON dienstgrade.id = id_dienstgrad WHERE isAdmin = 'true'";
 module.exports.MTG_GET_BASELESS = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE id_stuetzpunkt = -1 ORDER BY isAdmin DESC, username ASC";
 
+module.exports.MTG_GET_EINSAETZE = "SELECT id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit FROM Einsaetze INNER JOIN MTG_WB_EINSATZ ON id_einsatz = id WHERE id_mitglied = :1";
+
 module.exports.STPNKT_MTG_GET = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 ORDER BY id_dienstgrad, nachname";
 module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 AND id=:2";
 

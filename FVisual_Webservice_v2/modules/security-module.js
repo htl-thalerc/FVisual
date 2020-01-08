@@ -34,9 +34,9 @@ function authenticate(req, res, next) {
         res.status(401).send('Unauthorized');
         return;
     }
-    try{
+    try {
         var userObject = decryptToken(token);
-    }catch(ex){
+    } catch (ex) {
         logger.error(ex.message);
         loggerModule.lineFeed();
         res.status(401).send('Unauthorized');

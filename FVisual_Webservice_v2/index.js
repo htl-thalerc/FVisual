@@ -14,7 +14,7 @@ const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
 loggerModule.settings.Development();
 
 /* local variables */
-const HOSTNAME = 'localhost';
+const HOSTNAME = 'locahost';
 const PORT = 3030;
 var app = express();
 var logger = loggerModule.loggers['Application'];
@@ -23,7 +23,7 @@ var logger = loggerModule.loggers['Application'];
 app.use(bodyParser.json());
 
 /* public sector */
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     res.status(200).send('API up and running!');
 });
 
@@ -40,7 +40,7 @@ app.use('/stuetzpunkte', stuetzpunktRouter);
 app.use(centralErrorHandler);
 
 /* run app */
-app.listen(PORT, function () {
+app.listen(PORT, function() {
     logger.info(`API running on ${HOSTNAME}:${PORT}!`);
     loggerModule.lineFeed();
 });
