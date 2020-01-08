@@ -7,7 +7,7 @@
 /*                                                                           */
 /*  Method  |  URL                                                           */
 /*  GET     |  /einsaetze                                                    */
-/*  GET     |  /einsaetze/:Id                                             */
+/*  GET     |  /einsaetze/:Id                                                */
 /*  GET     |  /einsaetze?name=eName&zeit=eZeit                              */
 /*  POST    |  /einsaetze                                                    */
 /*  PUT     |  /einsaetze/:eId                                               */

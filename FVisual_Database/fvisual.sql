@@ -153,7 +153,6 @@ CREATE TABLE AOrg_wb_Einsatz
   id_andere_org INTEGER,
   CONSTRAINT fk_AORG_wb_E_refEinsatz FOREIGN KEY (id_Einsatz) REFERENCES Einsaetze (id),
   CONSTRAINT fk_AORG_wb_E_refAOrg FOREIGN KEY (id_andere_org) REFERENCES ANDERE_ORGANISATIONEN (id)
-
 );
 
 CREATE TABLE EKraft_wb_Einsatz
@@ -501,13 +500,15 @@ INSERT INTO FZG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_einsatzfahrzeug)
 VALUES(2, 1, 1);
 
 INSERT INTO MTG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_mitglied)
-VALUES(2,1,2);
+VALUES(2, 1, 2);
 
 SELECT * FROM Einsatzcodes;
 SELECT * FROM Einsatzarten;
 SELECT * FROM Einsaetze;
 
 COMMIT;
+
+SELECT id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit FROM Einsaetze INNER JOIN MTG_WB_EINSATZ ON id_einsatz = id WHERE id_mitglied = 2;
 
 SELECT 'drop table '||table_name||' cascade constraints;' FROM tabs;
 
