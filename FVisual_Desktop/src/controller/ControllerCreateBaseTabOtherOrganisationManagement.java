@@ -16,21 +16,12 @@ import javafx.scene.control.ListView;
 
 public class ControllerCreateBaseTabOtherOrganisationManagement implements Initializable {
 	@FXML
-	private ListView<OtherOrganisation> lvAvailableOrganisation;
+	private ListView<OtherOrganisation> lvAvailableOrganisation, lvSelectedOrganisation;
 	@FXML
-	private ListView<OtherOrganisation> lvSelectedOrganisation;
-	@FXML
-	private Button btnAddOneOrganisation;
-	@FXML
-	private Button btnRemoveOneOrganisation;
-	@FXML
-	private Button btnAddAllOrganisations;
-	@FXML
-	private Button btnRemoveAllOrganisations;
+	private Button btnAddOneOrganisation, btnRemoveOneOrganisation, btnAddAllOrganisations, btnRemoveAllOrganisations;
 
 	private ControllerCreateBaseManagement controllerCreateBase;
-	private ObservableList<OtherOrganisation> obsListLVAvailableOrganisation;
-	private ObservableList<OtherOrganisation> obsListlVSelectedOrganisation;
+	private ObservableList<OtherOrganisation> obsListLVAvailableOrganisation, obsListlVSelectedOrganisation;
 	private boolean isLVAvailableOrganisationSelected = false;
 	private int nrOfTotalOrganisations = 0;
 

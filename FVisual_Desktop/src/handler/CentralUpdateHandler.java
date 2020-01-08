@@ -18,6 +18,8 @@ public class CentralUpdateHandler {
 	private Base updatedBaseData;
 	private OperationVehicle updatedOperationVehicleData;
 	private Member updatedMemberData;
+	
+	private Base currBaseToUpdate = null;
 
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	
@@ -127,5 +129,13 @@ public class CentralUpdateHandler {
 	
 	public void setUpdatedMemberData(Member updatedMemberData) {
 		this.updatedMemberData = updatedMemberData;
+	}
+
+	public void setCurrBaseToUpdate(Base selectedBase) {
+		this.currBaseToUpdate = selectedBase;
+	}
+	
+	public Base getCurrBaseToUpdate() {
+		return this.currBaseToUpdate;
 	}
 }

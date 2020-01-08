@@ -20,13 +20,8 @@ import javafx.stage.Stage;
 
 public class ControllerUpdateFullBaseDialog implements Initializable {
 	@FXML private TabPane tabPaneUpdateTabs;
-	@FXML private Tab tabUpdateBase;
-	@FXML private Tab tabUpdateOperationVehicle;
-	@FXML private Tab tabUpdateMember;
-	@FXML private Button btnCancelUpdate;
-	@FXML private Button btnBackUpdate;
-	@FXML private Button btnNextUpdate;
-	@FXML private Button btnSaveUpdate;
+	@FXML private Tab tabUpdateBase, tabUpdateMember, tabUpdateOperationVehicle;
+	@FXML private Button btnCancelUpdate, btnSaveUpdate, btnBackUpdate, btnNextUpdate;
 	
 	private boolean btnSaveState;
 	

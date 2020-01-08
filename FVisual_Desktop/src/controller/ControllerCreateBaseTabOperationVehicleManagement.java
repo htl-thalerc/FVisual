@@ -26,8 +26,7 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 	private final String CONST_BTN_TEXT_ADD_NEW_VEHICLE = "Add new Vehicle";
 
 	private ControllerCreateBaseManagement controllerCreateBase;
-	private ObservableList<OperationVehicle> obsListLVAvailableOperationVehicles;
-	private ObservableList<OperationVehicle> obsListLVSelectedOperationVehciles;
+	private ObservableList<OperationVehicle> obsListLVAvailableOperationVehicles, obsListLVSelectedOperationVehciles;
 	private boolean isLVAvailableOperationVehiclesSelected = false;
 	private int nrOfTotalOperationVehicles = 0;
 

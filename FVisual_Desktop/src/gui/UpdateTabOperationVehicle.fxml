@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -71,6 +72,11 @@
 										<Insets left="5.0" />
 									</GridPane.margin>
 								</Label>
+                        <Button fx:id="btnAddNewVehicle" mnemonicParsing="false" onAction="#onClickBtnAddNewVehicle" text="Add Vehicle">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Button>
 							</children>
 						</GridPane>
 					</children>
@@ -89,4 +95,11 @@
 			</BorderPane.margin>
 		</GridPane>
 	</center>
+   <bottom>
+      <Label fx:id="lbStatusbar" style="-fx-font-weight: bold;" BorderPane.alignment="TOP_LEFT">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" />
+         </BorderPane.margin>
+      </Label>
+   </bottom>
 </BorderPane>
