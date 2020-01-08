@@ -1,5 +1,7 @@
 package com.example.myapplication.bll;
 
+import java.util.ArrayList;
+
 public class Stuetzpunkt {
     private int id;
     private String name;
@@ -7,6 +9,7 @@ public class Stuetzpunkt {
     private int plz;
     private String strasse;
     private String hausnr;
+
 
     public Stuetzpunkt(int id, String name, String ort, int plz, String strasse, String hausnr) {
         this.id = id;

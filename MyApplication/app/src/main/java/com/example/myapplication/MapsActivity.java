@@ -44,8 +44,8 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     GoogleMap googleMap;
-    List<Stuetzpunkt> stuetzpunktList;
     Mitglied currentMitglied;
+    Stuetzpunkt currentStuetzpunkt;
     List<Einsatz> einsatzList;
     Geocoder gc;
     RadioButton radioButtonStuetzpunkt;
@@ -62,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         currentMitglied = new Mitglied(1, Dienstgrad.Brandinspektor,"Andreas", "Drabosenig",
                 new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3")
                 ,"andi","andi123");
-        stuetzpunktList = new ArrayList<>();
+        currentStuetzpunkt = currentMitglied.getStuetzpunkt();
         einsatzList = new ArrayList<>();
 
         radioButtonStuetzpunkt = findViewById(R.id.radioButtonStuetzpunktFilter);
@@ -77,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 radioButtonStuetzpunkt.setChecked(false);
                 radioButtonEinsatz.setChecked(false);
                 showEinsaetze();
-                showStuetzpunkte();
+                showStuetzpunkt();
             }
         });
 
@@ -89,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if(checkedId == radioButtonEinsatz.getId()){
                     showEinsaetze();
                 }else if(checkedId == radioButtonStuetzpunkt.getId()){
-                    showStuetzpunkte();
+                    showStuetzpunkt();
                 }
             }
         });
@@ -110,14 +110,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         googleMap.moveCamera(cameraUpdate);
 
-        //TODO stuetzpunktList = getStuetzpunkteFromDatabase();
-        stuetzpunktList.add(new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3"));
-        stuetzpunktList.add(new Stuetzpunkt(2,"Latschach Feuerwehrhaus","Latschach", 9582, "Kulturhausstraße ", "13"));
-        
-        //TODO einsatzList = getEinsaetzeFromDatabase();
+        //TODO einsatzList = getEinsaetzeFromDatabase(); Aber nur Einsätze von currentMitglied
 
-
-        showStuetzpunkte();
+        showStuetzpunkt();
         showEinsaetze();
     }
 
@@ -177,21 +172,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         );
     }
 
-    private void showStuetzpunkte() {
+    private void showStuetzpunkt() {
         try {
-            for (Stuetzpunkt stuetzpunkt : stuetzpunktList){
-                if(currentMitglied.getStuetzpunkt().getId() == stuetzpunkt.getId()){
-                    List<Address> list = gc.getFromLocationName(stuetzpunkt.getAddress(), 1);
-                    Address add = list.get(0);
-
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
-                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
-                            .title(stuetzpunkt.getName())
-                            .snippet(stuetzpunkt.getClass().getName())
-                    );
-                }
-            }
+            List<Address> list = gc.getFromLocationName(currentStuetzpunkt.getAddress(), 1);
+            Address add = list.get(0);
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
+                    .title(currentStuetzpunkt.getName())
+                    .snippet(currentStuetzpunkt.getClass().getName())
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -207,7 +197,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         if(marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())){
             showPopupStuetzpunkt(this);
         }else if(marker.getSnippet().equals(new Einsatz().getClass().getName())){
@@ -248,10 +237,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TextView txtPLZ = (TextView) layout.findViewById(R.id.txtPLZ);
         TextView txtStrasse = (TextView) layout.findViewById(R.id.txtStrasse);
 
-        txtName.setText("Name: " + currentMitglied.getStuetzpunkt().getName());
-        txtOrt.setText("Ort: " + currentMitglied.getStuetzpunkt().getOrt());
-        txtPLZ.setText("PLZ: " + currentMitglied.getStuetzpunkt().getPlz());
-        txtStrasse.setText("Straße: " + currentMitglied.getStuetzpunkt().getStrasse() + " " + currentMitglied.getStuetzpunkt().getHausnr());
+        txtName.setText("Name: " + currentStuetzpunkt.getName());
+        txtOrt.setText("Ort: " + currentStuetzpunkt.getOrt());
+        txtPLZ.setText("PLZ: " + currentStuetzpunkt.getPlz());
+        txtStrasse.setText("Straße: " + currentStuetzpunkt.getStrasse() + " " + currentStuetzpunkt.getHausnr());
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
