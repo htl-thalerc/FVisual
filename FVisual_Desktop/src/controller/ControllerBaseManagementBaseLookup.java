@@ -10,26 +10,21 @@ import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
-import bll.Rank;
 import handler.BaseHandler;
 import handler.CentralHandler;
 import handler.CentralUpdateHandler;
 import handler.MemberHandler;
 import handler.OperationVehicleHandler;
-import handler.RankHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -41,10 +36,10 @@ import javafx.stage.Stage;
 import loader.BaseLoader;
 import loader.MemberLoader;
 import loader.OperationVehicleLoader;
+import loader.RankLoader;
 import manager.BaseManager;
 import manager.MemberManager;
 import manager.OperationVehicleManager;
-import manager.RankManager;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -67,11 +62,15 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	private ObservableList<Base> obsListTVBaseData = null;
 	private ObservableList<OperationVehicle> obsListTVVehicles = null;
 	private ObservableList<Member> obsListTVMembers = null;
-
+	
 	private ControllerBaseManagement controllerBaseManagement;
-
+	
 	public ControllerBaseManagementBaseLookup(ControllerBaseManagement controllerBaseManagement) {
 		this.controllerBaseManagement = controllerBaseManagement;
+	}
+	
+	public ControllerBaseManagementBaseLookup() {
+		super();
 	}
 
 	@Override
@@ -161,77 +160,74 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void fillTableViews() {
-		CountDownLatch latch = new CountDownLatch(3);
-
+		CountDownLatch latch = new CountDownLatch(4);
+		
 		BaseLoader baseLoader = new BaseLoader(latch);
 		OperationVehicleLoader vehicleLoader = new OperationVehicleLoader(latch);
+		RankLoader rankLoader = new RankLoader(latch);
 		MemberLoader memberLoader = new MemberLoader(latch);
-
-		// Create a thread for both actions
+		
 		Thread threadBaseLoader = new Thread(baseLoader);
 		Thread threadVehicleLoader = new Thread(vehicleLoader);
+		Thread threadRankLoader = new Thread(rankLoader);
 		Thread threadMemberLoader = new Thread(memberLoader);
-
+		
 		threadBaseLoader.start();
 		threadVehicleLoader.start();
+		threadRankLoader.start();
+		threadMemberLoader.start();
+		
+		try {
+			latch.await(); //After all 4 Threads from the countdownlatch are finished --> execute following lines
+			
+			this.fillTableViewBasesFromThread();
+			this.fillTableViewVehiclesFromThread();
+			this.fillTalbeViewMembersFromThread();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void fillCollOfBases(CountDownLatch latch) {
+		BaseLoader baseLoader = new BaseLoader(latch);
+		Thread threadBaseLoader = new Thread(baseLoader);
+		threadBaseLoader.start();
+	}
+	
+	private void fillCollOfOperationVehicles(CountDownLatch latch) {
+		OperationVehicleLoader vehicleLoader = new OperationVehicleLoader(latch);
+		Thread threadVehicleLoader = new Thread(vehicleLoader);
+		threadVehicleLoader.start();
+	}
+	
+	private void fillCollOfMembers(CountDownLatch latch) {
+		MemberLoader memberLoader = new MemberLoader(latch);
+		Thread threadMemberLoader = new Thread(memberLoader);
 		threadMemberLoader.start();
 
-		//this.fillTableViewBases();
-		//this.fillTableViewVehicles();
-		//this.fillTableViewMembers();
 	}
-
-	private void fillTableViewBases() {
+	
+	public void fillTableViewBasesFromThread() {
 		this.obsListTVBaseData = FXCollections.observableArrayList();
-
-		ArrayList<Base> tempList = new ArrayList<Base>();
-
-		ArrayList<Base> listOfBases = BaseManager.getInstance().getBases();
-		for (int i = 0; i < listOfBases.size(); i++) {
-			obsListTVBaseData.add(new Base(new CheckBox(), listOfBases.get(i)));
-			tempList.add(listOfBases.get(i));
-		}
-		tvBaseData.setItems(obsListTVBaseData.sorted());
-		BaseHandler.getInstance().setBaseList(tempList);
+		this.obsListTVBaseData.addAll(BaseHandler.getInstance().getBaseList());
+		
+		this.tvBaseData.setItems(this.obsListTVBaseData.sorted());
 	}
-
-	private void fillTableViewVehicles() {
+	
+	public void fillTableViewVehiclesFromThread() {
 		this.obsListTVVehicles = FXCollections.observableArrayList();
-
-		ArrayList<OperationVehicle> tempListVehicles = new ArrayList<OperationVehicle>();
-		ArrayList<OperationVehicle> listOfVehicles = OperationVehicleManager.getInstance().getVehicles();
-
-		for (int i = 0; i < listOfVehicles.size(); i++) {
-			tempListVehicles.add(listOfVehicles.get(i));
-		}
-		OperationVehicleHandler.getInstance().setVehicleList(tempListVehicles);
-		CentralHandler.getInstance().mergeFullVehicleObject();
-
-		obsListTVVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleList());
-		tvVehicleData.setItems(obsListTVVehicles.sorted());
+		
+		this.obsListTVVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleList());
+		this.tvVehicleData.setItems(this.obsListTVVehicles.sorted());
 	}
-
-	private void fillTableViewMembers() {
+	
+	public void fillTalbeViewMembersFromThread() {
 		this.obsListTVMembers = FXCollections.observableArrayList();
-		ArrayList<Member> tempListMembers = new ArrayList<Member>();
-
-		ArrayList<Member> listOfMembers = MemberManager.getInstance().getMembers();
-		for (int i = 0; i < listOfMembers.size(); i++) {
-			tempListMembers.add(listOfMembers.get(i));
-		}
-		MemberHandler.getInstance().setMemberList(tempListMembers);
-
-		ArrayList<Rank> tempListRank = new ArrayList<Rank>();
-		ArrayList<Rank> listOfRanks = RankManager.getInstance().getRanks();
-		for (int i = 0; i < listOfRanks.size(); i++) {
-			tempListRank.add(listOfRanks.get(i));
-		}
-		RankHandler.getInstance().setRankList(tempListRank);
-		CentralHandler.getInstance().mergeFullMemberObject(false);
-
+		
 		this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberList());
 		this.tvMemberData.setItems(this.obsListTVMembers.sorted());
 	}
+
 
 	private void initTableViewBaseListener() {
 		this.tvBaseData.setOnMouseClicked(event -> {
@@ -342,7 +338,14 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		if (selectedVehicle != null) {
 			OperationVehicleManager.getInstance().deleteVehicleFromBase(selectedVehicle.getBase().getBaseId(),
 					selectedVehicle.getOperationVehicleId());
-			this.fillTableViewVehicles();
+			try {
+				CountDownLatch countDownLatch = new CountDownLatch(0);
+				this.fillCollOfOperationVehicles(countDownLatch);
+				countDownLatch.await();
+				this.fillTableViewVehiclesFromThread();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -351,7 +354,15 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		OperationVehicle selectedVehicle = this.tvVehicleData.getSelectionModel().getSelectedItem();
 		if (selectedVehicle != null) {
 			CentralUpdateHandler.getInstance().initUpdateOperationVehicleDialog(selectedVehicle);
-			this.fillTableViewVehicles();
+			
+			try {
+				CountDownLatch countDownLatch = new CountDownLatch(0);
+				this.fillCollOfOperationVehicles(countDownLatch);
+				countDownLatch.await();
+				this.fillTableViewVehiclesFromThread();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -361,7 +372,14 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		if (selectedMember != null) {
 			MemberManager.getInstance().deleteMemberFromBase(selectedMember.getBase().getBaseId(),
 					selectedMember.getMemberId());
-			this.fillTableViewMembers();
+			try {
+				CountDownLatch countDownLatch = new CountDownLatch(0);
+				this.fillCollOfMembers(countDownLatch);
+				countDownLatch.await();
+				this.fillTalbeViewMembersFromThread();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -370,7 +388,15 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		Member selectedMember = this.tvMemberData.getSelectionModel().getSelectedItem();
 		if (selectedMember != null) {
 			CentralUpdateHandler.getInstance().initUpdateMemberDialog(selectedMember);
-			this.fillTableViewMembers();
+			
+			try {
+				CountDownLatch countDownLatch = new CountDownLatch(0);
+				this.fillCollOfMembers(countDownLatch);
+				countDownLatch.await();
+				this.fillTalbeViewMembersFromThread();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -6,7 +6,6 @@ import java.util.concurrent.CountDownLatch;
 import bll.OperationVehicle;
 import handler.CentralHandler;
 import handler.OperationVehicleHandler;
-import javafx.collections.FXCollections;
 import manager.OperationVehicleManager;
 
 public class OperationVehicleLoader implements Runnable  {
@@ -26,6 +25,7 @@ public class OperationVehicleLoader implements Runnable  {
 		
 		OperationVehicleHandler.getInstance().setVehicleList(tempListVehicles);
 		CentralHandler.getInstance().mergeFullVehicleObject();
+		
 		System.out.println("Finished laoding Vehicles");
 
 		this.countDownLatch.countDown();

@@ -5,7 +5,6 @@ import java.util.concurrent.CountDownLatch;
 
 import bll.Base;
 import handler.BaseHandler;
-import javafx.scene.control.CheckBox;
 import manager.BaseManager;
 
 public class BaseLoader implements Runnable {
@@ -26,6 +25,6 @@ public class BaseLoader implements Runnable {
 		
 		BaseHandler.getInstance().setBaseList(tempList);
 		System.out.println("Finished loading Bases");
-		this.countDownLatch.countDown();
+		this.countDownLatch.countDown();	
 	}
 }
