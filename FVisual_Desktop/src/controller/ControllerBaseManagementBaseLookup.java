@@ -34,6 +34,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import loader.BaseLoader;
+import loader.BaseMemberLoader;
+import loader.BaseVehicleLoader;
+import loader.BaselessMemberLoader;
 import loader.MemberLoader;
 import loader.OperationVehicleLoader;
 import loader.RankLoader;
@@ -55,7 +58,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
 	private Label lbShowNameData, lbShowPostcodeAndPlaceData, lbShowAddressData;
 	@FXML
-	private Button btnLoadVehicles, btnLoadMembers;
+	private Button btnLoadBaseVehicles, btnLoadBaseMembers, btnLoadAllVehicles, btnLoadAllMembers;
 	@FXML
 	private MenuItem mItemRemoveBase, mItemUpdateBase;
 
@@ -85,8 +88,10 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void defaultSettings() {
-		this.btnLoadVehicles.setDisable(true);
-		this.btnLoadMembers.setDisable(true);
+		this.btnLoadBaseVehicles.setDisable(true);
+		this.btnLoadBaseMembers.setDisable(true);
+		this.btnLoadAllVehicles.setDisable(true);
+		this.btnLoadAllMembers.setDisable(true);
 
 		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
 	}
@@ -233,13 +238,12 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.tvBaseData.setOnMouseClicked(event -> {
 			Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 			if (selectedBase != null) {
-				System.out.println("Selected base: " + selectedBase.toString());
 				this.showBaseData(selectedBase);
-				this.btnLoadVehicles.setDisable(false);
-				this.btnLoadMembers.setDisable(false);
+				this.btnLoadBaseVehicles.setDisable(false);
+				this.btnLoadBaseMembers.setDisable(false);
 			} else {
-				this.btnLoadVehicles.setDisable(true);
-				this.btnLoadMembers.setDisable(true);
+				this.btnLoadBaseVehicles.setDisable(true);
+				this.btnLoadBaseMembers.setDisable(true);
 			}
 			CentralUpdateHandler.getInstance().setCurrBaseToUpdate(selectedBase);
 		});
@@ -256,39 +260,77 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	@FXML
-	private void onClickBtnLoadVehicles(ActionEvent event) {
+	private void onClickBtnLoadBaseVehicles(ActionEvent event) {
 		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
-			ArrayList<OperationVehicle> listOfOperationVehiclesFilteredByBase = OperationVehicleManager.getInstance()
-					.getVehiclesFromBase(selectedBase.getBaseId());
-
-			OperationVehicleHandler.getInstance().setVehicleListByBaseId(listOfOperationVehiclesFilteredByBase);
-
+			try {
+				BaseVehicleLoader baseVehicleLoader = new BaseVehicleLoader(selectedBase);
+				
+				Thread threadBaseVehicleLoader = new Thread(baseVehicleLoader);
+				threadBaseVehicleLoader.start();
+				
+				threadBaseVehicleLoader.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			this.obsListTVVehicles.clear();
 			this.obsListTVVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleListByBaseId());
 
 			this.tvVehicleData.setItems(this.obsListTVVehicles);
-			this.btnLoadVehicles.setDisable(true);
+			this.btnLoadBaseVehicles.setDisable(true);
+			this.btnLoadAllVehicles.setDisable(false);
 		}
 	}
 
 	@FXML
-	private void onClickBtnLoadMembers(ActionEvent event) {
+	private void onClickBtnLoadBaseMembers(ActionEvent event) {
 		this.accordionSubTables.setExpandedPane(this.tpMember);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
-			ArrayList<Member> listOfMembersFilteredByBase = MemberManager.getInstance()
-					.getMembersFromBase(selectedBase.getBaseId());
-
-			MemberHandler.getInstance().setMemberListByBaseId(listOfMembersFilteredByBase);
+			try {
+				BaseMemberLoader baseMemberLoader = new BaseMemberLoader(selectedBase);
+				
+				Thread threadBaseMemberLoader = new Thread(baseMemberLoader);
+				threadBaseMemberLoader.start();
+				
+				threadBaseMemberLoader.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
 			this.obsListTVMembers.clear();
 			this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberListByBaseId());
 
 			this.tvMemberData.setItems(this.obsListTVMembers);
-			this.btnLoadMembers.setDisable(true);
+			this.btnLoadBaseMembers.setDisable(true);
+			this.btnLoadAllMembers.setDisable(false);
 		}
+	}
+	
+	@FXML
+	private void onClickBtnLoadAllVehicles(ActionEvent event) {
+		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
+
+		this.obsListTVVehicles.clear();
+		this.obsListTVVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleList());
+		this.tvVehicleData.setItems(this.obsListTVVehicles);
+		
+		this.btnLoadAllVehicles.setDisable(true);
+		this.btnLoadBaseVehicles.setDisable(false);
+	}
+	
+	@FXML
+	private void onClickBtnLoadAllMembers(ActionEvent event) {
+		this.accordionSubTables.setExpandedPane(this.tpMember);
+
+		this.obsListTVMembers.clear();
+		this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberList());
+		this.tvMemberData.setItems(this.obsListTVMembers);
+		
+		this.btnLoadAllMembers.setDisable(true);
+		this.btnLoadBaseMembers.setDisable(false);
 	}
 
 	@FXML

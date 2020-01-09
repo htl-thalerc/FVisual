@@ -5,8 +5,7 @@
 
 <BorderPane fx:id="paneOperationManagement" maxWidth="-Infinity"
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0"
-	prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="controller.ControllerOperationManagement">
+	prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
 		<Label text="Operation Management" BorderPane.alignment="CENTER" />
 	</center>

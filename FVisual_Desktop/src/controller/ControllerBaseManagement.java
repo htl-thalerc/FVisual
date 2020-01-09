@@ -8,15 +8,24 @@ import handler.CentralHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import loader.BaseLoader;
+import loader.MemberLoader;
+import loader.OperationVehicleLoader;
+import loader.RankLoader;
 
 public class ControllerBaseManagement implements Initializable {
-	@FXML
-	private TabPane mainTabPaneBaseManagement;
+	@FXML private TabPane mainTabPaneBaseManagement;
 
 	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup;
 	private ControllerCreateBaseManagement controllerCreateBase;
+	private ControllerMainframe controllerMainframe;
+
+	public ControllerBaseManagement(ControllerMainframe controllerMainframe) {
+		this.controllerMainframe = controllerMainframe;
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

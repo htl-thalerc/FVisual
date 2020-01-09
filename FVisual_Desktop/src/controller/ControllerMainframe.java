@@ -15,18 +15,21 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import loader.BaseLoader;
+import loader.MemberLoader;
+import loader.OperationVehicleLoader;
+import loader.RankLoader;
 
 public class ControllerMainframe implements Initializable {
-	@FXML
-	private MenuItem mItemOperationManagement, mItemBaseManagement, mItemProfileSettings, mItemLogout;
-	@FXML
-	private Label lblMessage;
-	@FXML
-	private BorderPane mainPane;
+	@FXML private MenuItem mItemOperationManagement, mItemBaseManagement, mItemProfileSettings, mItemLogout;
+	@FXML private Label lblMessage;
+	@FXML private BorderPane mainPane;
+	
 	private CentralHandler ch;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 	private static Stage currentStage;
@@ -48,20 +51,31 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemOperationManagement(ActionEvent aE) {
-		this.loadContentIntoMainPane("/gui/OperationManagement.fxml");
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/gui/OperationManagement.fxml"));
+			loader.setController(new ControllerOperationManagement(this));
+			
+			this.middlePaneContent.clear();
+			this.middlePaneContent.addAll(this.mainPane.getChildren());
+			this.mainPane.getChildren().clear();
+			this.mainPane.getChildren().add(loader.load());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
 	private void onClickmItemBaseManagement(ActionEvent aE) {
-		this.loadContentIntoMainPane("/gui/BaseManagement.fxml");
-	}
-
-	private void loadContentIntoMainPane(String fxmlRessourceURL) {
 		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("/gui/BaseManagement.fxml"));
+			loader.setController(new ControllerBaseManagement(this));
+			
 			this.middlePaneContent.clear();
 			this.middlePaneContent.addAll(this.mainPane.getChildren());
 			this.mainPane.getChildren().clear();
-			this.mainPane.getChildren().add(FXMLLoader.load(getClass().getResource(fxmlRessourceURL)));
+			this.mainPane.getChildren().add(loader.load());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
