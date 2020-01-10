@@ -74,10 +74,11 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		ArrayList<Member> listOfAllBaselessMembers = MemberManager.getInstance().getBaselessMembers();
 		System.out.println("b" + listOfAllBaselessMembers.size());
 		MemberHandler.getInstance().setBaselessMemberList(listOfAllBaselessMembers);
-		
+
 		CentralHandler.getInstance().mergeFullMemberObject(true);
 
-		this.obsListLVAvailableMembers = FXCollections.observableArrayList(MemberHandler.getInstance().getBaselessMemberList());
+		this.obsListLVAvailableMembers = FXCollections
+				.observableArrayList(MemberHandler.getInstance().getBaselessMemberList());
 		this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);
 
 		this.nrOfTotalOrganisations = this.lvAvailableMembers.getItems().size();
@@ -109,12 +110,10 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	@SuppressWarnings("unchecked")
 	private void initTableViewColumns() {
 		TableColumn<Member, String> colNameBlock = new TableColumn<Member, String>("Name");
-		TableColumn<Member, TextField> colFirstname = new TableColumn<Member, TextField>(
-				"Firstname");
+		TableColumn<Member, TextField> colFirstname = new TableColumn<Member, TextField>("Firstname");
 		TableColumn<Member, TextField> colLastname = new TableColumn<Member, TextField>("Lastname");
 		TableColumn<Member, Label> colUsername = new TableColumn<Member, Label>("Username");
-		TableColumn<Member, ComboBox<Rank>> colRank = new TableColumn<Member, ComboBox<Rank>>(
-				"Rank");
+		TableColumn<Member, ComboBox<Rank>> colRank = new TableColumn<Member, ComboBox<Rank>>("Rank");
 
 		colFirstname.setCellValueFactory(new PropertyValueFactory<Member, TextField>("tfFirstname"));
 		colLastname.setCellValueFactory(new PropertyValueFactory<Member, TextField>("tfLastname"));
@@ -210,7 +209,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		this.lvAvailableMembers.setDisable(true);
 		this.lvSelectedMembers.setDisable(true);
 		this.btnAddAllMembers.setDisable(true);
-		
+
 		this.btnAddNewMember.setDisable(true);
 		this.tvAddNewMember.setEditable(true);
 		this.obsListTVAddNewMember = FXCollections.observableArrayList();
@@ -303,7 +302,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		this.lvAvailableMembers.setDisable(false);
 		this.lvSelectedMembers.setDisable(false);
 		this.btnAddAllMembers.setDisable(false);
-		
+
 		Member memberData = this.tvAddNewMember.getItems().get(0);
 
 		Member member = new Member();

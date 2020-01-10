@@ -66,13 +66,9 @@ private static GeoLocationsManager instance = null;
 			invocationBuilder = temp.request(MediaType.APPLICATION_JSON);
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			ret = response.readEntity(String.class);
-			System.out.println(ret);
-			System.out.println(ret.split("\""));
-
 		} catch (JsonSyntaxException ex) {
 			throw new Exception();
 		}
 		return ret;
 	}
-
 }

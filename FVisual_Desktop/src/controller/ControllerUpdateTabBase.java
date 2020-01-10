@@ -14,27 +14,9 @@ import javafx.scene.control.TextFormatter;
 
 public class ControllerUpdateTabBase implements Initializable {
 	@FXML
-	private Label lbOldBasename;
+	private Label lbOldBasename, lbOldPlace, lbOldPostCode, lbOldStreet, lbOldHouseNr, lbStatusbar;
 	@FXML
-	private Label lbOldPlace;
-	@FXML
-	private Label lbOldPostCode;
-	@FXML
-	private Label lbOldStreet;
-	@FXML
-	private Label lbOldHouseNr;
-	@FXML
-	private TextField tfNewBasename;
-	@FXML
-	private TextField tfNewPlace;
-	@FXML
-	private TextField tfNewPostCode;
-	@FXML
-	private TextField tfNewStreet;
-	@FXML
-	private TextField tfNewHouseNr;
-	@FXML
-	private Label lbStatusbar;
+	private TextField tfNewBasename, tfNewPlace, tfNewPostCode, tfNewStreet, tfNewHouseNr;
 
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	private AtomicBoolean isValidBasename = new AtomicBoolean(false);

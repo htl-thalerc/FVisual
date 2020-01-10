@@ -5,10 +5,13 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import bll.OperationVehicle;
+import handler.CentralUpdateHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -17,9 +20,11 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	@FXML
 	private ListView<OperationVehicle> lvVehicles;
 	@FXML
-	private Label lbOldVehiclename;
+	private Label lbOldVehiclename, lbStatusbar;
 	@FXML
 	private TextField tfNewVehiclename;
+	@FXML
+	private Button btnAddNewVehicle;
 	
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	private AtomicBoolean isValidVehiclename = new AtomicBoolean(false);
@@ -53,11 +58,17 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 				this.tfNewVehiclename.setStyle("-fx-text-box-border: green;");
 				this.tfNewVehiclename.setStyle("-fx-focus-color: green;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
+				if(this.btnAddNewVehicle.getText().equals("Save Member")) {
+					this.btnAddNewVehicle.setDisable(false);
+				}
 			} else {
 				this.isValidVehiclename.set(false);
 				this.tfNewVehiclename.setStyle("-fx-text-box-border: red;");
 				this.tfNewVehiclename.setStyle("-fx-focus-color: red;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
+				if(this.btnAddNewVehicle.getText().equals("Save Member")) {
+					this.btnAddNewVehicle.setDisable(true);
+				}
 			}
 		});
 	}
@@ -77,5 +88,29 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			vehicle.setDescription(this.tfNewVehiclename.getText());	
 		} 
 		return vehicle;
+	}
+	
+	@FXML
+	private void onClickBtnAddNewVehicle(ActionEvent event) {
+		if(this.btnAddNewVehicle.getText().equals("Add Vehicle")) {
+			this.btnAddNewVehicle.setText("Save Vehicle");
+			this.lvVehicles.setDisable(true);
+			this.btnAddNewVehicle.setDisable(true);
+			this.lbOldVehiclename.setText("No Vehicle selected");
+			
+			this.lbStatusbar.setText("Note: Fill all Textfield to save Operationvehicle");
+		} else if(this.btnAddNewVehicle.getText().equals("Save Vehicle")) {
+			this.btnAddNewVehicle.setText("Add Vehicle");
+			this.lvVehicles.setDisable(false);
+			this.btnAddNewVehicle.setDisable(false);
+			this.lbOldVehiclename.setText("No Vehicledata available");
+			
+			OperationVehicle vehicleToCreate = new OperationVehicle();
+			vehicleToCreate.setBase(CentralUpdateHandler.getInstance().getCurrBaseToUpdate());
+			
+			vehicleToCreate.setDescription(this.tfNewVehiclename.getText().trim());
+			
+			this.lbStatusbar.setText("Successfully added Operationvehicle '" + vehicleToCreate.getDescription() + "'");
+		}
 	}
 }

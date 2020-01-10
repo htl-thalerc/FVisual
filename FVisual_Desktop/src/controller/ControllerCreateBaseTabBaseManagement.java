@@ -29,30 +29,14 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 	@FXML
 	private GoogleMapView mapView;
 	@FXML
-	private TextField tfBaseName;
+	private TextField tfBaseName, tfPlace, tfPostCode, tfStreet, tfHouseNr;
 	@FXML
-	private TextField tfPlace;
-	@FXML
-	private TextField tfPostCode;
-	@FXML
-	private TextField tfStreet;
-	@FXML
-	private TextField tfHouseNr;
-	@FXML
-	private Label lbStatusbarPlace;
-	@FXML
-	private Label lbStatusbarPostCode;
-	@FXML
-	private Label lbStatusbarStreet;
-	@FXML
-	private Label lbStatusbarHouseNr;
-	@FXML
-	private Label lbStatusbarBaseName;
+	private Label lbStatusbarPlace, lbStatusbarPostCode, lbStatusbarStreet, lbStatusbarHouseNr, lbStatusbarBaseName;
 
 	private ControllerCreateBaseManagement controllerCreateBaseManagement;
 	private GeoLocationsManager geoCodingService;
-    private GoogleMap map;
-    private Marker currentMarker;
+	private GoogleMap map;
+	private Marker currentMarker;
 
 	public ControllerCreateBaseTabBaseManagement(ControllerCreateBaseManagement controllerCreateBaseManagement) {
 		this.controllerCreateBaseManagement = controllerCreateBaseManagement;
@@ -65,7 +49,7 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.initGoogleMaps();
 
 	}
-	
+
 	private void initGoogleMaps() {
 		mapView.addMapInializedListener(this);
 		System.out.println("initializing google maps");
@@ -99,7 +83,8 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 				this.tfBaseName.setStyle("-fx-border-color: green;");
 			} else {
 				isValidBasename.set(false);
-				this.lbStatusbarBaseName.setText("Invalid Inputvalue for Basename - Inputvalue is too short (length >= 12)");
+				this.lbStatusbarBaseName
+						.setText("Invalid Inputvalue for Basename - Inputvalue is too short (length >= 12)");
 				this.tfBaseName.setStyle("-fx-text-box-border: red;");
 				this.tfBaseName.setStyle("-fx-focus-color: red;");
 				this.tfBaseName.setStyle("-fx-border-color: red;");
@@ -117,7 +102,8 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 				this.tfHouseNr.setStyle("-fx-border-color: green;");
 			} else {
 				isValidHouseNr.set(false);
-				this.lbStatusbarHouseNr.setText("Invalid Inputvalue for HouseNr - Inputvalue is too short (length >= 1)");
+				this.lbStatusbarHouseNr
+						.setText("Invalid Inputvalue for HouseNr - Inputvalue is too short (length >= 1)");
 				this.tfHouseNr.setStyle("-fx-text-box-border: red;");
 				this.tfHouseNr.setStyle("-fx-focus-color: red;");
 				this.tfHouseNr.setStyle("-fx-border-color: red;");
@@ -153,7 +139,8 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 				this.tfPostCode.setStyle("-fx-border-color: green;");
 			} else {
 				isValidPostCode.set(false);
-				this.lbStatusbarPostCode.setText("Invalid Inputvalue for PostCode - Inputvalue is too short (length = 4)");
+				this.lbStatusbarPostCode
+						.setText("Invalid Inputvalue for PostCode - Inputvalue is too short (length = 4)");
 				this.tfPostCode.setStyle("-fx-text-box-border: red;");
 				this.tfPostCode.setStyle("-fx-focus-color: red;");
 				this.tfPostCode.setStyle("-fx-border-color: red;");
@@ -214,52 +201,45 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 	@Override
 	public void mapInitialized() {
 		MapOptions mapOptions = new MapOptions();
-        
-        mapOptions.center(new LatLong(46.6103, 13.8558))
-                .mapType(MapTypeIdEnum.ROADMAP)
-                .overviewMapControl(false)
-                .panControl(false)
-                .rotateControl(false)
-                .scaleControl(false)
-                .streetViewControl(false)
-                .zoomControl(false)
-                .zoom(12);
-        
 
-        map = mapView.createMap(mapOptions);
-        
+		mapOptions.center(new LatLong(46.6103, 13.8558)).mapType(MapTypeIdEnum.ROADMAP).overviewMapControl(false)
+				.panControl(false).rotateControl(false).scaleControl(false).streetViewControl(false).zoomControl(false)
+				.zoom(12);
 
-        map.addMouseEventHandler(UIEventType.click, (GMapMouseEvent event) -> {
-	        try {
-	        	LatLong latLong = event.getLatLong();
-		        geoCodingService = GeoLocationsManager.newInstance();
-		        
-	        	// no Marker on MAP
-	        	if(currentMarker == null) {
-	        		LatLong currentPosition = new LatLong(latLong.getLatitude(),latLong.getLongitude());
-	        		setMarkerOnMap(currentPosition);
-	        		changeTextFields(geoCodingService.reverseGeoCoding(currentPosition));
-	        	}
-	        	// there is already a marker on the map placed
-	        	else {
-	        		map.removeMarker(this.currentMarker);
-	        		LatLong currentPosition = new LatLong(latLong.getLatitude(),latLong.getLongitude());
-	        		setMarkerOnMap(currentPosition);
-	        		changeTextFields(geoCodingService.reverseGeoCoding(currentPosition));
-	        	}
+		map = mapView.createMap(mapOptions);
+
+		map.addMouseEventHandler(UIEventType.click, (GMapMouseEvent event) -> {
+			try {
+				LatLong latLong = event.getLatLong();
+				geoCodingService = GeoLocationsManager.newInstance();
+
+				// no Marker on MAP
+				if (currentMarker == null) {
+					LatLong currentPosition = new LatLong(latLong.getLatitude(), latLong.getLongitude());
+					setMarkerOnMap(currentPosition);
+					changeTextFields(geoCodingService.reverseGeoCoding(currentPosition));
+				}
+				// there is already a marker on the map placed
+				else {
+					map.removeMarker(this.currentMarker);
+					LatLong currentPosition = new LatLong(latLong.getLatitude(), latLong.getLongitude());
+					setMarkerOnMap(currentPosition);
+					changeTextFields(geoCodingService.reverseGeoCoding(currentPosition));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-	    });
-        System.out.println("map initialized");
+		});
+		System.out.println("map initialized");
 	}
+
 	private void setMarkerOnMap(LatLong currentPosition) {
 		MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
-    	markerOptionsCurrentMarker.position(currentPosition);
-    	this.currentMarker = new Marker(markerOptionsCurrentMarker);
-    	map.addMarker(this.currentMarker);
+		markerOptionsCurrentMarker.position(currentPosition);
+		this.currentMarker = new Marker(markerOptionsCurrentMarker);
+		map.addMarker(this.currentMarker);
 	}
-	
+
 	private void changeTextFields(String Adress) {
 		String[] temp = Adress.split(",");
 		tfPostCode.setText(temp[1].split(" ")[1]);
@@ -267,12 +247,13 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		tfStreet.setText(temp[0].split(" ")[0]);
 		tfHouseNr.setText(temp[0].split(" ")[1]);
 	}
-	
+
 	@FXML
 	public void btnChangeMarkerClicked(MouseEvent event) {
 		try {
 			geoCodingService = GeoLocationsManager.newInstance();
-			String adress = tfStreet.getText() + "," + tfHouseNr.getText() + "," + tfPostCode.getText() + "," + tfPlace.getText();
+			String adress = tfStreet.getText() + "," + tfHouseNr.getText() + "," + tfPostCode.getText() + ","
+					+ tfPlace.getText();
 			System.out.println(geoCodingService.GeoCoding(adress));
 		} catch (Exception e) {
 			e.printStackTrace();

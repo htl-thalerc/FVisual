@@ -22,34 +22,28 @@ import javafx.stage.WindowEvent;
 
 public class ControllerMainframe implements Initializable {
 	@FXML
-	private MenuItem mItemOperationManagement;
-	@FXML
-	private MenuItem mItemBaseManagement;
-	@FXML
-	private MenuItem mItemProfileSettings;
-	@FXML
-	private MenuItem mItemLogout;
+	private MenuItem mItemOperationManagement, mItemBaseManagement, mItemProfileSettings, mItemLogout;
 	@FXML
 	private Label lblMessage;
-	private CentralHandler ch;
 	@FXML
 	private BorderPane mainPane;
+	private CentralHandler ch;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 	private static Stage currentStage;
-	
+
 	static void setStage(Stage stage) {
 		currentStage = stage;
-		
+
 		currentStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent we) {
-	              System.exit(0);
-	          }
-	      });   
+			public void handle(WindowEvent we) {
+				System.exit(0);
+			}
+		});
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-     
+
 	}
 
 	@FXML
@@ -61,7 +55,7 @@ public class ControllerMainframe implements Initializable {
 	private void onClickmItemBaseManagement(ActionEvent aE) {
 		this.loadContentIntoMainPane("/gui/BaseManagement.fxml");
 	}
-	
+
 	private void loadContentIntoMainPane(String fxmlRessourceURL) {
 		try {
 			this.middlePaneContent.clear();
@@ -85,12 +79,10 @@ public class ControllerMainframe implements Initializable {
 		ControllerEditProfile.setStage(stage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
-//		if(ch.getMember() == null) {
-//			currentStage.close();
-//		}
+		// if(ch.getMember() == null) {
+		// currentStage.close();
+		// }
 	}
-	
-	
 
 	@FXML
 	private void onClickmItemLogout(ActionEvent aE) {
