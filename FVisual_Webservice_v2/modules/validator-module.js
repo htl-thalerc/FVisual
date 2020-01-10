@@ -86,10 +86,10 @@ var isValidBody = function (body, pattern) {
                         } else if (pattern.data[element][constraint] == 'boolean') {
                             switch (body[element]) {
                                 case 'true':
-                                    body[element] = true;
+                                    body[element] = 'true';
                                     break;
                                 case 'false':
-                                    body[element] = true;
+                                    body[element] = 'false';
                                     break;
                                 default:
                                     logger.warn('invalid body type {' + element + '}');

@@ -46,7 +46,11 @@ stuetzpunktRouter.get('/', (req, res) => {
         return;
     } else if (req.query.name) {
         logger.debug('-- search: stuetzName');
-        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, [req.query.name], (err, result) => {
+
+        var params = [];
+        params.push(req.query.name);
+
+        oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_NAME, params, (err, result) => {
             if (err) {
                 responseHandler.internalServerError(res, err);
             } else if (req.headers.metadata) {
@@ -83,7 +87,11 @@ stuetzpunktRouter.get('/stuetzpunkte/:stuetzId', (req, res) => {
     if (!validatorModule.isValidParamId(req.params.stuetzId)) {
         responseHandler.invalidParamId(res, null);
     }
-    oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, [parseInt(req.params.stuetzId)], (err, result) => {
+
+    var params = [];
+    params.push(parseInt(req.params.stuetzId));
+
+    oracleJobs.execute(oracleQueryProvider.STPNKT_GETBY_STPNKT_ID, params, (err, result) => {
         if (err) {
             responseHandler.internalServerError(res, err);
         } else {
