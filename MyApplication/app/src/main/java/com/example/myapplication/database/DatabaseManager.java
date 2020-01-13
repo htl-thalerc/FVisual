@@ -3,7 +3,7 @@ package com.example.myapplication.database;
 import com.example.myapplication.bll.Einsatz;
 import com.example.myapplication.bll.Mitglied;
 import com.example.myapplication.bll.Stuetzpunkt;
-import com.example.myapplication.service.ServiceGetEinsaetzeList;
+import com.example.myapplication.service.ServiceGetEinsaetzeFromMitgliedList;
 import com.example.myapplication.service.ServiceGetMitgliederList;
 import com.example.myapplication.service.ServiceGetStuetzpunktList;
 import com.google.gson.Gson;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DatabaseManager {
     private static DatabaseManager db = null;
-    private static String ipHost = "http://192.168.8.111:8080";
+    private static String ipHost = "http://192.168.8.111:3030";
 
     private DatabaseManager() {
     }
