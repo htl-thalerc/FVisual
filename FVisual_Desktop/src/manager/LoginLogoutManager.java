@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.JsonSyntaxException;
 
 import bll.Member;
-import bll.User;
 
 public class LoginLogoutManager {
 	private static LoginLogoutManager instance = null;
@@ -36,7 +35,7 @@ public class LoginLogoutManager {
 	WebTarget webTagetLogout = client.target(resourceLogout);
 	WebTarget webTargetGetMember = client.target(ressourceGetMember);
 	
-	public boolean loginUser(User user) {
+	public boolean loginUser(Member user) {
 		Invocation.Builder invocationBuilder = this.webTargetLogin.request(MediaType.APPLICATION_JSON).header("flow", "management");
 		Response response = invocationBuilder.post(Entity.entity(user, MediaType.APPLICATION_JSON));
 
