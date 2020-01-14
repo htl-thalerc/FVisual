@@ -30,7 +30,7 @@ var put = function(res, data){
 var del = function(res){
   logger.debug('responded with {204}: valid');
   loggerModule.lineFeed();
-  res.status(200).send();
+  res.status(204).send();
 }
 
 var internalServerError = function(res, err){

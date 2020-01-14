@@ -36,6 +36,13 @@ module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpu
 
 module.exports.STPNKT_FZG_GET = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 ORDER BY bezeichnung";
 module.exports.STPNKT_FZG_GET_BY_FZG_ID = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
+module.exports.STPNKT_FZG_GET_BY_FZG_BEZEICHNUNG = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND bezeichnung = :2"
+module.exports.STPNKT_FZG_POST = "INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES(seq_Einsatzfahrzeuge.nextval, :1, :2)";
+module.exports.STPNKT_FZG_PUT = "UPDATE Einsatzfahrzeuge SET bezeichnung = :1 WHERE id_stuetzpunkt = :2 AND id = :3";
+module.exports.STPNKT_FZG_DELETE = "DELETE FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
+
+module.exports.STPNKT_FZG_GET = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 ORDER BY bezeichnung";
+module.exports.STPNKT_FZG_GET_BY_FZG_ID = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
 module.exports.STPNKT_FZG_GET_BY_FZG_NAME = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND bezeichnung = :2"
 module.exports.STPNKT_FZG_POST = "INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES(seq_Einsatzfahrzeuge.nextval, :1, :2)";
 module.exports.STPNKT_FZG_PUT = "UPDATE Einsatzfahrzeuge SET bezeichnung = :1 WHERE id_stuetzpunkt = :2 AND id = :3";
