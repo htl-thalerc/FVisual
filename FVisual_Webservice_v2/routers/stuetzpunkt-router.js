@@ -82,7 +82,7 @@ stuetzpunktRouter.get('/', (req, res) => {
 });
 
 // GET    | /stuetzpunkte/stuetzId
-stuetzpunktRouter.get('/stuetzpunkte/:stuetzId', (req, res) => {
+stuetzpunktRouter.get('/:stuetzId', (req, res) => {
     logger.debug('GET /stuetzpunkte/:stuetzId');
 
     if (!validatorModule.isValidParamId(req.params.stuetzId)) {
