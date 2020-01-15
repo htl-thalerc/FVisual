@@ -86,10 +86,10 @@ var isValidBody = function (body, pattern) {
                         } else if (pattern.data[element][constraint] == 'boolean') {
                             switch (body[element]) {
                                 case 'true':
-                                    body[element] = true;
+                                    body[element] = 'true';
                                     break;
                                 case 'false':
-                                    body[element] = true;
+                                    body[element] = 'false';
                                     break;
                                 default:
                                     logger.warn('invalid body type {' + element + '}');
@@ -161,6 +161,47 @@ var getMitgliedPattern = function () {
     };
 }
 
+var getStuetzpunktPattern = function () {
+    return {
+        "length": 5, "data": {
+            "id": {
+                "isMandatory": false
+            },
+            "NAME": {
+                "isMandatory": true, "type": "string", "min-length": "3"
+            },
+            "ORT": {
+                "isMandatory": true, "type": "string", "min-length": "3"
+            },
+            "PLZ": {
+                "isMandatory": true, "type": "number", "min-length": "3"
+            },
+            "STRASSE": {
+                "isMandatory": true, "type": "string", "min-length": "3"
+            },
+            "HAUSNR": {
+                "isMandatory": true, "type": "string", "min-length": "1"
+            }
+        }
+    };
+}
+
+var getFahrzeugPattern = function(){
+    return {
+        "length": 1, "data": {
+            "id": {
+                "isMandatory": false
+            },
+            "BEZEICHNUNG": {
+                "isMandatory": true, "type": "string", "min-length": "3"
+            },
+            "ID_STUETZPUNKT": {
+                "isMandatory": false
+            }
+        }
+    };
+}
+
 var getAdminsPattern = function () {
     return {
         "length": 1, "data": {
@@ -201,6 +242,8 @@ module.exports = {
     'patterns': {
         'getAOrgsPattern': getAOrgsPattern,
         'getMitgliedPattern': getMitgliedPattern,
+        'getStuetzpunktPattern': getStuetzpunktPattern,
+        'getFahrzeugPattern': getFahrzeugPattern,
         'getAdminsPattern': getAdminsPattern,
         'getSubQueryNamePattern': getSubQueryNamePattern,
         'getSubQueryIdPattern': getSubQueryIdPattern

@@ -62,6 +62,11 @@ public class Member {
 	public Member() {
 		super();
 	}
+	
+	public Member(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
 
 	public int getMemberId() {
 		return memberId;

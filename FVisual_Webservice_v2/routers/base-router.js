@@ -18,9 +18,9 @@
 /*  GET     |  /mitglieder/:mitglId                                          */
 /*  GET     |  /mitglieder/baseless                                          */
 /*  GET     |  /mitglieder/:mitglId/einsaetze                                */
-/*  POST    |  /mitglieder                                                   */ //notImplementedYet
-/*  PUT     |  /mitglieder/:mitglId                                          */ //notImplementedYet
-/*  DELETE  |  /mitglieder/:mitglId                                          */ //notTested
+/*  POST    |  /mitglieder                                                   */ 
+/*  PUT     |  /mitglieder/:mitglId                                          */
+/*  DELETE  |  /mitglieder/:mitglId                                          */
 /*  GET     |  /admins                                                       */
 /*                                                                           */
 /* ************************************************************************* */
@@ -164,14 +164,21 @@ baseRoutes.post('/andere_organisationen', (req, res) => {
     return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.AORGS_POST, [data.NAME], (err, result) => {
+  var params = [];
+  params.push(data.NAME);
+
+  oracleJobs.execute(oracleQueryProvider.AORGS_POST, params, (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }
     else {
-      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_NAME, [data.NAME], (err, result) => {
+
+      var params = [];
+      params.push(data.NAME);
+
+      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_NAME, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
@@ -222,7 +229,11 @@ baseRoutes.put('/andere_organisationen/:aOrgId', (req, res) => {
     return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.AORGS_PUT, [data.NAME, parseInt(req.params.aOrgId)], (err, result) => {
+  var params = [];
+  params.push(data.NAME);
+  params.push(parseInt(req.params.aOrgId));
+
+  oracleJobs.execute(oracleQueryProvider.AORGS_PUT, params, (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }
@@ -231,9 +242,13 @@ baseRoutes.put('/andere_organisationen/:aOrgId', (req, res) => {
         responseHandler.notFound(res, null);
         return;
       }
-      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_ID, [req.params.aOrgId], (err, result) => {
+
+      var params = [];
+      params.push(req.params.aOrgId);
+
+      oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_ID, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
@@ -259,7 +274,10 @@ baseRoutes.delete('/andere_organisationen/:aOrgId', (req, res) => {
     return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.AORGS_DELETE, [parseInt(req.params.aOrgId)], (err, result) => {
+  var params = [];
+  params.push(parseInt(req.params.aOrgId));
+
+  oracleJobs.execute(oracleQueryProvider.AORGS_DELETE, params, (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     } else {
@@ -312,11 +330,16 @@ baseRoutes.get('/mitglieder/:mitglId', (req, res) => {
     });
   } else {
     logger.debug('GET /mitglieder/:mitglId');
+    
     if (!validatorModule.isValidParamId(req.params.mitglId)) {
       responseHandler.invalidParamId(res, null);
       return;
     }
-    oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, [parseInt(req.params.mitglId)], (err, result) => {
+
+    var params = [];
+    params.push(parseInt(req.params.mitglId));
+
+    oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, params, (err, result) => {
       if (err) {
         responseHandler.internalServerError(res, err);
       } else {
@@ -346,7 +369,11 @@ baseRoutes.get('/mitglieder/:mitglId/einsaetze', (req, res) => {
       responseHandler.invalidParamId(res, null);
       return;
     }
-    oracleJobs.execute(oracleQueryProvider.MTG_GET_EINSAETZE, [parseInt(req.params.mitglId)], (err, result) => {
+
+    var params = [];
+    params.push(parseInt(req.params.mitglId));
+
+    oracleJobs.execute(oracleQueryProvider.MTG_GET_EINSAETZE, params, (err, result) => {
       if (err) {
         responseHandler.internalServerError(res, err);
       } else {
@@ -368,7 +395,7 @@ baseRoutes.get('/mitglieder/:mitglId/einsaetze', (req, res) => {
     });
 });
 
-// POST   |  /mitglieder //notImplementedYet
+// POST   |  /mitglieder
 baseRoutes.post('/mitglieder', (req, res) => {
   logger.debug('POST /mitglieder');
 
@@ -404,14 +431,25 @@ baseRoutes.post('/mitglieder', (req, res) => {
     return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.MTG_POST, [parseInt(data.ID_DIENSTGRAD), parseInt(data.ID_STUETZPUNKT), data.VORNAME, data.NACHNAME, data.USERNAME, data.PASSWORD, data.ISADMIN], (err, result) => {
+  var params = [];
+  params.push(parseInt(data.ID_DIENSTGRAD));
+  params.push(parseInt(data.ID_STUETZPUNKT));
+  params.push(data.VORNAME);
+  params.push(data.NACHNAME);
+  params.push(data.USERNAME);
+  params.push(data.PASSWORD);
+  params.push(data.ISADMIN);
+
+  oracleJobs.execute(oracleQueryProvider.MTG_POST, params, (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     }
     else {
-      oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_USERNAME, [data.USERNAME], (err, result) => {
+      var params = [];
+      params.push(data.USERNAME);
+      oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_USERNAME, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
@@ -428,10 +466,88 @@ baseRoutes.post('/mitglieder', (req, res) => {
   });
 });
 
-// PUT    |  /mitglieder/:mitglId //notImplementedYet
+// PUT    |  /mitglieder/:mitglId
 baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
-  logger.debug('PUT /mitglieder/:username');
-  responseHandler.notImplementedYet(res, null);
+  logger.debug('PUT /mitglieder/:mitglId'); 
+  
+  var data;
+  var metaData;  
+
+  if (!validatorModule.isValidParamId(req.params.mitglId)) {
+    responseHandler.invalidParamId(res, null);
+    return;
+  }
+
+  if (req.headers.metadata) {
+    try {
+      metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+      data = converterModule.convertSimpleInput(metaData, req.body);
+      if (!data) {
+        responseHandler.invalidMetaData(res, null);
+        return;
+      }
+    } catch (ex) {
+      responseHandler.invalidMetaData(res, null);
+      return;
+    }
+  } else {
+    data = {
+      "ID_DIENSTGRAD": req.body.id_dienstgrad,
+      "ID_STUETZPUNKT": req.body.id_stuetzpunkt,
+      "VORNAME": req.body.vorname,
+      "NACHNAME": req.body.nachname,
+      "USERNAME": req.body.username,
+      "PASSWORD": req.body.password,
+      "ISADMIN": req.body.isAdmin
+    };
+  }
+
+  if (!validatorModule.isValidBody(data, validatorModule.patterns.getMitgliedPattern())) {
+    responseHandler.invalidBody(res, null);
+    return;
+  }
+  var params = [];
+
+  params.push(parseInt(data.ID_DIENSTGRAD));
+  params.push(parseInt(data.ID_STUETZPUNKT));
+  params.push(data.VORNAME);
+  params.push(data.NACHNAME);
+  params.push(data.USERNAME);
+  params.push(data.PASSWORD);
+  params.push(data.ISADMIN);
+  params.push(parseInt(req.params.mitglId));
+
+  oracleJobs.execute(oracleQueryProvider.MTG_PUT, params, (err, result) => {
+    if (err) {
+      responseHandler.internalServerError(res, err);
+    }
+    else {
+      if (result.rowsAffected == 0) {
+        responseHandler.notFound(res, null);
+        return;
+      }
+
+      var params = [];
+      params.push(parseInt(req.params.mitglId));
+
+      oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, params, (err, result) => {
+        if (err) {
+          responseHandler.internalServerError(res, err);
+        } else {
+          if (metaData) {
+            let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
+            if (data)
+              responseHandler.put(res, data);
+            else{
+              responseHandler.invalidMetaData(res, null);
+            }
+          } else {
+            responseHandler.put(res, result.rows);
+          }
+        }
+      });
+    }
+  });
 });
 
 // DELETE |  /mitglieder/:mitglId
@@ -443,7 +559,10 @@ baseRoutes.delete('/mitglieder/:mitglId', (req, res) => {
     return;
   }
 
-  oracleJobs.execute(oracleQueryProvider.MTG_DELETE, [parseInt(req.params.mitglId)], (err, result) => {
+  var params = [];
+  params.push(parseInt(req.params.mitglId));
+
+  oracleJobs.execute(oracleQueryProvider.MTG_DELETE, params, (err, result) => {
     if (err) {
       responseHandler.internalServerError(res, err);
     } else {
