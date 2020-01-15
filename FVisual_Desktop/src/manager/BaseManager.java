@@ -14,10 +14,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
 import bll.ClassTypes;
+import bll.Member;
 import handler.CentralHandler;
 
 public class BaseManager {
@@ -25,7 +29,8 @@ public class BaseManager {
 	private Client client = ClientBuilder.newClient();
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetBaseService = this.webTarget.path(CentralHandler.CONST_BASE_URL);
-
+	private static final Logger LOGGER = LogManager.getLogger(BaseManager.class.getName());
+	
 	public static BaseManager getInstance() {
 		if (baseManagerInstance == null) {
 			baseManagerInstance = new BaseManager();
@@ -50,6 +55,7 @@ public class BaseManager {
 			if(response.getStatus() == 200) {
 				collOfBases = response.readEntity(new GenericType<ArrayList<Base>>() {
 				});
+				LOGGER.info("[BaseManager] [GET]: Bases");
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -62,13 +68,21 @@ public class BaseManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		WebTarget webTargetGetById = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+					Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
 		
 		try {
-			webTargetGetById = this.webTargetBaseService.path("?id=" + String.valueOf(baseId));
-			invocationBuilder = webTargetGetById.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+			webTargetGetById = this.webTargetBaseService.path(String.valueOf(baseId));
+			invocationBuilder = webTargetGetById.request(MediaType.APPLICATION_JSON).headers(headers);
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
-				foundedBase = response.readEntity(Base.class);	
+				ArrayList<Base> list = response.readEntity(new GenericType<ArrayList<Base>>() {
+				});
+				foundedBase = list.get(0);
+				LOGGER.info("[BaseManager] [GET]: Base by BaseId");
 			}
 		} catch(JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -95,16 +109,31 @@ public class BaseManager {
 		return foundedBase;
 	}
 	
-	public boolean postBase(Base baseObj) {
-		Invocation.Builder invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-				CentralHandler.getInstance().getHeaderAuthorization());
-		Response response = invocationBuilder.post(Entity.entity(baseObj, MediaType.APPLICATION_JSON));
+	public Base postBase(Base baseObj) {
+		Base retVal = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+					Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+		
+		Invocation.Builder invocationBuilder = this.webTargetBaseService.request(MediaType.APPLICATION_JSON).headers(headers);
+		
+		String jsonStr = "{\"houseNr\":\"" + baseObj.getHouseNr() + "\"," + 
+				"\"name\":\"" + baseObj.getName() + "\"," +
+				"\"place\":\"" + baseObj.getPlace() + "\"," +
+				"\"postCode\":\"" + baseObj.getPostCode() + "\"," +
+				"\"street\":\"" + baseObj.getStreet() + "\"}";
+		
+		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 
 		if (response.getStatus() == 201) {
-			return true;
-		} else {
-			return false;
-		}
+			ArrayList<Base> list = response.readEntity(new GenericType<ArrayList<Base>>() {
+			});
+			retVal = list.get(0);
+		} 
+		return retVal;
 	}
 	
 	public boolean deleteBase(int baseId) {

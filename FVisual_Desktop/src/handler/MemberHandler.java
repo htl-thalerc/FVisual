@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import bll.Base;
 import bll.Member;
+import bll.Rank;
 
 public class MemberHandler {
 	private static MemberHandler memberHandler = null;
@@ -11,6 +12,8 @@ public class MemberHandler {
 	private ArrayList<Member> listOfMembers = new ArrayList<Member>();
 	private ArrayList<Member> listOfMembersByBaseId = new ArrayList<Member>();
 	private ArrayList<Member> listOfBaselessMembers = new ArrayList<Member>();
+	
+	private Member updatedMember = null;
 	
 	public static MemberHandler getInstance() {
 		if(memberHandler == null) {
@@ -33,14 +36,26 @@ public class MemberHandler {
 	}
 
 	public void setMemberListByBaseId(ArrayList<Member> listOfMembersFilteredByBase) {
-		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
-		this.listOfMembersByBaseId = listOfMembersFilteredByBase;
-		
-		for(int i=0;i<this.listOfMembersByBaseId.size();i++) {
-			for(int j=0;j<tempListOfBases.size();j++) {
-				if(this.listOfMembersByBaseId.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
-					this.listOfMembersByBaseId.get(i).setBase(tempListOfBases.get(j));
-					break;
+		if(listOfMembersFilteredByBase != null) {
+			ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+			ArrayList<Rank> tempListOfRanks = RankHandler.getInstance().getRankList();
+			this.listOfMembersByBaseId = listOfMembersFilteredByBase;
+			
+			for(int i=0;i<this.listOfMembersByBaseId.size();i++) {
+				for(int j=0;j<tempListOfBases.size();j++) {
+					if(this.listOfMembersByBaseId.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+						this.listOfMembersByBaseId.get(i).setBase(tempListOfBases.get(j));
+						break;
+					}
+				}
+			}
+			
+			for(int i=0;i<this.listOfMembersByBaseId.size();i++) {
+				for(int j=0;j<tempListOfRanks.size();j++) {
+					if(this.listOfMembersByBaseId.get(i).getBase().getBaseId() == tempListOfRanks.get(j).getRankId()) {
+						this.listOfMembersByBaseId.get(i).setRank(tempListOfRanks.get(j));
+						break;
+					}
 				}
 			}
 		}
@@ -53,5 +68,13 @@ public class MemberHandler {
 	public void setBaselessMemberList(ArrayList<Member> memberList) {
 		this.listOfBaselessMembers.clear();
 		this.listOfBaselessMembers = memberList;
+	}
+	
+	public Member getUpdatedMember() {
+		return this.updatedMember;
+	}
+
+	public void setUpdatedMember(Member member) {
+		this.updatedMember = member;
 	}
 }

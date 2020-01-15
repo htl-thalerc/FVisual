@@ -2,14 +2,17 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
 
 import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
+import handler.BaseHandler;
 import handler.CentralHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +28,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import loader.BaseByBaseIdLoader;
+import loader.BaseLoader;
+import loader.BasePostLoader;
+import loader.MemberUpdateLoader;
+import manager.BaseManager;
 
 public class ControllerCreateBaseManagement implements Initializable {
 	@FXML
@@ -184,7 +192,7 @@ public class ControllerCreateBaseManagement implements Initializable {
 		loader.setController(controllerDialogSaveBase);
 		
 		this.setCreatedBase(this.controllerCreateBaseTabBaseManagement.getCreatedBaseData());
-		Base createdBase = this.getCreatedBase();
+		Base baseToCreate = this.getCreatedBase();
 		List<OperationVehicle> collOfOperationVehiclesToAddToBase = this.controllerCreateBaseTabOperationVehicleManagement
 				.getOperationVehcilesToCreate();
 		List<Member> collOfMembersToAddToBase = this.controllerCreateBaseTabMemberManagement.getMembersToCreate();
@@ -195,15 +203,63 @@ public class ControllerCreateBaseManagement implements Initializable {
 			curStage.setScene(scene);
 			curStage.initModality(Modality.APPLICATION_MODAL);
 			curStage.setTitle("Would you like to save your created base");
-			controllerDialogSaveBase.setBaseData(createdBase);
+			controllerDialogSaveBase.setBaseData(baseToCreate);
 			controllerDialogSaveBase.setListViewOperationVehicleData(collOfOperationVehiclesToAddToBase);
 			controllerDialogSaveBase.setListViewMemberData(collOfMembersToAddToBase);
 			curStage.showAndWait();
 			if (controllerDialogSaveBase.getButtonState()) {
-				//ToDo: Insert into DB
+				CountDownLatch countDownLatch = new CountDownLatch(2);
+				
+				BasePostLoader basePostLoader = new BasePostLoader(countDownLatch, baseToCreate);
+				//BaseByBaseIdLoader baseByBaseIdLoader = new BaseByBaseIdLoader(countDownLatch);
+				BaseLoader baseLoader = new BaseLoader(countDownLatch);
+				
+				Thread threadBasePostLoader = new Thread(basePostLoader);
+				Thread threadBaseLoader = new Thread(baseLoader);
+				
+				threadBasePostLoader.start();
+				threadBaseLoader.start();
+				
+				countDownLatch.await();
+				
+				for(int i=0;i<collOfOperationVehiclesToAddToBase.size();i++) {
+					//System.out.println(collOfMembersToAddToBase.get(i).toString());
+				}
+				
+				CountDownLatch countDownLatchMembers = new CountDownLatch(collOfMembersToAddToBase.size());
+				for(int i=0;i<collOfMembersToAddToBase.size();i++) {
+					if(collOfMembersToAddToBase.get(i).getBaseId() == 0 && collOfMembersToAddToBase.get(i).getMemberId() != -1) {
+						Member currMember = collOfMembersToAddToBase.get(i);
+						currMember.setRankId(currMember.getRank().getRankId());
+						currMember = this.setBaseObjAndBaseIdToMember(collOfMembersToAddToBase.get(i));
+						
+						if(currMember != null) {
+							System.out.println(currMember.toFullString());
+							currMember.setBaseId(BaseHandler.getInstance().getCreatedBase().getBaseId());
+							
+							MemberUpdateLoader memberUpdateLoader = new MemberUpdateLoader(countDownLatchMembers, currMember);
+							Thread threadMemberUpdateLoader = new Thread(memberUpdateLoader);
+							threadMemberUpdateLoader.start();
+						}
+					}
+				}
+				countDownLatchMembers.await();
 			}
-		} catch (final IOException e) {
+		} catch (final IOException | InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private Member setBaseObjAndBaseIdToMember(Member currMember) {
+		Base createdBase = BaseHandler.getInstance().getCreatedBase();
+		System.out.println("CB: " + createdBase.toString());
+		
+		if(createdBase.getBaseId() != 0 && createdBase != null) {
+			currMember.setBase(createdBase);
+			currMember.setBaseId(createdBase.getBaseId());
+			return currMember;
+		} else {
+			return null;
 		}
 	}
 	

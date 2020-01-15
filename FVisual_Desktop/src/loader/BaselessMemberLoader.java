@@ -2,7 +2,6 @@ package loader;
 
 import java.util.ArrayList;
 
-import bll.Base;
 import bll.Member;
 import handler.CentralHandler;
 import handler.MemberHandler;
@@ -16,6 +15,5 @@ public class BaselessMemberLoader implements Runnable {
 		MemberHandler.getInstance().setBaselessMemberList(listOfAllBaselessMembers);
 
 		CentralHandler.getInstance().mergeFullMemberObject(true);
-		System.out.println("Finsihed loading baseless members");
 	}
 }

@@ -25,8 +25,6 @@ public class OperationVehicleLoader implements Runnable {
 		
 		OperationVehicleHandler.getInstance().setVehicleList(tempListVehicles);
 		CentralHandler.getInstance().mergeFullVehicleObject();
-		
-		System.out.println("Finished laoding Vehicles");
 
 		this.countDownLatch.countDown();
 	}

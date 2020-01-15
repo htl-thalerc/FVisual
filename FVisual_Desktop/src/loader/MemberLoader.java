@@ -26,7 +26,6 @@ public class MemberLoader implements Runnable {
 		MemberHandler.getInstance().setMemberList(tempListMembers);
 		
 		CentralHandler.getInstance().mergeFullMemberObject(false);
-		System.out.println("Finished loading Members");
 		this.countDownLatch.countDown();
 	}
 }

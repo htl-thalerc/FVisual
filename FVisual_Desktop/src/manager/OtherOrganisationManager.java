@@ -1,6 +1,8 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,25 +11,53 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonSyntaxException;
 
+import bll.ClassTypes;
 import bll.OtherOrganisation;
 import handler.CentralHandler;
 
 public class OtherOrganisationManager {
-	private static OperationVehicleManager operationVehicleManagerInstance = null;
+	private static OtherOrganisationManager otherOrganisationManagerInstance = null;
 	private Client client = ClientBuilder.newClient();
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
+	private WebTarget webTargetOtherOrganisation = this.webTarget.path(CentralHandler.CONST_OTHER_ORGANISATION);
 	private WebTarget webTargetOtherOrganisationServiceForOperations = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
 	
-	public static OperationVehicleManager getInstance() {
-		if (operationVehicleManagerInstance == null) {
-			operationVehicleManagerInstance = new OperationVehicleManager();
+	public static OtherOrganisationManager getInstance() {
+		if (otherOrganisationManagerInstance == null) {
+			otherOrganisationManagerInstance = new OtherOrganisationManager();
 		}
-		return operationVehicleManagerInstance;
+		return otherOrganisationManagerInstance;
 	}
+	
+	public ArrayList<OtherOrganisation> getOtherOrganisations() {
+		ArrayList<OtherOrganisation> collOfOtherOrganisations = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.OTHER_ORG, new ArrayList<String>(
+				Arrays.asList("otherOrganisationId", "name")));
+
+		try {
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+			invocationBuilder = this.webTargetOtherOrganisation.request(MediaType.APPLICATION_JSON).headers(headers);
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			if(response.getStatus() == 200) {
+				collOfOtherOrganisations = response.readEntity(new GenericType<ArrayList<OtherOrganisation>>() {
+				});
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfOtherOrganisations;
+	}
+	
 	//Operation Services
 	public ArrayList<OtherOrganisation> getOtherOrganisationFromOperation(int operationId) {
 		ArrayList<OtherOrganisation> collOfOtherOrganisations = null;

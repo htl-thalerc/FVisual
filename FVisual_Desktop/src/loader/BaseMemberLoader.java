@@ -20,7 +20,5 @@ public class BaseMemberLoader implements Runnable {
 				.getMembersFromBase(this.base.getBaseId());
 
 		MemberHandler.getInstance().setMemberListByBaseId(listOfMembersFilteredByBase);
-		
-		System.out.println("Finished loading Member by Base");
 	}
 }

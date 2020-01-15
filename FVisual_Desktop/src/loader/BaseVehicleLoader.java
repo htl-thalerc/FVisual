@@ -20,7 +20,5 @@ public class BaseVehicleLoader implements Runnable {
 				.getVehiclesFromBase(this.base.getBaseId());
 
 		OperationVehicleHandler.getInstance().setVehicleListByBaseId(listOfOperationVehiclesFilteredByBase);
-		
-		System.out.println("Finished loading Vehicle by Base");
 	}
 }
