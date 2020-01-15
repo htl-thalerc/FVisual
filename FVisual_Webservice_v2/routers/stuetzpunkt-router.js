@@ -183,7 +183,7 @@ stuetzpunktRouter.post('/', (req, res) => {
 
 // PUT    | /stuetzpunkte/:stuetzId
 stuetzpunktRouter.put('/:stuetzId', (req, res) => {
-    logger.debug('PUT /stuetzpunkte');
+    logger.debug('PUT /stuetzpunkte/:stuetzId');
 
     var metaData;
     var data;

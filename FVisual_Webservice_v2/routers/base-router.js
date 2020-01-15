@@ -468,7 +468,7 @@ baseRoutes.post('/mitglieder', (req, res) => {
 
 // PUT    |  /mitglieder/:mitglId
 baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
-  logger.debug('PUT /mitglieder/:username'); 
+  logger.debug('PUT /mitglieder/:mitglId'); 
   
   var data;
   var metaData;  
@@ -528,7 +528,7 @@ baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
       }
 
       var params = [];
-      params.push(req.params.mitglId);
+      params.push(parseInt(req.params.mitglId));
 
       oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, params, (err, result) => {
         if (err) {
@@ -538,8 +538,9 @@ baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
             if (data)
               responseHandler.put(res, data);
-            else
+            else{
               responseHandler.invalidMetaData(res, null);
+            }
           } else {
             responseHandler.put(res, result.rows);
           }
