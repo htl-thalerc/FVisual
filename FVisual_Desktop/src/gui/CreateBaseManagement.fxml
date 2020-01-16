@@ -10,30 +10,33 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="537.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="537.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
 		<TabPane fx:id="tabPaneBase" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
 	</center>
 	<bottom>
 		<GridPane BorderPane.alignment="CENTER">
 			<columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="714.0" minWidth="10.0" prefWidth="700.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="390.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="714.0" minWidth="10.0" prefWidth="325.3333231608073" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="764.6666768391926" />
 			</columnConstraints>
 			<rowConstraints>
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+				<ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="471.0" GridPane.halignment="LEFT">
 					<buttons>
-						<Button fx:id="btnReset" mnemonicParsing="false" onAction="#onClickBtnReset" text="Reset" />
-						<Button fx:id="btnBack" mnemonicParsing="false" onAction="#onClickBtnBack" text="Back" />
-						<Button fx:id="btnNext" mnemonicParsing="false" onAction="#onClickBtnNext" text="Next" />
-						<Button fx:id="btnFinish" mnemonicParsing="false" onAction="#onClickBtnFinish" text="Finish" />
+						<Button fx:id="btnReset" mnemonicParsing="false" onAction="#onClickBtnReset" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Reset" />
+						<Button fx:id="btnBack" mnemonicParsing="false" onAction="#onClickBtnBack" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Back" />
+						<Button fx:id="btnNext" mnemonicParsing="false" onAction="#onClickBtnNext" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Next" />
+						<Button fx:id="btnFinish" mnemonicParsing="false" onAction="#onClickBtnFinish" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Finish" />
 					</buttons>
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
 				</ButtonBar>
             <Label fx:id="lbStatusbar" alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" />
 			</children>

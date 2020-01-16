@@ -26,7 +26,7 @@
 				</Label>
 				<TextField fx:id="txtUsername" layoutX="50.0" layoutY="57.0" prefHeight="25.0" prefWidth="221.0" promptText="Username" />
 				<PasswordField fx:id="txtPassword" layoutX="50.0" layoutY="106.0" prefHeight="25.0" prefWidth="221.0" promptText="Password" />
-				<Button fx:id="btnLogin" layoutX="50.0" layoutY="153.0" mnemonicParsing="false" onAction="#buttonLoginClicked" prefHeight="25.0" prefWidth="221.0" style="-fx-background-color: #BF463E; -fx-text-fill: white; -fx-font-size: 12px;" text="Login" />
+				<Button fx:id="btnLogin" layoutX="50.0" layoutY="153.0" mnemonicParsing="false" onAction="#buttonLoginClicked" prefHeight="25.0" prefWidth="221.0" style="-fx-background-color: #BF463E; -fx-text-fill: white; -fx-font-size: 12px;" styleClass="btnDefaultStyle" text="Login" />
 			</children>
 		</Pane>
 		<Label fx:id="lblMessage" layoutX="68.0" layoutY="331.0" prefHeight="17.0" prefWidth="321.0" textFill="#e10000">

@@ -1,174 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
-	<center>
-		<GridPane BorderPane.alignment="CENTER">
-			<columnConstraints>
-				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="130.0" />
-				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
-				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-			</columnConstraints>
-			<rowConstraints>
-				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-			</rowConstraints>
-			<children>
-				<ListView fx:id="lvAvailableMembers" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="402.0" prefWidth="277.0" GridPane.rowIndex="1">
-					<GridPane.margin>
-						<Insets bottom="50.0" left="20.0" top="-25.0" />
-					</GridPane.margin>
-				</ListView>
-				<ListView fx:id="lvSelectedMembers" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="402.0" prefWidth="277.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-					<GridPane.margin>
-						<Insets bottom="50.0" right="20.0" top="-25.0" />
-					</GridPane.margin>
-				</ListView>
-				<GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
-					<rowConstraints>
-						<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-						<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-					</rowConstraints>
-					<columnConstraints>
-						<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-					</columnConstraints>
-					<children>
-						<GridPane>
-							<columnConstraints>
-								<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-							</columnConstraints>
-							<rowConstraints>
-								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-							</rowConstraints>
-							<children>
-								<GridPane GridPane.rowIndex="1">
-									<columnConstraints>
-										<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-									</columnConstraints>
-									<rowConstraints>
-										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-									</rowConstraints>
-									<children>
-										<Button fx:id="btnAddOneMember" mnemonicParsing="false" onAction="#onClickBtnAddOneMember" text="Add &gt;" GridPane.halignment="CENTER" />
-										<Button fx:id="btnRemoveOneMember" mnemonicParsing="false" onAction="#onClickBtnRemoveOneMember" text="&lt; Remove" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-									</children>
-								</GridPane>
-								<GridPane GridPane.rowIndex="3">
-									<columnConstraints>
-										<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-									</columnConstraints>
-									<rowConstraints>
-										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-									</rowConstraints>
-									<children>
-										<Button fx:id="btnAddAllMembers" mnemonicParsing="false" onAction="#onClickBtnAddAllMembers" text="Add All &gt;&gt;" GridPane.halignment="CENTER" />
-										<Button fx:id="btnRemoveAllMembers" mnemonicParsing="false" onAction="#onClickBtnRemoveAllMembers" text="&lt;&lt; Remove All" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-									</children>
-								</GridPane>
-							</children>
-						</GridPane>
-                  <GridPane GridPane.rowIndex="1">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Button fx:id="btnAddNewMember" mnemonicParsing="false" onAction="#onClickBtnAddNewMember" text="Add new Member" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                     </children>
-                  </GridPane>
-					</children>
-				</GridPane>
-				<Label style="-fx-font-weight: bold;" text="Current Selected Members" GridPane.columnIndex="2">
-					<GridPane.margin>
-						<Insets />
-					</GridPane.margin>
-				</Label>
-				<Label style="-fx-font-weight: bold;" text="Available Members">
-					<GridPane.margin>
-						<Insets left="20.0" />
-					</GridPane.margin>
-				</Label>
-            <GridPane GridPane.columnIndex="3" GridPane.rowIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+<BorderPane id="paneAddMembers" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="1100.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" stylesheets="@application.css" BorderPane.alignment="CENTER">
+         <children>
+            <Pane layoutX="27.0" layoutY="11.0" prefHeight="414.0" prefWidth="705.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: black;" stylesheets="@application.css">
                <children>
-                  <TableView fx:id="tvAddNewMember" prefHeight="200.0" prefWidth="200.0">
-                     <GridPane.margin>
-                        <Insets left="-15.0" right="20.0" />
-                     </GridPane.margin>
-                  </TableView>
-                  <GridPane GridPane.rowIndex="1">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <ButtonBar prefHeight="40.0" prefWidth="200.0">
-                           <buttons>
-                              <Button fx:id="btnSaveNewMember" mnemonicParsing="false" onAction="#onClickBtnSaveNewMember" text="Save Member" />
-                           </buttons>
-                           <padding>
-                              <Insets right="20.0" />
-                           </padding>
-                        </ButtonBar>
-                     </children>
-                  </GridPane>
+                  <ListView fx:id="lvAvailableMembers" layoutX="13.0" layoutY="52.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="277.0" />
+                  <ListView fx:id="lvSelectedMembers" layoutX="414.0" layoutY="52.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="277.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="37.0" layoutY="18.0" prefHeight="17.0" prefWidth="229.0" style="-fx-font-weight: bold;" text="Current Selected Members">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="438.0" layoutY="18.0" prefHeight="17.0" prefWidth="230.0" style="-fx-font-weight: bold;" text="Available Members">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnAddAllMembers" layoutX="301.0" layoutY="104.0" mnemonicParsing="false" onAction="#onClickBtnAddAllMembers" prefWidth="100.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Add All &gt;&gt;" />
+                  <Button fx:id="btnAddNewMember" layoutX="303.0" layoutY="338.0" mnemonicParsing="false" onAction="#onClickBtnAddNewMember" prefWidth="100.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Add new Member">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnRemoveAllMembers" layoutX="302.0" layoutY="227.0" mnemonicParsing="false" onAction="#onClickBtnRemoveAllMembers" prefWidth="100.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="&lt;&lt; Remove All" />
+                  <Button fx:id="btnAddOneMember" layoutX="301.0" layoutY="71.0" mnemonicParsing="false" onAction="#onClickBtnAddOneMember" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" styleClass="btnDefaultStyle" text="Add &gt;&gt;" />
+                  <Button fx:id="btnRemoveOneMember" layoutX="302.0" layoutY="262.0" mnemonicParsing="false" onAction="#onClickBtnRemoveOneMember" prefWidth="100.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="&lt;&lt; Remove" />
                </children>
-            </GridPane>
-			</children>
-		</GridPane>
-	</center>
-	<top>
-		<GridPane BorderPane.alignment="CENTER">
-			<columnConstraints>
-				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-			</columnConstraints>
-			<rowConstraints>
-				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-			</rowConstraints>
-			<children>
-				<Label text="Move Member to the right to save them on current created Base">
-					<GridPane.margin>
-						<Insets left="20.0" />
-					</GridPane.margin>
-				</Label>
-			</children>
-		</GridPane>
-	</top>
+            </Pane>
+            <Pane layoutX="761.0" layoutY="10.0" prefHeight="416.0" prefWidth="319.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: black;">
+               <children>
+                  <TableView fx:id="tvAddNewMember" layoutX="29.0" layoutY="48.0" prefHeight="301.0" prefWidth="262.0" />
+                  <Button fx:id="btnSaveNewMember" layoutX="202.0" layoutY="366.0" mnemonicParsing="false" onAction="#onClickBtnSaveNewMember" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Save Member" />
+                  <Label alignment="CENTER" layoutX="73.0" layoutY="14.0" prefHeight="17.0" prefWidth="174.0" text="Add new Member">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </center>
 </BorderPane>
