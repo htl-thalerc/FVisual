@@ -24,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import loader.BaselessMemberLoader;
 import manager.MemberManager;
 import manager.RankManager;
 
@@ -71,12 +72,16 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 	}
 
 	private void initAvailableMembers() {
-		ArrayList<Member> listOfAllBaselessMembers = MemberManager.getInstance().getBaselessMembers();
-		System.out.println("b" + listOfAllBaselessMembers.size());
-		MemberHandler.getInstance().setBaselessMemberList(listOfAllBaselessMembers);
-
-		CentralHandler.getInstance().mergeFullMemberObject(true);
-
+		try {
+			BaselessMemberLoader loader = new BaselessMemberLoader();
+			Thread threadBaseLessMembers = new Thread(loader);
+			
+			threadBaseLessMembers.start();
+			threadBaseLessMembers.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		this.obsListLVAvailableMembers = FXCollections
 				.observableArrayList(MemberHandler.getInstance().getBaselessMemberList());
 		this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);

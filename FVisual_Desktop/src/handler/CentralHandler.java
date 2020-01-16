@@ -10,6 +10,7 @@ import bll.Base;
 import bll.ClassTypes;
 import bll.Member;
 import bll.OperationVehicle;
+import bll.OtherOrganisation;
 import bll.Rank;
 import javafx.fxml.FXMLLoader;
 import util.PropertyManager;
@@ -136,10 +137,24 @@ public class CentralHandler {
 					break;
 				case "base":
 					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_BASEID);
+					break;
+				case "baseId":
+					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_BASEID);
+					break;
 				}
 			}
 			break;
 		case OTHER_ORG:
+			for (int i = 0; i < listOfAttributes.size(); i++) {
+				switch (listOfAttributes.get(i)) {
+				case "otherOrganisationId":
+					retVal.put(listOfAttributes.get(i), OtherOrganisation.CONST_DB_ID);
+					break;
+				case "name":
+					retVal.put(listOfAttributes.get(i), OtherOrganisation.CONST_DB_NAME);
+					break;
+				}
+			}
 			break;
 		case RANK:
 			for (int i = 0; i < listOfAttributes.size(); i++) {
@@ -220,6 +235,7 @@ public class CentralHandler {
 		}
 		headerMetadataString += "}]";
 		headerMetadataString = headerMetadataString.replace("'", "\"");
+		System.out.println(headerMetadataString);
 		return headerMetadataString;
 	}
 

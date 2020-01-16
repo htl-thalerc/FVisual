@@ -493,6 +493,8 @@ VALUES(2, 3);
 
 INSERT INTO EKRAFT_WB_EINSATZ(id_einsatz, id_stuetzpunkt)
 VALUES(2, 1);
+INSERT INTO EKRAFT_WB_EINSATZ(id_einsatz, id_stuetzpunkt)
+VALUES(1, 1);
 
 INSERT INTO FZG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_einsatzfahrzeug)
 VALUES(2, 1, 2);
@@ -501,6 +503,8 @@ VALUES(2, 1, 1);
 
 INSERT INTO MTG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_mitglied)
 VALUES(2, 1, 2);
+INSERT INTO MTG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_mitglied)
+VALUES(1, 1, 2);
 
 SELECT * FROM Einsatzcodes;
 SELECT * FROM Einsatzarten;

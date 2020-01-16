@@ -25,7 +25,6 @@ public class RankLoader implements Runnable {
 		
 		RankHandler.getInstance().setRankList(tempListRank);
 		
-		System.out.println("Finished loading Ranks");
 		this.countDownLatch.countDown();
 	}
 }

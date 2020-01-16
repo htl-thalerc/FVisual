@@ -9,6 +9,8 @@ public class BaseHandler {
 	
 	private ArrayList<Base> listOfBases = new ArrayList<Base>();
 	
+	private Base latestCreatedBase = null;
+	
 	public static BaseHandler getInstance() {
 		if(baseHandler == null) {
 			baseHandler = new BaseHandler();
@@ -23,5 +25,13 @@ public class BaseHandler {
 	public void setBaseList(ArrayList<Base> baseList) {
 		this.listOfBases.clear();
 		this.listOfBases = baseList;
+	}
+	
+	public Base getCreatedBase() {
+		return this.latestCreatedBase;
+	}
+	
+	public void setCreatedBase(Base base) {
+		this.latestCreatedBase = base;
 	}
 }

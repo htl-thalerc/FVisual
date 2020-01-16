@@ -1,6 +1,8 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,31 +11,38 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
+import bll.ClassTypes;
 import bll.Operation;
 import handler.CentralHandler;
 
 public class OperationManager {
-	private static BaseManager baseManagerInstance = null;
+	private static OperationManager operationManagerInstance = null;
 	private Client client = ClientBuilder.newClient();
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetOperationService = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
-
-	public static BaseManager getInstance() {
-		if (baseManagerInstance == null) {
-			baseManagerInstance = new BaseManager();
+	private static final Logger LOGGER = LogManager.getLogger(OperationManager.class.getName());
+	
+	public static OperationManager getInstance() {
+		if (operationManagerInstance == null) {
+			operationManagerInstance = new OperationManager();
 		}
-		return baseManagerInstance;
+		return operationManagerInstance;
 	}
 	
 	public ArrayList<Operation> getOperations() {
 		ArrayList<Operation> collOfOperations = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
+		
 		try {
 			invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
 					CentralHandler.getInstance().getHeaderAuthorization()); 
@@ -41,6 +50,7 @@ public class OperationManager {
 			if(response.getStatus() == 200) {
 				collOfOperations = response.readEntity(new GenericType<ArrayList<Operation>>() {
 				});
+				LOGGER.info("[OperationManager] [GET]: Operations");
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();

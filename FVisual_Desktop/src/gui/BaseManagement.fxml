@@ -4,14 +4,9 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxWidth="-Infinity" minHeight="-Infinity"
-	minWidth="-Infinity" prefHeight="570.0" prefWidth="1100.0"
-	xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="controller.ControllerBaseManagement">
+<BorderPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<TabPane fx:id="mainTabPaneBaseManagement" prefHeight="200.0"
-			prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
-			BorderPane.alignment="CENTER">
+		<TabPane fx:id="mainTabPaneBaseManagement" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
 			<BorderPane.margin>
 				<Insets />
 			</BorderPane.margin>

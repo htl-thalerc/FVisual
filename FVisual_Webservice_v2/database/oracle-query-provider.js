@@ -20,9 +20,9 @@ module.exports.STPNKT_POST = "INSERT INTO Stuetzpunkte(id, name, ort, plz, stras
 module.exports.STPNKT_PUT = "UPDATE Stuetzpunkte SET name= :1, ort= :2, plz = :3, strasse = :4, hausnr = :5 WHERE id = :6";
 module.exports.STPNKT_DELETE = "DELETE FROM Stuetzpunkte WHERE id = :1";
 
-module.exports.MGT_GET = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad ORDER BY isAdmin DESC, username ASC";
-module.exports.MTG_GET_BY_MTG_ID = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE Mitglieder.id = :1 ORDER BY isAdmin DESC, username ASC";
-module.exports.MTG_GET_BY_USERNAME = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE username = :1 ORDER BY isAdmin DESC, username ASC";
+module.exports.MGT_GET = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad ORDER BY isAdmin DESC, username ASC";
+module.exports.MTG_GET_BY_MTG_ID = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE Mitglieder.id = :1 ORDER BY isAdmin DESC, username ASC";
+module.exports.MTG_GET_BY_USERNAME = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad WHERE username = :1 ORDER BY isAdmin DESC, username ASC";
 module.exports.MTG_POST = "INSERT INTO Mitglieder(id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username, password, isAdmin ) VALUES ( seq_Mitglieder.nextval, :1, :2, :3, :4, :5, :6, :7 )";
 module.exports.MTG_PUT = "UPDATE Mitglieder SET id_dienstgrad= :1, id_stuetzpunkt = :2, vorname= :3, nachname= :4, username= :5, password= :6, isAdmin= :7 WHERE id = :8";
 module.exports.MTG_DELETE = "DELETE FROM Mitglieder WHERE id = :1";
@@ -31,8 +31,15 @@ module.exports.MTG_GET_BASELESS = "SELECT Mitglieder.id, id_dienstgrad, kuerzel,
 
 module.exports.MTG_GET_EINSAETZE = "SELECT id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit FROM Einsaetze INNER JOIN MTG_WB_EINSATZ ON id_einsatz = id WHERE id_mitglied = :1";
 
-module.exports.STPNKT_MTG_GET = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 ORDER BY id_dienstgrad, nachname";
-module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname FROM Mitglieder WHERE id_stuetzpunkt = :1 AND id=:2";
+module.exports.STPNKT_MTG_GET = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username FROM Mitglieder WHERE id_stuetzpunkt = :1 ORDER BY id_dienstgrad, nachname";
+module.exports.STPNKT_MTG_GET_BY_MTG_ID = "SELECT id, id_dienstgrad, id_stuetzpunkt, vorname, nachname, username FROM Mitglieder WHERE id_stuetzpunkt = :1 AND id=:2";
+
+module.exports.STPNKT_FZG_GET = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 ORDER BY bezeichnung";
+module.exports.STPNKT_FZG_GET_BY_FZG_ID = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
+module.exports.STPNKT_FZG_GET_BY_FZG_BEZEICHNUNG = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND bezeichnung = :2"
+module.exports.STPNKT_FZG_POST = "INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunkt, bezeichnung) VALUES(seq_Einsatzfahrzeuge.nextval, :1, :2)";
+module.exports.STPNKT_FZG_PUT = "UPDATE Einsatzfahrzeuge SET bezeichnung = :1 WHERE id_stuetzpunkt = :2 AND id = :3";
+module.exports.STPNKT_FZG_DELETE = "DELETE FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
 
 module.exports.STPNKT_FZG_GET = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 ORDER BY bezeichnung";
 module.exports.STPNKT_FZG_GET_BY_FZG_ID = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";

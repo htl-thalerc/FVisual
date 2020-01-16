@@ -7,12 +7,16 @@ const loggerModule = require('../modules/logger-module');
 const logger = loggerModule.loggers['Converter'];
 
 var convertResult = function (metaData, result) {
-    if (typeof metaData !== 'string') {
+    if (typeof metaData !== 'object' && typeof metaData !== 'string') {
         logger.warn('invalid metadata supplied');
         return null;
     }
+
     try {
+    if(typeof metaData === 'string'){
         metaData = JSON.parse(metaData);
+    }
+
         var resultArray = [];
         var current;
         for (let idx1 in result.rows) {
@@ -36,7 +40,7 @@ function generateFilledRow(curMetaData, curRow, isNested = false) {
         let val = curRow[curMetaData[0][idx2]];
         if (typeof curMetaData[0][idx2] === 'object') {
             let arr = [];
-            arr.push(curMetaData[0][idx2])
+            arr.push(curMetaData[0][idx2]);
             curMetaData[0][idx2] = generateFilledRow(arr, curRow, true);
         } else if (typeof val === 'undefined') {
             throw { message: "invalid metadata supplied", stack: "typeof metadata === undefined" };
@@ -65,7 +69,7 @@ function generateInputRow(metaData, curBody) {
     var result = {};
     Object.keys(metaData).forEach((element) => {
         if (typeof curBody[element] === 'object') {
-            generateInputRow(metaData[element], curBody[element]);
+            result[metaData[element]] = generateInputRow(metaData[element], curBody[element]);
         } else if (typeof curBody[element] !== 'undefined') {
             result[metaData[element]] = curBody[element];
         }

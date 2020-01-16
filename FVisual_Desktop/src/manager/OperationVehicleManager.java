@@ -14,6 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.JsonSyntaxException;
 
 import bll.ClassTypes;
@@ -27,7 +30,8 @@ public class OperationVehicleManager {
 	private WebTarget webTargetOperationVehicleServiceForBase = this.webTarget.path(CentralHandler.CONST_BASE_URL);
 	private WebTarget webTargetOperationVehicleServiceForOperations = this.webTarget.path(CentralHandler.CONST_OPERATION_URL);
 	private WebTarget webTargetOperationVehilceService = this.webTarget.path(CentralHandler.CONST_VEHICLE); //.../fahrzeuge
-	
+	private static final Logger LOGGER = LogManager.getLogger(OperationVehicleManager.class.getName());
+		
 	public static OperationVehicleManager getInstance() {
 		if (operationVehicleManagerInstance == null) {
 			operationVehicleManagerInstance = new OperationVehicleManager();
@@ -57,6 +61,7 @@ public class OperationVehicleManager {
 			if(response.getStatus() == 200) {
 				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
 				});
+				LOGGER.info("[OperationVehicleManager] [GET]: OperationVehiles");
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -94,17 +99,30 @@ public class OperationVehicleManager {
 		return collOfVehicles;
 	}
 	
-	public OperationVehicle getVehicleByIdFromBase(int baseId, int vehicleId) {
-		OperationVehicle foundedVehicle = null;
+	public ArrayList<OperationVehicle> getVehicleByIdFromBase(int baseId, int vehicleId) {
+		ArrayList<OperationVehicle> foundedVehicle = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
-		WebTarget webTargetGetAll = this.webTargetOperationVehicleServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_VEHICLE + "?id=" + vehicleId);
+		
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.OPERATION_VEHICLE, new ArrayList<String>(
+					Arrays.asList("operationVehicleId", "description")));
+		
+		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
+		
+		HashMap<String, String> subMetadataBase = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
+				Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		subMetadata.put(ClassTypes.BASE, subMetadataBase);
+		
+		WebTarget webTargetGetAll = this.webTargetOperationVehicleServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_VEHICLE + "/" + vehicleId);
 		try {
-			invocationBuilder = webTargetGetAll.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, subMetadata));
+			invocationBuilder = webTargetGetAll.request(MediaType.APPLICATION_JSON).headers(headers); 
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
-				foundedVehicle = response.readEntity(OperationVehicle.class);
+				foundedVehicle = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
+				});
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -140,13 +158,19 @@ public class OperationVehicleManager {
 	
 	public boolean updateVehicleFromBase(int baseId, OperationVehicle vehicleObj) {
 		WebTarget webTargetUpdateVehicle = this.webTargetOperationVehicleServiceForBase.path(String.valueOf(baseId) + "/" + CentralHandler.CONST_VEHICLE + "/" + vehicleObj.getOperationVehicleId());
-		Invocation.Builder invocationBuilder = webTargetUpdateVehicle.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-				CentralHandler.getInstance().getHeaderAuthorization());
-		Response response = invocationBuilder.put(Entity.entity(vehicleObj, MediaType.APPLICATION_JSON));
+		
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.OPERATION_VEHICLE, new ArrayList<String>(
+				Arrays.asList("operationVehicleId", "description", "baseId")));
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+		Invocation.Builder invocationBuilder = webTargetUpdateVehicle.request(MediaType.APPLICATION_JSON).headers(headers);
+		Response response = invocationBuilder.put(Entity.entity("{\"description\":\"" + vehicleObj.getDescription() + "\"}", MediaType.APPLICATION_JSON));
 		
 		if (response.getStatus() == 200) {
 			return true;
-		} else {
+		}  else {
 			return false;
 		}
 	}

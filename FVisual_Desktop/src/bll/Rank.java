@@ -55,7 +55,10 @@ public class Rank {
 
 	@Override
 	public String toString() {
-		//return rankId + " - " + contraction + " - " + description;
 		return contraction + " [" + description + "]";
+	}
+	
+	public String toFullString() {
+		return rankId + " - " + contraction + " - " + description;
 	}
 }

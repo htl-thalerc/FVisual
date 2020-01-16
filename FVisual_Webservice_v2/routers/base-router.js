@@ -178,7 +178,7 @@ baseRoutes.post('/andere_organisationen', (req, res) => {
 
       oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_NAME, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
@@ -248,7 +248,7 @@ baseRoutes.put('/andere_organisationen/:aOrgId', (req, res) => {
 
       oracleJobs.execute(oracleQueryProvider.AORGS_GETBY_AORGS_ID, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
@@ -395,7 +395,7 @@ baseRoutes.get('/mitglieder/:mitglId/einsaetze', (req, res) => {
     });
 });
 
-// POST   |  /mitglieder //notImplementedYet
+// POST   |  /mitglieder
 baseRoutes.post('/mitglieder', (req, res) => {
   logger.debug('POST /mitglieder');
 
@@ -449,7 +449,7 @@ baseRoutes.post('/mitglieder', (req, res) => {
       params.push(data.USERNAME);
       oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_USERNAME, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
@@ -468,8 +468,10 @@ baseRoutes.post('/mitglieder', (req, res) => {
 
 // PUT    |  /mitglieder/:mitglId
 baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
-  logger.debug('PUT /mitglieder/:username'); var data;
-  var metaData;
+  logger.debug('PUT /mitglieder/:mitglId'); 
+  
+  var data;
+  var metaData;  
 
   if (!validatorModule.isValidParamId(req.params.mitglId)) {
     responseHandler.invalidParamId(res, null);
@@ -526,18 +528,19 @@ baseRoutes.put('/mitglieder/:mitglId', (req, res) => {
       }
 
       var params = [];
-      params.push(req.params.mitglId);
+      params.push(parseInt(req.params.mitglId));
 
       oracleJobs.execute(oracleQueryProvider.MTG_GET_BY_MTG_ID, params, (err, result) => {
         if (err) {
-          responseHandler.internalServerError(res.err);
+          responseHandler.internalServerError(res, err);
         } else {
           if (metaData) {
             let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
             if (data)
               responseHandler.put(res, data);
-            else
+            else{
               responseHandler.invalidMetaData(res, null);
+            }
           } else {
             responseHandler.put(res, result.rows);
           }
