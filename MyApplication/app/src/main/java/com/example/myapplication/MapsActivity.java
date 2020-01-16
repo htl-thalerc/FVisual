@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,17 +20,16 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.myapplication.bll.Dienstgrad;
 import com.example.myapplication.bll.Einsatz;
+import com.example.myapplication.bll.Einsatzart;
 import com.example.myapplication.bll.Mitglied;
 import com.example.myapplication.bll.Stuetzpunkt;
 import com.example.myapplication.database.DatabaseManager;
-import com.example.myapplication.service.ServiceGetEinsaetzeList;
-import com.example.myapplication.service.ServiceGetMitgliederList;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,7 +41,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Mitglied currentMitglied;
     Stuetzpunkt currentStuetzpunkt;
     ArrayList<Einsatz> einsatzList;
+    ArrayList<Einsatzart> einsatzartList;
     Geocoder gc;
     RadioButton radioButtonStuetzpunkt;
     RadioButton radioButtonEinsatz;
@@ -64,17 +65,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_maps);
-
+            db = DatabaseManager.newInstance("http://192.168.193.84:3030");
 
 
             //TODO get logged in User ==> currentMitglied. Von Login Activity get username und password
-            //getCurrentMitglied();
+            einsatzartList = db.getEinsatzart();
+            getCurrentMitglied();
+            Toast toast = Toast.makeText(getApplicationContext(), currentMitglied.getNachname(), Toast.LENGTH_SHORT);
 
-            //Des isada nur zum Testen
-            currentMitglied = new Mitglied(1, Dienstgrad.Brandinspektor,"Andreas", "Drabosenig",
-                    new Stuetzpunkt(1,"Ledenitzen Feuerwehrhaus","Ledenitzen", 9581, "St.Martinerstraße", "3")
-                    ,"andi","andi123");
-            currentStuetzpunkt = currentMitglied.getStuetzpunkt();
+            currentStuetzpunkt = db.getStuetzpunkt(currentMitglied.getStuetzpunkt());
             getEinsaetzeFromMitglied();
 
             radioButtonStuetzpunkt = findViewById(R.id.radioButtonStuetzpunktFilter);
@@ -88,19 +87,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     googleMap.clear();
                     radioButtonStuetzpunkt.setChecked(false);
                     radioButtonEinsatz.setChecked(false);
-                    showEinsaetze();
                     showStuetzpunkt();
+                    showEinsaetze();
                 }
             });
 
-            radioGroupFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-            {
+            radioGroupFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     googleMap.clear();
-                    if(checkedId == radioButtonEinsatz.getId()){
+                    if (checkedId == radioButtonEinsatz.getId()) {
                         showEinsaetze();
-                    }else if(checkedId == radioButtonStuetzpunkt.getId()){
+                    } else if (checkedId == radioButtonStuetzpunkt.getId()) {
                         showStuetzpunkt();
                     }
                 }
@@ -115,15 +113,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void getCurrentMitglied() throws Exception {
+    private void getCurrentMitglied() {
         ArrayList<Mitglied> mitgliedList = db.getAllMitglieder();
+        currentMitglied = mitgliedList.get(7);
+
         //TODO mit dem zeugs was i von login bekomme des current Mitglied holen
+        /*
         for(Mitglied m : mitgliedList){
             if(m.getUsername().equals(username) && m.getPassword().equals(password))
             {
                 currentMitglied = m;
             }
         }
+         */
     }
 
 
@@ -143,26 +145,78 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showEinsaetze() {
-        //TODO Change from se Stützpunkt to se Einsatz
-        /*
-        try {
-            for (Stuetzpunkt stuetzpunkt : stuetzpunktList){
-                if(currentMitglied.getStuetzpunkt().getId() == stuetzpunkt.getId()){
-                    List<Address> list = gc.getFromLocationName(stuetzpunkt.getAddress(), 1);
-                    Address add = list.get(0);
+        for (Einsatz einsatz : einsatzList){
+            Einsatzart currentEinsatzart = einsatzartList.get(einsatz.getId_einsatzart());
+            List<Address> list = null;
+            try {
+                list = gc.getFromLocationName(einsatz.getAddress(), 1);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            Address add = list.get(0);
+            switch (currentEinsatzart.getBeschreibung()){
+                case "Verkehrsunfall":
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
-                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
-                            .title(stuetzpunkt.getName())
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_sports_car))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
                     );
-                }
+                    break;
+                case "Brandeinsatz":
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_fire))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
+                    );
+                    break;
+                case "Technischer Einsatz":
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_tools_cross_settings_symbol_for_interface))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
+                    );
+                    break;
+                case "Hilfeleistung":
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_customer_service))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
+                    );
+                    break;
+                case "Personensuche":
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_man_user))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
+                    );
+                    break;
+                case "Brandmeldealarm":
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_alarm))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
+                    );
+                    break;
+                case "Wespen / Hornissen / Bienen":
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(add.getLatitude(), add.getLongitude()))
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_wasp))
+                            .title(currentEinsatzart.getBeschreibung())
+                            .snippet(String.valueOf(einsatz.getId()))
+                    );
+                    break;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+
+            }
 
 
-        googleMap.addMarker(new MarkerOptions()
+        /*googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(46.7525, 14.88))
                 .icon(bitmapDescriptorFromVector(this, R.drawable.ic_fire))
                 .title("Feuer")
@@ -195,7 +249,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .icon(bitmapDescriptorFromVector(this, R.drawable.ic_man_user))
                 .title("Personensuche")
                 .snippet(new Einsatz().getClass().getName())
-        );
+        );*/
     }
 
     private void showStuetzpunkt() {
@@ -205,8 +259,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(add.getLatitude(), add.getLongitude()))
                     .icon(bitmapDescriptorFromVector(this, R.drawable.ic_home_black_24dp))
-                    .title(currentStuetzpunkt.getName())
-                    .snippet(currentStuetzpunkt.getClass().getName())
+                    .title(Stuetzpunkt.class.getName())
+                    .snippet(Stuetzpunkt.class.getName())
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -214,14 +268,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void getEinsaetzeFromMitglied() throws Exception {
-
+        einsatzList = db.getAllEinsetzeFromMitglied(currentMitglied.getId());
     }
-
+    Einsatz currentEinsatz;
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())){
+        if (marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())) {
             showPopupStuetzpunkt(this);
-        }else if(marker.getSnippet().equals(new Einsatz().getClass().getName())){
+        } else {
+            currentEinsatz = einsatzList.get(Integer.parseInt(marker.getSnippet())-1);
             showPopupEinsatz(this);
         }
 
@@ -249,7 +304,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.setBackgroundDrawable(new BitmapDrawable());
 
         // Displaying the popup at the specified location, + offsets.
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,200,700);
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 200, 700);
 
         // Getting a reference to Close button, and close the popup when clicked.
         Button close = (Button) layout.findViewById(R.id.close);
@@ -272,8 +327,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showPopupEinsatz(final Activity context) {
-        int popupWidth = 200;
-        int popupHeight = 150;
+        int popupWidth = 650;
+        int popupHeight = 650;
 
         // Inflate the popup_layout.xml
         LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
@@ -296,10 +351,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.setBackgroundDrawable(new BitmapDrawable());
 
         // Displaying the popup at the specified location, + offsets.
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY,12,12);
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 12, 12);
 
         // Getting a reference to Close button, and close the popup when clicked.
         Button close = (Button) layout.findViewById(R.id.close);
+        TextView txtEinsatzcode = (TextView) layout.findViewById(R.id.txtEinsatzcode);
+        TextView txtEinsatzart = (TextView) layout.findViewById(R.id.txtEinsatzart);
+        TextView txtTitel = (TextView) layout.findViewById(R.id.txtTitel);
+        TextView txtKurzbeschreibung = (TextView) layout.findViewById(R.id.txtKurzbeschreibung);
+        TextView txtAdresse = (TextView) layout.findViewById(R.id.txtAdresse);
+        TextView txtPLZ = (TextView) layout.findViewById(R.id.txtPLZ);
+        TextView txtZeit = (TextView) layout.findViewById(R.id.txtZeit);
+
+        txtEinsatzcode.setText("Einsatzcode: " + currentEinsatz.getId_einsatzcode());
+        txtEinsatzart.setText("Einsatzart: " + currentEinsatz.getId_einsatzart());
+        txtTitel.setText("Titel: " + currentEinsatz.getTitel());
+        txtKurzbeschreibung.setText("Kurzbeschreibung: " + currentEinsatz.getKurzbeschreibung());
+        txtAdresse.setText("Adresse: " + currentEinsatz.getAdresse());
+        txtPLZ.setText("PLZ: " + currentEinsatz.getPlz());
+        txtZeit.setText("Zeit: " + currentEinsatz.getZeit());
+
+
         close.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -320,5 +392,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-
 }
