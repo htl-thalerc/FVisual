@@ -3,6 +3,7 @@ package handler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import app.Main;
@@ -63,59 +64,117 @@ public class CentralHandler {
 	public void setMember(Member member) {
 		this.member = member;
 	}
+	
+	public HashMap<String, String> setMetadataMap(ClassTypes classtype, ArrayList<String> additinalAttr) {
+		HashMap<String, String> retVal = new HashMap<String, String>();
+		ArrayList<String> listOfCurrAttr = new ArrayList<String>();
+		
+		switch(classtype) {
+		case BASE:
+			listOfCurrAttr.add("baseId");
+			listOfCurrAttr.add("name");
+			listOfCurrAttr.add("place");
+			listOfCurrAttr.add("street");
+			listOfCurrAttr.add("postCode");
+			listOfCurrAttr.add("houseNr");
+			break;
+		case MEMBER:
+			listOfCurrAttr.add("memberId");
+			listOfCurrAttr.add("username");
+			listOfCurrAttr.add("firstname");
+			listOfCurrAttr.add("lastname");
+			break;
+		case OPERATION:
+			break;
+		case OPERATION_CODE:
+			break;
+		case OPERATION_TYPE:
+			break;
+		case OPERATION_VEHICLE:
+			listOfCurrAttr.add("operationVehicleId");
+			listOfCurrAttr.add("description");
+			break;
+		case OTHER_ORG:
+			listOfCurrAttr.add("otherOrganisationId");
+			listOfCurrAttr.add("name");
+			break;
+		case RANK:
+			listOfCurrAttr.add("rankId");
+			listOfCurrAttr.add("contraction");
+			listOfCurrAttr.add("description");
+			break;
+		default:
+			break;
+		}
+		
+		if(additinalAttr != null && additinalAttr.size() > 0) {
+			for(int i=0;i<additinalAttr.size();i++) {
+				listOfCurrAttr.add(additinalAttr.get(i));
+			}
+		}
+		
+		retVal = CentralHandler.getInstance().setDatabaseFieldAttributes(classtype, listOfCurrAttr);
+		return retVal;
+	}
 
-	public HashMap<String, String> setDatabaseFieldAttributes(ClassTypes objType, ArrayList<String> listOfAttributes) {
+	public HashMap<String, String> setDatabaseFieldAttributes(ClassTypes objType, List<String> currAttr) {
 		HashMap<String, String> retVal = new HashMap<String, String>();
 		switch (objType) {
 		case BASE:
-			for (int i = 0; i < listOfAttributes.size(); i++) {
-				switch (listOfAttributes.get(i)) {
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
 				case "baseId":
-					retVal.put(listOfAttributes.get(i), Base.CONST_DB_BASEID);
+					retVal.put(currAttr.get(i), Base.CONST_DB_BASEID);
 					break;
 				case "name":
-					retVal.put(listOfAttributes.get(i), Base.CONST_DB_NAME);
+					retVal.put(currAttr.get(i), Base.CONST_DB_NAME);
 					break;
 				case "place":
-					retVal.put(listOfAttributes.get(i), Base.CONST_DB_PLACE);
+					retVal.put(currAttr.get(i), Base.CONST_DB_PLACE);
 					break;
 				case "postCode":
-					retVal.put(listOfAttributes.get(i), Base.CONST_DB_POSTCODE);
+					retVal.put(currAttr.get(i), Base.CONST_DB_POSTCODE);
 					break;
 				case "street":
-					retVal.put(listOfAttributes.get(i), Base.CONST_DB_STREET);
+					retVal.put(currAttr.get(i), Base.CONST_DB_STREET);
 					break;
 				case "houseNr":
-					retVal.put(listOfAttributes.get(i), Base.CONST_DB_HOUSENR);
+					retVal.put(currAttr.get(i), Base.CONST_DB_HOUSENR);
 					break;
 				}
 			}
 		case MEMBER:
-			for (int i = 0; i < listOfAttributes.size(); i++) {
-				switch (listOfAttributes.get(i)) {
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
 				case "memberId":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_MEMBERID);
+					retVal.put(currAttr.get(i), Member.CONST_DB_MEMBERID);
 					break;
 				case "firstname":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_FIRSTNAME);
+					retVal.put(currAttr.get(i), Member.CONST_DB_FIRSTNAME);
 					break;
 				case "lastname":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_LASTNAME);
+					retVal.put(currAttr.get(i), Member.CONST_DB_LASTNAME);
 					break;
 				case "username":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_USERNAME);
+					retVal.put(currAttr.get(i), Member.CONST_DB_USERNAME);
 					break;
 				case "password":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_PASSWORD);
+					retVal.put(currAttr.get(i), Member.CONST_DB_PASSWORD);
 					break;
 				case "isAdmin":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_ISADMIN);
+					retVal.put(currAttr.get(i), Member.CONST_DB_ISADMIN);
 					break;
 				case "base":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_BASEID);
+					retVal.put(currAttr.get(i), Member.CONST_DB_BASEID);
 					break;
 				case "rank":
-					retVal.put(listOfAttributes.get(i), Member.CONST_DB_RANKID);
+					retVal.put(currAttr.get(i), Member.CONST_DB_RANKID);
+					break;
+				case "description":
+					retVal.put(currAttr.get(i), Member.CONST_DB_DESCRIPTION);
+					break;
+				case "contraction":
+					retVal.put(currAttr.get(i), Member.CONST_DB_CONTRACTION);
 					break;
 				}
 			}
@@ -127,49 +186,51 @@ public class CentralHandler {
 		case OPERATION_TYPE:
 			break;
 		case OPERATION_VEHICLE:
-			for (int i = 0; i < listOfAttributes.size(); i++) {
-				switch (listOfAttributes.get(i)) {
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
 				case "operationVehicleId":
-					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_ID);
+					retVal.put(currAttr.get(i), OperationVehicle.CONST_DB_ID);
 					break;
 				case "description":
-					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_DESCRIPTION);
+					retVal.put(currAttr.get(i), OperationVehicle.CONST_DB_DESCRIPTION);
 					break;
 				case "base":
-					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_BASEID);
+					retVal.put(currAttr.get(i), OperationVehicle.CONST_DB_BASEID);
 					break;
 				case "baseId":
-					retVal.put(listOfAttributes.get(i), OperationVehicle.CONST_DB_BASEID);
+					retVal.put(currAttr.get(i), OperationVehicle.CONST_DB_BASEID);
 					break;
 				}
 			}
 			break;
 		case OTHER_ORG:
-			for (int i = 0; i < listOfAttributes.size(); i++) {
-				switch (listOfAttributes.get(i)) {
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
 				case "otherOrganisationId":
-					retVal.put(listOfAttributes.get(i), OtherOrganisation.CONST_DB_ID);
+					retVal.put(currAttr.get(i), OtherOrganisation.CONST_DB_ID);
 					break;
 				case "name":
-					retVal.put(listOfAttributes.get(i), OtherOrganisation.CONST_DB_NAME);
+					retVal.put(currAttr.get(i), OtherOrganisation.CONST_DB_NAME);
 					break;
 				}
 			}
 			break;
 		case RANK:
-			for (int i = 0; i < listOfAttributes.size(); i++) {
-				switch (listOfAttributes.get(i)) {
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
 				case "rankId":
-					retVal.put(listOfAttributes.get(i), Rank.CONST_DB_ID);
+					retVal.put(currAttr.get(i), Rank.CONST_DB_ID);
 					break;
 				case "contraction":
-					retVal.put(listOfAttributes.get(i), Rank.CONST_DB_CONTRACTION);
+					retVal.put(currAttr.get(i), Rank.CONST_DB_CONTRACTION);
 					break;
 				case "description":
-					retVal.put(listOfAttributes.get(i), Rank.CONST_DB_DESCRIPTION);
+					retVal.put(currAttr.get(i), Rank.CONST_DB_DESCRIPTION);
 					break;
 				}
 			}
+			break;
+		default:
 			break;
 		}
 

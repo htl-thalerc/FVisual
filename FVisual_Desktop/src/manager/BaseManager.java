@@ -43,8 +43,8 @@ public class BaseManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
-					Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.BASE, null);
 		
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
@@ -69,8 +69,8 @@ public class BaseManager {
 		Response response = null;
 		WebTarget webTargetGetById = null;
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
-					Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.BASE, null);
 		
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
@@ -112,8 +112,8 @@ public class BaseManager {
 	public Base postBase(Base baseObj) {
 		Base retVal = null;
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.BASE, new ArrayList<String>(
-					Arrays.asList("baseId", "name", "place", "street", "postCode", "houseNr")));
+		
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.BASE, null);
 		
 		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
 		headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));

@@ -18,6 +18,8 @@ public class BaseMemberLoader implements Runnable {
 	public void run() {
 		ArrayList<Member> listOfMembersFilteredByBase = MemberManager.getInstance()
 				.getMembersFromBase(this.base.getBaseId());
+		
+		System.out.println(listOfMembersFilteredByBase.get(0).toFullString());
 
 		MemberHandler.getInstance().setMemberListByBaseId(listOfMembersFilteredByBase);
 	}

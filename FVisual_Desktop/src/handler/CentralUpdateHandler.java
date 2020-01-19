@@ -14,13 +14,13 @@ import javafx.stage.Stage;
 import loader.BaseVehicleLoader;
 import loader.MemberByBaseIdLoader;
 import loader.MemberLoader;
-import loader.MemberUpdateLoader;
 import loader.OperationLoader;
 import loader.OperationVehicleByBaseIdLoader;
 import loader.OperationVehicleLoader;
-import loader.OperationVehicleUpdateLoader;
 import manager.MemberManager;
 import manager.OperationVehicleManager;
+import threadHelper.MemberUpdateHandler;
+import threadHelper.OperationVehicleUpdateHandler;
 
 public class CentralUpdateHandler {
 	private static CentralUpdateHandler helper;
@@ -73,7 +73,7 @@ public class CentralUpdateHandler {
 				
 				CountDownLatch countDownLatch = new CountDownLatch(3);
 				
-				OperationVehicleUpdateLoader operationVehicleUpdateLoader = new OperationVehicleUpdateLoader(countDownLatch, updatedOperationVehicle, this.currBaseToUpdate.getBaseId());
+				OperationVehicleUpdateHandler operationVehicleUpdateLoader = new OperationVehicleUpdateHandler(countDownLatch, updatedOperationVehicle, this.currBaseToUpdate.getBaseId());
 				OperationVehicleByBaseIdLoader operationVehicleByBaseIdLoader = new OperationVehicleByBaseIdLoader(countDownLatch, this.currBaseToUpdate.getBaseId(), updatedOperationVehicle.getBaseId());
 				OperationVehicleLoader operationVehicleLoader = new OperationVehicleLoader(countDownLatch);
 				

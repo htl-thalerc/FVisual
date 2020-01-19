@@ -8,13 +8,8 @@ import handler.CentralHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import loader.BaseLoader;
-import loader.MemberLoader;
-import loader.OperationVehicleLoader;
-import loader.RankLoader;
 
 public class ControllerBaseManagement implements Initializable {
 	@FXML private TabPane mainTabPaneBaseManagement;
@@ -67,5 +62,11 @@ public class ControllerBaseManagement implements Initializable {
 			e.printStackTrace();
 		}
 		this.mainTabPaneBaseManagement.getTabs().add(tabCreateBase);
+	}
+	
+	public void relaodBaseLookup() {
+		this.controllerBaseManagementBaseLookup.fillTableViews(false);
+		this.controllerCreateBase.resetCreateBaseTabs();
+		this.mainTabPaneBaseManagement.getSelectionModel().select(0);
 	}
 }

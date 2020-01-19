@@ -40,8 +40,7 @@ public class OtherOrganisationManager {
 		Response response = null;
 		
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.OTHER_ORG, new ArrayList<String>(
-				Arrays.asList("otherOrganisationId", "name")));
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.OTHER_ORG, null);
 
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());

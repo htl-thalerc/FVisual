@@ -62,8 +62,6 @@ public class LoginLogoutManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			MemberAsList = response.readEntity(new GenericType<List<Member>>() {
 			});
-			System.out.println(response.getStatus());
-
 		} catch (JsonSyntaxException ex) {
 			throw new Exception(retAktionsTypAsJson);
 		}

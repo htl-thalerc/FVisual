@@ -99,12 +99,6 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 			this.lvAvailableOperationVehicles.getSelectionModel().selectNext();
 
 			this.btnAddOneOperationVehicle.setDisable(true);
-			// if((this.lvAvailableOperationVehicles.getSelectionModel().getSelectedIndex()
-			// + 1) < this.lvAvailableOperationVehicles.getItems().size()) {
-			// this.lvAvailableOperationVehicles.getSelectionModel().selectNext();
-			// } else {
-			// this.lvAvailableOperationVehicles.getSelectionModel().selectFirst();
-			// }
 
 			this.obsListLVAvailableOperationVehicles.remove(selectedOperationVehicle);
 			this.lvAvailableOperationVehicles.refresh();
@@ -130,12 +124,6 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 			this.lvAvailableOperationVehicles.getSelectionModel().clearSelection();
 
 			this.btnRemoveOneOperationVehicle.setDisable(true);
-			// if((this.lvSelectedOperationVehciles.getSelectionModel().getSelectedIndex() +
-			// 1) < this.lvSelectedOperationVehciles.getItems().size()) {
-			// this.lvSelectedOperationVehciles.getSelectionModel().selectNext();
-			// } else {
-			// this.lvSelectedOperationVehciles.getSelectionModel().selectFirst();
-			// }
 
 			this.obsListLVSelectedOperationVehciles.remove(selectedOperationVehicle);
 			this.lvSelectedOperationVehciles.refresh();

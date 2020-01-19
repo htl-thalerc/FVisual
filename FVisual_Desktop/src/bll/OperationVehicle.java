@@ -96,7 +96,7 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	}
 	
 	public String toFullString() {
-		return operationVehicleId + ", " + description + ", " + base;
+		return operationVehicleId + ", " + description;
 	}
 
 	@Override

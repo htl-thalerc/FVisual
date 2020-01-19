@@ -1,7 +1,6 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
@@ -41,8 +40,9 @@ public class RankManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.RANK, new ArrayList<String>(
-				Arrays.asList("rankId", "contraction", "description")));
+		
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.RANK, null);
+		
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
 			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));

@@ -49,7 +49,6 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	private TextField tfFirstname = null;
 	private TextField tfLastname = null;
-	private Label lbUsername = null;
 
 	public ControllerCreateBaseTabMemberManagement(ControllerCreateBaseManagement controllerCreateBase) {
 		this.controllerCreateBase = controllerCreateBase;
@@ -114,19 +113,17 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	@SuppressWarnings("unchecked")
 	private void initTableViewColumns() {
+		this.tvAddNewMember.getColumns().clear();
 		TableColumn<Member, String> colNameBlock = new TableColumn<Member, String>("Name");
 		TableColumn<Member, TextField> colFirstname = new TableColumn<Member, TextField>("Firstname");
 		TableColumn<Member, TextField> colLastname = new TableColumn<Member, TextField>("Lastname");
-		TableColumn<Member, Label> colUsername = new TableColumn<Member, Label>("Username");
 		TableColumn<Member, ComboBox<Rank>> colRank = new TableColumn<Member, ComboBox<Rank>>("Rank");
 
 		colFirstname.setCellValueFactory(new PropertyValueFactory<Member, TextField>("tfFirstname"));
 		colLastname.setCellValueFactory(new PropertyValueFactory<Member, TextField>("tfLastname"));
-		colUsername.setCellValueFactory(new PropertyValueFactory<Member, Label>("lbUsername"));
-
 		colRank.setCellValueFactory(new PropertyValueFactory<Member, ComboBox<Rank>>("cbRank"));
 
-		colNameBlock.getColumns().addAll(colFirstname, colLastname, colUsername);
+		colNameBlock.getColumns().addAll(colFirstname, colLastname);
 		this.tvAddNewMember.getColumns().addAll(colNameBlock, colRank);
 		this.tvAddNewMember.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
@@ -223,13 +220,12 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		this.tfFirstname.setEditable(true);
 		this.tfLastname = new TextField();
 		this.tfLastname.setEditable(true);
-		this.lbUsername = new Label("Not available");
 
 		ObservableList<Rank> obsListOfRanks = FXCollections.observableArrayList(RankManager.getInstance().getRanks());
 		ComboBox<Rank> cbRanks = new ComboBox<Rank>();
 		cbRanks.setItems(obsListOfRanks);
 
-		this.obsListTVAddNewMember.add(new Member(tfFirstname, tfLastname, lbUsername, cbRanks));
+		this.obsListTVAddNewMember.add(new Member(tfFirstname, tfLastname, cbRanks));
 		this.tvAddNewMember.setItems(this.obsListTVAddNewMember);
 
 		this.initTextFieldListeners(tfFirstname, tfLastname);
@@ -242,13 +238,6 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 				this.isValidFirstname.set(true);
 				tfFirstname.setStyle("-fx-text-box-border: green;");
 				tfFirstname.setStyle("-fx-focus-color: green;");
-				if (this.isValidLastname.get() && this.tfLastname.getText().substring(0, 5) != ""
-						&& this.tfFirstname.getText().substring(0, 1) != "") {
-					this.lbUsername.setText(this.tfLastname.getText().substring(0, 5).toLowerCase()
-							+ this.tfFirstname.getText().substring(0, 1).toLowerCase());
-				} else {
-					this.lbUsername.setText("Not available");
-				}
 			} else {
 				this.isValidFirstname.set(false);
 				tfFirstname.setStyle("-fx-text-box-border: red;");
@@ -262,13 +251,6 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 				this.isValidLastname.set(true);
 				tfLastname.setStyle("-fx-text-box-border: green;");
 				tfLastname.setStyle("-fx-focus-color: green;");
-				if (this.isValidFirstname.get() && this.tfLastname.getText().substring(0, 5) != ""
-						&& this.tfFirstname.getText().substring(0, 1) != "") {
-					this.lbUsername.setText(this.tfLastname.getText().substring(0, 5).toLowerCase()
-							+ this.tfFirstname.getText().substring(0, 1).toLowerCase());
-				} else {
-					this.lbUsername.setText("Not available");
-				}
 			} else {
 				this.isValidLastname.set(false);
 				tfLastname.setStyle("-fx-text-box-border: red;");
@@ -311,10 +293,24 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		Member memberData = this.tvAddNewMember.getItems().get(0);
 
 		Member member = new Member();
+		member.setMemberId(-1);
 		member.setBaseId(-1);
 		member.setFirstname(memberData.getTfFirstname().getText().trim());
 		member.setLastname(memberData.getTfLastname().getText().trim());
-		member.setUsername(memberData.getLbUsername().getText().trim());
+		
+		String username = "";
+		
+		for(int i=0;i<member.getLastname().length();i++) {
+			if(i<=4) {
+				username += member.getLastname().charAt(i);
+			}
+		}
+		for(int i=0;i<member.getFirstname().length();i++) {
+			if(username.length() <= 5) {
+				username += member.getFirstname().charAt(i);
+			}
+		}
+		member.setUsername(username.trim());
 		member.setBase(null);
 		member.setRank(memberData.getCbRank().getValue());
 
@@ -323,9 +319,12 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		this.obsListLVAvailableMembers.add(member);
 		this.lvAvailableMembers.refresh();
 
-		System.out.println(member.toFullString());
-
 		this.btnAddNewMember.setDisable(false);
+		this.btnSaveNewMember.setDisable(true);
+		
+		this.isValidFirstname.set(false);
+		this.isValidLastname.set(false);
+		this.isValidRank.set(false);
 	}
 
 	public List<Member> getMembersToCreate() {
