@@ -1,0 +1,9 @@
+ORA-12170 | TNS: Connection timeout occurred
+ORA-00001 | unique constraint violation
+ORA-19090 | not found
+
+ WS-00001 | invalid paramId supplied
+ WS-00002 | invalid metaData supplied
+ WS-00003 | invalid bodyData supplied
+ WS-00004 | invalid subQuery supplied
+ WS-00005 | notImplementedYet
