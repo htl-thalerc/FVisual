@@ -124,7 +124,6 @@ stuetzpunktRouter.post('/', (req, res) => {
         try {
             metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
             data = converterModule.convertSimpleInput(metaData, req.body);
-            console.log(JSON.stringify(data));
             if (!data) {
                 responseHandler.invalidMetaData(res, null);
                 return;
@@ -438,7 +437,6 @@ stuetzpunktRouter.post('/:stuetzId/fahrzeuge', (req, res) => {
         try {
             metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
             data = converterModule.convertSimpleInput(metaData, req.body);
-            console.log(JSON.stringify(data));
             if (!data) {
                 responseHandler.invalidMetaData(res, null);
                 return;

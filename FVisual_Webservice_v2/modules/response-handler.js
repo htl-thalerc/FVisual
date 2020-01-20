@@ -6,72 +6,113 @@ const loggerModule = require('../modules/logger-module');
 /* local variables */
 const logger = loggerModule.loggers['Responder'];
 
-var get = function (res, data){
+var get = function (res, data) {
   res.header('content-type', 'application/json');
-  logger.debug('responded with {200}: valid');
-  loggerModule.lineFeed();
   res.status(200).send(data);
+  logger.debug('responded with {200}: valid');
+  loggerModule.lineFeed();  
 }
 
-var post = function(res, data){
+var post = function (res, data) {
   res.header('content-type', 'application/json');
+  res.status(201).send(data);
   logger.debug('responded with {201}: valid');
   loggerModule.lineFeed();
-  res.status(201).send(data);
 }
 
-var put = function(res, data){
+var put = function (res, data) {
   res.header('content-type', 'application/json');
+  res.status(200).send(data);
   logger.debug('responded with {200}: valid');
   loggerModule.lineFeed();
-  res.status(200).send(data);
 }
 
-var del = function(res){
+var del = function (res) {
+  res.status(204).send();
   logger.debug('responded with {204}: valid');
   loggerModule.lineFeed();
-  res.status(204).send();
 }
 
-var internalServerError = function(res, err){
-    logger.error(err.stack);
-    res.status(500).send(err.stack);
-    logger.debug('responded with {500}: internalServerError');
-    loggerModule.lineFeed();
+var internalServerError = function (res, err) {
+  logger.error(err.message);
+  
+  var errObj = {
+    "errorNum": "ORA-" + err.errorNum,
+    "message": err.message
+  }
+
+  res.header('content-type', 'application/json');
+  res.status(500).send(JSON.stringify(errObj));
+  logger.debug('responded with {500}: internalServerError');
+  loggerModule.lineFeed();
 }
 
-var notFound = function(res, err){
-  res.status(404).send('entry not found');
+var notFound = function (res, err) {
+  var errObj = {
+    "errorNum": "ORA-19090",
+    "message": "entry not found"
+  }
+  
+  res.header('content-type', 'application/json');
+  res.status(404).send(JSON.stringify(errObj));
   logger.debug('responded with {404}: notFound');
   loggerModule.lineFeed();
 }
 
-var invalidMetaData = function(res, err){
-  res.status(400).send('invalid metadata supplied');
-  logger.debug('responded with {400}: invalidMetaData');
-  loggerModule.lineFeed();
-}
-
-var invalidParamId = function(res, err){
-  res.status(400).send('invalid param id supplied');
+var invalidParamId = function (res, err) {
+  var errObj = {
+    "errorNum": "WS-00001",
+    "message": "invalid paramId supplied"
+  }
+  
+  res.header('content-type', 'application/json');
+  res.status(400).send(JSON.stringify(errObj));
   logger.debug('responded with {400}: invalidParamId');
   loggerModule.lineFeed();
 }
 
-var invalidBody = function(res, err){
-  res.status(400).send('invalid body supplied');
-  logger.debug('responded with {400}: invalidBody');
+var invalidMetaData = function (res, err) {
+  var errObj = {
+    "errorNum": "WS-00002",
+    "message": "invalid metaData supplied"
+  }
+  res.header('content-type', 'application/json');
+  res.status(400).send(JSON.stringify(errObj));
+  logger.debug('responded with {400}: invalidMetaData');
   loggerModule.lineFeed();
 }
 
-var invalidSubQuery = function(res, err){
-  res.status(400).send('invalid subquery supplied');
+var invalidBody = function (res, err) {
+  var errObj = {
+    "errorNum": "WS-00003",
+    "message": "invalid bodyData supplied"
+  }
+  
+  res.header('content-type', 'application/json');
+  res.status(400).send(JSON.stringify(errObj));
+  logger.debug('responded with {400}: invalidBody');
+  loggerModule.lineFeed();
+}
+var invalidSubQuery = function (res, err) {
+  var errObj = {
+    "errorNum": "WS-00004",
+    "message": "invalid subQuery supplied"
+  }
+  
+  res.header('content-type', 'application/json');
+  res.status(400).send(JSON.stringify(errObj));
   logger.debug('responded with {400}: invalidSubQuery');
   loggerModule.lineFeed();
 }
 
-var notImplementedYet = function (res, err){
-  res.status(501).send('url not implemented yet');
+var notImplementedYet = function (res, err) {
+  var errObj = {
+    "errorNum": "WS-00005",
+    "message": "notImplementedYet"
+  }
+  
+  res.header('content-type', 'application/json');
+  res.status(501).send(JSON.stringify(errObj));
   logger.debug('responded with {501}: notImplementedYet');
   loggerModule.lineFeed();
 }
