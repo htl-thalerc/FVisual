@@ -35,7 +35,7 @@ public class ControllerUpdateTabMember implements Initializable {
 	
 	private AtomicBoolean isValidFirstname = new AtomicBoolean(false);
 	private AtomicBoolean isValidLastname = new AtomicBoolean(false);
-	private AtomicBoolean isValidContraction = new AtomicBoolean(false);
+	private AtomicBoolean isValidRank = new AtomicBoolean(false);
 	
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = null;
 	private boolean isSingleMemberLoad;
@@ -120,12 +120,12 @@ public class ControllerUpdateTabMember implements Initializable {
 	private void initComboboxListener() {
 		this.cbNewContraction.getSelectionModel().selectedItemProperty().addListener((options, oldVal, newVal) -> {
 			if(newVal != null) {
-				this.isValidContraction.set(true);
+				this.isValidRank.set(true);
 				this.cbNewContraction.setStyle("-fx-text-box-border: green;");
 				this.cbNewContraction.setStyle("-fx-focus-color: green;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
 			} else {
-				this.isValidContraction.set(false);
+				this.isValidRank.set(false);
 				this.cbNewContraction.setStyle("-fx-text-box-border: red;");
 				this.cbNewContraction.setStyle("-fx-focus-color: red;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
@@ -140,7 +140,7 @@ public class ControllerUpdateTabMember implements Initializable {
 		this.lvMembers.getSelectionModel().select(oldMemberData);
 		this.lbOldFirstname.setText(oldMemberData.getFirstname());
 		this.lbOldLastname.setText(oldMemberData.getLastname());
-		//this.lbOldContraction.setText(oldMemberData.getContraction());
+		this.lbOldRank.setText(oldMemberData.getRank().getContraction());
 	}
 
 	public Member getNewMemberData() {
@@ -156,14 +156,15 @@ public class ControllerUpdateTabMember implements Initializable {
 		} else {
 			member.setLastname(this.lbOldFirstname.getText());
 		}
-		if(this.isValidContraction.get()) {
+		if(this.isValidRank.get()) {
 			Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
 			member.setRank(selectedRank);
-			//member.setContraction(selectedRank.getContraction());
+			member.setRankId(selectedRank.getRankId());
 		} else {
-			member.setRank(this.currSelectedMember.getRank());
-			//member.setContraction(this.currSelectedMember.getRank().getContraction());
+			//member.setRank(this.currSelectedMember.getRank());
+			member.setRankId(this.currSelectedMember.getRankId());
 		}
+		System.out.println("asdfds: " + member.getRank().toFullString());
 		return member;
 	}
 	

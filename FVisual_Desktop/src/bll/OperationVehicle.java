@@ -42,6 +42,13 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 		super();
 		this.description = description;
 	}
+	
+	public OperationVehicle(int operationVehicleId, String description, int baseId) {
+		super();
+		this.operationVehicleId = operationVehicleId;
+		this.description = description;
+		this.baseId = baseId;
+	}
 
 	public OperationVehicle() {
 		super();
@@ -89,7 +96,7 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	}
 	
 	public String toFullString() {
-		return operationVehicleId + ", " + description + ", " + base;
+		return operationVehicleId + ", " + description;
 	}
 
 	@Override

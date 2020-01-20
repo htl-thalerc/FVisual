@@ -24,7 +24,6 @@ public class BaseLoader implements Runnable {
 		}
 		
 		BaseHandler.getInstance().setBaseList(tempList);
-		System.out.println("Finished loading Bases");
 		this.countDownLatch.countDown();	
 	}
 }

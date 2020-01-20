@@ -14,6 +14,8 @@ public class OperationVehicleHandler {
 	private ArrayList<OperationVehicle> listOfGroupedVehicles = new ArrayList<OperationVehicle>();
 	private ArrayList<OperationVehicle> listOfVehiclesByBaseId = new ArrayList<OperationVehicle>();
 	
+	private OperationVehicle updatedOperationVehicle = null;
+	
 	public static OperationVehicleHandler getInstance() {
 		if(operationVehicleHandler == null) {
 			operationVehicleHandler = new OperationVehicleHandler();
@@ -44,17 +46,26 @@ public class OperationVehicleHandler {
 	}
 
 	public void setVehicleListByBaseId(ArrayList<OperationVehicle> listOfOperationVehiclesFilteredByBase) {
-		System.out.println(listOfOperationVehiclesFilteredByBase.size());
-		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
-		this.listOfVehiclesByBaseId = listOfOperationVehiclesFilteredByBase;
-		
-		for(int i=0;i<this.listOfVehiclesByBaseId.size();i++) {
-			for(int j=0;j<tempListOfBases.size();j++) {
-				if(this.listOfVehiclesByBaseId.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
-					this.listOfVehiclesByBaseId.get(i).setBase(tempListOfBases.get(j));
-					break;
+		if(listOfOperationVehiclesFilteredByBase != null) {
+			ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+			this.listOfVehiclesByBaseId = listOfOperationVehiclesFilteredByBase;
+			
+			for(int i=0;i<this.listOfVehiclesByBaseId.size();i++) {
+				for(int j=0;j<tempListOfBases.size();j++) {
+					if(this.listOfVehiclesByBaseId.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+						this.listOfVehiclesByBaseId.get(i).setBase(tempListOfBases.get(j));
+						break;
+					}
 				}
 			}
 		}
+	}
+	
+	public OperationVehicle getUpdatedOperationVehicle() {
+		return this.updatedOperationVehicle;
+	}
+	
+	public void setUpdatedOperationVehicle(OperationVehicle vehicle) {
+		this.updatedOperationVehicle = vehicle;
 	}
 }

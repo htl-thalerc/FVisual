@@ -4,7 +4,7 @@ public class Rank {
 	private String contraction;
 	private String description;
 	private int rankId;
-	
+
 	public static final String CONST_DB_ID = "ID";
 	public static final String CONST_DB_CONTRACTION = "KUERZEL";
 	public static final String CONST_DB_DESCRIPTION = "BEZEICHNUNG";
@@ -55,7 +55,10 @@ public class Rank {
 
 	@Override
 	public String toString() {
-		//return rankId + " - " + contraction + " - " + description;
 		return contraction + " [" + description + "]";
+	}
+	
+	public String toFullString() {
+		return rankId + " - " + contraction + " - " + description;
 	}
 }

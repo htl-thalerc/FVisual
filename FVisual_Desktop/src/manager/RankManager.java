@@ -1,7 +1,6 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
@@ -12,6 +11,9 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -24,6 +26,7 @@ public class RankManager {
 	private Client client = ClientBuilder.newClient();
 	private WebTarget webTarget = this.client.target(CentralHandler.getInstance().getRessource());
 	private WebTarget webTargetRankService = this.webTarget.path(CentralHandler.CONST_RANK);
+	private static final Logger LOGGER = LogManager.getLogger(RankManager.class.getName());
 	
 	public static RankManager getInstance() {
 		if (rankManager == null) {
@@ -37,8 +40,9 @@ public class RankManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setDatabaseFieldAttributes(ClassTypes.RANK, new ArrayList<String>(
-				Arrays.asList("rankId", "contraction", "description")));
+		
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.RANK, null);
+		
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
 			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
@@ -47,6 +51,7 @@ public class RankManager {
 			if(response.getStatus() == 200) {
 				collOfRanks = response.readEntity(new GenericType<ArrayList<Rank>>() {
 				});
+				LOGGER.info("[RankManager] [GET]: Ranks");
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();

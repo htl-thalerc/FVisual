@@ -1,6 +1,7 @@
 package handler;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 import bll.Base;
 import bll.Member;
@@ -10,8 +11,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import loader.BaseVehicleLoader;
+import loader.MemberByBaseIdLoader;
+import loader.MemberLoader;
+import loader.OperationLoader;
+import loader.OperationVehicleByBaseIdLoader;
+import loader.OperationVehicleLoader;
 import manager.MemberManager;
 import manager.OperationVehicleManager;
+import threadHelper.MemberUpdateHandler;
+import threadHelper.OperationVehicleUpdateHandler;
 
 public class CentralUpdateHandler {
 	private static CentralUpdateHandler helper;
@@ -42,7 +51,7 @@ public class CentralUpdateHandler {
 			Base updatedBaseData = this.controllerUpdateFullBaseDialog.getUpdatedBaseData();
 			if(updatedBaseData != null) {
 				updatedBaseData.setBaseId(selectedBase.getBaseId());
-				this.setUpdatedBaseData(updatedBaseData);
+				this.setUpdatedBase(updatedBaseData);
 				System.out.println(updatedBaseData.toString());
 			}
 		}
@@ -58,8 +67,29 @@ public class CentralUpdateHandler {
 			OperationVehicle updatedOperationVehicle = this.controllerUpdateFullBaseDialog.getUpdatedOperationVehicleData();
 			if(updatedOperationVehicle != null) {
 				updatedOperationVehicle.setOperationVehicleId(selectedVehicle.getOperationVehicleId());
-				this.setUpdatedOperationVehicleData(updatedOperationVehicle);
-				OperationVehicleManager.getInstance().updateVehicleFromBase(updatedOperationVehicle.getOperationVehicleId(), updatedOperationVehicle);
+				updatedOperationVehicle.setBase(this.currBaseToUpdate);
+				updatedOperationVehicle.setBaseId(this.currBaseToUpdate.getBaseId());
+				this.setUpdatedOperationVehicle(updatedOperationVehicle);
+				
+				CountDownLatch countDownLatch = new CountDownLatch(3);
+				
+				OperationVehicleUpdateHandler operationVehicleUpdateLoader = new OperationVehicleUpdateHandler(countDownLatch, updatedOperationVehicle, this.currBaseToUpdate.getBaseId());
+				OperationVehicleByBaseIdLoader operationVehicleByBaseIdLoader = new OperationVehicleByBaseIdLoader(countDownLatch, this.currBaseToUpdate.getBaseId(), updatedOperationVehicle.getBaseId());
+				OperationVehicleLoader operationVehicleLoader = new OperationVehicleLoader(countDownLatch);
+				
+				Thread threadOperationVehicleUpdateLoader = new Thread(operationVehicleUpdateLoader);
+				Thread threadOperationVehicleByBaseIdLoader = new Thread(operationVehicleByBaseIdLoader);
+				Thread threadOperationVehicleLoader = new Thread(operationVehicleLoader);
+				
+				threadOperationVehicleUpdateLoader.start();
+				threadOperationVehicleByBaseIdLoader.start();
+				threadOperationVehicleLoader.start();
+				
+				try {
+					countDownLatch.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}	
 			}
 		}
 	}
@@ -72,19 +102,41 @@ public class CentralUpdateHandler {
 		
 		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
 			Member updatedMember = this.controllerUpdateFullBaseDialog.getUpdatedMemberData();
+			
 			if(updatedMember != null) {
 				updatedMember.setMemberId(selectedMember.getMemberId());
 				updatedMember.setUsername(updatedMember.getLastname().substring(0, 4).toLowerCase() + updatedMember.getFirstname().substring(0, 1).toLowerCase());
 				updatedMember.setAdmin(selectedMember.isAdmin());
 				if(selectedMember.getBase() != null) {
-					updatedMember.setBase(selectedMember.getBase());
+					updatedMember.setBase(this.currBaseToUpdate);
+					updatedMember.setBaseId(this.currBaseToUpdate.getBaseId());
 				} else {
 					updatedMember.setBase(null);
+					updatedMember.setBaseId(-1);
 				}
 				updatedMember.setPassword(selectedMember.getPassword());
-				this.setUpdatedMemberData(updatedMember);
-				System.out.println(selectedMember.getBase());
-				MemberManager.getInstance().updateMemberFromBase(selectedMember.getBase().getBaseId(), updatedMember);
+				
+				this.setUpdatedMember(updatedMember);
+				
+				/*CountDownLatch countDownLatch = new CountDownLatch(3);
+				
+				MemberUpdateLoader memberUpdateLoader = new MemberUpdateLoader(countDownLatch, updatedMember, this.currBaseToUpdate.getBaseId());
+				MemberByBaseIdLoader memberByBaseIdLoader = new MemberByBaseIdLoader(countDownLatch, this.currBaseToUpdate.getBaseId(), updatedMember.getMemberId());
+				MemberLoader operationVehicleLoader = new MemberLoader(countDownLatch);
+				
+				Thread threadMemberUpdateLoader = new Thread(memberUpdateLoader);
+				Thread threadMemberByBaseIdLoader = new Thread(memberByBaseIdLoader);
+				Thread threadMemberLoader = new Thread(operationVehicleLoader);
+				
+				threadMemberUpdateLoader.start();
+				threadMemberByBaseIdLoader.start();
+				//threadMemberLoader.start();
+				
+				try {
+					countDownLatch.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}*/	
 			}
 		}
 	}
@@ -107,27 +159,27 @@ public class CentralUpdateHandler {
 		return curStage;
 	}
 	
-	public void setUpdatedBaseData(Base updatedBaseData) {
+	public void setUpdatedBase(Base updatedBaseData) {
 		this.updatedBaseData = updatedBaseData;
 	}
 	
-	public Base getUpdatedBaseData() {
+	public Base getUpdatedBase() {
 		return this.updatedBaseData;
 	}
 	
-	public OperationVehicle getUpdatedOperationVehicleData() {
+	public OperationVehicle getUpdatedOperationVehicle() {
 		return this.updatedOperationVehicleData;
 	}
 	
-	private void setUpdatedOperationVehicleData(OperationVehicle updatedOperationVehicle) {
+	public void setUpdatedOperationVehicle(OperationVehicle updatedOperationVehicle) {
 		this.updatedOperationVehicleData = updatedOperationVehicle;
 	}
 	
-	public Member getUpdatedMemberData() {
+	public Member getUpdatedMember() {
 		return this.updatedMemberData;
 	}
 	
-	public void setUpdatedMemberData(Member updatedMemberData) {
+	public void setUpdatedMember(Member updatedMemberData) {
 		this.updatedMemberData = updatedMemberData;
 	}
 

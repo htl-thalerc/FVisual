@@ -10,7 +10,6 @@ public class Stuetzpunkt {
     private String strasse;
     private String hausnr;
 
-
     public Stuetzpunkt(int id, String name, String ort, int plz, String strasse, String hausnr) {
         this.id = id;
         this.name = name;

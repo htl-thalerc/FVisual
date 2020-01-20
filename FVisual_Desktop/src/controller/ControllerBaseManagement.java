@@ -12,11 +12,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 public class ControllerBaseManagement implements Initializable {
-	@FXML
-	private TabPane mainTabPaneBaseManagement;
+	@FXML private TabPane mainTabPaneBaseManagement;
 
 	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup;
 	private ControllerCreateBaseManagement controllerCreateBase;
+	private ControllerMainframe controllerMainframe;
+
+	public ControllerBaseManagement(ControllerMainframe controllerMainframe) {
+		this.controllerMainframe = controllerMainframe;
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -58,5 +62,11 @@ public class ControllerBaseManagement implements Initializable {
 			e.printStackTrace();
 		}
 		this.mainTabPaneBaseManagement.getTabs().add(tabCreateBase);
+	}
+	
+	public void relaodBaseLookup() {
+		this.controllerBaseManagementBaseLookup.fillTableViews(false);
+		this.controllerCreateBase.resetCreateBaseTabs();
+		this.mainTabPaneBaseManagement.getSelectionModel().select(0);
 	}
 }

@@ -8,9 +8,9 @@ import handler.CentralHandler;
 import handler.OperationVehicleHandler;
 import manager.OperationVehicleManager;
 
-public class OperationVehicleLoader implements Runnable  {
+public class OperationVehicleLoader implements Runnable {
 	private CountDownLatch countDownLatch = null;
-
+			
 	public OperationVehicleLoader(CountDownLatch latch) {
 		this.countDownLatch = latch;
 	}
@@ -25,8 +25,6 @@ public class OperationVehicleLoader implements Runnable  {
 		
 		OperationVehicleHandler.getInstance().setVehicleList(tempListVehicles);
 		CentralHandler.getInstance().mergeFullVehicleObject();
-		
-		System.out.println("Finished laoding Vehicles");
 
 		this.countDownLatch.countDown();
 	}

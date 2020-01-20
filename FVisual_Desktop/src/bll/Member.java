@@ -18,7 +18,6 @@ public class Member {
 	
 	private TextField tfFirstname;
 	private TextField tfLastname;
-	private Label lbUsername;
 	private ComboBox<Rank> cbRank;
 
 	// DB Attribut names
@@ -30,6 +29,8 @@ public class Member {
 	public static final String CONST_DB_ISADMIN = "ISADMIN";
 	public static final String CONST_DB_BASEID = "ID_STUETZPUNKT";
 	public static final String CONST_DB_RANKID = "ID_DIENSTGRAD";
+	public static final String CONST_DB_CONTRACTION = "KUERZEL";
+	public static final String CONST_DB_DESCRIPTION = "BEZEICHNUNG";
 
 	private static Member memberObj = null;
 
@@ -52,10 +53,9 @@ public class Member {
 		this.isAdmin = isAdmin;
 	}
 	
-	public Member(TextField tfFirstname, TextField tfLastname, Label lbUsername, ComboBox<Rank> cb) {
+	public Member(TextField tfFirstname, TextField tfLastname, ComboBox<Rank> cb) {
 		this.tfFirstname = tfFirstname;
 		this.tfLastname = tfLastname;
-		this.lbUsername = lbUsername;
 		this.cbRank = cb;
 	}
 
@@ -147,7 +147,7 @@ public class Member {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 	}
-	
+
 	public TextField getTfFirstname() {
 		return tfFirstname;
 	}
@@ -162,14 +162,6 @@ public class Member {
 
 	public void setTfLastname(TextField tfLastname) {
 		this.tfLastname = tfLastname;
-	}
-
-	public Label getLbUsername() {
-		return lbUsername;
-	}
-
-	public void setLbUsername(Label lbUsername) {
-		this.lbUsername = lbUsername;
 	}
 
 	public ComboBox<Rank> getCbRank() {
@@ -190,10 +182,5 @@ public class Member {
 				+ base + ", " + rank;
 //		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
 //				+ this.base.getBaseId() + ", " + this.rank.getRankId();
-	}
-	
-	public String toNewMemberString() {
-		return tfFirstname.getText() + ", " + tfLastname.getText() + ", " + lbUsername.getText() + ", "
-				+ cbRank.getSelectionModel().getSelectedItem().toString();
 	}
 }

@@ -7,16 +7,16 @@ public class Mitglied {
     private Dienstgrad dienstgrad;
     private String vorname;
     private String nachname;
-    private Stuetzpunkt stuetzpunkt;
+    private int id_stuetzpunkt;
     private String username;
     private String password;
 
-    public Mitglied(int id, Dienstgrad dienstgrad, String vorname, String nachname, Stuetzpunkt stuetzpunkt, String username, String password) {
+    public Mitglied(int id, Dienstgrad dienstgrad, String vorname, String nachname, int stuetzpunkt, String username, String password) {
         this.id = id;
         this.dienstgrad = dienstgrad;
         this.vorname = vorname;
         this.nachname = nachname;
-        this.stuetzpunkt = stuetzpunkt;
+        this.id_stuetzpunkt = stuetzpunkt;
         this.username = username;
         this.password = password;
     }
@@ -53,12 +53,12 @@ public class Mitglied {
         this.nachname = nachname;
     }
 
-    public Stuetzpunkt getStuetzpunkt() {
-        return stuetzpunkt;
+    public int getStuetzpunkt() {
+        return id_stuetzpunkt;
     }
 
-    public void setStuetzpunkt(Stuetzpunkt stuetzpunkt) {
-        this.stuetzpunkt = stuetzpunkt;
+    public void setStuetzpunkt(int stuetzpunkt) {
+        this.id_stuetzpunkt = stuetzpunkt;
     }
 
     public String getUsername() {

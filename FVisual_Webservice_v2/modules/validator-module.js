@@ -140,7 +140,7 @@ var getMitgliedPattern = function () {
                 "isMandatory": true, "type": "number", "min-length": "0"
             },
             "ID_STUETZPUNKT": {
-                "isMandatory": true, "type": "number", "min-length": "0"
+                "isMandatory": true, "type": "number"
             },
             "VORNAME": {
                 "isMandatory": true, "type": "string", "min-length": "2"

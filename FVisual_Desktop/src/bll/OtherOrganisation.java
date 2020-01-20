@@ -3,6 +3,18 @@ package bll;
 public class OtherOrganisation {
 	private int otherOrganisationId;
 	private String name;
+	
+	private static OtherOrganisation otherOrgObj = null;
+	
+	public static final String CONST_DB_ID = "ID";
+	public static final String CONST_DB_NAME = "NAME";
+	
+	public static OtherOrganisation getInstance() {
+		if(otherOrgObj == null) {
+			otherOrgObj = new OtherOrganisation();
+		}
+		return otherOrgObj;
+	}
 
 	public OtherOrganisation(int otherOrganisationId, String name) {
 		super();
