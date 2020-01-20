@@ -21,10 +21,11 @@
 				<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="764.6666768391926" />
 			</columnConstraints>
 			<rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="471.0" GridPane.halignment="LEFT">
+				<ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="471.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
 					<buttons>
 						<Button fx:id="btnReset" mnemonicParsing="false" onAction="#onClickBtnReset" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Reset" />
 						<Button fx:id="btnBack" mnemonicParsing="false" onAction="#onClickBtnBack" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Back" />
@@ -38,7 +39,10 @@
                   <Insets />
                </opaqueInsets>
 				</ButtonBar>
-            <Label fx:id="lbStatusbar" alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;" />
+            <Label fx:id="lbStatusbar" alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" style="-fx-font-weight: bold;">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin></Label>
 			</children>
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" />
