@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.CountDownLatch;
 
 import bll.Base;
 import bll.EnumCRUDOption;
@@ -31,7 +30,6 @@ import threadHelper.BasePostHandler;
 import threadHelper.MemberPostHandler;
 import threadHelper.MemberUpdateHandler;
 import threadHelper.OperationVehiclePostHandler;
-import threadHelper.OperationVehicleUpdateHandler;
 
 public class ControllerCreateBaseManagement implements Initializable {
 	@FXML
@@ -210,7 +208,6 @@ public class ControllerCreateBaseManagement implements Initializable {
 				threadBasePostLoader.start();
 				threadBasePostLoader.join();
 				Thread.sleep(250);
-				System.out.println("Finished Post base");
 
 				if (collOfOperationVehiclesToAddToBase.size() >= 1) {
 					for (int i = 0; i < collOfOperationVehiclesToAddToBase.size(); i++) {

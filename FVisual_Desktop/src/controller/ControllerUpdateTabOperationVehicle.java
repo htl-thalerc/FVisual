@@ -1,11 +1,15 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import bll.Member;
 import bll.OperationVehicle;
+import bll.Rank;
 import handler.CentralUpdateHandler;
+import handler.OperationVehicleHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,10 +28,11 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	@FXML
 	private TextField tfNewVehiclename;
 	@FXML
-	private Button btnAddNewVehicle;
+	private Button btnAddNewVehicle, btnSaveUpdatedVehicle;
 	
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	private AtomicBoolean isValidVehiclename = new AtomicBoolean(false);
+	private ObservableList<OperationVehicle> obsListOfVehicleData;
 	
 	public ControllerUpdateTabOperationVehicle(ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog) {
 		this.controllerUpdateFullBaseDialog = controllerUpdateFullBaseDialog;
@@ -73,21 +78,36 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 		});
 	}
 	
-	public void setOperationVehicleData(OperationVehicle oldOperationVehicleData) {
-		ObservableList<OperationVehicle> obsListOfVehicleData = FXCollections.observableArrayList();
-		obsListOfVehicleData.add(oldOperationVehicleData);
-		this.lvVehicles.setItems(obsListOfVehicleData);
-		this.lvVehicles.getSelectionModel().select(oldOperationVehicleData);
-		this.lbOldVehiclename.setText(oldOperationVehicleData.getDescription());
+	public void setListOfOperationVehicles(ArrayList<OperationVehicle> listOfOperationVehicles) {
+		this.obsListOfVehicleData = FXCollections.observableArrayList();
+		if(listOfOperationVehicles.size() == 1) {
+			OperationVehicle vehicleToUpdate = listOfOperationVehicles.get(0);
+			this.obsListOfVehicleData.add(vehicleToUpdate);
+		} else {
+			ArrayList<OperationVehicle> list = OperationVehicleHandler.getInstance().getVehicleListByBaseId();
+			for(int i=0;i<list.size();i++) {
+				this.obsListOfVehicleData.add(list.get(i));
+			}
+		}
+		this.lvVehicles.setItems(this.obsListOfVehicleData);
+		this.lvVehicles.getSelectionModel().select(this.obsListOfVehicleData.get(0));
+		this.lbOldVehiclename.setText(this.obsListOfVehicleData.get(0).getDescription());
 	}
 
-	public OperationVehicle getNewOperationVehicleData() {
-		OperationVehicle vehicle = new OperationVehicle();
+	public ArrayList<OperationVehicle> getListOfNewOperationVehicles() {
+		ArrayList<OperationVehicle> retVal = new ArrayList<OperationVehicle>();
 		
-		if(this.isValidVehiclename.get()) {
-			vehicle.setDescription(this.tfNewVehiclename.getText());	
-		} 
-		return vehicle;
+		if(this.lvVehicles.getItems().size() == 1) {
+			OperationVehicle vehicle = new OperationVehicle();
+			
+			if(this.isValidVehiclename.get()) {
+				vehicle.setDescription(this.tfNewVehiclename.getText());	
+			}
+			retVal.add(vehicle);
+		} else {
+			
+		}
+		return retVal;
 	}
 	
 	@FXML
@@ -111,6 +131,27 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			vehicleToCreate.setDescription(this.tfNewVehiclename.getText().trim());
 			
 			this.lbStatusbar.setText("Successfully added Operationvehicle '" + vehicleToCreate.getDescription() + "'");
+		}
+	}
+	
+	@FXML
+	private void onClickBtnSaveUpdatedVehicle(ActionEvent event) {
+		OperationVehicle currSelectedVehicle = this.lvVehicles.getSelectionModel().getSelectedItem();
+		
+		if(currSelectedVehicle != null) {
+			if(this.isValidVehiclename.get()) {
+				currSelectedVehicle.setDescription(this.tfNewVehiclename.getText().trim());
+			} else {
+				currSelectedVehicle.setDescription(this.lbOldVehiclename.getText());
+			}
+			
+			for(int i=0;i<this.obsListOfVehicleData.size();i++) {
+				if(this.obsListOfVehicleData.get(i).getOperationVehicleId() == currSelectedVehicle.getOperationVehicleId()) {
+					this.obsListOfVehicleData.remove(this.obsListOfVehicleData.get(i));
+					this.obsListOfVehicleData.add(currSelectedVehicle);
+				}
+			}
+			this.lvVehicles.refresh();
 		}
 	}
 }

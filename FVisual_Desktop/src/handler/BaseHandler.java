@@ -8,6 +8,7 @@ public class BaseHandler {
 	private static BaseHandler baseHandler = null;
 	
 	private ArrayList<Base> listOfBases = new ArrayList<Base>();
+	private Base listOfBaseByBaseId = null;
 	
 	private Base latestCreatedBase = null;
 	
@@ -33,5 +34,13 @@ public class BaseHandler {
 	
 	public void setCreatedBase(Base base) {
 		this.latestCreatedBase = base;
+	}
+	
+	public Base getBaseByBaseId() {
+		return this.listOfBaseByBaseId;
+	}
+	
+	public void setBaseByBaseId(Base base) {
+		this.listOfBaseByBaseId = base;
 	}
 }
