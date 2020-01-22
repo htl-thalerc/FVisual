@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 public class DatabaseManager {
     private static DatabaseManager db = null;
-    private static String ipHost = "http://192.168.193.84:3030";
+    private static String ipHost = "http://10.0.0.8:3030";
 
     private DatabaseManager() {
     }
