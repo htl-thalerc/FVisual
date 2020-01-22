@@ -1,6 +1,8 @@
 ORA-12170 | TNS: Connection timeout occurred
+ORA-12514 | TNS:listener does not currently know of service requested in connect descriptor
 ORA-00001 | unique constraint violation
 ORA-19090 | not found
+
 
  WS-00001 | invalid paramId supplied
  WS-00002 | invalid metaData supplied
