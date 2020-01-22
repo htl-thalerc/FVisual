@@ -7,3 +7,5 @@ ORA-19090 | not found
  WS-00003 | invalid bodyData supplied
  WS-00004 | invalid subQuery supplied
  WS-00005 | notImplementedYet
+
+ 

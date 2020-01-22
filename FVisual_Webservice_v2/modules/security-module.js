@@ -30,7 +30,6 @@ function authenticate(req, res, next) {
 
     if (token == undefined || token == '') {
         logger.warn('Unauthorized login');
-        logger
         res.status(401).send('Unauthorized');
         return;
     }
