@@ -134,10 +134,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap = map;
         gc = new Geocoder(this);
         googleMap.setOnMarkerClickListener(this);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(46.7525, 13.8617)).zoom(7.5f).build();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-        googleMap.moveCamera(cameraUpdate);
+        try {
+            CameraPosition cameraPosition =
+                    new CameraPosition.Builder().target(
+                            new LatLng(
+                                    gc.getFromLocationName("St. Peter 47 9800 Spittal/Drau", 1).get(0).getLatitude(),
+                                    gc.getFromLocationName("St. Peter 47 9800 Spittal/Drau", 1).get(0).getLongitude()
+                            ))
+                            .zoom(14f).build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            googleMap.moveCamera(cameraUpdate);
+        }catch(Exception e){
 
+        }
         //TODO einsatzList = getEinsaetzeFromDatabase(); Aber nur Einsätze von currentMitglied
 
         showStuetzpunkt();
