@@ -1,6 +1,7 @@
 package handler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import bll.Base;
@@ -11,7 +12,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import loader.BaseByBaseIdLoader;
+import loader.BaseMemberLoader;
 import loader.BaseVehicleLoader;
+import loader.BaselessMemberLoader;
 import loader.MemberByBaseIdLoader;
 import loader.MemberLoader;
 import loader.OperationLoader;
@@ -43,65 +47,90 @@ public class CentralUpdateHandler {
 		Stage stage = this.initUpdateFullBaseDialog();
 		this.controllerUpdateFullBaseDialog.selectTabUpdateBase();
 		this.controllerUpdateFullBaseDialog.setOldBaseData(selectedBase);
-		/*this.controllerUpdateFullBaseDialog.setOldOperationVehicleData();
-		this.controllerUpdateFullBaseDialog.setOldMemberData();*/
+		
+//		Thread threadBaseByBaseId = new Thread(new BaseByBaseIdLoader(null, selectedBase.getBaseId()));
+//		threadBaseByBaseId.start();
+//		threadBaseByBaseId.join();
+//		Thread.sleep(250);
+		
+		try {
+			Thread threadVehcilesByBaseId = new Thread(new BaseVehicleLoader(selectedBase));
+			threadVehcilesByBaseId.start();
+			threadVehcilesByBaseId.join();
+			Thread.sleep(250);
+			
+			Thread threadMembersByBaseId = new Thread(new BaseMemberLoader(selectedBase));
+			threadMembersByBaseId.start();
+			threadMembersByBaseId.join();
+			Thread.sleep(250);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		this.controllerUpdateFullBaseDialog.setListOfOperationVehicles(new ArrayList<OperationVehicle>());
+		this.controllerUpdateFullBaseDialog.setListOfMembers(new ArrayList<Member>());
 		stage.showAndWait();
 		
 		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
 			Base updatedBaseData = this.controllerUpdateFullBaseDialog.getUpdatedBaseData();
+			ArrayList<Member> listOfUpdatedMembers = null;
+			ArrayList<OperationVehicle> listOfUpdatedVehicles = this.controllerUpdateFullBaseDialog.getListOfNewOperationVehicles();
+			
+			for(int i=0;i<listOfUpdatedVehicles.size();i++) {
+				System.out.println("All vehicles: " + listOfUpdatedVehicles.get(i).toFullString());
+			}
+			
 			if(updatedBaseData != null) {
 				updatedBaseData.setBaseId(selectedBase.getBaseId());
 				this.setUpdatedBase(updatedBaseData);
-				System.out.println(updatedBaseData.toString());
+				
+				
 			}
 		}
 	}
 	
 	public void initUpdateOperationVehicleDialog(OperationVehicle selectedVehicle) {
+		ArrayList<OperationVehicle> tempList = new ArrayList<OperationVehicle>();
+		tempList.add(selectedVehicle);
 		Stage stage = this.initUpdateFullBaseDialog();
 		this.controllerUpdateFullBaseDialog.selectTabUpdateOperationVehicle();
-		this.controllerUpdateFullBaseDialog.setOldOperationVehicleData(selectedVehicle);
+		this.controllerUpdateFullBaseDialog.setListOfOperationVehicles(tempList);
 		stage.showAndWait();
 		
 		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
-			OperationVehicle updatedOperationVehicle = this.controllerUpdateFullBaseDialog.getUpdatedOperationVehicleData();
+			ArrayList<OperationVehicle> updatedOperationVehicles = this.controllerUpdateFullBaseDialog.getListOfNewOperationVehicles();
+			OperationVehicle updatedOperationVehicle = updatedOperationVehicles.get(0);
 			if(updatedOperationVehicle != null) {
 				updatedOperationVehicle.setOperationVehicleId(selectedVehicle.getOperationVehicleId());
 				updatedOperationVehicle.setBase(this.currBaseToUpdate);
 				updatedOperationVehicle.setBaseId(this.currBaseToUpdate.getBaseId());
 				this.setUpdatedOperationVehicle(updatedOperationVehicle);
 				
-				CountDownLatch countDownLatch = new CountDownLatch(3);
-				
-				OperationVehicleUpdateHandler operationVehicleUpdateLoader = new OperationVehicleUpdateHandler(countDownLatch, updatedOperationVehicle, this.currBaseToUpdate.getBaseId());
-				OperationVehicleByBaseIdLoader operationVehicleByBaseIdLoader = new OperationVehicleByBaseIdLoader(countDownLatch, this.currBaseToUpdate.getBaseId(), updatedOperationVehicle.getBaseId());
-				OperationVehicleLoader operationVehicleLoader = new OperationVehicleLoader(countDownLatch);
-				
-				Thread threadOperationVehicleUpdateLoader = new Thread(operationVehicleUpdateLoader);
-				Thread threadOperationVehicleByBaseIdLoader = new Thread(operationVehicleByBaseIdLoader);
-				Thread threadOperationVehicleLoader = new Thread(operationVehicleLoader);
-				
-				threadOperationVehicleUpdateLoader.start();
-				threadOperationVehicleByBaseIdLoader.start();
-				threadOperationVehicleLoader.start();
-				
 				try {
-					countDownLatch.await();
+					Thread threadVehicleUpdaterHandler = new Thread(new OperationVehicleUpdateHandler(updatedOperationVehicle, this.currBaseToUpdate.getBaseId()));
+					
+					threadVehicleUpdaterHandler.start();
+					threadVehicleUpdaterHandler.join();
+					
+					Thread.sleep(250);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
-				}	
+				}
 			}
 		}
 	}
 	
 	public void initUpdateMemberDialog(Member selectedMember) {
+		ArrayList<Member> tempList = new ArrayList<Member>();
+		tempList.add(selectedMember);
 		Stage stage = this.initUpdateFullBaseDialog();
 		this.controllerUpdateFullBaseDialog.selectTabUpdateMember();
-		this.controllerUpdateFullBaseDialog.setOldMemberData(selectedMember);
+		this.controllerUpdateFullBaseDialog.setListOfMembers(tempList);
 		stage.showAndWait();
 		
 		if(this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
-			Member updatedMember = this.controllerUpdateFullBaseDialog.getUpdatedMemberData();
+			ArrayList<Member> updatedMembers = this.controllerUpdateFullBaseDialog.getListOfNewMembers();
+			Member updatedMember = updatedMembers.get(0);
 			
 			if(updatedMember != null) {
 				updatedMember.setMemberId(selectedMember.getMemberId());
@@ -117,6 +146,17 @@ public class CentralUpdateHandler {
 				updatedMember.setPassword(selectedMember.getPassword());
 				
 				this.setUpdatedMember(updatedMember);
+				
+				try {
+					Thread threadUpdateHandler = new Thread(new MemberUpdateHandler(updatedMember));
+					
+					threadUpdateHandler.start();
+					threadUpdateHandler.join();
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
 				
 				/*CountDownLatch countDownLatch = new CountDownLatch(3);
 				

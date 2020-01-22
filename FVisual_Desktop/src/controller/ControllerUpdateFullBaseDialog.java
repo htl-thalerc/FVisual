@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import bll.Base;
@@ -162,20 +163,20 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 		this.controllerUpdateTabBase.setBaseData(oldBaseData);
 	}
 	
-	public OperationVehicle getUpdatedOperationVehicleData() {
-		return this.controllerUpdateTabOperationVehicle.getNewOperationVehicleData();
+	public ArrayList<OperationVehicle> getListOfNewOperationVehicles() {
+		return this.controllerUpdateTabOperationVehicle.getListOfNewOperationVehicles();
 	}
 
-	public void setOldOperationVehicleData(OperationVehicle oldOperationVehicleData) {
-		this.controllerUpdateTabOperationVehicle.setOperationVehicleData(oldOperationVehicleData);
+	public void setListOfOperationVehicles(ArrayList<OperationVehicle> oldOperationVehicleData) {
+		this.controllerUpdateTabOperationVehicle.setListOfOperationVehicles(oldOperationVehicleData);
 	}
 	
-	public Member getUpdatedMemberData() {
+	public ArrayList<Member> getListOfNewMembers() {
 		return this.controllerUpdateTabMember.getNewMemberData();
 	}
 
-	public void setOldMemberData(Member oldMemberData) {
-		this.controllerUpdateTabMember.setMemberData(oldMemberData);
+	public void setListOfMembers(ArrayList<Member> oldMemberData) {
+		this.controllerUpdateTabMember.setListOfMembers(oldMemberData);
 	}
 	
 	public void setSaveBtnDisability(boolean isDisable) {

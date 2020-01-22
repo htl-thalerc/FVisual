@@ -9,6 +9,7 @@ import bll.Member;
 import bll.OperationVehicle;
 import bll.Rank;
 import handler.CentralUpdateHandler;
+import handler.MemberHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,23 +32,26 @@ public class ControllerUpdateTabMember implements Initializable {
 	@FXML
 	private ComboBox<Rank> cbNewContraction;
 	@FXML
-	private Button btnAddNewMember;
+	private Button btnAddNewMember, btnSaveChanges;
 	
 	private AtomicBoolean isValidFirstname = new AtomicBoolean(false);
 	private AtomicBoolean isValidLastname = new AtomicBoolean(false);
 	private AtomicBoolean isValidRank = new AtomicBoolean(false);
 	
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = null;
-	private boolean isSingleMemberLoad;
 	
 	public ControllerUpdateTabMember(ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog) {
 		this.controllerUpdateFullBaseDialog = controllerUpdateFullBaseDialog;
 	}
 	
 	private Member currSelectedMember = null;
+	private ObservableList<Member> obsListOfMemberData = null;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		this.obsListOfMemberData = FXCollections.observableArrayList();
+		this.btnSaveChanges.setDisable(true);
+		
 		this.initListViewMembers();
 		this.initComboboxRank();
 		this.initListViewListeners();
@@ -57,12 +61,6 @@ public class ControllerUpdateTabMember implements Initializable {
 	
 	private void initListViewMembers() {
 		ObservableList<Member> obsListOfMembers = FXCollections.observableArrayList();
-		ArrayList<Member> listOfMembers = null; //See what you should load
-		if(this.isSingleMemberLoad) {
-			
-		} else {
-			
-		}
 		this.lvMembers.setItems(obsListOfMembers);
 	}
 	
@@ -133,39 +131,57 @@ public class ControllerUpdateTabMember implements Initializable {
 		}); 
 	}
 	
-	public void setMemberData(Member oldMemberData) {
-		ObservableList<Member> obsListOfMemberData = FXCollections.observableArrayList();
-		obsListOfMemberData.add(oldMemberData);
+	public void setListOfMembers(ArrayList<Member> listOfMembers) {
+		this.obsListOfMemberData.clear();
+		
+		if(listOfMembers.size() == 1) {
+			this.btnSaveChanges.setDisable(true);
+			Member memberToUpdate = listOfMembers.get(0);
+			this.obsListOfMemberData.add(memberToUpdate);
+		} else {
+			this.btnSaveChanges.setDisable(false);
+			ArrayList<Member> list = MemberHandler.getInstance().getMemberListByBaseId();
+			for(int i=0;i<list.size();i++) {
+				this.obsListOfMemberData.add(list.get(0));
+			}
+		}
 		this.lvMembers.setItems(obsListOfMemberData);
-		this.lvMembers.getSelectionModel().select(oldMemberData);
-		this.lbOldFirstname.setText(oldMemberData.getFirstname());
-		this.lbOldLastname.setText(oldMemberData.getLastname());
-		this.lbOldRank.setText(oldMemberData.getRank().getContraction());
+		this.lvMembers.getSelectionModel().select(obsListOfMemberData.get(0));
+		this.lbOldFirstname.setText(obsListOfMemberData.get(0).getFirstname());
+		this.lbOldLastname.setText(obsListOfMemberData.get(0).getLastname());
+		this.lbOldRank.setText(obsListOfMemberData.get(0).getRank().getContraction());
 	}
 
-	public Member getNewMemberData() {
-		Member member = new Member();
+	public ArrayList<Member> getNewMemberData() {	
+		ArrayList<Member> retVal = new ArrayList<Member>();
 		
-		if(this.isValidFirstname.get()) {
-			member.setFirstname(this.tfNewFirstname.getText().trim());
+		if(this.lvMembers.getItems().size() == 1) {
+			Member member = new Member();
+			
+			if(this.isValidFirstname.get()) {
+				member.setFirstname(this.tfNewFirstname.getText().trim());
+			} else {
+				member.setFirstname(this.lbOldFirstname.getText());
+			}
+			if(this.isValidLastname.get()) {
+				member.setLastname(this.tfNewLastname.getText().trim());
+			} else {
+				member.setLastname(this.lbOldFirstname.getText());
+			}
+			if(this.isValidRank.get()) {
+				Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
+				member.setRank(selectedRank);
+				member.setRankId(selectedRank.getRankId());
+			} /*else {
+				//member.setRank(this.currSelectedMember.getRank());
+				member.setRankId(this.currSelectedMember.getRankId());
+			}*/
+			System.out.println("asdfds: " + member.getRank().toFullString());
+			retVal.add(member);
 		} else {
-			member.setFirstname(this.lbOldFirstname.getText());
+			
 		}
-		if(this.isValidLastname.get()) {
-			member.setLastname(this.tfNewLastname.getText().trim());
-		} else {
-			member.setLastname(this.lbOldFirstname.getText());
-		}
-		if(this.isValidRank.get()) {
-			Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
-			member.setRank(selectedRank);
-			member.setRankId(selectedRank.getRankId());
-		} else {
-			//member.setRank(this.currSelectedMember.getRank());
-			member.setRankId(this.currSelectedMember.getRankId());
-		}
-		System.out.println("asdfds: " + member.getRank().toFullString());
-		return member;
+		return retVal;
 	}
 	
 	@FXML
@@ -205,6 +221,47 @@ public class ControllerUpdateTabMember implements Initializable {
 			this.lvMembers.refresh();
 			
 			this.lbStatusbar.setText("Successfully added Member '" + memberToCreate.getUsername() + "'");
+		}
+	}
+	
+	@FXML private void onClickBtnSaveChanges(ActionEvent event) {
+		ArrayList<Member> listOfAllCurrMembers = new ArrayList<Member>();
+		
+		for(int i=0;i<this.obsListOfMemberData.size();i++) {
+			listOfAllCurrMembers.add(this.obsListOfMemberData.get(i));
+		}
+		
+		Member currSelectedMember = this.lvMembers.getSelectionModel().getSelectedItem();
+		
+		if(currSelectedMember != null) {
+			if(this.isValidFirstname.get()) {
+				currSelectedMember.setFirstname(this.tfNewFirstname.getText().trim());
+			} else {
+				currSelectedMember.setFirstname(this.lbOldFirstname.getText());
+			}
+			if(this.isValidLastname.get()) {
+				currSelectedMember.setLastname(this.tfNewLastname.getText().trim());
+			} else {
+				currSelectedMember.setLastname(this.lbOldFirstname.getText());
+			}
+			if(this.isValidRank.get()) {
+				Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
+				currSelectedMember.setRank(selectedRank);
+				currSelectedMember.setRankId(selectedRank.getRankId());
+			}
+			
+			for(int i=0;i<listOfAllCurrMembers.size();i++) {
+				if(listOfAllCurrMembers.get(i).getMemberId() == currSelectedMember.getMemberId()) {
+					listOfAllCurrMembers.remove(listOfAllCurrMembers.get(i));
+					listOfAllCurrMembers.add(currSelectedMember);
+				}
+			}
+			
+			for(int i=0;i<listOfAllCurrMembers.size();i++) {
+				System.out.println("All members: " + listOfAllCurrMembers.get(i).toFullString());
+			}
+			
+			this.lvMembers.refresh();
 		}
 	}
 }

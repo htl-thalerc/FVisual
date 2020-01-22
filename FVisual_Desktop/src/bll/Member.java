@@ -179,7 +179,7 @@ public class Member {
 
 	public String toFullString() {
 		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
-				+ base + ", " + rank;
+				+ base + ", " + rank.toFullString();
 //		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
 //				+ this.base.getBaseId() + ", " + this.rank.getRankId();
 	}
