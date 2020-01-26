@@ -10,6 +10,7 @@ import bll.OperationVehicle;
 import bll.Rank;
 import handler.CentralUpdateHandler;
 import handler.MemberHandler;
+import handler.RankHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -141,15 +142,19 @@ public class ControllerUpdateTabMember implements Initializable {
 		} else {
 			this.btnSaveChanges.setDisable(false);
 			ArrayList<Member> list = MemberHandler.getInstance().getMemberListByBaseId();
-			for(int i=0;i<list.size();i++) {
-				this.obsListOfMemberData.add(list.get(0));
+			if(list.size() != 0) {
+				for(int i=0;i<list.size();i++) {
+					this.obsListOfMemberData.add(list.get(0));
+				}	
 			}
 		}
 		this.lvMembers.setItems(obsListOfMemberData);
-		this.lvMembers.getSelectionModel().select(obsListOfMemberData.get(0));
-		this.lbOldFirstname.setText(obsListOfMemberData.get(0).getFirstname());
-		this.lbOldLastname.setText(obsListOfMemberData.get(0).getLastname());
-		this.lbOldRank.setText(obsListOfMemberData.get(0).getRank().getContraction());
+		if(this.obsListOfMemberData.size() != 0) {
+			this.lvMembers.getSelectionModel().select(obsListOfMemberData.get(0));
+			this.lbOldFirstname.setText(obsListOfMemberData.get(0).getFirstname());
+			this.lbOldLastname.setText(obsListOfMemberData.get(0).getLastname());
+			this.lbOldRank.setText(obsListOfMemberData.get(0).getRank().getContraction());
+		}
 	}
 
 	public ArrayList<Member> getNewMemberData() {	
@@ -172,15 +177,31 @@ public class ControllerUpdateTabMember implements Initializable {
 				Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
 				member.setRank(selectedRank);
 				member.setRankId(selectedRank.getRankId());
-			} /*else {
-				//member.setRank(this.currSelectedMember.getRank());
-				member.setRankId(this.currSelectedMember.getRankId());
-			}*/
-			System.out.println("asdfds: " + member.getRank().toFullString());
+			} else {
+				Rank tempRank = this.getRankFromOldTextfield();
+				member.setRank(tempRank);
+				member.setRankId(tempRank.getRankId());
+			}
 			retVal.add(member);
 		} else {
-			
+			for(int i=0;i< this.lvMembers.getItems().size();i++) {
+				retVal.add(this.lvMembers.getItems().get(i));
+			}
 		}
+		return retVal;
+	}
+	
+	private Rank getRankFromOldTextfield() {
+		Rank retVal = null;
+		ArrayList<Rank> tempListOfRanks = RankHandler.getInstance().getRankList();
+		
+		for(int i=0;i<tempListOfRanks.size();i++) {
+			if(tempListOfRanks.get(i).getContraction().equals(this.lbOldRank.getText().trim())) {
+				retVal = tempListOfRanks.get(i);
+				break;
+			}
+		}
+		
 		return retVal;
 	}
 	
@@ -255,10 +276,6 @@ public class ControllerUpdateTabMember implements Initializable {
 					listOfAllCurrMembers.remove(listOfAllCurrMembers.get(i));
 					listOfAllCurrMembers.add(currSelectedMember);
 				}
-			}
-			
-			for(int i=0;i<listOfAllCurrMembers.size();i++) {
-				System.out.println("All members: " + listOfAllCurrMembers.get(i).toFullString());
 			}
 			
 			this.lvMembers.refresh();

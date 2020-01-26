@@ -110,7 +110,7 @@
                   <Insets bottom="10.0" left="10.0" />
                </GridPane.margin>
             </Label>
-            <Button fx:id="btnSaveUpdatedVehicle" mnemonicParsing="false" onAction="#onClickBtnSaveUpdatedVehicle" text="Save Vehicle" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+            <Button fx:id="btnSaveUpdatedVehicleChanges" mnemonicParsing="false" onAction="#onClickBtnSaveUpdatedVehicleChanges" text="Save Changes" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <GridPane.margin>
                   <Insets bottom="10.0" right="10.0" />
                </GridPane.margin>

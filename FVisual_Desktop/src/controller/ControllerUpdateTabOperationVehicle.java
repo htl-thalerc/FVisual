@@ -9,6 +9,7 @@ import bll.Member;
 import bll.OperationVehicle;
 import bll.Rank;
 import handler.CentralUpdateHandler;
+import handler.EditingListCellOperationVehicle;
 import handler.OperationVehicleHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,11 +29,13 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	@FXML
 	private TextField tfNewVehiclename;
 	@FXML
-	private Button btnAddNewVehicle, btnSaveUpdatedVehicle;
+	private Button btnAddNewVehicle, btnSaveUpdatedVehicleChanges;
 	
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog;
 	private AtomicBoolean isValidVehiclename = new AtomicBoolean(false);
 	private ObservableList<OperationVehicle> obsListOfVehicleData;
+	
+	private final String CONST_NAME_FOR_NEW_VEHICLE = "Name for new Vehicle";
 	
 	public ControllerUpdateTabOperationVehicle(ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog) {
 		this.controllerUpdateFullBaseDialog = controllerUpdateFullBaseDialog;
@@ -41,6 +44,7 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
+		this.btnSaveUpdatedVehicleChanges.setDisable(true);
 		this.initListViewListeners();
 		this.initTextFieldListeners();
 	}
@@ -51,7 +55,11 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			if(selectedOperationVehicle != null) {
 				this.lbOldVehiclename.setText(selectedOperationVehicle.getDescription());
 			} else {
-				this.lbOldVehiclename.setText("No Operationvehicle selected");
+				if(this.lbOldVehiclename.getText().equals("No Vehicle selected") && selectedOperationVehicle == null) {
+					this.btnSaveUpdatedVehicleChanges.setDisable(true);
+				} else {
+					this.lbOldVehiclename.setText("No Operationvehicle selected");	
+				}
 			}
 		});
 	}
@@ -59,20 +67,40 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	private void initTextFieldListeners() {
 		this.tfNewVehiclename.textProperty().addListener((obj, oldVal, newVal) -> {
 			if(newVal.length() >= 3) {
-				this.isValidVehiclename.set(true);
-				this.tfNewVehiclename.setStyle("-fx-text-box-border: green;");
-				this.tfNewVehiclename.setStyle("-fx-focus-color: green;");
-				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
-				if(this.btnAddNewVehicle.getText().equals("Save Member")) {
-					this.btnAddNewVehicle.setDisable(false);
-				}
+				if(this.tfNewVehiclename.getText().equals(CONST_NAME_FOR_NEW_VEHICLE)) {
+					this.isValidVehiclename.set(false);
+					this.btnSaveUpdatedVehicleChanges.setDisable(true);
+					this.tfNewVehiclename.setStyle("-fx-text-box-border: red;");
+					this.tfNewVehiclename.setStyle("-fx-focus-color: red;");
+					this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
+				} else {
+					this.isValidVehiclename.set(true);
+					this.btnSaveUpdatedVehicleChanges.setDisable(false);
+					this.tfNewVehiclename.setStyle("-fx-text-box-border: green;");
+					this.tfNewVehiclename.setStyle("-fx-focus-color: green;");
+					this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
+					
+					if(this.btnAddNewVehicle.getText().equals("Add Vehicle") && 
+							this.lbOldVehiclename.getText().equals("Change Vehiclename")) {
+						this.btnAddNewVehicle.setDisable(false);
+						this.btnAddNewVehicle.setText("Save Vehicle");
+						this.btnSaveUpdatedVehicleChanges.setDisable(true);
+					} else if(this.btnAddNewVehicle.getText().equals("Save Vehicle") && 
+							this.lbOldVehiclename.getText().equals("Change Vehiclename")) {
+						this.btnSaveUpdatedVehicleChanges.setDisable(true);
+						this.btnAddNewVehicle.setDisable(false);
+					}
+				} 
 			} else {
 				this.isValidVehiclename.set(false);
+				this.btnSaveUpdatedVehicleChanges.setDisable(true);
 				this.tfNewVehiclename.setStyle("-fx-text-box-border: red;");
 				this.tfNewVehiclename.setStyle("-fx-focus-color: red;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(true);
-				if(this.btnAddNewVehicle.getText().equals("Save Member")) {
+				if(this.btnAddNewVehicle.getText().equals("Save Vehicle")) {
 					this.btnAddNewVehicle.setDisable(true);
+				} else {
+					this.btnAddNewVehicle.setDisable(false);
 				}
 			}
 		});
@@ -85,13 +113,17 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			this.obsListOfVehicleData.add(vehicleToUpdate);
 		} else {
 			ArrayList<OperationVehicle> list = OperationVehicleHandler.getInstance().getVehicleListByBaseId();
-			for(int i=0;i<list.size();i++) {
-				this.obsListOfVehicleData.add(list.get(i));
+			if(list.size() != 0) {
+				for(int i=0;i<list.size();i++) {
+					this.obsListOfVehicleData.add(list.get(i));
+				}	
 			}
 		}
 		this.lvVehicles.setItems(this.obsListOfVehicleData);
-		this.lvVehicles.getSelectionModel().select(this.obsListOfVehicleData.get(0));
-		this.lbOldVehiclename.setText(this.obsListOfVehicleData.get(0).getDescription());
+		if(this.obsListOfVehicleData.size() != 0) {
+			this.lvVehicles.getSelectionModel().select(this.obsListOfVehicleData.get(0));
+			this.lbOldVehiclename.setText(this.obsListOfVehicleData.get(0).getDescription());
+		}
 	}
 
 	public ArrayList<OperationVehicle> getListOfNewOperationVehicles() {
@@ -105,7 +137,9 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			}
 			retVal.add(vehicle);
 		} else {
-			
+			for(int i=0;i< this.lvVehicles.getItems().size();i++) {
+				retVal.add(this.lvVehicles.getItems().get(i));
+			}
 		}
 		return retVal;
 	}
@@ -113,12 +147,15 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 	@FXML
 	private void onClickBtnAddNewVehicle(ActionEvent event) {
 		if(this.btnAddNewVehicle.getText().equals("Add Vehicle")) {
-			this.btnAddNewVehicle.setText("Save Vehicle");
-			this.lvVehicles.setDisable(true);
-			this.btnAddNewVehicle.setDisable(true);
-			this.lbOldVehiclename.setText("No Vehicle selected");
+			this.lvVehicles.getSelectionModel().clearSelection();
 			
-			this.lbStatusbar.setText("Note: Fill all Textfield to save Operationvehicle");
+			this.lvVehicles.setDisable(true);
+			
+			this.btnAddNewVehicle.setDisable(true);
+			this.btnSaveUpdatedVehicleChanges.setDisable(true);
+			
+			this.lbOldVehiclename.setText("Change Vehiclename");
+			this.tfNewVehiclename.setText(CONST_NAME_FOR_NEW_VEHICLE);
 		} else if(this.btnAddNewVehicle.getText().equals("Save Vehicle")) {
 			this.btnAddNewVehicle.setText("Add Vehicle");
 			this.lvVehicles.setDisable(false);
@@ -127,15 +164,22 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			
 			OperationVehicle vehicleToCreate = new OperationVehicle();
 			vehicleToCreate.setBase(CentralUpdateHandler.getInstance().getCurrBaseToUpdate());
+			vehicleToCreate.setBaseId(CentralUpdateHandler.getInstance().getCurrBaseToUpdate().getBaseId());
 			
 			vehicleToCreate.setDescription(this.tfNewVehiclename.getText().trim());
+			vehicleToCreate.setOperationVehicleId(-1);
 			
-			this.lbStatusbar.setText("Successfully added Operationvehicle '" + vehicleToCreate.getDescription() + "'");
+			this.obsListOfVehicleData.add(vehicleToCreate);
+			this.lvVehicles.refresh();
+			
+			this.lvVehicles.getSelectionModel().clearSelection();
+			this.tfNewVehiclename.setText("");
+			this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
 		}
 	}
 	
 	@FXML
-	private void onClickBtnSaveUpdatedVehicle(ActionEvent event) {
+	private void onClickBtnSaveUpdatedVehicleChanges(ActionEvent event) {
 		OperationVehicle currSelectedVehicle = this.lvVehicles.getSelectionModel().getSelectedItem();
 		
 		if(currSelectedVehicle != null) {
@@ -152,6 +196,11 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 				}
 			}
 			this.lvVehicles.refresh();
+			this.lvVehicles.getSelectionModel().clearSelection();
+			this.tfNewVehiclename.setText("");
+			this.lbOldVehiclename.setText("No Vehicle selected");
+			this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
+			this.btnSaveUpdatedVehicleChanges.setDisable(false);
 		}
 	}
 }

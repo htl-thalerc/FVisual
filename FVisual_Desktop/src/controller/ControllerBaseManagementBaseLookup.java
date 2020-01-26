@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
 
+import com.sun.webkit.ContextMenu;
+
 import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
@@ -59,8 +61,8 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
 	private Button btnLoadBaseVehicles, btnLoadBaseMembers, btnLoadAllVehicles, btnLoadAllMembers;
 	@FXML
-	private MenuItem mItemRemoveBase, mItemUpdateBase;
-
+	private MenuItem mItemRemoveBase, mItemUpdateBase, mItemUpdateVehicle, mItemRemoveVehicle, mItemUpdateMember, mItemRemoveMember;
+	
 	private ObservableList<Base> obsListTVBaseData = null;
 	private ObservableList<OperationVehicle> obsListTVVehicles = null;
 	private ObservableList<Member> obsListTVMembers = null;
@@ -88,6 +90,11 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	private void defaultSettings() {
+		//todo: enable
+		this.mItemRemoveBase.setDisable(true);
+		this.mItemRemoveVehicle.setDisable(true);
+		this.mItemRemoveMember.setDisable(true);
+		
 		this.btnLoadBaseVehicles.setDisable(true);
 		this.btnLoadBaseMembers.setDisable(true);
 		this.btnLoadAllVehicles.setDisable(true);
@@ -400,7 +407,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 				this.onClickBtnLoadBaseVehicles(new ActionEvent());
 			} catch (InterruptedException e) {
-
 				e.printStackTrace();
 			}
 		}

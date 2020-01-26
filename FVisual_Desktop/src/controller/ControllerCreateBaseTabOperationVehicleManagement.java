@@ -13,14 +13,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 
 public class ControllerCreateBaseTabOperationVehicleManagement implements Initializable {
 	@FXML
 	private ListView<OperationVehicle> lvAvailableOperationVehicles, lvSelectedOperationVehciles;
 	@FXML
-	private Button btnAddOneOperationVehicle, btnRemoveOneOperationVehicle, btnAddAllOperationVehicles, btnRemoveAllOperationVehicles, btnAddNewOperationVehicle;
+	private Button btnAddOneOperationVehicle, btnRemoveOneOperationVehicle, btnAddAllOperationVehicles,
+			btnRemoveAllOperationVehicles, btnAddNewOperationVehicle;
 
 	private final String CONST_NAME_FOR_NEW_VEHICLE = "Name for new Vehicle";
 	private final String CONST_BTN_TEXT_ADD_NEW_VEHICLE = "Add new Vehicle";
@@ -171,7 +175,7 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 	@FXML
 	private void onClickBtnAddNewOperationVehicle(ActionEvent event) {
 		if (this.btnAddNewOperationVehicle.getText().equals(CONST_BTN_TEXT_ADD_NEW_VEHICLE)) {
-			this.obsListLVAvailableOperationVehicles.add(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null));
+			this.obsListLVAvailableOperationVehicles.add(0, new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null));
 
 			this.lvAvailableOperationVehicles.refresh();
 			this.lvAvailableOperationVehicles.setEditable(true);
@@ -197,7 +201,6 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 									this.btnAddNewOperationVehicle.setDisable(false);
 									this.lvAvailableOperationVehicles.setEditable(false);
 									this.controllerCreateBase.setAllOptionButtonsDisability(false);
-									this.lvAvailableOperationVehicles.setEditable(false);
 									this.controllerCreateBase.setStatusbarValue("");
 								}
 								return operationVehicle;
