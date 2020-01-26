@@ -210,6 +210,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.obsListTVBaseData.addAll(BaseHandler.getInstance().getBaseList());
 
 		this.tvBaseData.setItems(this.obsListTVBaseData.sorted());
+		this.tvBaseData.refresh();
 	}
 
 	public void fillTableViewVehiclesFromThread(boolean isLoadingAllVehicles) {

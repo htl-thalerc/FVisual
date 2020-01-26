@@ -212,7 +212,7 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			this.tfNewVehiclename.setText("");
 			this.lbOldVehiclename.setText("No Vehicle selected");
 			this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
-			this.btnSaveUpdatedVehicleChanges.setDisable(false);
+			this.btnSaveUpdatedVehicleChanges.setDisable(true);
 		}
 	}
 }

@@ -23,6 +23,7 @@ import loader.OperationVehicleByBaseIdLoader;
 import loader.OperationVehicleLoader;
 import manager.MemberManager;
 import manager.OperationVehicleManager;
+import threadHelper.BaseUpdateHandler;
 import threadHelper.MemberPostHandler;
 import threadHelper.MemberUpdateHandler;
 import threadHelper.OperationVehiclePostHandler;
@@ -81,12 +82,23 @@ public class CentralUpdateHandler {
 					.getListOfNewOperationVehicles();
 			try {
 				//update base
-				
-				
+				if (updatedBaseData != null) {
+					updatedBaseData.setBaseId(selectedBase.getBaseId());
+					this.setUpdatedBase(updatedBaseData);
+					
+					System.out.println(updatedBaseData.toString());
+					
+					Thread threadUpdateBase = new Thread(new BaseUpdateHandler(updatedBaseData));
+					threadUpdateBase.start();
+					threadUpdateBase.join();
+					Thread.sleep(250);
+				}
 				
 				//Update member
 				for (int i = 0; i < listOfUpdatedMembers.size(); i++) {
-					System.out.println("All members: " + listOfUpdatedMembers.get(i).toFullString());
+					listOfUpdatedMembers.get(i).setBaseId(listOfUpdatedMembers.get(i).getBase().getBaseId());
+					listOfUpdatedMembers.get(i).setRankId(listOfUpdatedMembers.get(i).getRank().getRankId());
+					
 					if (listOfUpdatedMembers.get(i).getMemberId() == -1) {
 						Thread threadPostMember = new Thread(new MemberPostHandler(listOfUpdatedMembers.get(i)));
 						threadPostMember.start();
@@ -118,12 +130,6 @@ public class CentralUpdateHandler {
 				}
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
-			}
-
-			if (updatedBaseData != null) {
-				updatedBaseData.setBaseId(selectedBase.getBaseId());
-				this.setUpdatedBase(updatedBaseData);
-
 			}
 		}
 	}

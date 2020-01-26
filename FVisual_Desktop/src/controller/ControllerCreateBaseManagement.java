@@ -214,11 +214,11 @@ public class ControllerCreateBaseManagement implements Initializable {
 				FXMLLoader loader2 = CentralHandler.loadFXML("/gui/CreateBaseThreadDialog.fxml");
 				loader2.setController(new ControllerCreateBaseThreadDialog(this, baseToCreate, collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase));
 				
-				//Stage stage2 = new Stage();
-				//Scene scene2 = new Scene(loader2.load());
-				//stage2.setScene(scene2);
-				//stage2.show();
-				//stage2.centerOnScreen();
+				Stage stage2 = new Stage();
+				Scene scene2 = new Scene(loader2.load());
+				stage2.setScene(scene2);
+				stage2.show();
+				stage2.centerOnScreen();
 				
 				// Update GUI
 				this.resetCreateBaseTabs();
