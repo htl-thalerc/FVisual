@@ -33,16 +33,22 @@ public class ControllerUpdateTabMember implements Initializable {
 	@FXML
 	private ComboBox<Rank> cbNewContraction;
 	@FXML
-	private Button btnAddNewMember, btnSaveChanges;
+	private Button btnAddNewMember, btnSaveMemberChanges;
 	
 	private AtomicBoolean isValidFirstname = new AtomicBoolean(false);
 	private AtomicBoolean isValidLastname = new AtomicBoolean(false);
 	private AtomicBoolean isValidRank = new AtomicBoolean(false);
 	
-	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = null;
+	private final String CONST_FIRSTNAME_FOR_NEW_MEMBER = "Firstname for new Member";
+	private final String CONST_LASTNAME_FOR_NEW_MEMBER = "Lastname for new Member";
+	private final String CONST_RANK_FOR_NEW_MEMBER = "Name for new Member";
 	
-	public ControllerUpdateTabMember(ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog) {
+	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = null;
+	private boolean isSingleUpdate;
+	
+	public ControllerUpdateTabMember(ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog, boolean isSingleUpdate) {
 		this.controllerUpdateFullBaseDialog = controllerUpdateFullBaseDialog;
+		this.isSingleUpdate = isSingleUpdate;
 	}
 	
 	private Member currSelectedMember = null;
@@ -51,7 +57,7 @@ public class ControllerUpdateTabMember implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.obsListOfMemberData = FXCollections.observableArrayList();
-		this.btnSaveChanges.setDisable(true);
+		this.btnSaveMemberChanges.setDisable(true);
 		
 		this.initListViewMembers();
 		this.initComboboxRank();
@@ -94,6 +100,10 @@ public class ControllerUpdateTabMember implements Initializable {
 				this.tfNewFirstname.setStyle("-fx-focus-color: green;");
 				this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
 			} else {
+				
+				
+				
+				
 				this.isValidFirstname.set(false);
 				this.tfNewFirstname.setStyle("-fx-text-box-border: red;");
 				this.tfNewFirstname.setStyle("-fx-focus-color: red;");
@@ -133,27 +143,26 @@ public class ControllerUpdateTabMember implements Initializable {
 	}
 	
 	public void setListOfMembers(ArrayList<Member> listOfMembers) {
-		this.obsListOfMemberData.clear();
-		
+		this.obsListOfMemberData = FXCollections.observableArrayList();
 		if(listOfMembers.size() == 1) {
-			this.btnSaveChanges.setDisable(true);
+			this.btnSaveMemberChanges.setDisable(true);
 			Member memberToUpdate = listOfMembers.get(0);
 			this.obsListOfMemberData.add(memberToUpdate);
 		} else {
-			this.btnSaveChanges.setDisable(false);
+			this.btnSaveMemberChanges.setDisable(false);
 			ArrayList<Member> list = MemberHandler.getInstance().getMemberListByBaseId();
 			if(list.size() != 0) {
 				for(int i=0;i<list.size();i++) {
-					this.obsListOfMemberData.add(list.get(0));
+					this.obsListOfMemberData.add(list.get(i));
 				}	
 			}
 		}
-		this.lvMembers.setItems(obsListOfMemberData);
+		this.lvMembers.setItems(this.obsListOfMemberData);
 		if(this.obsListOfMemberData.size() != 0) {
-			this.lvMembers.getSelectionModel().select(obsListOfMemberData.get(0));
-			this.lbOldFirstname.setText(obsListOfMemberData.get(0).getFirstname());
-			this.lbOldLastname.setText(obsListOfMemberData.get(0).getLastname());
-			this.lbOldRank.setText(obsListOfMemberData.get(0).getRank().getContraction());
+			this.lvMembers.getSelectionModel().select(this.obsListOfMemberData.get(0));
+			this.lbOldFirstname.setText(this.obsListOfMemberData.get(0).getFirstname());
+			this.lbOldLastname.setText(this.obsListOfMemberData.get(0).getLastname());
+			this.lbOldRank.setText(this.obsListOfMemberData.get(0).getRank().getContraction());
 		}
 	}
 
@@ -201,22 +210,28 @@ public class ControllerUpdateTabMember implements Initializable {
 				break;
 			}
 		}
-		
 		return retVal;
 	}
 	
 	@FXML
 	private void onClickBtnAddNewMember(ActionEvent event) {
 		if(this.btnAddNewMember.getText().equals("Add Member")) {
-			this.btnAddNewMember.setText("Save Member");
+			this.lvMembers.getSelectionModel().clearSelection();
+			
 			this.lvMembers.setDisable(true);
+			
 			this.btnAddNewMember.setDisable(true);
+			this.btnSaveMemberChanges.setDisable(true);
 			
-			this.lbOldFirstname.setText("No Member selected");
-			this.lbOldLastname.setText("No Member selected");
-			this.lbOldRank.setText("No Member selected");
+			this.lbOldFirstname.setText("Change Firstname");
+			this.lbOldLastname.setText("Change Lastname");
+			this.lbOldRank.setText("Change Rank");
 			
-			this.lbStatusbar.setText("Note: Fill all Textfield to save Member");
+			this.tfNewFirstname.setText(CONST_FIRSTNAME_FOR_NEW_MEMBER);
+			this.tfNewLastname.setText(CONST_LASTNAME_FOR_NEW_MEMBER);
+			this.cbNewContraction.setPromptText(CONST_RANK_FOR_NEW_MEMBER);
+			
+			//this.lbStatusbar.setText("Note: Fill all Textfield to save Member");
 		} else if(this.btnAddNewMember.getText().equals("Save Member")) {
 			this.btnAddNewMember.setText("Add Member");
 			this.lvMembers.setDisable(false);
@@ -236,16 +251,22 @@ public class ControllerUpdateTabMember implements Initializable {
 			memberToCreate.setRank(this.cbNewContraction.getValue());
 			memberToCreate.setPassword(memberToCreate.getUsername().toLowerCase());
 			memberToCreate.setAdmin(false);
+			memberToCreate.setMemberId(-1);
 			
-			ObservableList<Member> listOfMembers = this.lvMembers.getItems();
-			listOfMembers.add(memberToCreate);
+			this.obsListOfMemberData.add(memberToCreate);
 			this.lvMembers.refresh();
 			
-			this.lbStatusbar.setText("Successfully added Member '" + memberToCreate.getUsername() + "'");
+			//this.lbStatusbar.setText("Successfully added Member '" + memberToCreate.getUsername() + "'");
+			
+			this.lvMembers.getSelectionModel().clearSelection();
+			this.tfNewFirstname.setText("");
+			this.tfNewLastname.setText("");
+			this.cbNewContraction.setPromptText("");
+			this.controllerUpdateFullBaseDialog.setSaveBtnDisability(false);
 		}
 	}
 	
-	@FXML private void onClickBtnSaveChanges(ActionEvent event) {
+	@FXML private void onClickBtnSaveMemberChanges(ActionEvent event) {
 		ArrayList<Member> listOfAllCurrMembers = new ArrayList<Member>();
 		
 		for(int i=0;i<this.obsListOfMemberData.size();i++) {

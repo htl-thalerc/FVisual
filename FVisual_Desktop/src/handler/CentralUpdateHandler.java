@@ -23,6 +23,7 @@ import loader.OperationVehicleByBaseIdLoader;
 import loader.OperationVehicleLoader;
 import manager.MemberManager;
 import manager.OperationVehicleManager;
+import threadHelper.MemberPostHandler;
 import threadHelper.MemberUpdateHandler;
 import threadHelper.OperationVehiclePostHandler;
 import threadHelper.OperationVehicleUpdateHandler;
@@ -45,7 +46,7 @@ public class CentralUpdateHandler {
 	}
 
 	public void initUpdateBaseDialog(Base selectedBase) {
-		Stage stage = this.initUpdateFullBaseDialog();
+		Stage stage = this.initUpdateFullBaseDialog(false);
 		this.controllerUpdateFullBaseDialog.selectTabUpdateBase();
 		this.controllerUpdateFullBaseDialog.setOldBaseData(selectedBase);
 
@@ -78,34 +79,45 @@ public class CentralUpdateHandler {
 			ArrayList<Member> listOfUpdatedMembers = this.controllerUpdateFullBaseDialog.getListOfNewMembers();
 			ArrayList<OperationVehicle> listOfUpdatedVehicles = this.controllerUpdateFullBaseDialog
 					.getListOfNewOperationVehicles();
-
-			for (int i = 0; i < listOfUpdatedMembers.size(); i++) {
-				System.out.println("All members: " + listOfUpdatedMembers.get(i).toFullString());
-			}
-
-			for (int i = 0; i < listOfUpdatedVehicles.size(); i++) {
-				System.out.println("All vehicles: " + listOfUpdatedVehicles.get(i).toFullString());
-				if (listOfUpdatedVehicles.get(i).getOperationVehicleId() == -1) {
-					try {
+			try {
+				//update base
+				
+				
+				
+				//Update member
+				for (int i = 0; i < listOfUpdatedMembers.size(); i++) {
+					System.out.println("All members: " + listOfUpdatedMembers.get(i).toFullString());
+					if (listOfUpdatedMembers.get(i).getMemberId() == -1) {
+						Thread threadPostMember = new Thread(new MemberPostHandler(listOfUpdatedMembers.get(i)));
+						threadPostMember.start();
+						threadPostMember.join();
+						Thread.sleep(250);
+					} else {
+						Thread threadUpdateMember = new Thread(new MemberUpdateHandler(listOfUpdatedMembers.get(i)));
+						threadUpdateMember.start();
+						threadUpdateMember.join();
+						Thread.sleep(250);
+					}
+				}
+				
+				//Update vehicle
+				for (int i = 0; i < listOfUpdatedVehicles.size(); i++) {
+					if (listOfUpdatedVehicles.get(i).getOperationVehicleId() == -1) {
 						Thread threadPostVehicle = new Thread(
 								new OperationVehiclePostHandler(listOfUpdatedVehicles.get(i)));
 						threadPostVehicle.start();
 						threadPostVehicle.join();
 						Thread.sleep(250);
-					} catch (InterruptedException ex) {
-						ex.printStackTrace();
-					}
-				} else {
-					try {
+					} else {
 						Thread threadVehicleUpdaterHandler = new Thread(new OperationVehicleUpdateHandler(
 								listOfUpdatedVehicles.get(i), this.currBaseToUpdate.getBaseId()));
 						threadVehicleUpdaterHandler.start();
 						threadVehicleUpdaterHandler.join();
 						Thread.sleep(250);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
 					}
 				}
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
 			}
 
 			if (updatedBaseData != null) {
@@ -119,7 +131,7 @@ public class CentralUpdateHandler {
 	public void initUpdateOperationVehicleDialog(OperationVehicle selectedVehicle) {
 		ArrayList<OperationVehicle> tempList = new ArrayList<OperationVehicle>();
 		tempList.add(selectedVehicle);
-		Stage stage = this.initUpdateFullBaseDialog();
+		Stage stage = this.initUpdateFullBaseDialog(true);
 		this.controllerUpdateFullBaseDialog.selectTabUpdateOperationVehicle();
 		this.controllerUpdateFullBaseDialog.setListOfOperationVehicles(tempList);
 		stage.showAndWait();
@@ -152,7 +164,7 @@ public class CentralUpdateHandler {
 	public void initUpdateMemberDialog(Member selectedMember) {
 		ArrayList<Member> tempList = new ArrayList<Member>();
 		tempList.add(selectedMember);
-		Stage stage = this.initUpdateFullBaseDialog();
+		Stage stage = this.initUpdateFullBaseDialog(true);
 		this.controllerUpdateFullBaseDialog.selectTabUpdateMember();
 		this.controllerUpdateFullBaseDialog.setListOfMembers(tempList);
 		stage.showAndWait();
@@ -160,8 +172,7 @@ public class CentralUpdateHandler {
 		if (this.controllerUpdateFullBaseDialog.getBtnSaveState()) {
 			ArrayList<Member> updatedMembers = this.controllerUpdateFullBaseDialog.getListOfNewMembers();
 			Member updatedMember = updatedMembers.get(0);
-			System.out.println("aaaa: " + updatedMember.toFullString());
-
+			
 			if (updatedMember != null) {
 				updatedMember.setMemberId(selectedMember.getMemberId());
 				updatedMember.setUsername(updatedMember.getLastname().substring(0, 4).toLowerCase()
@@ -191,10 +202,10 @@ public class CentralUpdateHandler {
 		}
 	}
 
-	public Stage initUpdateFullBaseDialog() {
+	public Stage initUpdateFullBaseDialog(boolean isSingleUpdate) {
 		FXMLLoader loader = CentralHandler.loadFXML("/gui/UpdateFullBaseDialog.fxml");
 		Stage curStage = null;
-		this.controllerUpdateFullBaseDialog = new ControllerUpdateFullBaseDialog(this);
+		this.controllerUpdateFullBaseDialog = new ControllerUpdateFullBaseDialog(this, isSingleUpdate);
 		loader.setController(this.controllerUpdateFullBaseDialog);
 
 		try {

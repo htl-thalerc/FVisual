@@ -30,9 +30,11 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 	private ControllerUpdateTabOperationVehicle controllerUpdateTabOperationVehicle;
 	private ControllerUpdateTabMember controllerUpdateTabMember;
 	private CentralUpdateHandler centralUpdateHandler;
+	private boolean isSingleUpdate;
 	
-	public ControllerUpdateFullBaseDialog(CentralUpdateHandler centralUpdateHandler) {
+	public ControllerUpdateFullBaseDialog(CentralUpdateHandler centralUpdateHandler, boolean isSingleUpdate) {
 		this.centralUpdateHandler = centralUpdateHandler;
+		this.isSingleUpdate = isSingleUpdate;
 	}
 
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -56,7 +58,7 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 	
 	private void setTabUpdateOperationVehicleContent() {
 		FXMLLoader loader = CentralHandler.loadFXML("/gui/UpdateTabOperationVehicle.fxml");
-		this.controllerUpdateTabOperationVehicle = new ControllerUpdateTabOperationVehicle(this);
+		this.controllerUpdateTabOperationVehicle = new ControllerUpdateTabOperationVehicle(this, this.isSingleUpdate);
 		loader.setController(this.controllerUpdateTabOperationVehicle);
 
 		try {
@@ -68,7 +70,7 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 	
 	private void setTabUpdateMemberContent() {
 		FXMLLoader loader = CentralHandler.loadFXML("/gui/UpdateTabMember.fxml");
-		this.controllerUpdateTabMember = new ControllerUpdateTabMember(this);
+		this.controllerUpdateTabMember = new ControllerUpdateTabMember(this, this.isSingleUpdate);
 		loader.setController(this.controllerUpdateTabMember);
 
 		try {
