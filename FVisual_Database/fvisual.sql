@@ -478,41 +478,40 @@ VALUES ( seq_Einsatzfahrzeuge.nextval, 6, 'MBT' );
 alter session set nls_timestamp_format='YYYY-MM-DD HH24:MI:SS.FF6';
 
 INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
-VALUES(seq_Einsaetze.nextval, 32, 2 ,'Mein Herz es brennt', 'Mein Herz es brennt, wenn ich dich seh ...', 'Villacher Straße 12', 9800, TO_TIMESTAMP('1984-08-05 13:40:12', 'YYYY-MM-DD HH24:MI:SS'));
+VALUES(seq_Einsaetze.nextval, 32, 2, 'Brand Balkon', 'Es handelte sich um einen Fehlalarm', 'Drauweg 9', 9800,TO_TIMESTAMP('2020-01-10 18:11:00', 'YYYY-MM-DD HH24:MI:SS'));
 
 INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
-VALUES(seq_Einsaetze.nextval, 34, 2 ,'Kerth sei Orsch brennt', 'Kerthi hat zu viel Chilli gessn', 'Oktoberstraße', 9800, TO_TIMESTAMP('2020-01-08 08:00:00', 'YYYY-MM-DD HH24:MI:SS'));
+VALUES(seq_Einsaetze.nextval, 33, 2, 'Brand Küche', 'Küchenbrand in einem Wohnblock', 'Ulrich-v.-Cilli-Straße 43', 9800,TO_TIMESTAMP('2020-01-07 15:44:00', 'YYYY-MM-DD HH24:MI:SS'));
 
 INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
-VALUES(seq_Einsaetze.nextval, 2, 3 ,'Unglück im Focknstoll', 'Drabse hot nit auf de Hildegard aufgepasst', 'Bahnhofsstraße', 9800, TO_TIMESTAMP('2019-03-23 21:33:00', 'YYYY-MM-DD HH24:MI:SS'));
+VALUES(seq_Einsaetze.nextval, 34, 2, 'Brand Gebäude', 'Vollbrand des ehemaligen Gösserbräu', 'Villacher Straße 5', 9800,TO_TIMESTAMP('2020-01-04 23:33:00', 'YYYY-MM-DD HH24:MI:SS'));
 
-INSERT INTO AORG_WB_EINSATZ(id_einsatz, id_andere_org)
-VALUES(2, 1);
-INSERT INTO AORG_WB_EINSATZ(id_einsatz, id_andere_org)
-VALUES(2, 3);
+INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
+VALUES(seq_Einsaetze.nextval, 23, 1, 'Fahrzeugabsturz', 'PKW von Straße abgekommen', 'L37 Km 25.8', 9800,TO_TIMESTAMP('2020-12-14 16:58:00', 'YYYY-MM-DD HH24:MI:SS'));
 
-INSERT INTO EKRAFT_WB_EINSATZ(id_einsatz, id_stuetzpunkt)
-VALUES(2, 1);
-INSERT INTO EKRAFT_WB_EINSATZ(id_einsatz, id_stuetzpunkt)
+INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
 VALUES(1, 1);
+INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
+VALUES (1, 1, 2);
 
-INSERT INTO FZG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_einsatzfahrzeug)
-VALUES(2, 1, 2);
-INSERT INTO FZG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_einsatzfahrzeug)
-VALUES(2, 1, 1);
+INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
+VALUES(2, 1);
+INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
+VALUES (2, 1, 2);
 
-INSERT INTO MTG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_mitglied)
-VALUES(2, 1, 2);
-INSERT INTO MTG_WB_EINSATZ(id_einsatz, id_stuetzpunkt, id_mitglied)
-VALUES(1, 1, 2);
+INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
+VALUES(3, 1);
+INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
+VALUES (3, 1, 2);
+
+INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
+VALUES(4, 1);
+INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
+VALUES (4, 1, 2);
 
 SELECT * FROM Einsatzcodes;
 SELECT * FROM Einsatzarten;
 SELECT * FROM Einsaetze;
+SELECT * FROM Mtg_wb_Einsatz;
 
 COMMIT;
-
-SELECT id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit FROM Einsaetze INNER JOIN MTG_WB_EINSATZ ON id_einsatz = id WHERE id_mitglied = 2;
-
-SELECT 'drop table '||table_name||' cascade constraints;' FROM tabs;
-

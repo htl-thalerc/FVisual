@@ -1,7 +1,6 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
@@ -21,7 +20,6 @@ import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
 import bll.ClassTypes;
-import bll.Member;
 import handler.CentralHandler;
 
 public class BaseManager {
@@ -150,10 +148,23 @@ public class BaseManager {
 	}
 	
 	public boolean putBase(Base baseObj) {
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.BASE, null);
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+		
 		WebTarget webTargetUpdateBase = this.webTargetBaseService.path(String.valueOf(baseObj.getBaseId()));
-		Invocation.Builder invocationBuilder = webTargetUpdateBase.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-				CentralHandler.getInstance().getHeaderAuthorization());
-		Response response = invocationBuilder.put(Entity.entity(baseObj, MediaType.APPLICATION_JSON));
+		Invocation.Builder invocationBuilder = webTargetUpdateBase.request(MediaType.APPLICATION_JSON).headers(headers);
+
+		String jsonStr = "{\"houseNr\":\"" + baseObj.getHouseNr() + "\"," + 
+				"\"name\":\"" + baseObj.getName() + "\"," +
+				"\"place\":\"" + baseObj.getPlace() + "\"," +
+				"\"postCode\":\"" + baseObj.getPostCode() + "\"," +
+				"\"street\":\"" + baseObj.getStreet() + "\"}";
+		
+		Response response = invocationBuilder.put(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 		
 		if (response.getStatus() == 200) {
 			return true;

@@ -1,6 +1,7 @@
 /* node modules */
 var express = require('express');
 var bodyParser = require('body-parser');
+var ip = require("ip");
 
 /* own modules */
 const centralErrorHandler = require('./public/central_error_handler');
@@ -14,7 +15,7 @@ const stuetzpunktRouter = require('./routers/stuetzpunkt-router');
 loggerModule.settings.Development();
 
 /* local variables */
-const HOSTNAME = '192.168.178.28';
+const HOSTNAME = ip.address();
 const PORT = 3030;
 var app = express();
 var logger = loggerModule.loggers['Application'];

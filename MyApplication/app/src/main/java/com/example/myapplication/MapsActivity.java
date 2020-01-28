@@ -65,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_maps);
-            db = DatabaseManager.newInstance("http://192.168.193.84:3030");
+            db = DatabaseManager.newInstance("http://10.0.0.8:3030");
 
 
             //TODO get logged in User ==> currentMitglied. Von Login Activity get username und password
@@ -134,10 +134,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap = map;
         gc = new Geocoder(this);
         googleMap.setOnMarkerClickListener(this);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(46.7525, 13.8617)).zoom(7.5f).build();
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-        googleMap.moveCamera(cameraUpdate);
+        try {
+            CameraPosition cameraPosition =
+                    new CameraPosition.Builder().target(
+                            new LatLng(
+                                    gc.getFromLocationName("St. Peter 47 9800 Spittal/Drau", 1).get(0).getLatitude(),
+                                    gc.getFromLocationName("St. Peter 47 9800 Spittal/Drau", 1).get(0).getLongitude()
+                            ))
+                            .zoom(14f).build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            googleMap.moveCamera(cameraUpdate);
+        }catch(Exception e){
 
+        }
         //TODO einsatzList = getEinsaetzeFromDatabase(); Aber nur Einsätze von currentMitglied
 
         showStuetzpunkt();
@@ -154,8 +163,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ex.printStackTrace();
             }
             Address add = list.get(0);
-            switch (currentEinsatzart.getBeschreibung()){
-                case "Verkehrsunfall":
+            switch (einsatz.getId_einsatzart()){
+                /*
+                1	Verkehrsunfall
+                2	Brandeinsatz
+                3	Technischer Einsatz
+                4	Hilfeleistung
+                5	Technische Hilfeleistung
+                6	Personensuche
+                7	Brandmeldealarm
+                8	Wespen / Hornissen / Bienen
+                 */
+
+                //Verkehrsunfall
+                case 1:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_sports_car))
@@ -163,7 +184,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .snippet(String.valueOf(einsatz.getId()))
                     );
                     break;
-                case "Brandeinsatz":
+                //Brandeinsatz
+                case 2:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_fire))
@@ -171,7 +193,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .snippet(String.valueOf(einsatz.getId()))
                     );
                     break;
-                case "Technischer Einsatz":
+                //Technischer Einsatz
+                case 3:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_tools_cross_settings_symbol_for_interface))
@@ -179,7 +202,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .snippet(String.valueOf(einsatz.getId()))
                     );
                     break;
-                case "Hilfeleistung":
+                //Hilfeleistung
+                case 4:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_customer_service))
@@ -187,7 +211,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .snippet(String.valueOf(einsatz.getId()))
                     );
                     break;
-                case "Personensuche":
+                //Personensuche
+                case 6:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_man_user))
@@ -195,7 +220,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .snippet(String.valueOf(einsatz.getId()))
                     );
                     break;
-                case "Brandmeldealarm":
+                //Brandmeldealarm
+                case 7:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_alarm))
@@ -203,7 +229,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .snippet(String.valueOf(einsatz.getId()))
                     );
                     break;
-                case "Wespen / Hornissen / Bienen":
+                //Wespen / Hornissen / Bienen
+                case 8:
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(add.getLatitude(), add.getLongitude()))
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_wasp))
@@ -215,8 +242,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
 
-
-        /*googleMap.addMarker(new MarkerOptions()
+/*
+        googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(46.7525, 14.88))
                 .icon(bitmapDescriptorFromVector(this, R.drawable.ic_fire))
                 .title("Feuer")

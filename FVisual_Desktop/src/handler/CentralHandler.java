@@ -296,7 +296,7 @@ public class CentralHandler {
 		}
 		headerMetadataString += "}]";
 		headerMetadataString = headerMetadataString.replace("'", "\"");
-		System.out.println(headerMetadataString);
+		//System.out.println(headerMetadataString);
 		return headerMetadataString;
 	}
 

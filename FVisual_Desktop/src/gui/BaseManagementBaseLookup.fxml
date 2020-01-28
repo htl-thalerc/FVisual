@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="537.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="537.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<Accordion fx:id="dropMenuFilter" BorderPane.alignment="CENTER">
 			<panes>
@@ -149,8 +149,8 @@
                                              <contextMenu>
                                                 <ContextMenu>
                                                   <items>
-                                                    <MenuItem mnemonicParsing="false" onAction="#onClickMItemUpdateVehicle" text="Update Vehicle" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#onClickMItemRemoveVehicle" text="Delete Vehicle" />
+                                                    <MenuItem fx:id="mItemUpdateVehicle" mnemonicParsing="false" onAction="#onClickMItemUpdateVehicle" text="Update Vehicle" />
+                                                      <MenuItem fx:id="mItemRemoveVehicle" mnemonicParsing="false" onAction="#onClickMItemRemoveVehicle" text="Delete Vehicle" />
                                                   </items>
                                                 </ContextMenu>
                                              </contextMenu>
@@ -170,8 +170,8 @@
                                              <contextMenu>
                                                 <ContextMenu>
                                                   <items>
-                                                    <MenuItem mnemonicParsing="false" onAction="#onClickMItemUpdateMember" text="Update Member" />
-                                                      <MenuItem mnemonicParsing="false" onAction="#onClickMItemRemoveMember" text="Delete Member" />
+                                                    <MenuItem fx:id="mItemUpdateMember" mnemonicParsing="false" onAction="#onClickMItemUpdateMember" text="Update Member" />
+                                                      <MenuItem fx:id="mItemRemoveMember" mnemonicParsing="false" onAction="#onClickMItemRemoveMember" text="Delete Member" />
                                                   </items>
                                                 </ContextMenu>
                                              </contextMenu>

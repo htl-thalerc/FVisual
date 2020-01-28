@@ -8,9 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import bll.Base;
 import bll.EnumCRUDOption;
@@ -19,21 +21,13 @@ import bll.OperationVehicle;
 
 public class ControllerBaseManagementDialog implements Initializable {
 	@FXML
-	private Label lbBasename;
-	@FXML
-	private Label lbPostcodeAndPlace;
-	@FXML
-	private Label lbStreetAndHouseNr;
-	@FXML
-	private Label lbStatusMessage;
+	private Label lbBasename, lbPostcodeAndPlace, lbStreetAndHouseNr, lbStatusMessage;
 	@FXML
 	private ListView<OperationVehicle> lvOperationVehicleData;
 	@FXML
 	private ListView<Member> lvMemberData;
 	@FXML
-	private Button btnCancel;
-	@FXML
-	private Button btnOk;
+	private Button btnCancel, btnOk;
 
 	private ControllerCreateBaseManagement controllerCreateBase = null;
 	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup = null;
@@ -73,6 +67,9 @@ public class ControllerBaseManagementDialog implements Initializable {
 		Stage stage = (Stage) ((Button) aE.getSource()).getScene().getWindow();
 		this.btnSaveState = true;
 		stage.close();
+		
+		
+		
 	}
 	
 	public void setBaseData(Base createdBase) {

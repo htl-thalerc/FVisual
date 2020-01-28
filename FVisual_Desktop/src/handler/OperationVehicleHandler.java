@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import bll.Base;
 import bll.OperationVehicle;
+import javafx.collections.ObservableList;
 
 public class OperationVehicleHandler {
 	private static OperationVehicleHandler operationVehicleHandler = null;
@@ -67,5 +68,39 @@ public class OperationVehicleHandler {
 	
 	public void setUpdatedOperationVehicle(OperationVehicle vehicle) {
 		this.updatedOperationVehicle = vehicle;
+	}
+
+	public boolean checkUniqueVehicle(ObservableList<OperationVehicle> obsListAvailable, ObservableList<OperationVehicle> obsListSelected) {
+		boolean isUnique = false;
+		ArrayList<OperationVehicle> tempListOfAllVehicles = new ArrayList<OperationVehicle>();
+		tempListOfAllVehicles.addAll(this.listOfVehicles);
+		
+		for(int i=0;i<tempListOfAllVehicles.size();i++) {
+			for(int j=0;j<obsListAvailable.size();j++) {
+				if(tempListOfAllVehicles.get(i).getDescription().equals(obsListAvailable.get(j).getDescription())) {
+					return false;
+				}
+			}
+			for(int j=0;j<obsListSelected.size();j++) {
+				if(tempListOfAllVehicles.get(i).getDescription().equals(obsListSelected.get(j).getDescription())) {
+					return false;
+				}
+			}
+		}
+		
+		return isUnique;
+	}
+
+	public boolean checkUniqueVehicle(OperationVehicle operationVehicle) {
+		ArrayList<OperationVehicle> tempListOfAllVehicles = new ArrayList<OperationVehicle>();
+		tempListOfAllVehicles.addAll(this.listOfVehicles);
+		
+		for(int i=0;i<tempListOfAllVehicles.size();i++) {
+			System.out.println("H: " + tempListOfAllVehicles.get(i).toFullString());
+			if(tempListOfAllVehicles.get(i).getDescription().equals(operationVehicle.getDescription())) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

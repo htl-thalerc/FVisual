@@ -10,16 +10,22 @@ import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
@@ -30,6 +36,7 @@ import threadHelper.BasePostHandler;
 import threadHelper.MemberPostHandler;
 import threadHelper.MemberUpdateHandler;
 import threadHelper.OperationVehiclePostHandler;
+import threadHelper.PostFullBaseTask;
 
 public class ControllerCreateBaseManagement implements Initializable {
 	@FXML
@@ -204,100 +211,21 @@ public class ControllerCreateBaseManagement implements Initializable {
 			controllerDialogSaveBase.setListViewMemberData(collOfMembersToAddToBase);
 			curStage.showAndWait();
 			if (controllerDialogSaveBase.getButtonState()) {
-				Thread threadBasePostLoader = new Thread(new BasePostHandler(baseToCreate));
-				threadBasePostLoader.start();
-				threadBasePostLoader.join();
-				Thread.sleep(250);
-
-				if (collOfOperationVehiclesToAddToBase.size() >= 1) {
-					for (int i = 0; i < collOfOperationVehiclesToAddToBase.size(); i++) {
-						if (collOfOperationVehiclesToAddToBase.get(i).getOperationVehicleId() == -1) {
-							// Create Vehicle
-							OperationVehicle vehicleToCreate = collOfOperationVehiclesToAddToBase.get(i);
-							vehicleToCreate = this
-									.setBaseObjAndBaseIdToVehicle(collOfOperationVehiclesToAddToBase.get(i));
-
-							Thread threadCreateOperationVehicle = new Thread(
-									new OperationVehiclePostHandler(vehicleToCreate));
-							threadCreateOperationVehicle.start();
-							threadCreateOperationVehicle.join();
-							Thread.sleep(250);
-						} else if (collOfOperationVehiclesToAddToBase.get(i).getOperationVehicleId() != -1) {
-							// Update Vehicle not right bec. we dont change id; we reate a new vehcile
-							OperationVehicle vehicleToCreateFromExistingVehicleData = collOfOperationVehiclesToAddToBase
-									.get(i);
-							vehicleToCreateFromExistingVehicleData.setBase(null);
-							vehicleToCreateFromExistingVehicleData.setBaseId(-1);
-							vehicleToCreateFromExistingVehicleData = this
-									.setBaseObjAndBaseIdToVehicle(collOfOperationVehiclesToAddToBase.get(i));
-
-							Thread threadCreateOperationVehicle = new Thread(
-									new OperationVehiclePostHandler(vehicleToCreateFromExistingVehicleData));
-							threadCreateOperationVehicle.start();
-							threadCreateOperationVehicle.join();
-							Thread.sleep(250);
-						}
-					}
-				}
-
-				if (collOfMembersToAddToBase.size() >= 1) {
-					for (int i = 0; i < collOfMembersToAddToBase.size(); i++) {
-						if (collOfMembersToAddToBase.get(i).getBaseId() == 0
-								&& collOfMembersToAddToBase.get(i).getMemberId() != -1) {
-							// Members with no base
-							Member memberToUpdate = collOfMembersToAddToBase.get(i);
-							memberToUpdate.setRankId(memberToUpdate.getRank().getRankId());
-							memberToUpdate = this.setBaseObjAndBaseIdToMember(collOfMembersToAddToBase.get(i));
-
-							Thread threadUpdateMember = new Thread(new MemberUpdateHandler(memberToUpdate));
-							threadUpdateMember.start();
-							threadUpdateMember.join();
-							Thread.sleep(250);
-						} else if (collOfMembersToAddToBase.get(i).getBaseId() == -1
-								&& collOfMembersToAddToBase.get(i).getMemberId() == -1) {
-							// Complete new Member
-							Member memberToCreate = collOfMembersToAddToBase.get(i);
-							memberToCreate.setRankId(memberToCreate.getRank().getRankId());
-							memberToCreate = this.setBaseObjAndBaseIdToMember(collOfMembersToAddToBase.get(i));
-
-							Thread threadCreateMember = new Thread(new MemberPostHandler(memberToCreate));
-							threadCreateMember.start();
-							threadCreateMember.join();
-							Thread.sleep(250);
-						}
-					}
-
-					// Update GUI
-					this.resetCreateBaseTabs();
-					this.controllerBaseManagement.relaodBaseLookup();
-				}
+				FXMLLoader loader2 = CentralHandler.loadFXML("/gui/CreateBaseThreadDialog.fxml");
+				loader2.setController(new ControllerCreateBaseThreadDialog(this, baseToCreate, collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase));
+				
+				Stage stage2 = new Stage();
+				Scene scene2 = new Scene(loader2.load());
+				stage2.setScene(scene2);
+				stage2.show();
+				stage2.centerOnScreen();
+				
+				// Update GUI
+				this.resetCreateBaseTabs();
+				this.controllerBaseManagement.relaodBaseLookup();
 			}
-		} catch (final IOException | InterruptedException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-	private Member setBaseObjAndBaseIdToMember(Member currMember) {
-		Base createdBase = BaseHandler.getInstance().getCreatedBase();
-
-		if (createdBase.getBaseId() != 0 && createdBase != null) {
-			currMember.setBase(createdBase);
-			currMember.setBaseId(createdBase.getBaseId());
-			return currMember;
-		} else {
-			return null;
-		}
-	}
-
-	private OperationVehicle setBaseObjAndBaseIdToVehicle(OperationVehicle currVehicle) {
-		Base createdBase = BaseHandler.getInstance().getCreatedBase();
-
-		if (createdBase.getBaseId() != 0 && createdBase != null) {
-			currVehicle.setBase(createdBase);
-			currVehicle.setBaseId(createdBase.getBaseId());
-			return currVehicle;
-		} else {
-			return null;
 		}
 	}
 
