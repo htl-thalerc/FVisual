@@ -10,10 +10,10 @@ import java.net.URL;
 public class ServiceGetEinsaetzeFromMitgliedList extends AsyncTask<String, Void, String> {
     private static final String URL = "";
     private static String ipHost = null;
-
     public static void setIpHost(String ip) {
         ipHost = ip;
     }
+
     @Override
     protected String doInBackground(String... command) {
         boolean isError = false;

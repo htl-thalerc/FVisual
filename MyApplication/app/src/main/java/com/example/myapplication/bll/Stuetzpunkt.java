@@ -1,5 +1,6 @@
 package com.example.myapplication.bll;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Stuetzpunkt {

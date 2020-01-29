@@ -26,7 +26,7 @@ public class ServiceGetMitgliederList extends AsyncTask<String, Void, String> {
             url = new URL(ipHost + URL);
             conn = (HttpURLConnection) url.openConnection();
             conn.addRequestProperty("Authorization", "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3");
-            conn.addRequestProperty("metadata", "[{\"id\":\"ID\", \"dienstgrad\":\"BEZEICHNUNG\" , \"id_stuetzpunkt\": \"ID_STUETZPUNKT\", \"vorname\":\"VORNAME\", \"nachname\":\"NACHNAME\", \"username\": \"USERNAME\", \"isAdmin\": \"ISADMIN\"}]");
+            conn.addRequestProperty("metadata", "[{\"id\":\"ID\", \"dienstgrad\":\"BEZEICHNUNG\" , \"id_stuetzpunkt\": \"ID_STUETZPUNKT\", \"vorname\":\"VORNAME\", \"nachname\":\"NACHNAME\", \"username\": \"USERNAME\", \"password\": \"PASSWORD\", \"isAdmin\": \"ISADMIN\"}]");
             /*if (!conn.getResponseMessage().contains("OK")) {
                 //isError = true;
                 System.out.println("asdfaasdf");

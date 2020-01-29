@@ -1,8 +1,8 @@
 package com.example.myapplication.bll;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Mitglied {
+public class Mitglied implements Serializable {
     private int id;
     private Dienstgrad dienstgrad;
     private String vorname;
@@ -76,4 +76,5 @@ public class Mitglied {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }
