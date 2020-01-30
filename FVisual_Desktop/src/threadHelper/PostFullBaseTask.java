@@ -25,23 +25,23 @@ public class PostFullBaseTask extends Task<Void>{
 
 	@Override
 	protected Void call() throws Exception {
-		int nrOfPosts = 1; //post base once
+		int reqDuringBaseCreation = 1; //post base once
 		
-		nrOfPosts+=this.collOfMembersToAddToBase.size();
-		nrOfPosts+=this.collOfOperationVehiclesToAddToBase.size();
+		reqDuringBaseCreation+=this.collOfMembersToAddToBase.size();
+		reqDuringBaseCreation+=this.collOfOperationVehiclesToAddToBase.size();
 		
-		this.updateMessage("Creating base");
+		//this.updateMessage("Creating base");
 		Thread threadBasePostLoader = new Thread(new BasePostHandler(baseToCreate));
 		threadBasePostLoader.start();
 		threadBasePostLoader.join();
 		Thread.sleep(250);
 		
-		this.updateProgress(33, nrOfPosts);
+		//this.updateProgress(33, nrOfPosts);
 
-		this.updateMessage("Creating OperationVehicles");
+		//this.updateMessage("Creating OperationVehicles");
 		if (collOfOperationVehiclesToAddToBase.size() >= 1) {
 			for (int i = 0; i < collOfOperationVehiclesToAddToBase.size(); i++) {
-				this.updateProgress(i, nrOfPosts);
+				this.updateProgress(i, reqDuringBaseCreation);
 				if (collOfOperationVehiclesToAddToBase.get(i).getOperationVehicleId() == -1) {
 					// Create Vehicle
 					OperationVehicle vehicleToCreate = collOfOperationVehiclesToAddToBase.get(i);
@@ -74,7 +74,7 @@ public class PostFullBaseTask extends Task<Void>{
 		this.updateMessage("Creating Members");
 		if (collOfMembersToAddToBase.size() >= 1) {
 			for (int i = 0; i < collOfMembersToAddToBase.size(); i++) {
-				this.updateProgress(i, nrOfPosts);
+				this.updateProgress(i, reqDuringBaseCreation);
 				if (collOfMembersToAddToBase.get(i).getBaseId() == 0
 						&& collOfMembersToAddToBase.get(i).getMemberId() != -1) {
 					// Members with no base

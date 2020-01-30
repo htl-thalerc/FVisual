@@ -45,7 +45,8 @@ public class ControllerUpdateTabMember implements Initializable {
 
 	private ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog = null;
 	private boolean isSingleUpdate;
-
+	private String savedMemberRank;
+	
 	public ControllerUpdateTabMember(ControllerUpdateFullBaseDialog controllerUpdateFullBaseDialog,
 			boolean isSingleUpdate) {
 		this.controllerUpdateFullBaseDialog = controllerUpdateFullBaseDialog;
@@ -351,7 +352,6 @@ public class ControllerUpdateTabMember implements Initializable {
 				member.setRankId(selectedRank.getRankId());
 			} else {
 				Rank tempRank = this.getRankFromOldTextfield();
-				System.out.println(tempRank.toFullString());
 				member.setRank(tempRank);
 				member.setRankId(tempRank.getRankId());
 			}
@@ -369,9 +369,16 @@ public class ControllerUpdateTabMember implements Initializable {
 		ArrayList<Rank> tempListOfRanks = RankHandler.getInstance().getRankList();
 
 		for (int i = 0; i < tempListOfRanks.size(); i++) {
-			if (tempListOfRanks.get(i).getContraction().equals(this.lbOldRank.getText().trim())) {
-				retVal = tempListOfRanks.get(i);
-				break;
+			if(this.lbOldRank.getText().equals("No Member selected")) {
+				if (tempListOfRanks.get(i).getContraction().equals(this.savedMemberRank)) {
+					retVal = tempListOfRanks.get(i);
+					break;
+				}
+			} else {
+				if (tempListOfRanks.get(i).getContraction().equals(this.lbOldRank.getText().trim())) {
+					retVal = tempListOfRanks.get(i);
+					break;
+				}
 			}
 		}
 		return retVal;
@@ -412,8 +419,8 @@ public class ControllerUpdateTabMember implements Initializable {
 				memberToCreate.setBaseId(memberToCreate.getBase().getBaseId());
 				memberToCreate.setFirstname(this.tfNewFirstname.getText().trim());
 				memberToCreate.setLastname(this.tfNewLastname.getText().trim());
-				memberToCreate.setUsername(this.tfNewLastname.getText().trim().substring(0, 4) + ""
-						+ this.tfNewFirstname.getText().trim().substring(0, 1));
+				memberToCreate.setUsername(this.tfNewLastname.getText().trim().substring(0, 4).toLowerCase() + ""
+						+ this.tfNewFirstname.getText().trim().substring(0, 1).toLowerCase());
 				if(String.valueOf(this.cbNewContraction.getValue()).equals(CONST_RANK_FOR_NEW_MEMBER)) {
 					memberToCreate.setRank(RankHandler.getInstance().getRankList().get(0));
 				} else {
@@ -464,9 +471,27 @@ public class ControllerUpdateTabMember implements Initializable {
 				currSelectedMember.setRank(selectedRank);
 				currSelectedMember.setRankId(selectedRank.getRankId());
 			}
+			
+			String firstname = null;
+			String lastname = null;
+			if(this.tfNewFirstname.getText() == "") {
+				firstname = this.currSelectedMember.getFirstname();
+
+			} else {
+				firstname = this.tfNewFirstname.getText().trim();
+			}
+			
+			if(this.tfNewLastname.getText() == "") {
+				lastname = this.currSelectedMember.getLastname();
+			} else {
+				lastname = this.tfNewLastname.getText().trim();
+			}
+			System.out.println(lastname + ", " + firstname);
+			currSelectedMember.setUsername(lastname.substring(0, 4).toLowerCase() + ""
+					+ firstname.substring(0, 1).toLowerCase());
 
 			for (int i = 0; i < listOfAllCurrMembers.size(); i++) {
-				if (listOfAllCurrMembers.get(i).getMemberId() == currSelectedMember.getMemberId()) {
+				if (listOfAllCurrMembers.get(i).getMemberId() == currSelectedMember.getMemberId()) {					
 					listOfAllCurrMembers.remove(listOfAllCurrMembers.get(i));
 					listOfAllCurrMembers.add(currSelectedMember);
 				}
@@ -477,6 +502,7 @@ public class ControllerUpdateTabMember implements Initializable {
 			this.tfNewFirstname.setText("");
 			this.tfNewLastname.setText("");
 			this.cbNewContraction.getSelectionModel().clearSelection();
+			this.savedMemberRank = this.lbOldRank.getText().trim();
 			this.lbOldFirstname.setText("No Member selected");
 			this.lbOldLastname.setText("No Member selected");
 			this.lbOldRank.setText("No Member selected");

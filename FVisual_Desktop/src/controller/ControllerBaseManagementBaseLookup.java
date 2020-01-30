@@ -392,6 +392,8 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		if (selectedBase != null) {
 			CentralUpdateHandler.getInstance().initUpdateBaseDialog(selectedBase);
 			this.fillTableViews();
+			this.onClickBtnLoadBaseVehicles(new ActionEvent());
+			this.onClickBtnLoadBaseMembers(new ActionEvent());
 		}
 	}
 

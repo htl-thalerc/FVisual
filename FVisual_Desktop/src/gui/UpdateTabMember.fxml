@@ -6,62 +6,118 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <GridPane BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <Label fx:id="lbStatusbar" style="-fx-font-weight: bold;" />
-            <Pane layoutX="22.0" layoutY="11.0" prefHeight="272.0" prefWidth="557.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 10; -fx-background-radius: 10;">
+            <GridPane GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <Button fx:id="btnSaveChanges" layoutX="456.0" layoutY="236.0" mnemonicParsing="false" onAction="#onClickBtnSaveChanges" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Save Changes" />
-                  <ComboBox fx:id="cbNewContraction" layoutX="295.0" layoutY="204.0" prefWidth="250.0" />
-                  <ListView fx:id="lvMembers" layoutX="24.0" layoutY="10.0" prefHeight="91.0" prefWidth="509.0">
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </ListView>
-                  <TextField fx:id="tfNewLastname" layoutX="295.0" layoutY="170.0" prefHeight="25.0" prefWidth="250.0" />
-                  <TextField fx:id="tfNewFirstname" layoutX="295.0" layoutY="138.0" prefHeight="25.0" prefWidth="249.0" />
-                  <Label fx:id="lbOldRank" layoutX="141.0" layoutY="208.0" text="No Member selected">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <Label fx:id="lbOldLastname" layoutX="141.0" layoutY="174.0" text="No Member selected">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <Label fx:id="lbOldFirstname" layoutX="141.0" layoutY="142.0" text="No Member selected">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <Label layoutX="148.0" layoutY="111.0" style="-fx-font-weight: bold;" text="New Memberdata" />
-                  <Label layoutX="370.0" layoutY="111.0" style="-fx-font-weight: bold;" text="Old Memberdata">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-                  <Button fx:id="btnAddNewMember" layoutX="24.0" layoutY="108.0" mnemonicParsing="false" onAction="#onClickBtnAddNewMember" prefHeight="23.0" prefWidth="79.0" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Add Member">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Button>
-                  <Label layoutX="25.0" layoutY="174.0" style="-fx-font-weight: bold;" text="Lastname" />
-                  <Label layoutX="24.0" layoutY="142.0" style="-fx-font-weight: bold;" text="Firstname" />
-                  <Label layoutX="26.0" layoutY="208.0" style="-fx-font-weight: bold;" text="Rank" />
+                  <GridPane GridPane.columnIndex="1">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label style="-fx-font-weight: bold;" text="Old Memberdata">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <Label style="-fx-font-weight: bold;" text="New Memberdata" GridPane.columnIndex="1" />
+                        <Label fx:id="lbOldFirstname" text="No Member selected" GridPane.rowIndex="1">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="lbOldLastname" text="No Member selected" GridPane.rowIndex="2">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="lbOldRank" text="No Member selected" GridPane.rowIndex="3">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="tfNewFirstname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="tfNewLastname" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="cbNewContraction" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     </children>
+                  </GridPane>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label style="-fx-font-weight: bold;" text="Firstname" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label style="-fx-font-weight: bold;" text="Lastname" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label style="-fx-font-weight: bold;" text="Rank" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Button fx:id="btnAddNewMember" mnemonicParsing="false" onAction="#onClickBtnAddNewMember" text="Add Member">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Button>
+                     </children>
+                  </GridPane>
                </children>
-            </Pane>
+            </GridPane>
+            <ListView fx:id="lvMembers" prefHeight="200.0" prefWidth="200.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </ListView>
          </children>
-      </AnchorPane>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </GridPane>
    </center>
-<<<<<<< Upstream, based on origin/master
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -85,6 +141,4 @@
          </children>
       </GridPane>
    </bottom>
-=======
->>>>>>> 89f0f55 Design of Update Windows
 </BorderPane>

@@ -11,6 +11,7 @@ import bll.Rank;
 import bll.TableViewRowData;
 import handler.CentralHandler;
 import handler.MemberHandler;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -208,6 +209,10 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	@FXML
 	private void onClickBtnAddNewMember(ActionEvent event) {
+		Platform.runLater( () -> this.lvAvailableMembers.scrollTo(0));
+		this.lvAvailableMembers.scrollTo(0);
+		this.lvAvailableMembers.getSelectionModel().clearSelection();
+		this.lvSelectedMembers.getSelectionModel().clearSelection();
 		this.lvAvailableMembers.setDisable(true);
 		this.lvSelectedMembers.setDisable(true);
 		this.btnAddAllMembers.setDisable(true);
