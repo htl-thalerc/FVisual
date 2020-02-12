@@ -119,8 +119,8 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 		this.tvBaseData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		columnName.setMaxWidth(1f * Integer.MAX_VALUE * 32.5);
-		columnPlace.setMaxWidth(1f * Integer.MAX_VALUE * 31);
-		columnPostCode.setMaxWidth(1f * Integer.MAX_VALUE * 8);
+		columnPlace.setMaxWidth(1f * Integer.MAX_VALUE * 27);
+		columnPostCode.setMaxWidth(1f * Integer.MAX_VALUE * 12);
 		columnStreet.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnHouseNr.setMaxWidth(1f * Integer.MAX_VALUE * 5);
 
@@ -253,13 +253,11 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	private void initTableViewVehicleListener() {
 		this.tvVehicleData.setOnMouseClicked(event -> {
-			System.out.println(this.tvVehicleData.getSelectionModel().getSelectedItem().toFullString());
 		});
 	}
 
 	private void initTableViewMemberListener() {
 		this.tvMemberData.setOnMouseClicked(event -> {
-			System.out.println(this.tvMemberData.getSelectionModel().getSelectedItem().toFullString());
 		});
 	}
 

@@ -103,7 +103,7 @@ public class ControllerUpdateTabMember implements Initializable {
 
 	private void initTextFieldListeners() {
 		this.tfNewFirstname.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (newVal.length() >= 4) {
+			if (newVal.length() >= 3) {
 				if (this.tfNewFirstname.getText().equals(this.CONST_FIRSTNAME_FOR_NEW_MEMBER)
 						&& this.tfNewLastname.getText().equals(CONST_LASTNAME_FOR_NEW_MEMBER)
 						&& String.valueOf(this.cbNewContraction.getSelectionModel().getSelectedItem())
@@ -170,7 +170,7 @@ public class ControllerUpdateTabMember implements Initializable {
 		});
 
 		this.tfNewLastname.textProperty().addListener((obj, oldVal, newVal) -> {
-			if (newVal.length() >= 4) {
+			if (newVal.length() >= 3) {
 				if (this.tfNewFirstname.getText().equals(this.CONST_FIRSTNAME_FOR_NEW_MEMBER)
 						&& this.tfNewLastname.getText().equals(CONST_LASTNAME_FOR_NEW_MEMBER)
 						&& String.valueOf(this.cbNewContraction.getSelectionModel().getSelectedItem())
@@ -419,8 +419,7 @@ public class ControllerUpdateTabMember implements Initializable {
 				memberToCreate.setBaseId(memberToCreate.getBase().getBaseId());
 				memberToCreate.setFirstname(this.tfNewFirstname.getText().trim());
 				memberToCreate.setLastname(this.tfNewLastname.getText().trim());
-				memberToCreate.setUsername(this.tfNewLastname.getText().trim().substring(0, 4).toLowerCase() + ""
-						+ this.tfNewFirstname.getText().trim().substring(0, 1).toLowerCase());
+				memberToCreate.setUsername(MemberHandler.getInstance().setGeneratedUsername(new Member(-1, this.tfNewFirstname.getText().trim(), this.tfNewLastname.getText().trim())));
 				if(String.valueOf(this.cbNewContraction.getValue()).equals(CONST_RANK_FOR_NEW_MEMBER)) {
 					memberToCreate.setRank(RankHandler.getInstance().getRankList().get(0));
 				} else {
@@ -454,7 +453,7 @@ public class ControllerUpdateTabMember implements Initializable {
 		}
 
 		Member currSelectedMember = this.lvMembers.getSelectionModel().getSelectedItem();
-
+		
 		if (currSelectedMember != null) {
 			if (this.isValidFirstname.get()) {
 				currSelectedMember.setFirstname(this.tfNewFirstname.getText().trim());
@@ -472,23 +471,18 @@ public class ControllerUpdateTabMember implements Initializable {
 				currSelectedMember.setRankId(selectedRank.getRankId());
 			}
 			
-			String firstname = null;
-			String lastname = null;
-			if(this.tfNewFirstname.getText() == "") {
-				firstname = this.currSelectedMember.getFirstname();
-
-			} else {
-				firstname = this.tfNewFirstname.getText().trim();
+			String tempFirstname = this.currSelectedMember.getFirstname();
+			String tempLastname = this.currSelectedMember.getLastname();
+			
+			if(this.tfNewFirstname.getText() != "") {
+				tempFirstname = this.tfNewFirstname.getText().trim();
 			}
 			
-			if(this.tfNewLastname.getText() == "") {
-				lastname = this.currSelectedMember.getLastname();
-			} else {
-				lastname = this.tfNewLastname.getText().trim();
-			}
-			System.out.println(lastname + ", " + firstname);
-			currSelectedMember.setUsername(lastname.substring(0, 4).toLowerCase() + ""
-					+ firstname.substring(0, 1).toLowerCase());
+			if(this.tfNewLastname.getText() != "") {
+				tempLastname = this.tfNewLastname.getText().trim();
+			} 
+			System.out.println(tempLastname + ", " + tempFirstname);
+			currSelectedMember.setUsername(MemberHandler.getInstance().setGeneratedUsername(new Member(-1, tempFirstname, tempLastname)));
 
 			for (int i = 0; i < listOfAllCurrMembers.size(); i++) {
 				if (listOfAllCurrMembers.get(i).getMemberId() == currSelectedMember.getMemberId()) {					
@@ -496,7 +490,6 @@ public class ControllerUpdateTabMember implements Initializable {
 					listOfAllCurrMembers.add(currSelectedMember);
 				}
 			}
-
 			this.lvMembers.refresh();
 			this.lvMembers.getSelectionModel().clearSelection();
 			this.tfNewFirstname.setText("");

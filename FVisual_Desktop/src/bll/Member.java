@@ -68,6 +68,12 @@ public class Member {
 		this.password = password;
 	}
 
+	public Member(int id, String firstname, String lastname) {
+		this.memberId = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
+
 	public int getMemberId() {
 		return memberId;
 	}

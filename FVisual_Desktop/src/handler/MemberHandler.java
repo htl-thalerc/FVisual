@@ -77,4 +77,20 @@ public class MemberHandler {
 	public void setUpdatedMember(Member member) {
 		this.updatedMember = member;
 	}
+	
+	public String setGeneratedUsername(Member member) {
+		String username = "";
+		
+		for(int i=0;i<member.getLastname().length();i++) {
+			if(i<=4) {
+				username += member.getLastname().charAt(i);
+			}
+		}
+		for(int i=0;i<member.getFirstname().length();i++) {
+			if(username.length() <= 5) {
+				username += member.getFirstname().charAt(i);
+			}
+		}
+		return username.toLowerCase();
+	}
 }
