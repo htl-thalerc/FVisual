@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -42,10 +43,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, Serializable {
     GoogleMap googleMap;
     Mitglied currentMitglied;
     Stuetzpunkt currentStuetzpunkt;
@@ -57,21 +59,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     RadioGroup radioGroupFilter;
     Button resetButton;
     DatabaseManager db;
-    String username;
-    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_maps);
-            db = DatabaseManager.newInstance("http://10.0.0.8:3030");
+            currentMitglied = (Mitglied) getIntent().getSerializableExtra("serialzable");
+            db = DatabaseManager.newInstance("http://192.168.193.84:3030");
 
 
-            //TODO get logged in User ==> currentMitglied. Von Login Activity get username und password
             einsatzartList = db.getEinsatzart();
-            getCurrentMitglied();
-            Toast toast = Toast.makeText(getApplicationContext(), currentMitglied.getNachname(), Toast.LENGTH_SHORT);
 
             currentStuetzpunkt = db.getStuetzpunkt(currentMitglied.getStuetzpunkt());
             getEinsaetzeFromMitglied();
@@ -112,22 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
     }
-
-    private void getCurrentMitglied() {
-        ArrayList<Mitglied> mitgliedList = db.getAllMitglieder();
-        currentMitglied = mitgliedList.get(7);
-
-        //TODO mit dem zeugs was i von login bekomme des current Mitglied holen
-        /*
-        for(Mitglied m : mitgliedList){
-            if(m.getUsername().equals(username) && m.getPassword().equals(password))
-            {
-                currentMitglied = m;
-            }
-        }
-         */
-    }
-
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -297,6 +279,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getEinsaetzeFromMitglied() throws Exception {
         einsatzList = db.getAllEinsetzeFromMitglied(currentMitglied.getId());
     }
+
     Einsatz currentEinsatz;
     @Override
     public boolean onMarkerClick(Marker marker) {
