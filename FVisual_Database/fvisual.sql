@@ -486,9 +486,6 @@ VALUES(seq_Einsaetze.nextval, 33, 2, 'Brand Küche', 'Küchenbrand in einem Wohn
 INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
 VALUES(seq_Einsaetze.nextval, 34, 2, 'Brand Gebäude', 'Vollbrand des ehemaligen Gösserbräu', 'Villacher Straße 5', 9800,TO_TIMESTAMP('2020-01-04 23:33:00', 'YYYY-MM-DD HH24:MI:SS'));
 
-INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit)
-VALUES(seq_Einsaetze.nextval, 23, 1, 'Fahrzeugabsturz', 'PKW von Straße abgekommen', 'L37 Km 25.8', 9800,TO_TIMESTAMP('2020-12-14 16:58:00', 'YYYY-MM-DD HH24:MI:SS'));
-
 INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
 VALUES(1, 1);
 INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
@@ -503,11 +500,6 @@ INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
 VALUES(3, 1);
 INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
 VALUES (3, 1, 2);
-
-INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
-VALUES(4, 1);
-INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
-VALUES (4, 1, 2);
 
 SELECT * FROM Einsatzcodes;
 SELECT * FROM Einsatzarten;
