@@ -1,7 +1,7 @@
 /* node modules */
 var express = require('express');
 var bodyParser = require('body-parser');
-var ip = require("ip");
+var ip = require('ip');
 
 /* own modules */
 const centralErrorHandler = require('./public/central_error_handler');
