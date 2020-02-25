@@ -309,7 +309,7 @@ baseRoutes.get('/mitglieder', (req, res) => {
   });
 });
 
-// GET    | /mitglieder/baseless
+// GET    | /mitglieder/base
 // GET    | /mitglieder/:mitglId
 baseRoutes.get('/mitglieder/:mitglId', (req, res) => {
   if (req.params.mitglId == 'baseless') {

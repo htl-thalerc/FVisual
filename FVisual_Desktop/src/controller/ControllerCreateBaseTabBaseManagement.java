@@ -47,7 +47,6 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.initTextFieldPatterns();
 		this.initTextFieldListeners();
 		this.initGoogleMaps();
-
 	}
 
 	private void initGoogleMaps() {
@@ -76,15 +75,12 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 
 		this.tfBaseName.textProperty().addListener((obj, oldVal, newVal) -> {
 			if (newVal.length() >= 12) {
-				isValidBasename.set(true);
-				this.lbStatusbarBaseName.setText("Valid Inputvalue for Basename");
+				isValidBasename.set(true);				
 				this.tfBaseName.setStyle("-fx-text-box-border: green;");
 				this.tfBaseName.setStyle("-fx-focus-color: green;");
 				this.tfBaseName.setStyle("-fx-border-color: green;");
 			} else {
-				isValidBasename.set(false);
-				this.lbStatusbarBaseName
-						.setText("Invalid Inputvalue for Basename - Inputvalue is too short (length >= 12)");
+				isValidBasename.set(false);				
 				this.tfBaseName.setStyle("-fx-text-box-border: red;");
 				this.tfBaseName.setStyle("-fx-focus-color: red;");
 				this.tfBaseName.setStyle("-fx-border-color: red;");
@@ -95,15 +91,12 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 
 		this.tfHouseNr.textProperty().addListener((obj, oldVal, newVal) -> {
 			if (newVal.length() >= 1) {
-				isValidHouseNr.set(true);
-				this.lbStatusbarHouseNr.setText("Valid Inputvalue for HouseNr");
+				isValidHouseNr.set(true);				
 				this.tfHouseNr.setStyle("-fx-text-box-border: green;");
 				this.tfHouseNr.setStyle("-fx-focus-color: green;");
 				this.tfHouseNr.setStyle("-fx-border-color: green;");
 			} else {
-				isValidHouseNr.set(false);
-				this.lbStatusbarHouseNr
-						.setText("Invalid Inputvalue for HouseNr - Inputvalue is too short (length >= 1)");
+				isValidHouseNr.set(false);				
 				this.tfHouseNr.setStyle("-fx-text-box-border: red;");
 				this.tfHouseNr.setStyle("-fx-focus-color: red;");
 				this.tfHouseNr.setStyle("-fx-border-color: red;");
@@ -115,13 +108,11 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.tfPlace.textProperty().addListener((obj, oldVal, newVal) -> {
 			if (newVal.length() >= 3) {
 				isValidPlace.set(true);
-				this.lbStatusbarPlace.setText("Valid Inputvalue for Place");
 				this.tfPlace.setStyle("-fx-text-box-border: green;");
 				this.tfPlace.setStyle("-fx-focus-color: green;");
 				this.tfPlace.setStyle("-fx-border-color: green;");
 			} else {
 				isValidPlace.set(false);
-				this.lbStatusbarPlace.setText("Invalid Inputvalue for Place - Inputvalue is too short (length >= 3)");
 				this.tfPlace.setStyle("-fx-text-box-border: red;");
 				this.tfPlace.setStyle("-fx-focus-color: red;");
 				this.tfPlace.setStyle("-fx-border-color: red;");
@@ -133,14 +124,11 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.tfPostCode.textProperty().addListener((obj, oldVal, newVal) -> {
 			if (newVal.length() == 4) {
 				isValidPostCode.set(true);
-				this.lbStatusbarPostCode.setText("Valid Inputvalue for PostCode");
 				this.tfPostCode.setStyle("-fx-text-box-border: green;");
 				this.tfPostCode.setStyle("-fx-focus-color: green;");
 				this.tfPostCode.setStyle("-fx-border-color: green;");
 			} else {
 				isValidPostCode.set(false);
-				this.lbStatusbarPostCode
-						.setText("Invalid Inputvalue for PostCode - Inputvalue is too short (length = 4)");
 				this.tfPostCode.setStyle("-fx-text-box-border: red;");
 				this.tfPostCode.setStyle("-fx-focus-color: red;");
 				this.tfPostCode.setStyle("-fx-border-color: red;");
@@ -152,13 +140,11 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.tfStreet.textProperty().addListener((obj, oldVal, newVal) -> {
 			if (newVal.length() >= 3) {
 				isValidStreet.set(true);
-				this.lbStatusbarStreet.setText("Valid Inputvalue for Street");
 				this.tfStreet.setStyle("-fx-text-box-border: green;");
 				this.tfStreet.setStyle("-fx-focus-color: green;");
 				this.tfStreet.setStyle("-fx-border-color: green;");
 			} else {
 				isValidStreet.set(false);
-				this.lbStatusbarStreet.setText("Invalid Inputvalue for Street - Inputvalue is too short (length >= 3)");
 				this.tfStreet.setStyle("-fx-text-box-border: red;");
 				this.tfStreet.setStyle("-fx-focus-color: red;");
 				this.tfStreet.setStyle("-fx-border-color: red;");
@@ -196,6 +182,14 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.tfPlace.clear();
 		this.tfPostCode.clear();
 		this.tfStreet.clear();
+		
+		this.tfBaseName.setStyle(null);
+		this.tfHouseNr.setStyle(null);
+		this.tfPlace.setStyle(null);
+		this.tfStreet.setStyle(null);
+		this.tfPostCode.setStyle(null);
+		
+		this.map.removeMarker(this.currentMarker);
 	}
 
 	@Override
@@ -241,11 +235,15 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 	}
 
 	private void changeTextFields(String Adress) {
-		String[] temp = Adress.split(",");
-		tfPostCode.setText(temp[1].split(" ")[1]);
-		tfPlace.setText(temp[1].split(" ")[2]);
-		tfStreet.setText(temp[0].split(" ")[0]);
-		tfHouseNr.setText(temp[0].split(" ")[1]);
+		try {
+			String[] temp = Adress.split(",");
+			tfPostCode.setText(temp[1].split(" ")[1]);
+			tfPlace.setText(temp[1].split(" ")[2]);
+			tfStreet.setText(temp[0].split(" ")[0]);
+			tfHouseNr.setText(temp[0].split(" ")[1]);
+		} catch(NullPointerException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@FXML

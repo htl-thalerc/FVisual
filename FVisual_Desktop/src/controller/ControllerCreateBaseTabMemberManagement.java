@@ -11,6 +11,7 @@ import bll.Rank;
 import bll.TableViewRowData;
 import handler.CentralHandler;
 import handler.MemberHandler;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -74,13 +75,13 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		try {
 			BaselessMemberLoader loader = new BaselessMemberLoader();
 			Thread threadBaseLessMembers = new Thread(loader);
-			
+
 			threadBaseLessMembers.start();
 			threadBaseLessMembers.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		this.obsListLVAvailableMembers = FXCollections
 				.observableArrayList(MemberHandler.getInstance().getBaselessMemberList());
 		this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);
@@ -208,6 +209,10 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 	@FXML
 	private void onClickBtnAddNewMember(ActionEvent event) {
+		Platform.runLater(() -> this.lvAvailableMembers.scrollTo(0));
+		this.lvAvailableMembers.scrollTo(0);
+		this.lvAvailableMembers.getSelectionModel().clearSelection();
+		this.lvSelectedMembers.getSelectionModel().clearSelection();
 		this.lvAvailableMembers.setDisable(true);
 		this.lvSelectedMembers.setDisable(true);
 		this.btnAddAllMembers.setDisable(true);
@@ -297,20 +302,8 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 		member.setBaseId(-1);
 		member.setFirstname(memberData.getTfFirstname().getText().trim());
 		member.setLastname(memberData.getTfLastname().getText().trim());
-		
-		String username = "";
-		
-		for(int i=0;i<member.getLastname().length();i++) {
-			if(i<=4) {
-				username += member.getLastname().charAt(i);
-			}
-		}
-		for(int i=0;i<member.getFirstname().length();i++) {
-			if(username.length() <= 5) {
-				username += member.getFirstname().charAt(i);
-			}
-		}
-		member.setUsername(username.trim());
+
+		member.setUsername(MemberHandler.getInstance().setGeneratedUsername(member));
 		member.setBase(null);
 		member.setRank(memberData.getCbRank().getValue());
 
@@ -321,7 +314,7 @@ public class ControllerCreateBaseTabMemberManagement implements Initializable {
 
 		this.btnAddNewMember.setDisable(false);
 		this.btnSaveNewMember.setDisable(true);
-		
+
 		this.isValidFirstname.set(false);
 		this.isValidLastname.set(false);
 		this.isValidRank.set(false);

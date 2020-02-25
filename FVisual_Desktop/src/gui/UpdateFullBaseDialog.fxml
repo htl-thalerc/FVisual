@@ -7,14 +7,9 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-	prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<center>
-		<TabPane fx:id="tabPaneUpdateTabs" prefHeight="200.0"
-			prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
-			BorderPane.alignment="CENTER">
+		<TabPane fx:id="tabPaneUpdateTabs" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
 			<tabs>
 				<Tab fx:id="tabUpdateBase" text="Base" />
 				<Tab fx:id="tabUpdateOperationVehicle" text="Operation Vehicles" />
@@ -23,17 +18,12 @@
 		</TabPane>
 	</center>
 	<bottom>
-		<ButtonBar prefHeight="40.0" prefWidth="200.0"
-			BorderPane.alignment="CENTER">
+		<ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
 			<buttons>
-				<Button fx:id="btnCancelUpdate" mnemonicParsing="false"
-					onAction="#onClickBtnCancelUpdate" text="Cancel" />
-				<Button fx:id="btnBackUpdate" mnemonicParsing="false"
-					onAction="#onClickBtnBackUpdate" text="Back" />
-				<Button fx:id="btnNextUpdate" mnemonicParsing="false"
-					onAction="#onClickBtnNextUpdate" text="Next" />
-				<Button fx:id="btnSaveUpdate" mnemonicParsing="false"
-					onAction="#onClickBtnSaveUpdate" text="Save" />
+				<Button fx:id="btnCancelUpdate" mnemonicParsing="false" onAction="#onClickBtnCancelUpdate" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Cancel" />
+				<Button fx:id="btnBackUpdate" mnemonicParsing="false" onAction="#onClickBtnBackUpdate" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Back" />
+				<Button fx:id="btnNextUpdate" mnemonicParsing="false" onAction="#onClickBtnNextUpdate" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Next" />
+				<Button fx:id="btnSaveUpdate" mnemonicParsing="false" onAction="#onClickBtnSaveUpdate" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Save" />
 			</buttons>
 			<BorderPane.margin>
 				<Insets right="5.0" />

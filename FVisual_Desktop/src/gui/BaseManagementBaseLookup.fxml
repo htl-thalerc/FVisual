@@ -189,7 +189,7 @@
                      <bottom>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <buttons>
-                            <Button fx:id="btnLoadAllVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadAllVehicles" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load all Vehicles" />
+                            <Button fx:id="btnLoadAllVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadAllVehicles" style="-fx-background-color: 	; -fx-text-fill: white;" text="Load all Vehicles" />
                               <Button fx:id="btnLoadAllMembers" mnemonicParsing="false" onAction="#onClickBtnLoadAllMembers" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load all Members" />
                           </buttons>
                            <BorderPane.margin>
