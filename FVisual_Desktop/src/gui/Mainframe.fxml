@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -7,7 +8,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ControllerMainframe">
 	<top>
-		<MenuBar BorderPane.alignment="CENTER">
+		<MenuBar>
 			<menus>
 				<Menu mnemonicParsing="false" text="Management">
 					<items>
@@ -15,6 +16,11 @@
 						<MenuItem fx:id="mItemBaseManagement" mnemonicParsing="false" onAction="#onClickmItemBaseManagement" text="Base Management" />
 					</items>
 				</Menu>
+            <Menu mnemonicParsing="false" text="Exceptions">
+              <items>
+                <MenuItem fx:id="mItemExceptions" mnemonicParsing="false" onAction="#onClickmItemExceptions" text="Exceptions" />
+              </items>
+            </Menu>
 				<Menu mnemonicParsing="false" text="Profile">
 					<items>
 						<MenuItem fx:id="mItemProfileSettings" mnemonicParsing="false" onAction="#onClickmItemProfileSettings" text="Profile Setting" />
@@ -22,6 +28,9 @@
 					</items>
 				</Menu>
 			</menus>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
 		</MenuBar>
 	</top>
 	<center>

@@ -21,8 +21,10 @@ import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
 import bll.ClassTypes;
+import bll.EnumCRUDOption;
 import bll.Operation;
 import handler.CentralHandler;
+import handler.ExceptionHandler;
 
 public class OperationManager {
 	private static OperationManager operationManagerInstance = null;
@@ -51,6 +53,8 @@ public class OperationManager {
 				collOfOperations = response.readEntity(new GenericType<ArrayList<Operation>>() {
 				});
 				LOGGER.info("[OperationManager] [GET]: Operations");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -70,6 +74,8 @@ public class OperationManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				foundedOperation = response.readEntity(Base.class);	
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.GET);
 			}
 		} catch(JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -89,6 +95,8 @@ public class OperationManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				foundedOperation = response.readEntity(Base.class);	
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.GET);
 			}
 		} catch(JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -104,6 +112,7 @@ public class OperationManager {
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.POST);
 			return false;
 		}
 	}
@@ -117,6 +126,7 @@ public class OperationManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -130,6 +140,7 @@ public class OperationManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.PUT);
 			return false;
 		}
 	}

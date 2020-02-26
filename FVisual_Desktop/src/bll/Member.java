@@ -1,7 +1,6 @@
 package bll;
 
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class Member {
@@ -15,6 +14,8 @@ public class Member {
 	private Base base;
 	private int rankId;
 	private Rank rank;
+	
+	private boolean isUpdated = false;
 	
 	private TextField tfFirstname;
 	private TextField tfLastname;
@@ -178,6 +179,14 @@ public class Member {
 		this.cbRank = cbRank;
 	}
 
+	public boolean isUpdated() {
+		return isUpdated;
+	}
+
+	public void setUpdated(boolean isUpdated) {
+		this.isUpdated = isUpdated;
+	}
+
 	@Override
 	public String toString() {
 		return username + "[" + firstname + " " + lastname + "]";
@@ -185,7 +194,7 @@ public class Member {
 
 	public String toFullString() {
 		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
-				+ base + ", " + rank.toFullString();
+				+ base + ", " + rank.toFullString() + ", " + isUpdated;
 //		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
 //				+ this.base.getBaseId() + ", " + this.rank.getRankId();
 	}

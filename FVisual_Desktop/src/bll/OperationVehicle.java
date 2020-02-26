@@ -8,6 +8,8 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	private Base base;
 	private int baseId;
 	
+	private boolean isUpdated = false;
+	
 	private CheckBox selection;
 	
 	private static OperationVehicle operationVehicleObj = null;
@@ -89,6 +91,14 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	public CheckBox getSelection() {
 		return selection;
 	}
+	
+	public boolean isUpdated() {
+		return isUpdated;
+	}
+
+	public void setUpdated(boolean isUpdated) {
+		this.isUpdated = isUpdated;
+	}
 
 	@Override
 	public String toString() {
@@ -96,7 +106,7 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 	}
 	
 	public String toFullString() {
-		return operationVehicleId + ", " + description + ", " + base.toString();
+		return operationVehicleId + ", " + description + ", " + base.toString() + ", " + isUpdated;
 	}
 
 	@Override

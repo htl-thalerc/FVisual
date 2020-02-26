@@ -1,11 +1,13 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 import bll.Base;
+import handler.BaseHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -221,6 +223,16 @@ public class ControllerUpdateTabBase implements Initializable {
 			retVal.setStreet(this.lbOldStreet.getText());
 		} else {
 			retVal.setStreet(this.tfNewStreet.getText());
+		}
+		
+		//checks if base has updated
+		ArrayList<Base> tempBases = BaseHandler.getInstance().getBaseList();
+		for(int i=0;i<tempBases.size();i++) {
+			if(tempBases.get(i).equals(retVal)) {
+				retVal.setUpdated(false);
+			} else {
+				retVal.setUpdated(true);
+			}
 		}
 		return retVal;
 	}

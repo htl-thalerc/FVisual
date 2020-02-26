@@ -55,18 +55,18 @@ public class CentralUpdateHandler {
 		// selectedBase.getBaseId()));
 		// threadBaseByBaseId.start();
 		// threadBaseByBaseId.join();
-		// Thread.sleep(250);
+		// Thread.sleep(100);
 
 		try {
 			Thread threadVehcilesByBaseId = new Thread(new BaseVehicleLoader(selectedBase));
 			threadVehcilesByBaseId.start();
 			threadVehcilesByBaseId.join();
-			Thread.sleep(250);
+			Thread.sleep(100);
 
 			Thread threadMembersByBaseId = new Thread(new BaseMemberLoader(selectedBase));
 			threadMembersByBaseId.start();
 			threadMembersByBaseId.join();
-			Thread.sleep(250);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -82,16 +82,14 @@ public class CentralUpdateHandler {
 					.getListOfNewOperationVehicles();
 			try {
 				//update base
-				if (updatedBaseData != null) {
+				if (updatedBaseData != null && updatedBaseData.isUpdated()) {
 					updatedBaseData.setBaseId(selectedBase.getBaseId());
 					this.setUpdatedBase(updatedBaseData);
-					
-					System.out.println(updatedBaseData.toString());
 					
 					Thread threadUpdateBase = new Thread(new BaseUpdateHandler(updatedBaseData));
 					threadUpdateBase.start();
 					threadUpdateBase.join();
-					Thread.sleep(250);
+					Thread.sleep(100);
 				}
 				
 				//Update member
@@ -99,33 +97,33 @@ public class CentralUpdateHandler {
 					listOfUpdatedMembers.get(i).setBaseId(listOfUpdatedMembers.get(i).getBase().getBaseId());
 					listOfUpdatedMembers.get(i).setRankId(listOfUpdatedMembers.get(i).getRank().getRankId());
 					
-					if (listOfUpdatedMembers.get(i).getMemberId() == -1) {
+					if (listOfUpdatedMembers.get(i).getMemberId() == -1 && listOfUpdatedMembers.get(i).isUpdated()) {
 						Thread threadPostMember = new Thread(new MemberPostHandler(listOfUpdatedMembers.get(i)));
 						threadPostMember.start();
 						threadPostMember.join();
-						Thread.sleep(250);
-					} else {
+						Thread.sleep(100);
+					} else if(listOfUpdatedMembers.get(i).getMemberId() != -1 && listOfUpdatedMembers.get(i).isUpdated()) {
 						Thread threadUpdateMember = new Thread(new MemberUpdateHandler(listOfUpdatedMembers.get(i)));
 						threadUpdateMember.start();
 						threadUpdateMember.join();
-						Thread.sleep(250);
+						Thread.sleep(100);
 					}
 				}
 				
 				//Update vehicle
 				for (int i = 0; i < listOfUpdatedVehicles.size(); i++) {
-					if (listOfUpdatedVehicles.get(i).getOperationVehicleId() == -1) {
+					if (listOfUpdatedVehicles.get(i).getOperationVehicleId() == -1 && listOfUpdatedVehicles.get(i).isUpdated()) {
 						Thread threadPostVehicle = new Thread(
 								new OperationVehiclePostHandler(listOfUpdatedVehicles.get(i)));
 						threadPostVehicle.start();
 						threadPostVehicle.join();
-						Thread.sleep(250);
-					} else {
+						Thread.sleep(100);
+					} else if(listOfUpdatedVehicles.get(i).getOperationVehicleId() != -1 && listOfUpdatedVehicles.get(i).isUpdated()) {
 						Thread threadVehicleUpdaterHandler = new Thread(new OperationVehicleUpdateHandler(
 								listOfUpdatedVehicles.get(i), this.currBaseToUpdate.getBaseId()));
 						threadVehicleUpdaterHandler.start();
 						threadVehicleUpdaterHandler.join();
-						Thread.sleep(250);
+						Thread.sleep(100);
 					}
 				}
 			} catch (InterruptedException ex) {
@@ -159,7 +157,7 @@ public class CentralUpdateHandler {
 					threadVehicleUpdaterHandler.start();
 					threadVehicleUpdaterHandler.join();
 
-					Thread.sleep(250);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -200,7 +198,7 @@ public class CentralUpdateHandler {
 
 					threadUpdateHandler.start();
 					threadUpdateHandler.join();
-					Thread.sleep(250);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

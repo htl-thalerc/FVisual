@@ -15,18 +15,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import loader.BaseLoader;
-import loader.MemberLoader;
-import loader.OperationVehicleLoader;
-import loader.RankLoader;
 
 public class ControllerMainframe implements Initializable {
-	@FXML private MenuItem mItemOperationManagement, mItemBaseManagement, mItemProfileSettings, mItemLogout;
+	@FXML private MenuItem mItemOperationManagement, mItemBaseManagement, mItemProfileSettings, mItemLogout, mItemExceptions;
 	@FXML private Label lblMessage;
 	@FXML private BorderPane mainPane;
 	
@@ -46,11 +41,10 @@ public class ControllerMainframe implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
 	}
 
 	@FXML
-	private void onClickmItemOperationManagement(ActionEvent aE) {
+	private void onClickmItemOperationManagement(ActionEvent event) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/gui/OperationManagement.fxml"));
@@ -66,7 +60,7 @@ public class ControllerMainframe implements Initializable {
 	}
 
 	@FXML
-	private void onClickmItemBaseManagement(ActionEvent aE) {
+	private void onClickmItemBaseManagement(ActionEvent event) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/gui/BaseManagement.fxml"));
@@ -82,7 +76,7 @@ public class ControllerMainframe implements Initializable {
 	}
 
 	@FXML
-	private void onClickmItemProfileSettings(ActionEvent aE) throws IOException {
+	private void onClickmItemProfileSettings(ActionEvent event) throws IOException {
 		ch = CentralHandler.getInstance();
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		fxmlLoader.setLocation(getClass().getResource("/gui/EditProfile.fxml"));
@@ -99,7 +93,25 @@ public class ControllerMainframe implements Initializable {
 	}
 
 	@FXML
-	private void onClickmItemLogout(ActionEvent aE) {
+	private void onClickmItemLogout(ActionEvent event) {
 		currentStage.close();
+	}
+	
+	@FXML
+	private void onClickmItemExceptions(ActionEvent event) {
+		FXMLLoader loader = CentralHandler.loadFXML("/gui/ExceptionDialog.fxml");
+		loader.setController(new ControllerExeptionsDialog(this));
+
+		try {
+			Stage curStage = new Stage();
+			Scene scene = new Scene(loader.load());
+			curStage.setTitle("List of Exeptions");
+			curStage.setScene(scene);
+			curStage.initModality(Modality.APPLICATION_MODAL);
+			
+			curStage.showAndWait();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

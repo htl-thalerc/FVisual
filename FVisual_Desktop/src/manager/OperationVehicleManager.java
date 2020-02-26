@@ -19,11 +19,12 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
-import bll.Base;
 import bll.ClassTypes;
-import bll.Member;
+import bll.EnumCRUDOption;
+import bll.Exception;
 import bll.OperationVehicle;
 import handler.CentralHandler;
+import handler.ExceptionHandler;
 
 public class OperationVehicleManager {
 	private static OperationVehicleManager operationVehicleManagerInstance = null;
@@ -65,6 +66,8 @@ public class OperationVehicleManager {
 				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
 				});
 				LOGGER.info("[OperationVehicleManager] [GET]: OperationVehiles");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -96,6 +99,8 @@ public class OperationVehicleManager {
 			if (response.getStatus() == 200) {
 				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -127,6 +132,8 @@ public class OperationVehicleManager {
 			if (response.getStatus() == 200) {
 				foundedVehicle = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -154,6 +161,7 @@ public class OperationVehicleManager {
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.POST);
 			return false;
 		}
 	}
@@ -168,6 +176,7 @@ public class OperationVehicleManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -192,6 +201,7 @@ public class OperationVehicleManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.PUT);
 			return false;
 		}
 	}
@@ -210,6 +220,8 @@ public class OperationVehicleManager {
 			if (response.getStatus() == 200) {
 				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -229,6 +241,8 @@ public class OperationVehicleManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if (response.getStatus() == 200) {
 				foundedVehicle = response.readEntity(OperationVehicle.class);
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -246,6 +260,7 @@ public class OperationVehicleManager {
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.POST);
 			return false;
 		}
 	}
@@ -260,6 +275,7 @@ public class OperationVehicleManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -275,6 +291,7 @@ public class OperationVehicleManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.PUT);
 			return false;
 		}
 	}

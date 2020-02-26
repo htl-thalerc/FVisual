@@ -180,6 +180,7 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			
 			vehicleToCreate.setDescription(this.tfNewVehiclename.getText().trim());
 			vehicleToCreate.setOperationVehicleId(-1);
+			vehicleToCreate.setUpdated(true);
 			
 			this.obsListOfVehicleData.add(vehicleToCreate);
 			this.lvVehicles.refresh();
@@ -200,6 +201,8 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 			} else {
 				currSelectedVehicle.setDescription(this.lbOldVehiclename.getText());
 			}
+			
+			currSelectedVehicle.setUpdated(true);
 			
 			for(int i=0;i<this.obsListOfVehicleData.size();i++) {
 				if(this.obsListOfVehicleData.get(i).getOperationVehicleId() == currSelectedVehicle.getOperationVehicleId()) {

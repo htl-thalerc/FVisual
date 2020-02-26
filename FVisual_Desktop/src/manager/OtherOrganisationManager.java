@@ -17,8 +17,10 @@ import javax.ws.rs.core.Response;
 import com.google.gson.JsonSyntaxException;
 
 import bll.ClassTypes;
+import bll.EnumCRUDOption;
 import bll.OtherOrganisation;
 import handler.CentralHandler;
+import handler.ExceptionHandler;
 
 public class OtherOrganisationManager {
 	private static OtherOrganisationManager otherOrganisationManagerInstance = null;
@@ -50,6 +52,8 @@ public class OtherOrganisationManager {
 			if(response.getStatus() == 200) {
 				collOfOtherOrganisations = response.readEntity(new GenericType<ArrayList<OtherOrganisation>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -70,6 +74,8 @@ public class OtherOrganisationManager {
 			if(response.getStatus() == 200) {
 				collOfOtherOrganisations = response.readEntity(new GenericType<ArrayList<OtherOrganisation>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -88,6 +94,8 @@ public class OtherOrganisationManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				foundedOtherOrganisation = response.readEntity(OtherOrganisation.class);
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -104,6 +112,7 @@ public class OtherOrganisationManager {
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.POST);
 			return false;
 		}
 	}
@@ -117,6 +126,7 @@ public class OtherOrganisationManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -130,6 +140,7 @@ public class OtherOrganisationManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.PUT);
 			return false;
 		}
 	}

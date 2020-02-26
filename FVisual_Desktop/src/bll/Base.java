@@ -10,6 +10,8 @@ public class Base implements Comparable<Base> {
 	private String street;
 	private String houseNr;
 	
+	private boolean isUpdated = false;
+	
 	private CheckBox selection;
 	//DB Attribut names
 	public static final String CONST_DB_BASEID = "ID";
@@ -114,6 +116,14 @@ public class Base implements Comparable<Base> {
 
 	public CheckBox getSelection() {
 		return selection;
+	}
+	
+	public boolean isUpdated() {
+		return isUpdated;
+	}
+
+	public void setUpdated(boolean isUpdated) {
+		this.isUpdated = isUpdated;
 	}
 
 	@Override

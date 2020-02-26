@@ -20,7 +20,9 @@ import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
 import bll.ClassTypes;
+import bll.EnumCRUDOption;
 import handler.CentralHandler;
+import handler.ExceptionHandler;
 
 public class BaseManager {
 	private static BaseManager baseManagerInstance = null;
@@ -54,6 +56,8 @@ public class BaseManager {
 				collOfBases = response.readEntity(new GenericType<ArrayList<Base>>() {
 				});
 				LOGGER.info("[BaseManager] [GET]: Bases");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.BASE, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -81,6 +85,8 @@ public class BaseManager {
 				});
 				foundedBase = list.get(0);
 				LOGGER.info("[BaseManager] [GET]: Base by BaseId");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.BASE, EnumCRUDOption.GET);
 			}
 		} catch(JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -100,6 +106,8 @@ public class BaseManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				foundedBase = response.readEntity(Base.class);	
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.BASE, EnumCRUDOption.GET);
 			}
 		} catch(JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -130,7 +138,9 @@ public class BaseManager {
 			ArrayList<Base> list = response.readEntity(new GenericType<ArrayList<Base>>() {
 			});
 			retVal = list.get(0);
-		} 
+		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.BASE, EnumCRUDOption.POST);
+		}
 		return retVal;
 	}
 	
@@ -143,6 +153,7 @@ public class BaseManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.BASE, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -169,6 +180,7 @@ public class BaseManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.BASE, EnumCRUDOption.PUT);
 			return false;
 		}
 	}

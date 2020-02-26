@@ -428,6 +428,7 @@ public class ControllerUpdateTabMember implements Initializable {
 				memberToCreate.setPassword(memberToCreate.getUsername().toLowerCase());
 				memberToCreate.setAdmin(false);
 				memberToCreate.setMemberId(-1);
+				memberToCreate.setUpdated(true);
 
 				this.obsListOfMemberData.add(memberToCreate);
 				this.lvMembers.refresh();
@@ -477,13 +478,12 @@ public class ControllerUpdateTabMember implements Initializable {
 			if(this.tfNewFirstname.getText() != "") {
 				tempFirstname = this.tfNewFirstname.getText().trim();
 			}
-			
 			if(this.tfNewLastname.getText() != "") {
 				tempLastname = this.tfNewLastname.getText().trim();
 			} 
-			System.out.println(tempLastname + ", " + tempFirstname);
 			currSelectedMember.setUsername(MemberHandler.getInstance().setGeneratedUsername(new Member(-1, tempFirstname, tempLastname)));
-
+			currSelectedMember.setUpdated(true);
+			
 			for (int i = 0; i < listOfAllCurrMembers.size(); i++) {
 				if (listOfAllCurrMembers.get(i).getMemberId() == currSelectedMember.getMemberId()) {					
 					listOfAllCurrMembers.remove(listOfAllCurrMembers.get(i));

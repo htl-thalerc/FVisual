@@ -18,8 +18,10 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonSyntaxException;
 
 import bll.ClassTypes;
+import bll.EnumCRUDOption;
 import bll.Rank;
 import handler.CentralHandler;
+import handler.ExceptionHandler;
 
 public class RankManager {
 	private static RankManager rankManager = null;
@@ -52,6 +54,8 @@ public class RankManager {
 				collOfRanks = response.readEntity(new GenericType<ArrayList<Rank>>() {
 				});
 				LOGGER.info("[RankManager] [GET]: Ranks");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.RANK, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();

@@ -21,9 +21,11 @@ import com.google.gson.JsonSyntaxException;
 
 import bll.Base;
 import bll.ClassTypes;
+import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
 import handler.CentralHandler;
+import handler.ExceptionHandler;
 
 public class MemberManager {
 	private static MemberManager memberManagerInstance = null;
@@ -64,6 +66,8 @@ public class MemberManager {
 				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
 				});
 				LOGGER.info("[MemberManager] [GET]: Members");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -94,6 +98,8 @@ public class MemberManager {
 				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
 				});
 				LOGGER.info("[MemberManager] [GET]: Baseless Members");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -126,6 +132,8 @@ public class MemberManager {
 				});
 				foundedMember = list.get(0);
 				LOGGER.info("[MemberManager] [GET]: Member by Id");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -159,6 +167,8 @@ public class MemberManager {
 				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
 				});
 				LOGGER.info("[MemberManager] [GET]: Members by BaseId");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -193,6 +203,8 @@ public class MemberManager {
 			if (response.getStatus() == 200) {
 				foundedMember = response.readEntity(new GenericType<ArrayList<Member>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -223,6 +235,7 @@ public class MemberManager {
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.POST);
 			return false;
 		}
 	}
@@ -238,6 +251,7 @@ public class MemberManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -267,6 +281,7 @@ public class MemberManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.PUT);
 			return false;
 		}
 	}
@@ -285,6 +300,8 @@ public class MemberManager {
 			if (response.getStatus() == 200) {
 				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
 				});
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -304,6 +321,8 @@ public class MemberManager {
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if (response.getStatus() == 200) {
 				foundedMember = response.readEntity(Member.class);
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
 			}
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
@@ -321,6 +340,7 @@ public class MemberManager {
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.POST);
 			return false;
 		}
 	}
@@ -335,6 +355,7 @@ public class MemberManager {
 		if (response.getStatus() == 204) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.DELETE);
 			return false;
 		}
 	}
@@ -349,6 +370,7 @@ public class MemberManager {
 		if (response.getStatus() == 200) {
 			return true;
 		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.PUT);
 			return false;
 		}
 	}
