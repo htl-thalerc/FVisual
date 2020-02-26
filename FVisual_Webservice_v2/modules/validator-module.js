@@ -225,6 +225,19 @@ var getSubQueryNamePattern = function () {
     };
 }
 
+var getSubQueryEinsatzPattern = function(){
+    return{
+        "length":2, "data":{
+            "name": {
+                "isMandatory": true, "type": "string", "min-length": "3"    
+            },
+            "zeit": {
+                "isMandatory": true
+            }
+        }
+    }
+}
+
 var getSubQueryIdPattern = function () {
     return {
         "length": 1, "data": {
@@ -246,6 +259,7 @@ module.exports = {
         'getFahrzeugPattern': getFahrzeugPattern,
         'getAdminsPattern': getAdminsPattern,
         'getSubQueryNamePattern': getSubQueryNamePattern,
+        'getSubQueryEinsatzPattern': getSubQueryEinsatzPattern,
         'getSubQueryIdPattern': getSubQueryIdPattern
     }
 }

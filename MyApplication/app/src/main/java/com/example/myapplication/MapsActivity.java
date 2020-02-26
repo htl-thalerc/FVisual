@@ -59,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     RadioGroup radioGroupFilter;
     Button resetButton;
     DatabaseManager db;
+    Einsatz currentEinsatz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_maps);
             currentMitglied = (Mitglied) getIntent().getSerializableExtra("serialzable");
-            db = DatabaseManager.newInstance("http://192.168.193.84:3030");
-
+            db = DatabaseManager.newInstance("http://192.168.197.152:3030");
 
             einsatzartList = db.getEinsatzart();
 
@@ -129,8 +129,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch(Exception e){
 
         }
-        //TODO einsatzList = getEinsaetzeFromDatabase(); Aber nur Einsätze von currentMitglied
-
         showStuetzpunkt();
         showEinsaetze();
     }
@@ -144,6 +142,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+
             Address add = list.get(0);
             switch (einsatz.getId_einsatzart()){
                 /*
@@ -224,41 +223,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
 
-/*
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.7525, 14.88))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_fire))
-                .title("Feuer")
-                .snippet(new Einsatz().getClass().getName())
-        );
 
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.9525, 14.88))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_sports_car))
-                .title("Unfall")
-                .snippet(new Einsatz().getClass().getName())
-        );
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.3525, 14.7))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_tools_cross_settings_symbol_for_interface))
-                .title("Technischer Einsatz")
-                .snippet(new Einsatz().getClass().getName())
-        );
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.4525, 14.88))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_customer_service))
-                .title("Hilfeleistung")
-                .snippet(new Einsatz().getClass().getName())
-        );
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(46.3525, 14.78))
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_man_user))
-                .title("Personensuche")
-                .snippet(new Einsatz().getClass().getName())
-        );*/
     }
 
     private void showStuetzpunkt() {
@@ -280,13 +245,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         einsatzList = db.getAllEinsetzeFromMitglied(currentMitglied.getId());
     }
 
-    Einsatz currentEinsatz;
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())) {
             showPopupStuetzpunkt(this);
         } else {
-            currentEinsatz = einsatzList.get(Integer.parseInt(marker.getSnippet())-1);
+            currentEinsatz = einsatzList.get(Integer.parseInt(marker.getSnippet()));
             showPopupEinsatz(this);
         }
 
@@ -294,8 +258,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void showPopupStuetzpunkt(final Activity context) {
-        int popupWidth = 550;
-        int popupHeight = 500;
+        int popupWidth = 350;
+        int popupHeight = 300;
 
         // Inflate the popup_layout.xml
         LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
@@ -317,7 +281,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.showAtLocation(layout, Gravity.NO_GRAVITY, 200, 700);
 
         // Getting a reference to Close button, and close the popup when clicked.
-        Button close = (Button) layout.findViewById(R.id.close);
         TextView txtName = (TextView) layout.findViewById(R.id.txtName);
         TextView txtOrt = (TextView) layout.findViewById(R.id.txtOrt);
         TextView txtPLZ = (TextView) layout.findViewById(R.id.txtPLZ);
@@ -327,18 +290,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         txtOrt.setText("Ort: " + currentStuetzpunkt.getOrt());
         txtPLZ.setText("PLZ: " + currentStuetzpunkt.getPlz());
         txtStrasse.setText("Straße: " + currentStuetzpunkt.getStrasse() + " " + currentStuetzpunkt.getHausnr());
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popup.dismiss();
-            }
-        });
     }
 
     private void showPopupEinsatz(final Activity context) {
-        int popupWidth = 650;
-        int popupHeight = 650;
+        int popupWidth = 350;
+        int popupHeight = 350;
 
         // Inflate the popup_layout.xml
         LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
@@ -361,10 +317,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.setBackgroundDrawable(new BitmapDrawable());
 
         // Displaying the popup at the specified location, + offsets.
-        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 12, 12);
+        popup.showAtLocation(layout, Gravity.NO_GRAVITY, 200, 700);
 
         // Getting a reference to Close button, and close the popup when clicked.
-        Button close = (Button) layout.findViewById(R.id.close);
         TextView txtEinsatzcode = (TextView) layout.findViewById(R.id.txtEinsatzcode);
         TextView txtEinsatzart = (TextView) layout.findViewById(R.id.txtEinsatzart);
         TextView txtTitel = (TextView) layout.findViewById(R.id.txtTitel);
@@ -373,29 +328,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TextView txtPLZ = (TextView) layout.findViewById(R.id.txtPLZ);
         TextView txtZeit = (TextView) layout.findViewById(R.id.txtZeit);
 
+
         txtEinsatzcode.setText("Einsatzcode: " + currentEinsatz.getId_einsatzcode());
-        txtEinsatzart.setText("Einsatzart: " + currentEinsatz.getId_einsatzart());
+        txtEinsatzart.setText("Einsatzart: " + einsatzartList.get(currentEinsatz.getId_einsatzart() - 1).getBeschreibung());
         txtTitel.setText("Titel: " + currentEinsatz.getTitel());
         txtKurzbeschreibung.setText("Kurzbeschreibung: " + currentEinsatz.getKurzbeschreibung());
         txtAdresse.setText("Adresse: " + currentEinsatz.getAdresse());
         txtPLZ.setText("PLZ: " + currentEinsatz.getPlz());
         txtZeit.setText("Zeit: " + currentEinsatz.getZeit());
-
-
-        close.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                popup.dismiss();
-            }
-        });
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_placeholder);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(23, 17, vectorDrawable.getIntrinsicWidth() + 23, vectorDrawable.getIntrinsicHeight() + 17);
+        vectorDrawable.setBounds(10, 10, vectorDrawable.getIntrinsicWidth() + 10, vectorDrawable.getIntrinsicHeight() + 10);
         Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
