@@ -42,10 +42,16 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		this.controllerCreateOperationManagement.setAllOptionButtonsDisability(false);
+		this.initTextFieldListeners();
 	}
-
 	
+	private void initTextFieldListeners() {
+		this.tfBaseName.textProperty().addListener((obj, oldVal, newVal) -> {
+			this.controllerCreateOperationManagement.setAllOptionButtonsDisability(false);
+			this.controllerCreateOperationManagement.setTabOperationVehicleManagementDisability(false);
+		});
+	}
 
 	@Override
 	public void mapInitialized() {
