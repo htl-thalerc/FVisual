@@ -19,7 +19,7 @@
 	<top>
 		<Accordion fx:id="dropMenuFilter" BorderPane.alignment="CENTER">
 			<panes>
-				<TitledPane animated="false" text="Filter Bases">
+				<TitledPane animated="false" text="Filter Operation">
 					<content>
 						<GridPane>
 							<columnConstraints>
@@ -62,8 +62,8 @@
 					<contextMenu>
 						<ContextMenu>
 							<items>
-								<MenuItem fx:id="mItemRemoveBase" mnemonicParsing="false" onAction="#onClickMItemRemoveBase" text="Remove Base" />
-								<MenuItem fx:id="mItemUpdateBase" mnemonicParsing="false" onAction="#onClickMItemUpdateBase" text="Update Base" />
+								<MenuItem fx:id="mItemRemoveOperation" mnemonicParsing="false" onAction="#onClickMItemRemoveOperation" text="Remove Operation" />
+								<MenuItem fx:id="mItemUpdateOperation" mnemonicParsing="false" onAction="#onClickMItemUpdateOperation" text="Update Operation" />
 							</items>
 						</ContextMenu>
 					</contextMenu>
@@ -90,7 +90,7 @@
 								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 							</rowConstraints>
 							<children>
-								<Label style="-fx-font-weight: bold;" text="Name" GridPane.halignment="RIGHT">
+								<Label style="-fx-font-weight: bold;" text="Code, Type, Titel" GridPane.halignment="RIGHT">
 									<GridPane.margin>
 										<Insets />
 									</GridPane.margin>
@@ -98,27 +98,27 @@
 										<Insets right="5.0" />
 									</padding>
 								</Label>
-								<Label style="-fx-font-weight: bold;" text="Postcode and Place" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+								<Label style="-fx-font-weight: bold;" text="Shortdescription" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
 									<padding>
 										<Insets right="5.0" />
 									</padding>
 								</Label>
-								<Label style="-fx-font-weight: bold;" text="Address" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+								<Label style="-fx-font-weight: bold;" text="Address, Plz" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
 									<padding>
 										<Insets right="5.0" />
 									</padding>
 								</Label>
-								<Label fx:id="lbShowNameData" text="No Data available - Select Base" GridPane.columnIndex="1">
+								<Label fx:id="lbShowCodeAndTypeAndTitleData" text="No Data available - Select Base" GridPane.columnIndex="1">
 									<padding>
 										<Insets left="5.0" />
 									</padding>
 								</Label>
-								<Label fx:id="lbShowPostcodeAndPlaceData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="1">
+								<Label fx:id="lbShowShortdescriptionData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="1">
 									<padding>
 										<Insets left="5.0" />
 									</padding>
 								</Label>
-								<Label fx:id="lbShowAddressData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="2">
+								<Label fx:id="lbShowAddressAndPlzData" text="No Data available - Select Base" GridPane.columnIndex="1" GridPane.rowIndex="2">
 									<padding>
 										<Insets left="5.0" />
 									</padding>
@@ -161,10 +161,18 @@
                                  <content>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                                        <center>
-                                          <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                          <TableView fx:id="tvOtherOrgData" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets bottom="-10.0" left="-10.0" right="-10.0" top="-10.0" />
                                              </BorderPane.margin>
+                                             <contextMenu>
+                                                <ContextMenu>
+                                                  <items>
+                                                    <MenuItem mnemonicParsing="false" onAction="#onClickMItemUpdateOrg" text="Update Org" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#onClickMItemRemoveOrg" text="Remove Org" />
+                                                  </items>
+                                                </ContextMenu>
+                                             </contextMenu>
                                           </TableView>
                                        </center>
                                     </BorderPane>

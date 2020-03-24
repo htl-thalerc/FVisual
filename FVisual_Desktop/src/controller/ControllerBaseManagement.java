@@ -12,7 +12,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 public class ControllerBaseManagement implements Initializable {
-	@FXML private TabPane mainTabPaneBaseManagement;
+	@FXML 
+	private TabPane mainTabPaneBaseManagement;
 
 	private ControllerBaseManagementBaseLookup controllerBaseManagementBaseLookup;
 	private ControllerCreateBaseManagement controllerCreateBase;

@@ -13,6 +13,8 @@ public class MemberHandler {
 	private ArrayList<Member> listOfMembersByBaseId = new ArrayList<Member>();
 	private ArrayList<Member> listOfBaselessMembers = new ArrayList<Member>();
 	
+	private ArrayList<Member> listOfMembersByOperationId = new ArrayList<Member>();
+	
 	private Member updatedMember = null;
 	
 	public static MemberHandler getInstance() {
@@ -92,5 +94,9 @@ public class MemberHandler {
 			}
 		}
 		return username.toLowerCase();
+	}
+	
+	public void setOperationListByOperationId(ArrayList<Member> listOfMembersFilteredByOperation) {
+		
 	}
 }

@@ -14,21 +14,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
-public class ControllerCreateBaseTabOtherOrganisationManagement implements Initializable {
+public class ControllerCreateOperationTabOtherOrganisationManagement implements Initializable {
 	@FXML
 	private ListView<OtherOrganisation> lvAvailableOrganisation, lvSelectedOrganisation;
 	@FXML
 	private Button btnAddOneOrganisation, btnRemoveOneOrganisation, btnAddAllOrganisations, btnRemoveAllOrganisations;
 
-	private ControllerCreateBaseManagement controllerCreateBase;
+	private ControllerCreateOperationManagement controllerCreateOperationManagement;
 	private ObservableList<OtherOrganisation> obsListLVAvailableOrganisation, obsListlVSelectedOrganisation;
 	private boolean isLVAvailableOrganisationSelected = false;
 	private int nrOfTotalOrganisations = 0;
-
-	public ControllerCreateBaseTabOtherOrganisationManagement(ControllerCreateBaseManagement controllerCreateBase) {
-		this.controllerCreateBase = controllerCreateBase;
+	
+	public ControllerCreateOperationTabOtherOrganisationManagement(
+			ControllerCreateOperationManagement controllerCreateOperationManagement) {
+		this.controllerCreateOperationManagement = controllerCreateOperationManagement;
 	}
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.init();

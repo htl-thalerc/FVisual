@@ -51,6 +51,12 @@ public class OperationVehicle implements Comparable<OperationVehicle> {
 		this.description = description;
 		this.baseId = baseId;
 	}
+	
+	public OperationVehicle(int operationVehicleId, String description) {
+		super();
+		this.operationVehicleId = operationVehicleId;
+		this.description = description;
+	}
 
 	public OperationVehicle() {
 		super();

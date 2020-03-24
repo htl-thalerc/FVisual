@@ -1,8 +1,6 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -11,7 +9,6 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
@@ -62,8 +59,8 @@ public class OperationManager {
 		return collOfOperations;
 	}
 	
-	public Base getOperationById(int operationId) {
-		Base foundedOperation = null;
+	public Operation getOperationById(int operationId) {
+		Operation foundedOperation = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		WebTarget webTargetGetById = null;
@@ -73,7 +70,7 @@ public class OperationManager {
 			invocationBuilder = webTargetGetById.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
-				foundedOperation = response.readEntity(Base.class);	
+				foundedOperation = response.readEntity(Operation.class);	
 			} else {
 				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.GET);
 			}

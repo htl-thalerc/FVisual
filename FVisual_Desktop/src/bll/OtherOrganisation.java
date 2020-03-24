@@ -3,6 +3,7 @@ package bll;
 public class OtherOrganisation {
 	private int otherOrganisationId;
 	private String name;
+	private Operation operation;
 	
 	private static OtherOrganisation otherOrgObj = null;
 	
@@ -16,6 +17,13 @@ public class OtherOrganisation {
 		return otherOrgObj;
 	}
 
+	public OtherOrganisation(int otherOrganisationId, String name, Operation operation) {
+		super();
+		this.otherOrganisationId = otherOrganisationId;
+		this.name = name;
+		this.operation = operation;
+	}
+	
 	public OtherOrganisation(int otherOrganisationId, String name) {
 		super();
 		this.otherOrganisationId = otherOrganisationId;
@@ -42,6 +50,14 @@ public class OtherOrganisation {
 		this.name = name;
 	}
 	
+	public Operation getOperation() {
+		return operation;
+	}
+
+	public void setOperation(Operation operation) {
+		this.operation = operation;
+	}
+
 	@Override
 	public String toString() {
 		return name;
