@@ -60,6 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Button resetButton;
     DatabaseManager db;
     Einsatz currentEinsatz;
+    Button editProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_maps);
             currentMitglied = (Mitglied) getIntent().getSerializableExtra("serialzable");
-            db = DatabaseManager.newInstance("http://192.168.197.152:3030");
+            db = DatabaseManager.newInstance();
 
             einsatzartList = db.getEinsatzart();
 
@@ -78,6 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             radioButtonEinsatz = findViewById(R.id.radioButtonEinsatzFilter);
             radioGroupFilter = findViewById(R.id.radioGroupFilter);
             resetButton = findViewById(R.id.buttonReset);
+            editProfile = findViewById(R.id.buttonEdit);
 
             resetButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,6 +89,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     radioButtonEinsatz.setChecked(false);
                     showStuetzpunkt();
                     showEinsaetze();
+                }
+            });
+
+            editProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent send = new Intent(MapsActivity.this, EditActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("serialzable", currentMitglied);
+                    send.putExtras(b);
+                    startActivity(send);
+                    finish();
                 }
             });
 
@@ -250,7 +264,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())) {
             showPopupStuetzpunkt(this);
         } else {
-            currentEinsatz = einsatzList.get(Integer.parseInt(marker.getSnippet()));
+            for(Einsatz e:einsatzList){
+                if(e.getId() == Integer.parseInt(marker.getSnippet())){
+                    currentEinsatz = einsatzList.get(Integer.parseInt(marker.getSnippet()));
+                }
+            }
             showPopupEinsatz(this);
         }
 

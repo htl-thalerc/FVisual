@@ -8,6 +8,7 @@ import com.example.myapplication.service.ServiceGetEinsaetzeFromMitgliedList;
 import com.example.myapplication.service.ServiceGetEinsatzarten;
 import com.example.myapplication.service.ServiceGetMitgliederList;
 import com.example.myapplication.service.ServiceGetStuetzpunkt;
+import com.example.myapplication.service.ServicePutMitglied;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,16 +18,15 @@ import java.util.concurrent.ExecutionException;
 
 public class DatabaseManager {
     private static DatabaseManager db = null;
-    private static String ipHost = "http://192.168.197.152:3030";
+    private static String ipHost = "http://192.168.8.121:3030";
 
     private DatabaseManager() {
     }
 
-    public static DatabaseManager newInstance(String ip) {
+    public static DatabaseManager newInstance() {
         if (db == null) {
             db = new DatabaseManager();
         }
-        ipHost = ip;
         return db;
     }
 
@@ -116,4 +116,15 @@ public class DatabaseManager {
         }
         return einsatzartList;
     }
+
+    public String UpdateMitglied(Mitglied mitglied) throws ExecutionException, InterruptedException {
+        Gson gson = new Gson();
+        ServicePutMitglied controller = new ServicePutMitglied();
+        ServicePutMitglied.setIPHost(ipHost + "/mitglieder/"+mitglied.getId());
+        controller.setMitglied(mitglied);
+        controller.execute();
+        return controller.get();
+    }
+
+
 }
