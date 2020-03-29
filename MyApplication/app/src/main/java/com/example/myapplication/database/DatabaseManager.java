@@ -119,10 +119,13 @@ public class DatabaseManager {
 
     public String UpdateMitglied(Mitglied mitglied) throws ExecutionException, InterruptedException {
         Gson gson = new Gson();
+
         ServicePutMitglied controller = new ServicePutMitglied();
-        ServicePutMitglied.setIPHost(ipHost + "/mitglieder/"+mitglied.getId());
+        ServicePutMitglied.setIPHost(ipHost+ "/mitglieder/"+mitglied.getId());
+
         controller.setMitglied(mitglied);
         controller.execute();
+
         return controller.get();
     }
 

@@ -42,7 +42,8 @@ public class EditActivity extends AppCompatActivity implements Serializable {
         save = findViewById(R.id.btnSave);
         cancel = findViewById(R.id.btnCancel);
         checkBox = findViewById(R.id.checkbox);
-
+        usernameText.setText(currentMitglied.getUsername());
+        passwordText.setText(currentMitglied.getPassword());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -80,6 +81,7 @@ public class EditActivity extends AppCompatActivity implements Serializable {
         currentMitglied.setPassword(passwordText.getText().toString());
 
         db.UpdateMitglied(currentMitglied);
+        System.out.println(currentMitglied);
         Intent send = new Intent(EditActivity.this, MapsActivity.class);
         Bundle b = new Bundle();
         b.putSerializable("serialzable", currentMitglied);
