@@ -15,6 +15,76 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/dienstgrad"
+                android:layout_width="398dp"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:autoText="true"
+                android:text="Dienstgrad"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/txtdienstgrad"
+                android:layout_width="652dp"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="none" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/vorname"
+                android:layout_width="398dp"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:autoText="true"
+                android:text="Vorname"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/txtvorname"
+                android:layout_width="652dp"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="none" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/nachname"
+                android:layout_width="398dp"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:text="Nachname"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/txtnachname"
+                android:layout_width="652dp"
+                android:layout_height="53dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:enabled="false"
+                android:inputType="none" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
                 android:id="@+id/username"
                 android:layout_width="398dp"
                 android:layout_height="53dp"
@@ -90,9 +160,9 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100dp"
-                android:onClick="cancel"
                 android:layout_weight="1"
-                android:text="@android:string/cancel" />
+                android:onClick="cancel"
+                android:text="Cancel" />
         </TableRow>
     </TableLayout>
 

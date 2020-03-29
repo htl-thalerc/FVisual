@@ -45,16 +45,20 @@ public class ServicePutMitglied extends AsyncTask<String, Void, String> {
         try {
             url = new java.net.URL(this.ipHost);
             // Öffnen der Connection
+            System.out.println("PUUUUUUUUUUUUUUUUUUUUUUUUUT");
+
             conn = (HttpURLConnection)url.openConnection();
-            conn.setDoOutput(true);
-            conn.setChunkedStreamingMode(0);
+            conn.setRequestMethod("PUT");
             conn.addRequestProperty("Content-Type", "application/json");
             conn.addRequestProperty("Authorization", "53616c7465645f5fc70def69b8f6a43bb830eb4835c02344a798099ca5a5ace531e8254f6108f3058c233a5aae22e25f29edbee629ce7375b0424d3c5bd883c3");
 
-            OutputStream out = new BufferedOutputStream(conn.getOutputStream());
+            conn.setRequestProperty("Content-Type", "application/json");
+            writer = new BufferedWriter( new OutputStreamWriter(( conn.getOutputStream())));
+            writer.write(gson.toJson(mitglied));
+            writer.flush();
+            writer.close();
 //            writeStream(out);
-
-            InputStream in = new BufferedInputStream(conn.getInputStream());
+            System.out.println("--------------------------" + conn.getResponseCode() + conn.getResponseMessage());
   //          readStream(in);
         }catch(Exception ex){
         } finally {

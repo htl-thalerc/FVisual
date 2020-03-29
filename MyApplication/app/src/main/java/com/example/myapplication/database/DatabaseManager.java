@@ -1,9 +1,11 @@
 package com.example.myapplication.database;
 
+import com.example.myapplication.bll.Dienstgrad;
 import com.example.myapplication.bll.Einsatz;
 import com.example.myapplication.bll.Einsatzart;
 import com.example.myapplication.bll.Mitglied;
 import com.example.myapplication.bll.Stuetzpunkt;
+import com.example.myapplication.service.ServiceGetDienstgrade;
 import com.example.myapplication.service.ServiceGetEinsaetzeFromMitgliedList;
 import com.example.myapplication.service.ServiceGetEinsatzarten;
 import com.example.myapplication.service.ServiceGetMitgliederList;
@@ -129,5 +131,30 @@ public class DatabaseManager {
         return controller.get();
     }
 
+    public ArrayList<Dienstgrad> getDienstgrade() {
+        Gson gson = new Gson();
+        ArrayList<Dienstgrad> retArtikel = new ArrayList<>();
 
+        //each call needs an new instance of async !!
+        ServiceGetDienstgrade controller = new ServiceGetDienstgrade();
+        ServiceGetDienstgrade.setIpHost(ipHost);
+
+        controller.execute();
+        String strFromWebService = null;
+        try {
+            strFromWebService = controller.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Type colltype = new TypeToken<ArrayList<Dienstgrad>>(){}.getType();
+            retArtikel = gson.fromJson(strFromWebService,colltype);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return retArtikel;
+    }
 }

@@ -10,9 +10,9 @@ public class Mitglied implements Serializable {
     private int id_stuetzpunkt;
     private String username;
     private String password;
-    private boolean isAdmin;
+    private String isAdmin;
 
-    public Mitglied(int id, int id_dienstgrad, String vorname, String nachname, int stuetzpunkt, String username, String password, boolean isAdmin) {
+    public Mitglied(int id, int id_dienstgrad, String vorname, String nachname, int stuetzpunkt, String username, String password, String isAdmin) {
         this.id = id;
         this.id_dienstgrad = id_dienstgrad;
         this.vorname = vorname;
@@ -35,7 +35,7 @@ public class Mitglied implements Serializable {
         return id_dienstgrad;
     }
 
-    public void setDienstgrad(Dienstgrad dienstgrad) {
+    public void setDienstgrad(int dienstgrad) {
         this.id_dienstgrad = id_dienstgrad;
     }
 
@@ -79,11 +79,11 @@ public class Mitglied implements Serializable {
         this.password = password;
     }
 
-    public boolean isAdmin() {
+    public String isAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(String admin) {
         isAdmin = admin;
     }
 }
