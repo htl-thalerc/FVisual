@@ -27,6 +27,8 @@ public class ControllerBaseManagement implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initTabBaseLookup();
 		this.initTabCreateNewBase();
+		this.controllerMainframe.removeInnerBorderPaneContent();
+		this.controllerMainframe.removeProgressbar();
 	}
 
 	/**
@@ -65,7 +67,7 @@ public class ControllerBaseManagement implements Initializable {
 		this.mainTabPaneBaseManagement.getTabs().add(tabCreateBase);
 	}
 	
-	public void relaodBaseLookup() {
+	public void reloadBaseLookup() {
 		this.controllerBaseManagementBaseLookup.fillTableViews();
 		this.controllerCreateBase.resetCreateBaseTabs();
 		this.mainTabPaneBaseManagement.getSelectionModel().select(0);

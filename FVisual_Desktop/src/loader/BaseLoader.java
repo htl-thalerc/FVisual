@@ -11,7 +11,9 @@ public class BaseLoader implements Runnable {
 	private CountDownLatch countDownLatch = null;
 
 	public BaseLoader(CountDownLatch latch) {
-		this.countDownLatch = latch;
+		if(latch != null) {
+			this.countDownLatch = latch;	
+		}
 	}
 
 	@Override
@@ -24,6 +26,9 @@ public class BaseLoader implements Runnable {
 		}
 		
 		BaseHandler.getInstance().setBaseList(tempList);
-		this.countDownLatch.countDown();	
+		
+		if(this.countDownLatch != null) {
+			this.countDownLatch.countDown();;	
+		}
 	}
 }

@@ -170,7 +170,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	public void fillTableViews() {
-		CountDownLatch latch = new CountDownLatch(4);
+		/*CountDownLatch latch = new CountDownLatch(4);
 
 		BaseLoader baseLoader = new BaseLoader(latch);
 		OperationVehicleLoader vehicleLoader = new OperationVehicleLoader(latch);
@@ -184,13 +184,13 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 		try {
 			threadBaseLoader.start();
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			threadRankLoader.start();
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			threadVehicleLoader.start();
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			threadMemberLoader.start();
-			Thread.sleep(1000);
+			Thread.sleep(100);
 
 			latch.await(); // After all 4 Threads from the countdownlatch are finished --> execute
 							// following lines
@@ -200,7 +200,10 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 			this.fillTalbeViewMembersFromThread();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
+		this.fillTableViewBasesFromThread();
+		this.fillTableViewVehiclesFromThread(true);
+		this.fillTalbeViewMembersFromThread();
 	}
 
 	public void fillTableViewBasesFromThread() {

@@ -12,7 +12,9 @@ public class OperationVehicleLoader implements Runnable {
 	private CountDownLatch countDownLatch = null;
 			
 	public OperationVehicleLoader(CountDownLatch latch) {
-		this.countDownLatch = latch;
+		if(latch != null) {
+			this.countDownLatch = latch;	
+		}
 	}
 
 	@Override
@@ -25,7 +27,8 @@ public class OperationVehicleLoader implements Runnable {
 		
 		OperationVehicleHandler.getInstance().setVehicleList(tempListVehicles);
 		CentralHandler.getInstance().mergeFullVehicleObject();
-
-		this.countDownLatch.countDown();
+		if(this.countDownLatch != null) {
+			this.countDownLatch.countDown();	
+		}
 	}
 }

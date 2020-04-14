@@ -189,7 +189,7 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		this.tfStreet.setStyle(null);
 		this.tfPostCode.setStyle(null);
 		
-		this.map.removeMarker(this.currentMarker);
+		//this.map.removeMarker(this.currentMarker);
 	}
 
 	@Override

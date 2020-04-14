@@ -10,6 +10,7 @@ import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
+import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,13 +31,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import handler.BaseHandler;
 import handler.CentralHandler;
-import threadHelper.BasePostHandler;
-import threadHelper.MemberPostHandler;
-import threadHelper.MemberUpdateHandler;
-import threadHelper.OperationVehiclePostHandler;
-import threadHelper.PostFullBaseTask;
 
 public class ControllerCreateBaseManagement implements Initializable {
 	@FXML
@@ -212,17 +207,34 @@ public class ControllerCreateBaseManagement implements Initializable {
 			curStage.showAndWait();
 			if (controllerDialogSaveBase.getButtonState()) {
 				FXMLLoader loader2 = CentralHandler.loadFXML("/gui/CreateBaseThreadDialog.fxml");
-				loader2.setController(new ControllerCreateBaseThreadDialog(this, baseToCreate, collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase));
+				ControllerCreateBaseThreadDialog controllerCreateBaseThreadDialog = new ControllerCreateBaseThreadDialog(
+						ControllerCreateBaseManagement.this, baseToCreate, collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase);
+				loader2.setController(controllerCreateBaseThreadDialog);
 				
 				Stage stage2 = new Stage();
 				Scene scene2 = new Scene(loader2.load());
 				stage2.setScene(scene2);
 				stage2.show();
 				stage2.centerOnScreen();
-				
-				// Update GUI
-				this.resetCreateBaseTabs();
-				this.controllerBaseManagement.relaodBaseLookup();
+				Task<Void> postTask = new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						new Thread(controllerCreateBaseThreadDialog.postFullBase()).start();;
+						return null;
+					}
+				};
+				postTask.setOnSucceeded(e -> {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					stage2.close();
+					// Update GUI
+					this.resetCreateBaseTabs();
+					this.controllerBaseManagement.reloadBaseLookup();
+				});
+				new Thread(postTask).start();
 			}
 		} catch (final IOException e) {
 			e.printStackTrace();

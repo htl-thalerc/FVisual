@@ -34,12 +34,12 @@ public class PostFullBaseTask extends Task<Void>{
 		Thread threadBasePostLoader = new Thread(new BasePostHandler(baseToCreate));
 		threadBasePostLoader.start();
 		threadBasePostLoader.join();
-		Thread.sleep(250);
+		Thread.sleep(100);
 		
 		//this.updateProgress(33, nrOfPosts);
 
 		//this.updateMessage("Creating OperationVehicles");
-		if (collOfOperationVehiclesToAddToBase.size() >= 1) {
+		if (this.collOfOperationVehiclesToAddToBase.size() >= 1) {
 			for (int i = 0; i < collOfOperationVehiclesToAddToBase.size(); i++) {
 				this.updateProgress(i, reqDuringBaseCreation);
 				if (collOfOperationVehiclesToAddToBase.get(i).getOperationVehicleId() == -1) {
@@ -52,7 +52,7 @@ public class PostFullBaseTask extends Task<Void>{
 							new OperationVehiclePostHandler(vehicleToCreate));
 					threadCreateOperationVehicle.start();
 					threadCreateOperationVehicle.join();
-					Thread.sleep(250);
+					Thread.sleep(100);
 				} else if (collOfOperationVehiclesToAddToBase.get(i).getOperationVehicleId() != -1) {
 					// Update Vehicle not right bec. we dont change id; we reate a new vehcile
 					OperationVehicle vehicleToCreateFromExistingVehicleData = collOfOperationVehiclesToAddToBase
@@ -66,13 +66,13 @@ public class PostFullBaseTask extends Task<Void>{
 							new OperationVehiclePostHandler(vehicleToCreateFromExistingVehicleData));
 					threadCreateOperationVehicle.start();
 					threadCreateOperationVehicle.join();
-					Thread.sleep(250);
+					Thread.sleep(100);
 				}
 			}
 		}
 		
 		this.updateMessage("Creating Members");
-		if (collOfMembersToAddToBase.size() >= 1) {
+		if (this.collOfMembersToAddToBase.size() >= 1) {
 			for (int i = 0; i < collOfMembersToAddToBase.size(); i++) {
 				this.updateProgress(i, reqDuringBaseCreation);
 				if (collOfMembersToAddToBase.get(i).getBaseId() == 0
@@ -85,7 +85,7 @@ public class PostFullBaseTask extends Task<Void>{
 					Thread threadUpdateMember = new Thread(new MemberUpdateHandler(memberToUpdate));
 					threadUpdateMember.start();
 					threadUpdateMember.join();
-					Thread.sleep(250);
+					Thread.sleep(100);
 				} else if (collOfMembersToAddToBase.get(i).getBaseId() == -1
 						&& collOfMembersToAddToBase.get(i).getMemberId() == -1) {
 					// Complete new Member
@@ -96,7 +96,7 @@ public class PostFullBaseTask extends Task<Void>{
 					Thread threadCreateMember = new Thread(new MemberPostHandler(memberToCreate));
 					threadCreateMember.start();
 					threadCreateMember.join();
-					Thread.sleep(250);
+					Thread.sleep(100);
 				}
 			}	
 		}
