@@ -68,7 +68,7 @@ public class ControllerBaseManagement implements Initializable {
 	}
 	
 	public void reloadBaseLookup() {
-		this.controllerBaseManagementBaseLookup.fillTableViews();
+		this.controllerBaseManagementBaseLookup.fillTableViews(true); //boolean: is for reloading
 		this.controllerCreateBase.resetCreateBaseTabs();
 		this.mainTabPaneBaseManagement.getSelectionModel().select(0);
 	}

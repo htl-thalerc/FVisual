@@ -81,7 +81,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.initTableViewBase();
 		this.initTableViewVehicle();
 		this.initTableViewMember();
-		this.fillTableViews();
+		this.fillTableViews(false);
 		this.initTableViewBaseListener();
 		this.initTableViewVehicleListener();
 		this.initTableViewMemberListener();
@@ -169,38 +169,40 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.tvMemberData.getColumns().addAll(colNameBlock, colContraction);
 	}
 
-	public void fillTableViews() {
-		/*CountDownLatch latch = new CountDownLatch(4);
+	public void fillTableViews(boolean isCalledInReloadingData) {
+		if(isCalledInReloadingData) {
+			CountDownLatch latch = new CountDownLatch(4);
 
-		BaseLoader baseLoader = new BaseLoader(latch);
-		OperationVehicleLoader vehicleLoader = new OperationVehicleLoader(latch);
-		RankLoader rankLoader = new RankLoader(latch);
-		MemberLoader memberLoader = new MemberLoader(latch);
+			BaseLoader baseLoader = new BaseLoader(latch);
+			OperationVehicleLoader vehicleLoader = new OperationVehicleLoader(latch);
+			RankLoader rankLoader = new RankLoader(latch);
+			MemberLoader memberLoader = new MemberLoader(latch);
 
-		Thread threadBaseLoader = new Thread(baseLoader);
-		Thread threadVehicleLoader = new Thread(vehicleLoader);
-		Thread threadRankLoader = new Thread(rankLoader);
-		Thread threadMemberLoader = new Thread(memberLoader);
+			Thread threadBaseLoader = new Thread(baseLoader);
+			Thread threadVehicleLoader = new Thread(vehicleLoader);
+			Thread threadRankLoader = new Thread(rankLoader);
+			Thread threadMemberLoader = new Thread(memberLoader);
 
-		try {
-			threadBaseLoader.start();
-			Thread.sleep(100);
-			threadRankLoader.start();
-			Thread.sleep(100);
-			threadVehicleLoader.start();
-			Thread.sleep(100);
-			threadMemberLoader.start();
-			Thread.sleep(100);
+			try {
+				threadBaseLoader.start();
+				Thread.sleep(100);
+				threadRankLoader.start();
+				Thread.sleep(100);
+				threadVehicleLoader.start();
+				Thread.sleep(100);
+				threadMemberLoader.start();
+				Thread.sleep(100);
 
-			latch.await(); // After all 4 Threads from the countdownlatch are finished --> execute
-							// following lines
+				latch.await(); // After all 4 Threads from the countdownlatch are finished --> execute
+								// following lines
 
-			this.fillTableViewBasesFromThread();
-			this.fillTableViewVehiclesFromThread(true);
-			this.fillTalbeViewMembersFromThread();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
+				this.fillTableViewBasesFromThread();
+				this.fillTableViewVehiclesFromThread(true);
+				this.fillTalbeViewMembersFromThread();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}	
+		}
 		this.fillTableViewBasesFromThread();
 		this.fillTableViewVehiclesFromThread(true);
 		this.fillTalbeViewMembersFromThread();
@@ -377,7 +379,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 				curStage.showAndWait();
 				if (controllerDialogSaveBase.getButtonState()) {
 					BaseManager.getInstance().deleteBase(selectedBase.getBaseId());
-					this.fillTableViews();
+					this.fillTableViews(true);
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -390,7 +392,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
 			CentralUpdateHandler.getInstance().initUpdateBaseDialog(selectedBase);
-			this.fillTableViews();
+			this.fillTableViews(true);
 			this.onClickBtnLoadBaseVehicles(new ActionEvent());
 			this.onClickBtnLoadBaseMembers(new ActionEvent());
 		}
