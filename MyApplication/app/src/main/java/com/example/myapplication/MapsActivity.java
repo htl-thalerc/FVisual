@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +18,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -54,12 +58,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Einsatz> einsatzList;
     ArrayList<Einsatzart> einsatzartList;
     Geocoder gc;
-    RadioButton radioButtonStuetzpunkt;
-    RadioButton radioButtonEinsatz;
-    RadioGroup radioGroupFilter;
-    Button resetButton;
+    CheckBox chkBoxStuetzpunkt;
+    CheckBox chkBoxEinsatz;
     DatabaseManager db;
     Einsatz currentEinsatz;
+    Button editProfile;
+    Button logout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,38 +72,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_maps);
             currentMitglied = (Mitglied) getIntent().getSerializableExtra("serialzable");
-            db = DatabaseManager.newInstance("http://192.168.197.152:3030");
-
+            db = DatabaseManager.newInstance();
+            einsatzList = new ArrayList<Einsatz>();
             einsatzartList = db.getEinsatzart();
 
             currentStuetzpunkt = db.getStuetzpunkt(currentMitglied.getStuetzpunkt());
             getEinsaetzeFromMitglied();
 
-            radioButtonStuetzpunkt = findViewById(R.id.radioButtonStuetzpunktFilter);
-            radioButtonEinsatz = findViewById(R.id.radioButtonEinsatzFilter);
-            radioGroupFilter = findViewById(R.id.radioGroupFilter);
-            resetButton = findViewById(R.id.buttonReset);
+            chkBoxStuetzpunkt = findViewById(R.id.radioButtonStuetzpunktFilter);
+            chkBoxEinsatz = findViewById(R.id.radioButtonEinsatzFilter);
+            editProfile = findViewById(R.id.buttonEdit);
+            logout = findViewById(R.id.logout);
 
-            resetButton.setOnClickListener(new View.OnClickListener() {
+            chkBoxEinsatz.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     googleMap.clear();
-                    radioButtonStuetzpunkt.setChecked(false);
-                    radioButtonEinsatz.setChecked(false);
-                    showStuetzpunkt();
-                    showEinsaetze();
+                    checkBoxes(isChecked, chkBoxStuetzpunkt.isChecked());
                 }
             });
 
-            radioGroupFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            chkBoxStuetzpunkt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     googleMap.clear();
-                    if (checkedId == radioButtonEinsatz.getId()) {
-                        showEinsaetze();
-                    } else if (checkedId == radioButtonStuetzpunkt.getId()) {
-                        showStuetzpunkt();
-                    }
+                    checkBoxes(chkBoxEinsatz.isChecked(), isChecked);
+                }
+            });
+
+            editProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent send = new Intent(MapsActivity.this, EditActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("serialzable", currentMitglied);
+                    send.putExtras(b);
+                    startActivity(send);
+                    finish();
+                }
+            });
+
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent send = new Intent(MapsActivity.this, LoginActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("serialzable", "logout");
+                    send.putExtras(b);
+                    startActivity(send);
+                    finish();
                 }
             });
 
@@ -108,6 +130,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mapFragment.getMapAsync(this);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkBoxes(boolean isCheckedEinsatz, boolean isCheckedStuetzpunkt) {
+        if(isCheckedEinsatz && isCheckedStuetzpunkt){
+            showEinsaetze();
+            showStuetzpunkt();
+        }else if(!isCheckedEinsatz && isCheckedStuetzpunkt){
+            showStuetzpunkt();
+        }else if(isCheckedEinsatz && !isCheckedStuetzpunkt){
+            showEinsaetze();
+        }else if(!isCheckedEinsatz && !isCheckedStuetzpunkt){
+            googleMap.clear();
         }
     }
 
@@ -242,7 +277,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void getEinsaetzeFromMitglied() throws Exception {
-        einsatzList = db.getAllEinsetzeFromMitglied(currentMitglied.getId());
+        einsatzList.addAll(db.getAllEinsetzeFromMitglied(currentMitglied.getId()));
     }
 
     @Override
@@ -250,7 +285,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (marker.getSnippet().equals(new Stuetzpunkt().getClass().getName())) {
             showPopupStuetzpunkt(this);
         } else {
-            currentEinsatz = einsatzList.get(Integer.parseInt(marker.getSnippet()));
+            for(Einsatz e:einsatzList){
+                if(e.getId() == Integer.parseInt(marker.getSnippet())){
+                    currentEinsatz = e;
+                }
+            }
             showPopupEinsatz(this);
         }
 
@@ -259,7 +298,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void showPopupStuetzpunkt(final Activity context) {
         int popupWidth = 350;
-        int popupHeight = 300;
+        int popupHeight = 230;
 
         // Inflate the popup_layout.xml
         LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.popup);
@@ -273,9 +312,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.setWidth(popupWidth);
         popup.setHeight(popupHeight);
         popup.setFocusable(true);
-
         // Clear the default translucent background
-        popup.setBackgroundDrawable(new BitmapDrawable());
+        //popup.setBackgroundDrawable(new BitmapDrawable());
 
         // Displaying the popup at the specified location, + offsets.
         popup.showAtLocation(layout, Gravity.NO_GRAVITY, 200, 700);
@@ -314,7 +352,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int OFFSET_Y = 30;
 
         // Clear the default translucent background
-        popup.setBackgroundDrawable(new BitmapDrawable());
+        //popup.setBackgroundDrawable(new BitmapDrawable());
 
         // Displaying the popup at the specified location, + offsets.
         popup.showAtLocation(layout, Gravity.NO_GRAVITY, 200, 700);
