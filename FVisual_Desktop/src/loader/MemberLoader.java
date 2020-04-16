@@ -12,7 +12,9 @@ public class MemberLoader implements Runnable {
 	private CountDownLatch countDownLatch = null;
 
 	public MemberLoader(CountDownLatch latch) {
-		this.countDownLatch = latch;
+		if(latch != null) {
+			this.countDownLatch = latch;	
+		}
 	}
 	
 	@Override
@@ -26,6 +28,8 @@ public class MemberLoader implements Runnable {
 		MemberHandler.getInstance().setMemberList(tempListMembers);
 		
 		CentralHandler.getInstance().mergeFullMemberObject(false);
-		this.countDownLatch.countDown();
+		if(this.countDownLatch != null) {
+			this.countDownLatch.countDown();	
+		}
 	}
 }

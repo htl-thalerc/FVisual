@@ -4,21 +4,23 @@ import java.io.Serializable;
 
 public class Mitglied implements Serializable {
     private int id;
-    private Dienstgrad dienstgrad;
+    private int id_dienstgrad;
     private String vorname;
     private String nachname;
     private int id_stuetzpunkt;
     private String username;
     private String password;
+    private String isAdmin;
 
-    public Mitglied(int id, Dienstgrad dienstgrad, String vorname, String nachname, int stuetzpunkt, String username, String password) {
+    public Mitglied(int id, int id_dienstgrad, String vorname, String nachname, int stuetzpunkt, String username, String password, String isAdmin) {
         this.id = id;
-        this.dienstgrad = dienstgrad;
+        this.id_dienstgrad = id_dienstgrad;
         this.vorname = vorname;
         this.nachname = nachname;
         this.id_stuetzpunkt = stuetzpunkt;
         this.username = username;
         this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public int getId() {
@@ -29,12 +31,12 @@ public class Mitglied implements Serializable {
         this.id = id;
     }
 
-    public Dienstgrad getDienstgrad() {
-        return dienstgrad;
+    public int getDienstgrad() {
+        return id_dienstgrad;
     }
 
-    public void setDienstgrad(Dienstgrad dienstgrad) {
-        this.dienstgrad = dienstgrad;
+    public void setDienstgrad(int dienstgrad) {
+        this.id_dienstgrad = id_dienstgrad;
     }
 
     public String getVorname() {
@@ -77,4 +79,11 @@ public class Mitglied implements Serializable {
         this.password = password;
     }
 
+    public String isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(String admin) {
+        isAdmin = admin;
+    }
 }

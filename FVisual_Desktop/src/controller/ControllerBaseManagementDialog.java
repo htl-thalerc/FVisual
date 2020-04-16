@@ -67,9 +67,6 @@ public class ControllerBaseManagementDialog implements Initializable {
 		Stage stage = (Stage) ((Button) aE.getSource()).getScene().getWindow();
 		this.btnSaveState = true;
 		stage.close();
-		
-		
-		
 	}
 	
 	public void setBaseData(Base createdBase) {

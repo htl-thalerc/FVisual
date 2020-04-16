@@ -11,7 +11,9 @@ public class RankLoader implements Runnable {
 	private CountDownLatch countDownLatch = null;
 
 	public RankLoader(CountDownLatch latch) {
-		this.countDownLatch = latch;
+		if(latch != null) {
+			this.countDownLatch = latch;	
+		}
 	}
 	
 	@Override
@@ -24,7 +26,8 @@ public class RankLoader implements Runnable {
 		}
 		
 		RankHandler.getInstance().setRankList(tempListRank);
-		
-		this.countDownLatch.countDown();
+		if(this.countDownLatch != null) {
+			this.countDownLatch.countDown();	
+		}
 	}
 }

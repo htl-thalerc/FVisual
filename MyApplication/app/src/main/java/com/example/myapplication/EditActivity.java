@@ -13,22 +13,28 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.bll.Dienstgrad;
 import com.example.myapplication.bll.Mitglied;
 import com.example.myapplication.database.DatabaseManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class EditActivity extends AppCompatActivity implements Serializable {
     DatabaseManager db;
     Mitglied currentMitglied;
+    EditText dienstgradText;
+    EditText vornameText;
+    EditText nachnameText;
     EditText usernameText;
     EditText passwordText;
     Button generatePassword;
     Button save;
     Button cancel;
     CheckBox checkBox;
+    ArrayList<Dienstgrad> dienstgrade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,11 @@ public class EditActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_edit);
         currentMitglied = (Mitglied) getIntent().getSerializableExtra("serialzable");
         db = DatabaseManager.newInstance();
+
+        dienstgrade = db.getDienstgrade();
+        dienstgradText = findViewById(R.id.txtdienstgrad);
+        vornameText = findViewById(R.id.txtvorname);
+        nachnameText = findViewById(R.id.txtnachname);
         usernameText = findViewById(R.id.txtusername);
         passwordText = findViewById(R.id.txtPassword);
         generatePassword = findViewById(R.id.buttonGenerate);
@@ -43,6 +54,11 @@ public class EditActivity extends AppCompatActivity implements Serializable {
         cancel = findViewById(R.id.btnCancel);
         checkBox = findViewById(R.id.checkbox);
 
+        dienstgradText.setText(dienstgrade.get(currentMitglied.getDienstgrad()-1).getBezeichnung());
+        vornameText.setText(currentMitglied.getVorname());
+        nachnameText.setText(currentMitglied.getNachname());
+        usernameText.setText(currentMitglied.getUsername());
+        passwordText.setText(currentMitglied.getPassword());
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -71,6 +87,9 @@ public class EditActivity extends AppCompatActivity implements Serializable {
 
     public void cancel(View view) {
         Intent send = new Intent(EditActivity.this, MapsActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("serialzable", currentMitglied);
+        send.putExtras(b);
         startActivity(send);
         finish();
     }
@@ -78,7 +97,6 @@ public class EditActivity extends AppCompatActivity implements Serializable {
     public void save(View view) throws ExecutionException, InterruptedException {
         currentMitglied.setUsername(usernameText.getText().toString());
         currentMitglied.setPassword(passwordText.getText().toString());
-
         db.UpdateMitglied(currentMitglied);
         Intent send = new Intent(EditActivity.this, MapsActivity.class);
         Bundle b = new Bundle();

@@ -10,33 +10,25 @@ import bll.Base;
 import bll.EnumCRUDOption;
 import bll.Member;
 import bll.OperationVehicle;
-import javafx.concurrent.WorkerStateEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import handler.BaseHandler;
-import handler.CentralHandler;
-import threadHelper.BasePostHandler;
-import threadHelper.MemberPostHandler;
-import threadHelper.MemberUpdateHandler;
-import threadHelper.OperationVehiclePostHandler;
 import threadHelper.PostFullBaseTask;
+import handler.CentralHandler;
 
 public class ControllerCreateBaseManagement implements Initializable {
 	@FXML
@@ -211,22 +203,113 @@ public class ControllerCreateBaseManagement implements Initializable {
 			controllerDialogSaveBase.setListViewMemberData(collOfMembersToAddToBase);
 			curStage.showAndWait();
 			if (controllerDialogSaveBase.getButtonState()) {
-				FXMLLoader loader2 = CentralHandler.loadFXML("/gui/CreateBaseThreadDialog.fxml");
-				loader2.setController(new ControllerCreateBaseThreadDialog(this, baseToCreate, collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase));
+				FXMLLoader loaderProgressBarDialog = CentralHandler.loadFXML("/gui/ThreadProgressBarDialog.fxml");
+				ControllerThreadProgressBarDialog controllerThreadProgressBarDialog = new ControllerThreadProgressBarDialog();
+				loaderProgressBarDialog.setController(controllerThreadProgressBarDialog);
+
+				Stage stageProgressBarDialog = new Stage();
+				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
+				stageProgressBarDialog.setScene(sceneProgressBarDialog);
+				stageProgressBarDialog.setTitle("Post Base");
+				stageProgressBarDialog.show();
 				
-				Stage stage2 = new Stage();
-				Scene scene2 = new Scene(loader2.load());
-				stage2.setScene(scene2);
-				stage2.show();
-				stage2.centerOnScreen();
+				controllerThreadProgressBarDialog.unbindProgressBar();
 				
-				// Update GUI
-				this.resetCreateBaseTabs();
-				this.controllerBaseManagement.relaodBaseLookup();
+				Thread postThread = new Thread(managePostTask(this, baseToCreate, collOfMembersToAddToBase,
+						collOfOperationVehiclesToAddToBase));
+				
+				Task<Void> managePostTask = new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						updateProgress(0, 100);
+						int lastProgressValue = 0;
+						updateProgress(0, 100);
+						
+						//Start post thread
+						postThread.start();
+						postThread.join();
+
+						// Set progress for base
+						for(int i=0;i<5;i++) {
+							lastProgressValue += 4;
+							updateProgress(lastProgressValue, 100);
+							Thread.sleep(200);
+						}
+
+						// set progress for OperationVehicles
+						updateProgress(20, 100);
+						lastProgressValue = 20;
+						int nrOfOperationVehiclesToCreate = collOfOperationVehiclesToAddToBase.size();
+						if (nrOfOperationVehiclesToCreate == 0) {
+							nrOfOperationVehiclesToCreate = 1;
+						}
+						double progressIncreasePerOperationVehicleObject = (40 / nrOfOperationVehiclesToCreate);
+						if(progressIncreasePerOperationVehicleObject < 1) {
+							progressIncreasePerOperationVehicleObject = 1;
+							nrOfOperationVehiclesToCreate = 40;
+						}
+						for (int i = 0; i < nrOfOperationVehiclesToCreate; i++) {
+							lastProgressValue += progressIncreasePerOperationVehicleObject;
+							updateProgress(lastProgressValue, 100);
+							Thread.sleep(100);
+						}
+
+						// set progress for Members
+						updateProgress(60, 100);
+						lastProgressValue = 60;
+						int nrOfMembersToCreate = collOfMembersToAddToBase.size();
+						if (nrOfMembersToCreate == 0) {
+							nrOfMembersToCreate = 1;
+						}
+						double progressIncreasePerMemberObject = (40 / nrOfMembersToCreate);
+						if(progressIncreasePerMemberObject < 1) {
+							progressIncreasePerMemberObject = 1;
+							nrOfMembersToCreate = 40;
+						}
+						for (int i = 0; i < nrOfMembersToCreate; i++) {
+							lastProgressValue += progressIncreasePerMemberObject;
+							updateProgress(lastProgressValue, 100);
+							Thread.sleep(100);
+						}
+						
+						updateProgress(100, 100);
+						updateMessage("Finising");
+						
+						return null;
+					}
+				};
+				managePostTask.messageProperty().addListener(new ChangeListener<String>() {
+					@Override
+					public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
+						controllerThreadProgressBarDialog.setLabelText(newValue);
+					}
+				});
+				managePostTask.setOnSucceeded(e -> {
+					stageProgressBarDialog.close();
+					
+					this.resetCreateBaseTabs();
+					this.controllerBaseManagement.reloadBaseLookup();
+				});
+				controllerThreadProgressBarDialog.bindProgressBarOnTask(managePostTask);
+				new Thread(managePostTask).start();
 			}
-		} catch (final IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private Task<Void> managePostTask(ControllerCreateBaseManagement controllerCreateBaseManagement, Base baseToCreate,
+			List<Member> collOfMembersToAddToBase, List<OperationVehicle> collOfOperationVehiclesToAddToBase) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread postFullBase = new Thread(new PostFullBaseTask(controllerCreateBaseManagement, baseToCreate,
+						collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase));
+				postFullBase.start();
+				postFullBase.join();
+				return null;
+			}
+		};
 	}
 
 	public void setButtonResetDisability(boolean isDisabled) {
