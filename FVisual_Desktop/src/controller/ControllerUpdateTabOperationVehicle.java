@@ -144,9 +144,9 @@ public class ControllerUpdateTabOperationVehicle implements Initializable {
 		if(this.lvVehicles.getItems().size() == 1) {
 			OperationVehicle vehicle = new OperationVehicle();
 			
-			if(this.isValidVehiclename.get()) {
-				vehicle.setDescription(this.tfNewVehiclename.getText());	
-			}
+//			if(this.isValidVehiclename.get()) {
+				vehicle.setDescription(this.lvVehicles.getItems().get(0).getDescription());	
+//			}
 			retVal.add(vehicle);
 		} else {
 			for(int i=0;i< this.lvVehicles.getItems().size();i++) {

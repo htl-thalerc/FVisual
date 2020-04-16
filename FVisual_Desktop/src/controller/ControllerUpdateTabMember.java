@@ -335,17 +335,10 @@ public class ControllerUpdateTabMember implements Initializable {
 
 		if (this.lvMembers.getItems().size() == 1) {
 			Member member = new Member();
+			
+			member.setFirstname(this.lvMembers.getItems().get(0).getFirstname());
+			member.setLastname(this.lvMembers.getItems().get(0).getLastname());
 
-			if (this.isValidFirstname.get()) {
-				member.setFirstname(this.tfNewFirstname.getText().trim());
-			} else {
-				member.setFirstname(this.lbOldFirstname.getText());
-			}
-			if (this.isValidLastname.get()) {
-				member.setLastname(this.tfNewLastname.getText().trim());
-			} else {
-				member.setLastname(this.lbOldFirstname.getText());
-			}
 			if (this.isValidRank.get()) {
 				Rank selectedRank = this.cbNewContraction.getSelectionModel().getSelectedItem();
 				member.setRank(selectedRank);

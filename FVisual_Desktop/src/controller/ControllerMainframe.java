@@ -64,6 +64,7 @@ public class ControllerMainframe implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		this.progressbar.setStyle("-fx-accent: red;");
 	}
 
 	@FXML
@@ -100,6 +101,7 @@ public class ControllerMainframe implements Initializable {
 				int lastProgressValue = 0;
 				updateProgress(0, 100);
 				updateMessage("Initializing Components");
+				
 				// Set progress for bases
 				threadGETBase.start();
 				threadGETBase.join();
@@ -168,6 +170,7 @@ public class ControllerMainframe implements Initializable {
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
 				}
+				
 				latchGETMethods.await();
 
 				updateProgress(99, 100);

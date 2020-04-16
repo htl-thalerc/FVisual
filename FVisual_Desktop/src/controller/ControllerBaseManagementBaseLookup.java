@@ -18,6 +18,7 @@ import handler.OperationVehicleHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -170,7 +171,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 	}
 
 	public void fillTableViews(boolean isCalledInReloadingData) {
-		if(isCalledInReloadingData) {
+		if(isCalledInReloadingData) {			
 			CountDownLatch latch = new CountDownLatch(4);
 
 			BaseLoader baseLoader = new BaseLoader(latch);
@@ -213,7 +214,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.obsListTVBaseData.addAll(BaseHandler.getInstance().getBaseList());
 
 		this.tvBaseData.setItems(this.obsListTVBaseData.sorted());
-		this.tvBaseData.refresh();
 	}
 
 	public void fillTableViewVehiclesFromThread(boolean isLoadingAllVehicles) {
