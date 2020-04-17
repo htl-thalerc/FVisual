@@ -19,11 +19,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonSyntaxException;
 
-import bll.Base;
 import bll.ClassTypes;
 import bll.EnumCRUDOption;
 import bll.Member;
-import bll.OperationVehicle;
 import handler.CentralHandler;
 import handler.ExceptionHandler;
 

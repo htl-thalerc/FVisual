@@ -16,6 +16,8 @@ import handler.CentralUpdateHandler;
 import handler.MemberHandler;
 import handler.OperationVehicleHandler;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -43,6 +45,7 @@ import loader.OperationVehicleLoader;
 import loader.RankLoader;
 import manager.BaseManager;
 import manager.MemberManager;
+import threadHelper.OperationVehicleUpdateHandler;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML
@@ -172,27 +175,20 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	public void fillTableViews(boolean isCalledInReloadingData) {
 		if(isCalledInReloadingData) {			
-			CountDownLatch latch = new CountDownLatch(4);
+			CountDownLatch latch = new CountDownLatch(3);
 
 			BaseLoader baseLoader = new BaseLoader(latch);
 			OperationVehicleLoader vehicleLoader = new OperationVehicleLoader(latch);
-			RankLoader rankLoader = new RankLoader(latch);
 			MemberLoader memberLoader = new MemberLoader(latch);
 
 			Thread threadBaseLoader = new Thread(baseLoader);
 			Thread threadVehicleLoader = new Thread(vehicleLoader);
-			Thread threadRankLoader = new Thread(rankLoader);
 			Thread threadMemberLoader = new Thread(memberLoader);
 
 			try {
 				threadBaseLoader.start();
-				Thread.sleep(100);
-				threadRankLoader.start();
-				Thread.sleep(100);
 				threadVehicleLoader.start();
-				Thread.sleep(100);
 				threadMemberLoader.start();
-				Thread.sleep(100);
 
 				latch.await(); // After all 4 Threads from the countdownlatch are finished --> execute
 								// following lines
@@ -269,31 +265,76 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
+			//Open ProgressBarDialog
+			FXMLLoader loaderProgressBarDialog = CentralHandler.loadFXML("/gui/ThreadProgressBarDialog.fxml");
+			ControllerThreadProgressBarDialog controllerThreadProgressBarDialog = new ControllerThreadProgressBarDialog();
+			loaderProgressBarDialog.setController(controllerThreadProgressBarDialog);
+			
+			Stage stageProgressBarDialog = new Stage();
 			try {
-				BaseVehicleLoader baseVehicleLoader = new BaseVehicleLoader(selectedBase);
-
-				Thread threadBaseVehicleLoader = new Thread(baseVehicleLoader);
-				threadBaseVehicleLoader.start();
-
-				threadBaseVehicleLoader.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
+				stageProgressBarDialog.setScene(sceneProgressBarDialog);
+				stageProgressBarDialog.setTitle("Loading OperationVehicle by Base '" + selectedBase.getName() + "'");
+				stageProgressBarDialog.show();	
+				stageProgressBarDialog.centerOnScreen();
+			} catch(IOException ex) {
+				ex.printStackTrace();
 			}
-
-			this.obsListTVVehicles.clear();
-			ArrayList<OperationVehicle> tempListOfVehicles = OperationVehicleHandler.getInstance()
-					.getVehicleListByBaseId();
-
-			if (tempListOfVehicles != null) {
-				this.obsListTVVehicles.addAll(tempListOfVehicles);
-
-				this.tvVehicleData.setItems(this.obsListTVVehicles);
-				this.btnLoadBaseVehicles.setDisable(true);
-				this.btnLoadAllVehicles.setDisable(false);
-			} else {
+			
+			controllerThreadProgressBarDialog.unbindProgressBar();
+			
+			//Start threading
+			Thread threadBaseVehicleLoader = new Thread(new BaseVehicleLoader(selectedBase));
+			
+			Task<Void> loadingOperationVehicleByBaseTask = new Task<Void>() {
+				@Override
+				protected Void call() throws Exception {
+					updateProgress(0, 100);
+					int lastProgressValue = 0;
+					
+					threadBaseVehicleLoader.start();
+					threadBaseVehicleLoader.join();
+					
+					for(int i=0;i<20;i++) {
+						lastProgressValue += 2.5;
+						updateProgress(lastProgressValue, 100);
+						Thread.sleep(75);
+					}
+					return null;
+				}
+			};
+			loadingOperationVehicleByBaseTask.messageProperty().addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
+					controllerThreadProgressBarDialog.setLabelText(newValue);
+				}
+			});
+			loadingOperationVehicleByBaseTask.setOnSucceeded(e -> {
+				stageProgressBarDialog.close();
+				
 				this.obsListTVVehicles.clear();
-				this.tvVehicleData.refresh();
-				this.tvVehicleData.setPlaceholder(new Label("No Vehicles in current selected Base available"));
+				ArrayList<OperationVehicle> tempListOfVehicles = OperationVehicleHandler.getInstance()
+						.getVehicleListByBaseId();
+
+				if (tempListOfVehicles != null) {
+					this.obsListTVVehicles.addAll(tempListOfVehicles);
+
+					this.tvVehicleData.setItems(this.obsListTVVehicles);
+					this.btnLoadBaseVehicles.setDisable(true);
+					this.btnLoadAllVehicles.setDisable(false);
+				} else {
+					this.obsListTVVehicles.clear();
+					this.tvVehicleData.refresh();
+					this.tvVehicleData.setPlaceholder(new Label("No Vehicles in current selected Base available"));
+				}
+			});
+			controllerThreadProgressBarDialog.bindProgressBarOnTask(loadingOperationVehicleByBaseTask);
+			try {
+				Thread mainThread = new Thread(loadingOperationVehicleByBaseTask);
+				mainThread.start();
+				mainThread.join();
+			} catch(InterruptedException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -303,30 +344,76 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 		this.accordionSubTables.setExpandedPane(this.tpMember);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
+			//Open ProgressBarDialog
+			FXMLLoader loaderProgressBarDialog = CentralHandler.loadFXML("/gui/ThreadProgressBarDialog.fxml");
+			ControllerThreadProgressBarDialog controllerThreadProgressBarDialog = new ControllerThreadProgressBarDialog();
+			loaderProgressBarDialog.setController(controllerThreadProgressBarDialog);
+			
+			Stage stageProgressBarDialog = new Stage();
 			try {
-				BaseMemberLoader baseMemberLoader = new BaseMemberLoader(selectedBase);
-
-				Thread threadBaseMemberLoader = new Thread(baseMemberLoader);
-				threadBaseMemberLoader.start();
-
-				threadBaseMemberLoader.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
+				stageProgressBarDialog.setScene(sceneProgressBarDialog);
+				stageProgressBarDialog.setTitle("Loading Members by Base '" + selectedBase.getName() + "'");
+				stageProgressBarDialog.show();	
+				stageProgressBarDialog.centerOnScreen();
+			} catch(IOException ex) {
+				ex.printStackTrace();
 			}
-
-			this.obsListTVMembers.clear();
-			ArrayList<Member> tempListOfMembers = MemberHandler.getInstance().getMemberListByBaseId();
-
-			if (tempListOfMembers != null) {
-				this.obsListTVMembers.addAll(tempListOfMembers);
-
-				this.tvMemberData.setItems(this.obsListTVMembers);
-				this.btnLoadBaseMembers.setDisable(true);
-				this.btnLoadAllMembers.setDisable(false);
-			} else {
+			
+			controllerThreadProgressBarDialog.unbindProgressBar();
+			
+			//Starting Threading
+			Thread threadBaseMemberLoader = new Thread(new BaseMemberLoader(selectedBase));
+			
+			Task<Void> loadingMembersByBaseTask = new Task<Void>() {
+				@Override
+				protected Void call() throws Exception {
+					updateProgress(0, 100);
+					int lastProgressValue = 0;
+					
+					threadBaseMemberLoader.start();
+					threadBaseMemberLoader.join();
+					
+					for(int i=0;i<20;i++) {
+						lastProgressValue += 2.5;
+						updateProgress(lastProgressValue, 100);
+						Thread.sleep(75);
+					}
+					
+					return null;
+				}
+			};
+			loadingMembersByBaseTask.messageProperty().addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
+					controllerThreadProgressBarDialog.setLabelText(newValue);
+				}
+			});
+			loadingMembersByBaseTask.setOnSucceeded(e -> {
+				stageProgressBarDialog.close();
+				
 				this.obsListTVMembers.clear();
-				this.tvMemberData.refresh();
-				this.tvMemberData.setPlaceholder(new Label("No Members in current selected Base available"));
+				ArrayList<Member> tempListOfMembers = MemberHandler.getInstance().getMemberListByBaseId();
+
+				if (tempListOfMembers != null) {
+					this.obsListTVMembers.addAll(tempListOfMembers);
+
+					this.tvMemberData.setItems(this.obsListTVMembers);
+					this.btnLoadBaseMembers.setDisable(true);
+					this.btnLoadAllMembers.setDisable(false);
+				} else {
+					this.obsListTVMembers.clear();
+					this.tvMemberData.refresh();
+					this.tvMemberData.setPlaceholder(new Label("No Members in current selected Base available"));
+				}
+			});
+			controllerThreadProgressBarDialog.bindProgressBarOnTask(loadingMembersByBaseTask);
+			try {
+				Thread mainThread = new Thread(loadingMembersByBaseTask);
+				mainThread.start();
+				mainThread.join();
+			} catch(InterruptedException ex) {
+				ex.printStackTrace();
 			}
 		}
 	}

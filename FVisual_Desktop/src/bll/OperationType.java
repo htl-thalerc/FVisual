@@ -3,6 +3,10 @@ package bll;
 public class OperationType {
 	private int operationTypeId;
 	private String description;
+	
+	//DB Attr Name
+	public static final String CONST_DB_OPERATIONTYPEID = "ID";
+	public static final String CONST_DB_DESCRIPTION = "BESCHREIBUNG";
 
 	public OperationType(int operationTypeId, String description) {
 		super();
@@ -28,5 +32,10 @@ public class OperationType {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override
+	public String toString() {
+		return "" + operationTypeId + ", " + description;
 	}
 }

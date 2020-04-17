@@ -1,17 +1,34 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.CountDownLatch;
 
+import bll.Base;
 import bll.Member;
 import bll.Operation;
 import bll.OperationVehicle;
 import bll.OtherOrganisation;
+import handler.BaseHandler;
+import handler.CentralHandler;
+import handler.CentralUpdateHandler;
+import handler.MemberHandler;
+import handler.OperationHandler;
+import handler.OperationVehicleHandler;
+import handler.OtherOrganisationHandler;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,10 +37,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import loader.BaseLoader;
+import loader.BaseMemberLoader;
+import loader.MemberLoader;
+import loader.OperationMemberLoader;
+import loader.OperationVehicleLoader;
+import loader.RankLoader;
 
 public class ControllerOperationManagementOperationLookup implements Initializable {
 	@FXML
-    private Accordion dropMenuFilter;
+    private Accordion dropMenuFilter, accordionSubTables;
     @FXML
     private TableView<Operation> tvOperationData;
     @FXML
@@ -63,8 +87,11 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 		this.initTVOperationVehicle();
 		this.initTVOtherOrg();
 		this.initTVMember();
+		
+		this.fillTableViews(false);
+		this.initTVOperationListeners();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void initTVOperation() {
 		TableColumn<Operation, String> columnOperationCode = new TableColumn<Operation, String>("Code");
@@ -72,19 +99,21 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 		TableColumn<Operation, String> columnAddress = new TableColumn<Operation, String>("Address");
 		TableColumn<Operation, String> columnTitle = new TableColumn<Operation, String>("Title");
 		TableColumn<Operation, String> columnDescription = new TableColumn<Operation, String>("Description");
-
-		columnOperationCode.setCellValueFactory(new PropertyValueFactory<Operation, String>("operationCode"));
-		columnOperationType.setCellValueFactory(new PropertyValueFactory<Operation, String>("operationType"));
+		
+		columnOperationCode
+			.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOperationCode().getCode()));
+		columnOperationType
+			.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOperationType().getDescription()));
 		columnAddress.setCellValueFactory(new PropertyValueFactory<Operation, String>("address"));
 		columnTitle.setCellValueFactory(new PropertyValueFactory<Operation, String>("title"));
 		columnDescription.setCellValueFactory(new PropertyValueFactory<Operation, String>("shortDescription"));
 
 		this.tvOperationData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		columnOperationCode.setMaxWidth(1f * Integer.MAX_VALUE * 10);
-		columnOperationType.setMaxWidth(1f * Integer.MAX_VALUE * 10);
+		columnOperationType.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnAddress.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnTitle.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-		columnDescription.setMaxWidth(1f * Integer.MAX_VALUE * 40);
+		columnDescription.setMaxWidth(1f * Integer.MAX_VALUE * 30);
 
 		this.tvOperationData.getColumns().addAll(columnOperationCode, columnOperationType, columnTitle, columnDescription, columnAddress);
 	}
@@ -113,8 +142,8 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 		TableColumn<OtherOrganisation, String> columnOpeartion = new TableColumn<OtherOrganisation, String>("Operation");
 
 		columnName.setCellValueFactory(new PropertyValueFactory<OtherOrganisation, String>("name"));
-		columnOpeartion
-				.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOperation().getTitle()));
+		//columnOpeartion
+			//	.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOperation().getTitle()));
 
 		this.tvVehicleData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		columnName.setMaxWidth(1f * Integer.MAX_VALUE * 40);
@@ -150,6 +179,56 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 		this.tvMemberData.getColumns().addAll(colNameBlock, colContraction);
 	}
 	
+	public void fillTableViews(boolean isCalledInReloadingData) {
+		if(isCalledInReloadingData) {			
+			
+		}
+		this.fillTableViewOperationsFromThread();
+		this.fillTableViewOperationVehiclesFromThread();
+		this.fillTableViewOtherOrgFromThread();
+		this.fillTableViewMembersFromThread();
+	}
+	
+	private void fillTableViewOperationsFromThread() {
+		this.obsListTVOperations = FXCollections.observableArrayList();
+		this.obsListTVOperations.addAll(OperationHandler.getInstance().getOperationList());
+
+		this.tvOperationData.setItems(this.obsListTVOperations.sorted());
+	}
+	
+	private void fillTableViewOperationVehiclesFromThread() {
+		this.obsListTVOperationVehicles = FXCollections.observableArrayList();
+		this.obsListTVOperationVehicles.addAll(OperationVehicleHandler.getInstance().getVehicleList());
+
+		this.tvVehicleData.setItems(this.obsListTVOperationVehicles.sorted());
+	}
+	
+	private void fillTableViewOtherOrgFromThread() {
+		this.obsListTVOtherOrgs = FXCollections.observableArrayList();
+		this.obsListTVOtherOrgs.addAll(OtherOrganisationHandler.getInstance().getOtherOrganisationList());
+
+		this.tvOtherOrgData.setItems(this.obsListTVOtherOrgs.sorted());
+	}
+	
+	private void fillTableViewMembersFromThread() {
+		this.obsListTVMembers = FXCollections.observableArrayList();
+		this.obsListTVMembers.addAll(MemberHandler.getInstance().getMemberList());
+
+		this.tvMemberData.setItems(this.obsListTVMembers.sorted());
+	}
+	
+	private void initTVOperationListeners() {
+		 this.tvOperationData.setOnMouseClicked(event -> {
+			Operation selectedOperation = this.tvOperationData.getSelectionModel().getSelectedItem();
+			if(selectedOperation != null) {
+				this.lbShowCodeAndTypeAndTitleData.setText(selectedOperation.getOperationCode().getCode() + ", " + 
+						selectedOperation.getOperationType().getDescription());
+				this.lbShowShortdescriptionData.setText(selectedOperation.getTitle() + " -" + selectedOperation.getShortDescription());
+				this.lbShowAddressAndPlzData.setText(selectedOperation.getAddress() + ", " + selectedOperation.getPostCode());
+			}
+		 });
+	}
+	
 	@FXML
 	private void onClickBtnLoadAllMembers(ActionEvent event) {
 		
@@ -167,7 +246,80 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 
 	@FXML
 	private void onClickBtnLoadOperationMembers(ActionEvent event) {
+		this.accordionSubTables.setExpandedPane(this.tpMember);
+		Operation selectedOperation = this.tvOperationData.getSelectionModel().getSelectedItem();
+		if (selectedOperation != null) {
+			//Open ProgressBarDialog
+			FXMLLoader loaderProgressBarDialog = CentralHandler.loadFXML("/gui/ThreadProgressBarDialog.fxml");
+			ControllerThreadProgressBarDialog controllerThreadProgressBarDialog = new ControllerThreadProgressBarDialog();
+			loaderProgressBarDialog.setController(controllerThreadProgressBarDialog);
+			
+			Stage stageProgressBarDialog = new Stage();
+			try {
+				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
+				stageProgressBarDialog.setScene(sceneProgressBarDialog);
+				stageProgressBarDialog.setTitle("Loading Members by Operation '" + selectedOperation.getTitle() + "'");
+				stageProgressBarDialog.show();	
+				stageProgressBarDialog.centerOnScreen();
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
+			
+			controllerThreadProgressBarDialog.unbindProgressBar();
+			
+			//Starting Threading
+			Thread threadOperationMemberLoader = new Thread(new OperationMemberLoader(selectedOperation.getOperationId()));
+			
+			Task<Void> loadingMembersByOperationTask = new Task<Void>() {
+				@Override
+				protected Void call() throws Exception {
+					updateProgress(0, 100);
+					int lastProgressValue = 0;
+					
+					threadOperationMemberLoader.start();
+					threadOperationMemberLoader.join();
+					
+					for(int i=0;i<20;i++) {
+						lastProgressValue += 2.5;
+						updateProgress(lastProgressValue, 100);
+						Thread.sleep(75);
+					}
+					return null;
+				}
+			};
+			loadingMembersByOperationTask.messageProperty().addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
+					controllerThreadProgressBarDialog.setLabelText(newValue);
+				}
+			});
+			loadingMembersByOperationTask.setOnSucceeded(e -> {
+				stageProgressBarDialog.close();
+				
+				this.obsListTVMembers.clear();
+				ArrayList<Member> tempListOfMembers = MemberHandler.getInstance().getMemberListByOperationId();
+				
+				if (tempListOfMembers != null) {
+					this.obsListTVMembers.addAll(tempListOfMembers);
 
+					this.tvMemberData.setItems(this.obsListTVMembers);
+					this.btnLoadOperationMembers.setDisable(true);
+					this.btnLoadAllMembers.setDisable(false);
+				} else {
+					this.obsListTVMembers.clear();
+					this.tvMemberData.refresh();
+					this.tvMemberData.setPlaceholder(new Label("No Members in current selected Operation available"));
+				}
+			});
+			controllerThreadProgressBarDialog.bindProgressBarOnTask(loadingMembersByOperationTask);
+			try {
+				Thread mainThread = new Thread(loadingMembersByOperationTask);
+				mainThread.start();
+				mainThread.join();
+			} catch(InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	@FXML

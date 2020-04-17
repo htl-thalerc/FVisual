@@ -99,4 +99,12 @@ public class MemberHandler {
 	public void setOperationListByOperationId(ArrayList<Member> listOfMembersFilteredByOperation) {
 		
 	}
+
+	public ArrayList<Member> getMemberListByOperationId() {
+		return this.listOfMembersByOperationId;
+	}
+	
+	public void setMemberListByOperationId(ArrayList<Member> list) {
+		this.listOfMembersByOperationId = list;
+	}
 }

@@ -90,7 +90,7 @@
 								<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 							</rowConstraints>
 							<children>
-								<Label style="-fx-font-weight: bold;" text="Code, Type, Titel" GridPane.halignment="RIGHT">
+								<Label style="-fx-font-weight: bold;" text="Code, Type" GridPane.halignment="RIGHT">
 									<GridPane.margin>
 										<Insets />
 									</GridPane.margin>
@@ -98,7 +98,7 @@
 										<Insets right="5.0" />
 									</padding>
 								</Label>
-								<Label style="-fx-font-weight: bold;" text="Shortdescription" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+								<Label style="-fx-font-weight: bold;" text="Title, Shortdescription" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
 									<padding>
 										<Insets right="5.0" />
 									</padding>
@@ -134,7 +134,7 @@
 						</GridPane>
 						<BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                      <top>
-                        <Accordion BorderPane.alignment="CENTER">
+                        <Accordion fx:id="accordionSubTables" BorderPane.alignment="CENTER">
                           <panes>
                             <TitledPane fx:id="tpOperationVehcile" animated="false" text="Operation Vehicles">
                                  <content>

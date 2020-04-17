@@ -21,13 +21,14 @@ public class MemberLoader implements Runnable {
 	public void run() {
 		ArrayList<Member> tempListMembers = new ArrayList<Member>();
 		ArrayList<Member> listOfMembers = MemberManager.getInstance().getMembers();
+		
 		for (int i = 0; i < listOfMembers.size(); i++) {
 			tempListMembers.add(listOfMembers.get(i));
 		}
 		
 		MemberHandler.getInstance().setMemberList(tempListMembers);
-		
 		CentralHandler.getInstance().mergeFullMemberObject(false);
+		
 		if(this.countDownLatch != null) {
 			this.countDownLatch.countDown();	
 		}

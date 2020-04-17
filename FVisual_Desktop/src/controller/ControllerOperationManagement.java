@@ -21,6 +21,8 @@ public class ControllerOperationManagement implements Initializable {
 
 	public ControllerOperationManagement(ControllerMainframe controllerMainframe) {
 		this.controllerMainframe = controllerMainframe;
+		this.controllerMainframe.removeInnerBorderPaneContent();
+		this.controllerMainframe.removeProgressbar();
 	}
 
 	@Override

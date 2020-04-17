@@ -216,7 +216,6 @@ public class CentralUpdateHandler {
 						}
 					}
 					
-					
 					//Start thread for update/post Vehicle(s) --> in total 40% of progressbar (from 60%-100%)
 					lastProgressValue = 60;
 					updateProgress(60, 100);

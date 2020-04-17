@@ -1,6 +1,7 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -9,6 +10,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
@@ -41,10 +43,19 @@ public class OperationManager {
 		ArrayList<Operation> collOfOperations = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.OPERATION, null);
+		
+		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
+
+		subMetadata.put(ClassTypes.OPERATION_TYPE, CentralHandler.getInstance().setMetadataMap(ClassTypes.OPERATION_TYPE, null));
+		subMetadata.put(ClassTypes.OPERATION_CODE, CentralHandler.getInstance().setMetadataMap(ClassTypes.OPERATION_CODE, null));
 		
 		try {
-			invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA,
+					CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, subMetadata));
+			invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).headers(headers); 
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				collOfOperations = response.readEntity(new GenericType<ArrayList<Operation>>() {

@@ -1,7 +1,9 @@
 package handler;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -10,6 +12,9 @@ import app.Main;
 import bll.Base;
 import bll.ClassTypes;
 import bll.Member;
+import bll.Operation;
+import bll.OperationCode;
+import bll.OperationType;
 import bll.OperationVehicle;
 import bll.OtherOrganisation;
 import bll.Rank;
@@ -27,8 +32,10 @@ public class CentralHandler {
 
 	public static final String CONST_MEMBER_URL = "mitglieder";
 	public static final String CONST_VEHICLE = "fahrzeuge";
-	public static final String CONST_OTHER_ORGANISATION = "andere_organisation";
+	public static final String CONST_OTHER_ORGANISATION = "andere_organisationen";
 	public static final String CONST_RANK = "dienstgrade";
+	public static final String CONST_OPERATION_TYPE = "einsatzarten";
+	public static final String CONST_OPERATION_CODE = "einsatzcodes";
 
 	private Member member;
 
@@ -64,12 +71,12 @@ public class CentralHandler {
 	public void setMember(Member member) {
 		this.member = member;
 	}
-	
+
 	public HashMap<String, String> setMetadataMap(ClassTypes classtype, ArrayList<String> additinalAttr) {
 		HashMap<String, String> retVal = new HashMap<String, String>();
 		ArrayList<String> listOfCurrAttr = new ArrayList<String>();
-		
-		switch(classtype) {
+
+		switch (classtype) {
 		case BASE:
 			listOfCurrAttr.add("baseId");
 			listOfCurrAttr.add("name");
@@ -85,10 +92,20 @@ public class CentralHandler {
 			listOfCurrAttr.add("lastname");
 			break;
 		case OPERATION:
+			listOfCurrAttr.add("operationId");
+			listOfCurrAttr.add("address");
+			listOfCurrAttr.add("postCode");
+			listOfCurrAttr.add("title");
+			listOfCurrAttr.add("shortDescription");
+			//listOfCurrAttr.add("time");
 			break;
 		case OPERATION_CODE:
+			listOfCurrAttr.add("operationCodeId");
+			listOfCurrAttr.add("code");
 			break;
 		case OPERATION_TYPE:
+			listOfCurrAttr.add("operationTypeId");
+			listOfCurrAttr.add("description");
 			break;
 		case OPERATION_VEHICLE:
 			listOfCurrAttr.add("operationVehicleId");
@@ -106,13 +123,13 @@ public class CentralHandler {
 		default:
 			break;
 		}
-		
-		if(additinalAttr != null && additinalAttr.size() > 0) {
-			for(int i=0;i<additinalAttr.size();i++) {
+
+		if (additinalAttr != null && additinalAttr.size() > 0) {
+			for (int i = 0; i < additinalAttr.size(); i++) {
 				listOfCurrAttr.add(additinalAttr.get(i));
 			}
 		}
-		
+
 		retVal = CentralHandler.getInstance().setDatabaseFieldAttributes(classtype, listOfCurrAttr);
 		return retVal;
 	}
@@ -180,10 +197,58 @@ public class CentralHandler {
 			}
 			break;
 		case OPERATION:
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
+				case "operationId":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_OPERATIONID);
+					break;
+				case "operationCode":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_OPERATIONCODEID);
+					break;
+				case "operationType":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_OPERATIONTYPEID);
+					break;
+				case "postCode":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_POSTCODE);
+					break;
+				case "address":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_ADDRESS);
+					break;
+				case "title":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_TITLE);
+					break;
+				case "shortDescription":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_SHORTDESCRIPTION);
+					break;
+				case "time":
+					retVal.put(currAttr.get(i), Operation.CONST_DB_TIME);
+					break;
+				}
+			}
 			break;
 		case OPERATION_CODE:
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
+					case "operationCodeId":
+						retVal.put(currAttr.get(i), OperationCode.CONST_DB_OPERATIONCODEID);
+						break;
+					case "code":
+						retVal.put(currAttr.get(i), OperationCode.CONST_DB_CODE);
+						break;
+				}
+			}
 			break;
 		case OPERATION_TYPE:
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
+					case "operationTypeId":
+						retVal.put(currAttr.get(i), OperationType.CONST_DB_OPERATIONTYPEID);
+						break;
+					case "description":
+						retVal.put(currAttr.get(i), OperationType.CONST_DB_DESCRIPTION);
+						break;
+				}
+			}
 			break;
 		case OPERATION_VEHICLE:
 			for (int i = 0; i < currAttr.size(); i++) {
@@ -270,8 +335,28 @@ public class CentralHandler {
 				case OPERATION:
 					break;
 				case OPERATION_CODE:
+					String operationCodeId = null;
+					HashMap<String, String> subMetadataOperationCode = subMetadata.get(ClassTypes.OPERATION_CODE);
+					for (Entry<String, String> currBaseAttr : subMetadataOperationCode.entrySet()) {
+						if (currBaseAttr.getKey().equals("operationCodeId")) {
+							operationCodeId = OperationCode.CONST_DB_OPERATIONCODEID;
+						}
+					}
+					if (operationCodeId != null) {
+						headerMetadataString += ", 'operationCode':{'operationCodeId':'" + operationCodeId + "'}";
+					}
 					break;
 				case OPERATION_TYPE:
+					String operationTypeId = null;
+					HashMap<String, String> subMetadataOperationType = subMetadata.get(ClassTypes.OPERATION_TYPE);
+					for (Entry<String, String> currBaseAttr : subMetadataOperationType.entrySet()) {
+						if (currBaseAttr.getKey().equals("operationTypeId")) {
+							operationTypeId = OperationCode.CONST_DB_OPERATIONCODEID;
+						}
+					}
+					if (operationTypeId != null) {
+						headerMetadataString += ", 'operationType':{'operationTypeId':'" + operationTypeId + "'}";
+					}
 					break;
 				case OPERATION_VEHICLE:
 					break;
@@ -296,7 +381,7 @@ public class CentralHandler {
 		}
 		headerMetadataString += "}]";
 		headerMetadataString = headerMetadataString.replace("'", "\"");
-		//System.out.println(headerMetadataString);
+		System.out.println(headerMetadataString);
 		return headerMetadataString;
 	}
 
@@ -324,6 +409,30 @@ public class CentralHandler {
 			for (int j = 0; j < tempListOfRanks.size(); j++) {
 				if (tempListOfMembers.get(i).getRank().getRankId() == tempListOfRanks.get(j).getRankId()) {
 					tempListOfMembers.get(i).setRank(tempListOfRanks.get(j));
+				}
+			}
+		}
+	}
+	
+	public void mergeFullOperationObject() {
+		ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
+		ArrayList<OperationCode> tempListOfOperationCodes = OperationCodeHandler.getInstance().getOperationCodeList();
+		ArrayList<OperationType> tempListOfOperationTypes = OperationTypeHandler.getInstance().getOperationTypeList();
+		
+		//Add Code- to Operation-Object
+		for(int i=0;i<tempListOfOperations.size();i++) {
+			for(int j=0;j<tempListOfOperationCodes.size();j++) {
+				if(tempListOfOperations.get(i).getOperationCode().getOperationCodeId() == tempListOfOperationCodes.get(j).getOperationCodeId()) {
+					tempListOfOperations.get(i).setOperationCode(tempListOfOperationCodes.get(j));
+				}
+			}
+		}
+		
+		//Add Type- to Operation-Object
+		for(int i=0;i<tempListOfOperations.size();i++) {
+			for(int j=0;j<tempListOfOperationTypes.size();j++) {
+				if(tempListOfOperations.get(i).getOperationType().getOperationTypeId() == tempListOfOperationTypes.get(j).getOperationTypeId()) {
+					tempListOfOperations.get(i).setOperationType(tempListOfOperationTypes.get(j));
 				}
 			}
 		}

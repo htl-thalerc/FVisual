@@ -17,11 +17,11 @@ public class OperationHandler {
 		return operationHandlerInstance;
 	}
 	
-	public ArrayList<Operation> getListOfOperations() {
+	public ArrayList<Operation> getOperationList() {
 		return this.listOfOperations;
 	}
 	
-	public void setListOfOperations(ArrayList<Operation> listOfOperation) {
+	public void setOperationList(ArrayList<Operation> listOfOperation) {
 		this.listOfOperations = listOfOperation;
 	}
 	

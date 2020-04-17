@@ -3,6 +3,10 @@ package bll;
 public class OperationCode {
 	private int operationCodeId;
 	private String code;
+	
+	//DB Attr Name
+	public static final String CONST_DB_OPERATIONCODEID = "ID";
+	public static final String CONST_DB_CODE = "CODE";
 
 	public OperationCode(int operationCodeId, String code) {
 		super();
@@ -28,5 +32,10 @@ public class OperationCode {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	@Override
+	public String toString() {
+		return "" + operationCodeId + ", " + code;
 	}
 }
