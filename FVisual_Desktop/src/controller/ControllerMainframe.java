@@ -85,7 +85,7 @@ public class ControllerMainframe implements Initializable {
 			this.addProgressbar();
 		}
 		this.progressbar.progressProperty().unbind();
-		CountDownLatch latchGETMethods = new CountDownLatch(7);
+		CountDownLatch latchGETMethods = new CountDownLatch(8);
 		
 		Task<Void> mainTask = new Task<Void>() {
 			@Override
@@ -110,6 +110,7 @@ public class ControllerMainframe implements Initializable {
 				} else {
 					latchGETMethods.countDown();
 				}
+				Thread threadGETBases = new Thread(loadBases(latchGETMethods));
 				Thread threadGETOperations = new Thread(loadOperation(latchGETMethods));
 				Thread threadGETMembers = new Thread(loadMembers(latchGETMethods));
 				Thread threadGETOperationVehicles = new Thread(loadOperationVehicles(latchGETMethods));
@@ -175,12 +176,31 @@ public class ControllerMainframe implements Initializable {
 				//Set progress for operation
 				lastProgressValue = 20;
 				updateProgress(lastProgressValue, 100);
+				updateMessage("Loading Bases from Database");
+				threadGETBases.start();
+				threadGETBases.join();
+				
+				int nrOfBaseObj = BaseHandler.getInstance().getBaseList().size();
+				double processIncreasePerBaseObj = (10 / nrOfBaseObj);
+				if(processIncreasePerBaseObj < 1) {
+					nrOfBaseObj = 10;
+					processIncreasePerBaseObj = 2.5;
+				}
+				for(int i=0;i<nrOfBaseObj;i++) {
+					lastProgressValue += processIncreasePerBaseObj;
+					updateProgress(lastProgressValue, 100);
+					Thread.sleep(100);
+				}
+				
+				//Set progress for operation
+				lastProgressValue = 35;
+				updateProgress(lastProgressValue, 100);
 				updateMessage("Loading Operations from Database");
 				threadGETOperations.start();
 				threadGETOperations.join();
 				
 				int nrOfOperationObj =  OperationHandler.getInstance().getOperationList().size();
-				double processIncreasePerOperationObj = (25 / nrOfOperationObj);
+				double processIncreasePerOperationObj = (15 / nrOfOperationObj);
 				if(processIncreasePerOperationObj < 1) {
 					nrOfOperationObj = 10;
 					processIncreasePerOperationObj = 2.5;

@@ -22,6 +22,7 @@ import com.google.gson.JsonSyntaxException;
 import bll.ClassTypes;
 import bll.EnumCRUDOption;
 import bll.Member;
+import bll.Member_Is_In_Operation;
 import handler.CentralHandler;
 import handler.ExceptionHandler;
 
@@ -286,17 +287,30 @@ public class MemberManager {
 
 	// Operation Services
 	public ArrayList<Member> getMembersFromOperation(int operationId) {
-		ArrayList<Member> collOfMembers = null;
+		ArrayList<Member> foundedMember = null;
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
-		WebTarget webTargetGetAllMembers = this.webTargetMemberServiceForOperation
+		WebTarget webTargetGetAll = this.webTargetMemberServiceForOperation
 				.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_MEMBER_URL);
+
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		ArrayList<String> additinalAttr = new ArrayList<String>(Arrays.asList("isAdmin", "password"));
+		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.MEMBER,
+				additinalAttr);
+
+		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
+
+		subMetadata.put(ClassTypes.BASE, CentralHandler.getInstance().setMetadataMap(ClassTypes.BASE, null));
+		subMetadata.put(ClassTypes.RANK, CentralHandler.getInstance().setMetadataMap(ClassTypes.RANK, null));
+
 		try {
-			invocationBuilder = webTargetGetAllMembers.request(MediaType.APPLICATION_JSON)
-					.header(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, "[{\"firstname\":\"VORNAME\", \"memberId\":\"ID\", \"username\":\"USERNAME\", \"lastname\":\"NACHNAME\", \"rank\":{\"rankId\":\"ID_DIENSTGRAD\"}, \"base\":{\"baseId\":\"ID_STUETZPUNKT\"}, \"operation\":{\"operationId\":\"ID_EINSATZ\"}}]");
+
+			invocationBuilder = webTargetGetAll.request(MediaType.APPLICATION_JSON).headers(headers);
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if (response.getStatus() == 200) {
-				collOfMembers = response.readEntity(new GenericType<ArrayList<Member>>() {
+				foundedMember = response.readEntity(new GenericType<ArrayList<Member>>() {
 				});
 			} else {
 				ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER, EnumCRUDOption.GET);
@@ -304,7 +318,7 @@ public class MemberManager {
 		} catch (JsonSyntaxException ex) {
 			ex.printStackTrace();
 		}
-		return collOfMembers;
+		return foundedMember;
 	}
 
 	public Member getMemberByIdFromOperation(int operationId, int memberId) {

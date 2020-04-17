@@ -44,17 +44,11 @@ public class OperationManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.OPERATION, null);
-		
-		HashMap<ClassTypes, HashMap<String, String>> subMetadata = new HashMap<ClassTypes, HashMap<String, String>>();
-
-		subMetadata.put(ClassTypes.OPERATION_TYPE, CentralHandler.getInstance().setMetadataMap(ClassTypes.OPERATION_TYPE, null));
-		subMetadata.put(ClassTypes.OPERATION_CODE, CentralHandler.getInstance().setMetadataMap(ClassTypes.OPERATION_CODE, null));
 		
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
 			headers.add(CentralHandler.CONST_METADATA,
-					CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, subMetadata));
+					"[{\"address\":\"ADRESSE\", \"operationId\":\"ID\", \"postCode\":\"PLZ\", \"shortDescription\":\"KURZBESCHREIBUNG\", \"title\":\"TITEL\", \"operationType\":{\"operationTypeId\":\"ID\"}, \"operationCode\":{\"operationCodeId\":\"ID\"}, \"base\":{\"baseId\":\"ID_STUETZPUNKT\"}}]");
 			invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).headers(headers); 
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {

@@ -88,15 +88,15 @@ public class ControllerCreateOperationTabMemberManagement implements Initializab
 		// this.nrOfTotalOrganisations = this.lvAvailableMembers.getItems().size();
 		ArrayList<Member> list = new ArrayList<Member>();
 		list.add(new Member(1, new Base(1, "Feuerwehr Villach", "Villach", 9500, "Keine Ahnung1", "51"),
-				new Rank(1, "BI", "Brandinspektor"), "Sandro", "Assek", "asseks", "1234", true));
+				new Rank(1, "BI", "Brandinspektor"), null, "Sandro", "Assek", "asseks", "1234", true));
 		list.add(new Member(2, new Base(2, "Feuerwehr St. Peter", "St. Peter", 9501, "Keine Ahnung2", "52"),
-				new Rank(2, "OBI", "Oberbrandinspektor"), "Christoph", "Thaler", "tahlerc", "1234", true));
+				new Rank(2, "OBI", "Oberbrandinspektor"), null, "Christoph", "Thaler", "tahlerc", "1234", true));
 		list.add(new Member(3, new Base(3, "Feuerwehr Wernberg", "Wernberg", 9502, "Keine Ahnung3", "53"),
-				new Rank(3, "HBI", "Hauptbrandinspektor"), "Flo", "Graf", "graff", "1234", true));
+				new Rank(3, "HBI", "Hauptbrandinspektor"), null, "Flo", "Graf", "graff", "1234", true));
 		list.add(new Member(4, new Base(4, "Feuerwehr Lede", "Lede", 9503, "Keine Ahnung4", "54"),
-				new Rank(4, "OLM", "Oberlöschmeister"), "Andreas", "Drabse", "drabosea", "1234", true));
+				new Rank(4, "OLM", "Oberlöschmeister"), null, "Andreas", "Drabse", "drabosea", "1234", true));
 		list.add(new Member(5, new Base(5, "Feuerwehr Töplitsch", "Töplitsch", 9504, "Keine Ahnung5", "55"),
-				new Rank(5, "HFM", "Hauptlöschmeister"), "Test", "user", "testu", "1234", false));
+				new Rank(5, "HFM", "Hauptlöschmeister"), null, "Test", "user", "testu", "1234", false));
 
 		this.obsListLVAvailableMembers = FXCollections
 				.observableArrayList(MemberHandler.getInstance().getBaselessMemberList());

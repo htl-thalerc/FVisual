@@ -8,6 +8,7 @@ import java.util.concurrent.CountDownLatch;
 
 import bll.Base;
 import bll.Member;
+import bll.Member_Is_In_Operation;
 import bll.Operation;
 import bll.OperationVehicle;
 import bll.OtherOrganisation;
@@ -38,12 +39,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import loader.BaseLoader;
-import loader.BaseMemberLoader;
-import loader.MemberLoader;
 import loader.OperationMemberLoader;
-import loader.OperationVehicleLoader;
-import loader.RankLoader;
 
 public class ControllerOperationManagementOperationLookup implements Initializable {
 	@FXML
@@ -53,7 +49,7 @@ public class ControllerOperationManagementOperationLookup implements Initializab
     @FXML
     private MenuItem mItemRemoveOperation, mItemUpdateOperation;
     @FXML
-    private Label lbShowCodeAndTypeAndTitleData, lbShowShortdescriptionData, lbShowAddressAndPlzData;
+    private Label lbShowCodeAndTypeAndTitleData, lbShowShortdescriptionData, lbShowAddressAndPlzData, lbShowBase;
     @FXML
     private TableView<OperationVehicle> tvVehicleData;
     @FXML
@@ -96,7 +92,7 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 	private void initTVOperation() {
 		TableColumn<Operation, String> columnOperationCode = new TableColumn<Operation, String>("Code");
 		TableColumn<Operation, String> columnOperationType = new TableColumn<Operation, String>("Type");
-		TableColumn<Operation, String> columnAddress = new TableColumn<Operation, String>("Address");
+		TableColumn<Operation, String> columnBase = new TableColumn<Operation, String>("Base");
 		TableColumn<Operation, String> columnTitle = new TableColumn<Operation, String>("Title");
 		TableColumn<Operation, String> columnDescription = new TableColumn<Operation, String>("Description");
 		
@@ -104,18 +100,19 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 			.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOperationCode().getCode()));
 		columnOperationType
 			.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOperationType().getDescription()));
-		columnAddress.setCellValueFactory(new PropertyValueFactory<Operation, String>("address"));
+		columnBase
+			.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBase().getName()));
 		columnTitle.setCellValueFactory(new PropertyValueFactory<Operation, String>("title"));
 		columnDescription.setCellValueFactory(new PropertyValueFactory<Operation, String>("shortDescription"));
 
 		this.tvOperationData.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		columnOperationCode.setMaxWidth(1f * Integer.MAX_VALUE * 10);
 		columnOperationType.setMaxWidth(1f * Integer.MAX_VALUE * 20);
-		columnAddress.setMaxWidth(1f * Integer.MAX_VALUE * 20);
+		columnBase.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnTitle.setMaxWidth(1f * Integer.MAX_VALUE * 20);
 		columnDescription.setMaxWidth(1f * Integer.MAX_VALUE * 30);
 
-		this.tvOperationData.getColumns().addAll(columnOperationCode, columnOperationType, columnTitle, columnDescription, columnAddress);
+		this.tvOperationData.getColumns().addAll(columnOperationCode, columnOperationType, columnTitle, columnDescription, columnBase);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -223,8 +220,9 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 			if(selectedOperation != null) {
 				this.lbShowCodeAndTypeAndTitleData.setText(selectedOperation.getOperationCode().getCode() + ", " + 
 						selectedOperation.getOperationType().getDescription());
-				this.lbShowShortdescriptionData.setText(selectedOperation.getTitle() + " -" + selectedOperation.getShortDescription());
+				this.lbShowShortdescriptionData.setText(selectedOperation.getTitle() + ", " + selectedOperation.getShortDescription());
 				this.lbShowAddressAndPlzData.setText(selectedOperation.getAddress() + ", " + selectedOperation.getPostCode());
+				this.lbShowBase.setText(selectedOperation.getBase().getName());
 			}
 		 });
 	}

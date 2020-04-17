@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import bll.Base;
 import bll.Member;
+import bll.Member_Is_In_Operation;
+import bll.Operation;
 import bll.Rank;
 
 public class MemberHandler {
@@ -104,7 +106,41 @@ public class MemberHandler {
 		return this.listOfMembersByOperationId;
 	}
 	
-	public void setMemberListByOperationId(ArrayList<Member> list) {
-		this.listOfMembersByOperationId = list;
+	public void setMemberListByOperationId(ArrayList<Member> arrayList) {
+		if(arrayList != null) {
+			ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+			ArrayList<Rank> tempListOfRanks = RankHandler.getInstance().getRankList();
+			ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
+			this.listOfMembersByOperationId = arrayList;
+			
+			for(int i=0;i<this.listOfMembersByOperationId.size();i++) {
+				for(int j=0;j<tempListOfBases.size();j++) {
+					if(this.listOfMembersByOperationId.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+						this.listOfMembersByOperationId.get(i).setBase(tempListOfBases.get(j));
+						break;
+					}
+				}
+			}
+			
+			for(int i=0;i<this.listOfMembersByOperationId.size();i++) {
+				for(int j=0;j<tempListOfRanks.size();j++) {
+					if(this.listOfMembersByOperationId.get(i).getBase().getBaseId() == tempListOfRanks.get(j).getRankId()) {
+						this.listOfMembersByOperationId.get(i).setRank(tempListOfRanks.get(j));
+						break;
+					}
+				}
+			}
+			
+			for(int i=0;i<this.listOfMembersByOperationId.size();i++) {
+				for(int j=0;j<tempListOfOperations.size();j++) {
+					if(this.listOfMembersByOperationId.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
+						this.listOfMembersByOperationId.get(i).setOperation(tempListOfOperations.get(j));
+						break;
+					}
+				}
+			}
+			
+			System.out.println(this.listOfMembersByOperationId.get(0).toFullString());
+		}
 	}
 }

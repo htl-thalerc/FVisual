@@ -14,6 +14,9 @@ public class Operation {
 	private Date date;
 	private Timestamp time;
 	
+	private Base base;
+	private int baseId;
+	
 	//name of DB Attr
 	public static final String CONST_DB_OPERATIONID = "ID";
 	public static final String CONST_DB_OPERATIONCODEID = "ID_EINSATZCODE";
@@ -112,6 +115,22 @@ public class Operation {
 
 	public void setTime(Timestamp time) {
 		this.time = time;
+	}
+
+	public Base getBase() {
+		return base;
+	}
+
+	public void setBase(Base base) {
+		this.base = base;
+	}
+
+	public int getBaseId() {
+		return baseId;
+	}
+
+	public void setBaseId(int baseId) {
+		this.baseId = baseId;
 	}
 
 	@Override

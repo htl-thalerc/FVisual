@@ -10,10 +10,13 @@ public class Member {
 	private String username;
 	private String password;
 	private boolean isAdmin;
+	
 	private int baseId;
 	private Base base;
 	private int rankId;
 	private Rank rank;
+	private int operationId;
+	private Operation operation;
 	
 	private boolean isUpdated = false;
 	
@@ -30,6 +33,7 @@ public class Member {
 	public static final String CONST_DB_ISADMIN = "ISADMIN";
 	public static final String CONST_DB_BASEID = "ID_STUETZPUNKT";
 	public static final String CONST_DB_RANKID = "ID_DIENSTGRAD";
+	public static final String CONST_DB_OPERATIONID = "ID_EINSATZ";
 	public static final String CONST_DB_CONTRACTION = "KUERZEL";
 	public static final String CONST_DB_DESCRIPTION = "BEZEICHNUNG";
 
@@ -42,11 +46,12 @@ public class Member {
 		return memberObj;
 	}
 
-	public Member(int memberId, Base base, Rank rank, String firstname, String lastname, String username, String password, boolean isAdmin) {
+	public Member(int memberId, Base base, Rank rank, Operation operation, String firstname, String lastname, String username, String password, boolean isAdmin) {
 		super();
 		this.memberId = memberId;
 		this.base = base;
 		this.rank = rank;
+		this.operation = operation;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
@@ -155,6 +160,22 @@ public class Member {
 		this.rank = rank;
 	}
 
+	public int getOperationId() {
+		return operationId;
+	}
+
+	public void setOperationId(int operationId) {
+		this.operationId = operationId;
+	}
+
+	public Operation getOperation() {
+		return operation;
+	}
+
+	public void setOperation(Operation operation) {
+		this.operation = operation;
+	}
+
 	public TextField getTfFirstname() {
 		return tfFirstname;
 	}
@@ -194,7 +215,7 @@ public class Member {
 
 	public String toFullString() {
 		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
-				+ base + ", " + rank.toFullString() + ", " + isUpdated;
+				+ base + ", " + rank.toFullString() + ", " + isUpdated + ", " + operation.toString();
 //		return memberId + ", " + firstname + ", " + lastname + ", " + username + ", " + password + ", " + isAdmin + ", "
 //				+ this.base.getBaseId() + ", " + this.rank.getRankId();
 	}

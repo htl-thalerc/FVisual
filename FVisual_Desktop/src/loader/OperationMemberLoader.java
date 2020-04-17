@@ -12,7 +12,7 @@ public class OperationMemberLoader implements Runnable {
 
 	@Override
 	public void run() {
-		MemberHandler.getInstance().setOperationListByOperationId(
+		MemberHandler.getInstance().setMemberListByOperationId(
 				MemberManager.getInstance().getMembersFromOperation(this.operationId));
 	}
 }

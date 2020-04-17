@@ -12,6 +12,7 @@ import app.Main;
 import bll.Base;
 import bll.ClassTypes;
 import bll.Member;
+import bll.Member_Is_In_Operation;
 import bll.Operation;
 import bll.OperationCode;
 import bll.OperationType;
@@ -97,7 +98,7 @@ public class CentralHandler {
 			listOfCurrAttr.add("postCode");
 			listOfCurrAttr.add("title");
 			listOfCurrAttr.add("shortDescription");
-			//listOfCurrAttr.add("time");
+			// listOfCurrAttr.add("time");
 			break;
 		case OPERATION_CODE:
 			listOfCurrAttr.add("operationCodeId");
@@ -229,24 +230,24 @@ public class CentralHandler {
 		case OPERATION_CODE:
 			for (int i = 0; i < currAttr.size(); i++) {
 				switch (currAttr.get(i)) {
-					case "operationCodeId":
-						retVal.put(currAttr.get(i), OperationCode.CONST_DB_OPERATIONCODEID);
-						break;
-					case "code":
-						retVal.put(currAttr.get(i), OperationCode.CONST_DB_CODE);
-						break;
+				case "operationCodeId":
+					retVal.put(currAttr.get(i), OperationCode.CONST_DB_OPERATIONCODEID);
+					break;
+				case "code":
+					retVal.put(currAttr.get(i), OperationCode.CONST_DB_CODE);
+					break;
 				}
 			}
 			break;
 		case OPERATION_TYPE:
 			for (int i = 0; i < currAttr.size(); i++) {
 				switch (currAttr.get(i)) {
-					case "operationTypeId":
-						retVal.put(currAttr.get(i), OperationType.CONST_DB_OPERATIONTYPEID);
-						break;
-					case "description":
-						retVal.put(currAttr.get(i), OperationType.CONST_DB_DESCRIPTION);
-						break;
+				case "operationTypeId":
+					retVal.put(currAttr.get(i), OperationType.CONST_DB_OPERATIONTYPEID);
+					break;
+				case "description":
+					retVal.put(currAttr.get(i), OperationType.CONST_DB_DESCRIPTION);
+					break;
 				}
 			}
 			break;
@@ -295,6 +296,21 @@ public class CentralHandler {
 				}
 			}
 			break;
+		case MEMBER_IS_IN_OPERATION:
+			for (int i = 0; i < currAttr.size(); i++) {
+				switch (currAttr.get(i)) {
+				case "member":
+					retVal.put(currAttr.get(i), Member_Is_In_Operation.CONST_DB_MEMBERID);
+					break;
+				case "base":
+					retVal.put(currAttr.get(i), Member_Is_In_Operation.CONST_DB_BASEID);
+					break;
+				case "operation":
+					retVal.put(currAttr.get(i), Member_Is_In_Operation.CONST_DB_OPERATIONID);
+					break;
+				}
+			}
+			break;
 		default:
 			break;
 		}
@@ -307,17 +323,21 @@ public class CentralHandler {
 		int nrOfAttributes = 0;
 		String headerMetadataString = "[{";
 
-		for (Entry<String, String> key : mainMetadataMap.entrySet()) {
-			headerMetadataString += "'" + key.getKey() + "':'" + key.getValue() + "'";
-			nrOfAttributes++;
-			if (nrOfAttributes != mainMetadataMap.size()) {
-				headerMetadataString += ", ";
+		if (mainMetadataMap != null) {
+			for (Entry<String, String> key : mainMetadataMap.entrySet()) {
+				headerMetadataString += "'" + key.getKey() + "':'" + key.getValue() + "'";
+				nrOfAttributes++;
+				if (nrOfAttributes != mainMetadataMap.size()) {
+					headerMetadataString += ", ";
+				}
 			}
 		}
 
 		if (subMetadata != null) {
 			for (Entry<ClassTypes, HashMap<String, String>> key : subMetadata.entrySet()) {
 				switch (key.getKey()) {
+				case MEMBER:
+					break;
 				case BASE:
 					String baseId = null;
 					HashMap<String, String> subMetadataBase = subMetadata.get(ClassTypes.BASE);
@@ -329,8 +349,6 @@ public class CentralHandler {
 					if (baseId != null) {
 						headerMetadataString += ", 'base':{'baseId':'" + baseId + "'}";
 					}
-					break;
-				case MEMBER:
 					break;
 				case OPERATION:
 					break;
@@ -374,6 +392,32 @@ public class CentralHandler {
 						headerMetadataString += ", 'rank':{'rankId':'" + rankId + "'}";
 					}
 					break;
+				case MEMBER_IS_IN_OPERATION:
+					String memberId = null, operationId = null, baseId2 = null;
+					HashMap<String, String> subMetadataMemberIsInOperation = subMetadata
+							.get(ClassTypes.MEMBER_IS_IN_OPERATION);
+
+					for (Entry<String, String> currRankAttr : subMetadataMemberIsInOperation.entrySet()) {
+						switch (currRankAttr.getKey()) {
+						case "member":
+							memberId = Member_Is_In_Operation.CONST_DB_MEMBERID;
+							break;
+						case "base":
+							baseId2 = Member_Is_In_Operation.CONST_DB_BASEID;
+							break;
+						case "operation":
+							operationId = Member_Is_In_Operation.CONST_DB_OPERATIONID;
+							break;
+						default:
+							break;
+						}
+					}
+					if (memberId != null && operationId != null && baseId2 != null) {
+						headerMetadataString += "'operation':{'operationId':'" + operationId + "'}, "
+								+ "'member':'{'memberId': '" + memberId + "'}, " + "'base':'{'baseId': '" + baseId2
+								+ "'}";
+					}
+					break;
 				default:
 					break;
 				}
@@ -413,26 +457,39 @@ public class CentralHandler {
 			}
 		}
 	}
-	
+
 	public void mergeFullOperationObject() {
 		ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
 		ArrayList<OperationCode> tempListOfOperationCodes = OperationCodeHandler.getInstance().getOperationCodeList();
 		ArrayList<OperationType> tempListOfOperationTypes = OperationTypeHandler.getInstance().getOperationTypeList();
-		
-		//Add Code- to Operation-Object
-		for(int i=0;i<tempListOfOperations.size();i++) {
-			for(int j=0;j<tempListOfOperationCodes.size();j++) {
-				if(tempListOfOperations.get(i).getOperationCode().getOperationCodeId() == tempListOfOperationCodes.get(j).getOperationCodeId()) {
+		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+
+		// Add Code- to Operation-Object
+		for (int i = 0; i < tempListOfOperations.size(); i++) {
+			for (int j = 0; j < tempListOfOperationCodes.size(); j++) {
+				if (tempListOfOperations.get(i).getOperationCode().getOperationCodeId() == tempListOfOperationCodes
+						.get(j).getOperationCodeId()) {
 					tempListOfOperations.get(i).setOperationCode(tempListOfOperationCodes.get(j));
 				}
 			}
 		}
-		
-		//Add Type- to Operation-Object
-		for(int i=0;i<tempListOfOperations.size();i++) {
-			for(int j=0;j<tempListOfOperationTypes.size();j++) {
-				if(tempListOfOperations.get(i).getOperationType().getOperationTypeId() == tempListOfOperationTypes.get(j).getOperationTypeId()) {
+
+		// Add Type- to Operation-Object
+		for (int i = 0; i < tempListOfOperations.size(); i++) {
+			for (int j = 0; j < tempListOfOperationTypes.size(); j++) {
+				if (tempListOfOperations.get(i).getOperationType().getOperationTypeId() == tempListOfOperationTypes
+						.get(j).getOperationTypeId()) {
 					tempListOfOperations.get(i).setOperationType(tempListOfOperationTypes.get(j));
+				}
+			}
+		}
+		
+		//Add Base Object
+		for (int i = 0; i < tempListOfOperations.size(); i++) {
+			for (int j = 0; j < tempListOfBases.size(); j++) {
+				if (tempListOfOperations.get(i).getBase().getBaseId() == tempListOfBases
+						.get(j).getBaseId()) {
+					tempListOfOperations.get(i).setBase(tempListOfBases.get(j));
 				}
 			}
 		}
