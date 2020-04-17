@@ -6,17 +6,16 @@ const loggerModule = require('../modules/logger-module');
 /* local variables */
 const logger = loggerModule.loggers['Validator'];
 
-var paramIsInteger = function (id) {
+var paramIsInteger = function(id) {
     if (!Number.isNaN(id) && id > 0) {
         return true;
-    }
-    else {
+    } else {
         logger.warn('invalid param {id}');
         return false;
     }
 }
 
-var isValidSubQuery = function (query, pattern, emptyAllowed) {
+var isValidSubQuery = function(query, pattern, emptyAllowed) {
     if (Object.keys(query).length === 0 && emptyAllowed) {
         return true;
     } else if (Object.keys(query).length !== pattern.length) {
@@ -61,7 +60,7 @@ var isValidSubQuery = function (query, pattern, emptyAllowed) {
     }
 }
 
-var isValidBody = function (body, pattern) {
+var isValidBody = function(body, pattern) {
     if (typeof Object.keys(body).length === 'undefined') {
         logger.warn('empty body supplied');
         return false;
@@ -119,81 +118,111 @@ var isValidBody = function (body, pattern) {
     }
 }
 
-var getAOrgsPattern = function () {
+var getAOrgsPattern = function() {
     return {
-        "length": 1, "data": {
+        "length": 1,
+        "data": {
             "id": { "isMandatory": false },
             "NAME": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             }
         }
     };
 }
 
-var getMitgliedPattern = function () {
+var getMitgliedPattern = function() {
     return {
-        "length": 7, "data": {
+        "length": 7,
+        "data": {
             "id": {
                 "isMandatory": false
             },
             "ID_DIENSTGRAD": {
-                "isMandatory": true, "type": "number", "min-length": "0"
+                "isMandatory": true,
+                "type": "number",
+                "min-length": "0"
             },
             "ID_STUETZPUNKT": {
-                "isMandatory": true, "type": "number"
+                "isMandatory": true,
+                "type": "number"
             },
             "VORNAME": {
-                "isMandatory": true, "type": "string", "min-length": "2"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "2"
             },
             "NACHNAME": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "USERNAME": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "PASSWORD": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "ISADMIN": {
-                "isMandatory": true, "type": "boolean"
+                "isMandatory": true,
+                "type": "boolean"
             }
         }
     };
 }
 
-var getStuetzpunktPattern = function () {
+var getStuetzpunktPattern = function() {
     return {
-        "length": 5, "data": {
+        "length": 5,
+        "data": {
             "id": {
                 "isMandatory": false
             },
             "NAME": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "ORT": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "PLZ": {
-                "isMandatory": true, "type": "number", "min-length": "3"
+                "isMandatory": true,
+                "type": "number",
+                "min-length": "3"
             },
             "STRASSE": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "HAUSNR": {
-                "isMandatory": true, "type": "string", "min-length": "1"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "1"
             }
         }
     };
 }
 
-var getFahrzeugPattern = function(){
+var getFahrzeugPattern = function() {
     return {
-        "length": 1, "data": {
+        "length": 1,
+        "data": {
             "id": {
                 "isMandatory": false
             },
             "BEZEICHNUNG": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "ID_STUETZPUNKT": {
                 "isMandatory": false
@@ -202,34 +231,43 @@ var getFahrzeugPattern = function(){
     };
 }
 
-var getAdminsPattern = function () {
+var getAdminsPattern = function() {
     return {
-        "length": 1, "data": {
+        "length": 1,
+        "data": {
             "id": {
                 "isMandatory": false
             },
             "name": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             }
         }
     };
 }
 
-var getSubQueryNamePattern = function () {
+var getSubQueryNamePattern = function() {
     return {
-        "length": 1, "data": {
+        "length": 1,
+        "data": {
             "name": {
-                "isMandatory": true, "type": "string", "min-length": "3"
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             }
         }
     };
 }
 
-var getSubQueryEinsatzPattern = function(){
-    return{
-        "length":2, "data":{
+var getSubQueryEinsatzPattern = function() {
+    return {
+        "length": 2,
+        "data": {
             "name": {
-                "isMandatory": true, "type": "string", "min-length": "3"    
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
             },
             "zeit": {
                 "isMandatory": true
@@ -238,11 +276,14 @@ var getSubQueryEinsatzPattern = function(){
     }
 }
 
-var getSubQueryIdPattern = function () {
+var getSubQueryIdPattern = function() {
     return {
-        "length": 1, "data": {
+        "length": 1,
+        "data": {
             "id": {
-                "isMandatory": true, "type": "number", "min-length": "0"
+                "isMandatory": true,
+                "type": "number",
+                "min-length": "0"
             }
         }
     };

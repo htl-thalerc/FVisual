@@ -48,10 +48,10 @@ module.exports.STPNKT_FZG_POST = "INSERT INTO Einsatzfahrzeuge(id, id_stuetzpunk
 module.exports.STPNKT_FZG_PUT = "UPDATE Einsatzfahrzeuge SET bezeichnung = :1 WHERE id_stuetzpunkt = :2 AND id = :3";
 module.exports.STPNKT_FZG_DELETE = "DELETE FROM Einsatzfahrzeuge WHERE id_stuetzpunkt = :1 AND id = :2";
 
-module.exports.EINSATZ_GET = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.datum FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id";
-module.exports.EINSATZ_GET_BY_ID = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.datum FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id WHERE E.id = :1";
+module.exports.EINSATZ_GET = "SELECT E.id, E.id_einsatzart, EA.beschreibung, MTG_WB_EINSATZ.ID_STUETZPUNKT, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.plz, E.zeit FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id INNER JOIN MTG_WB_EINSATZ ON MTG_WB_EINSATZ.ID_EINSATZ = E.ID";
+module.exports.EINSATZ_GET_BY_ID = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.zeit FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id WHERE E.id = :1";
 module.exports.EINSATZ_GET_BY_NAME_ZEIT = "";
-module.exports.EINSATZ_GET_MITGLIEDER = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN MTG_WB_EINSATZ ON id_einsatz = :1";
+module.exports.EINSATZ_GET_MITGLIEDER = "SELECT Mitglieder.id, id_dienstgrad, MTG_WB_EINSATZ.id_einsatz, Mitglieder.ID_STUETZPUNKT, kuerzel, bezeichnung, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad INNER JOIN MTG_WB_EINSATZ ON MTG_WB_EINSATZ.ID_STUETZPUNKT = Mitglieder.ID_STUETZPUNKT WHERE MTG_WB_EINSATZ.ID_EINSATZ = :1 AND MTG_WB_EINSATZ.ID_MITGLIED = Mitglieder.id";
 module.exports.EINSATZ_GET_FAHRZEUGE = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge INNER JOIN FZG_wb_Einsatz ON id_einsatz = :1";
 module.exports.EINSATZ_GET_AORGS = "SELECT id, name FROM Andere_Organisationen INNER JOIN AOrg_wb_Einsatz ON id_einsatz = :1";
 

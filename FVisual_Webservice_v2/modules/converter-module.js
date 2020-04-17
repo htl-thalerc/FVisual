@@ -6,16 +6,16 @@ const loggerModule = require('../modules/logger-module');
 /* local variables */
 const logger = loggerModule.loggers['Converter'];
 
-var convertResult = function (metaData, result) {
+var convertResult = function(metaData, result) {
     if (typeof metaData !== 'object' && typeof metaData !== 'string') {
         logger.warn('invalid metadata supplied');
         return null;
     }
 
     try {
-    if(typeof metaData === 'string'){
-        metaData = JSON.parse(metaData);
-    }
+        if (typeof metaData === 'string') {
+            metaData = JSON.parse(metaData);
+        }
 
         var resultArray = [];
         var current;
@@ -54,7 +54,7 @@ function generateFilledRow(curMetaData, curRow, isNested = false) {
         return JSON.stringify(curMetaData);
 }
 
-var convertSimpleInput = function (metaData, curBody) {
+var convertSimpleInput = function(metaData, curBody) {
     try {
         var resultObject = {};
         resultObject = generateInputRow(metaData, curBody);
@@ -77,7 +77,7 @@ function generateInputRow(metaData, curBody) {
     return result;
 }
 
-var convertValuesToUpper = function (metadata) {
+var convertValuesToUpper = function(metadata) {
     for (var key in metadata) {
         metadata[key] = metadata[key].toUpperCase();
     }
