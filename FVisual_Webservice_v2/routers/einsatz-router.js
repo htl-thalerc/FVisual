@@ -35,7 +35,6 @@ const express = require('express');
 const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
-const classNameParser = require('../modules/classname-parser');
 const loggerModule = require('../modules/logger-module');
 const validatorModule = require('../modules/validator-module');
 
@@ -123,7 +122,7 @@ einsatzRouter.get('/:eId', (req, res) => {
 });
 
 // POST   |  /einsaetze
-einsatzRouter.get('/', (req, res) => {
+einsatzRouter.post('/', (req, res) => {
     res.status(501).send('not implemented yet');
 });
 
@@ -139,7 +138,36 @@ einsatzRouter.delete('/:eId', (req, res) => {
 
 // GET    |  /einsaetze/:eId/mitglieder
 einsatzRouter.get('/:eId/mitglieder', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('GET /:eId/mitglieder');
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    var params = [];
+    params.push(parseInt(req.params.eId));
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_MITGLIEDER, [req.params.eId], (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        } else {
+            if (result.rows.length == 0) {
+                responseHandler.notFound(res, err);
+                return;
+            }
+
+            if (req.headers.metadata) {
+                let data = converterModule.convertResult(req.headers.metadata, result);
+                if (data)
+                    responseHandler.get(res, data);
+                else
+                    responseHandler.invalidMetaData(res, null);
+            } else {
+                responseHandler.get(res, result.rows);
+            }
+        }
+    });
 });
 
 // POST   |  /einsaetze/:eId/mitglieder
@@ -159,7 +187,36 @@ einsatzRouter.delete('/:eId/mitglieder/:mgtId', (req, res) => {
 
 // GET    |  /einsaetze/:eId/fahrzeuge
 einsatzRouter.get('/:eId/fahrzeuge/', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('GET /:eId/mitglieder');
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    var params = [];
+    params.push(parseInt(req.params.eId));
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_FAHRZEUGE, [req.params.eId], (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        } else {
+            if (result.rows.length == 0) {
+                responseHandler.notFound(res, err);
+                return;
+            }
+
+            if (req.headers.metadata) {
+                let data = converterModule.convertResult(req.headers.metadata, result);
+                if (data)
+                    responseHandler.get(res, data);
+                else
+                    responseHandler.invalidMetaData(res, null);
+            } else {
+                responseHandler.get(res, result.rows);
+            }
+        }
+    });
 });
 
 // POST   |  /einsaetze/:eId/fahrzeuge
@@ -179,7 +236,36 @@ einsatzRouter.delete('/:eId/fahrzeuge/:mgtId', (req, res) => {
 
 // GET    |  /einsaetze/:eId/andere_organisationen
 einsatzRouter.get('/:eId/andere_organisationen', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('GET /:eId/mitglieder');
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    var params = [];
+    params.push(parseInt(req.params.eId));
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_AORGS, [req.params.eId], (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        } else {
+            if (result.rows.length == 0) {
+                responseHandler.notFound(res, err);
+                return;
+            }
+
+            if (req.headers.metadata) {
+                let data = converterModule.convertResult(req.headers.metadata, result);
+                if (data)
+                    responseHandler.get(res, data);
+                else
+                    responseHandler.invalidMetaData(res, null);
+            } else {
+                responseHandler.get(res, result.rows);
+            }
+        }
+    });
 });
 
 // POST   |  /einsaetze/:eId/andere_organisationen

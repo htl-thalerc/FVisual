@@ -17,10 +17,10 @@ const pwd = `d5a`;
 //const cStr = `192.168.193.243:1521/ora11g`;
 
 //intern
-const cStr = `10.0.6.111:1521/ora11g`;
+//const cStr = `10.0.6.111:1521/ora11g`;
 
 //extern
-//const cStr = `212.152.179.117:1521/ora11g`;
+const cStr = `212.152.179.117:1521/ora11g`;
 
 /* single execute */
 var execute = async function(querystring, params, cbf) {

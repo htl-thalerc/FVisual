@@ -51,6 +51,9 @@ module.exports.STPNKT_FZG_DELETE = "DELETE FROM Einsatzfahrzeuge WHERE id_stuetz
 module.exports.EINSATZ_GET = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.datum FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id";
 module.exports.EINSATZ_GET_BY_ID = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.datum FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id WHERE E.id = :1";
 module.exports.EINSATZ_GET_BY_NAME_ZEIT = "";
+module.exports.EINSATZ_GET_MITGLIEDER = "SELECT Mitglieder.id, id_dienstgrad, kuerzel, bezeichnung, id_stuetzpunkt, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN MTG_WB_EINSATZ ON id_einsatz = :1";
+module.exports.EINSATZ_GET_FAHRZEUGE = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge INNER JOIN FZG_wb_Einsatz ON id_einsatz = :1";
+module.exports.EINSATZ_GET_AORGS = "SELECT id, name FROM Andere_Organisationen INNER JOIN AOrg_wb_Einsatz ON id_einsatz = :1";
 
 /* IS support */
 module.exports.FZG_GET = "SELECT * FROM Einsatzfahrzeuge ORDER BY bezeichnung";
