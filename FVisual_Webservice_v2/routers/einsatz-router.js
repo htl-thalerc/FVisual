@@ -36,6 +36,7 @@ const oracleJobs = require('../database/oracle-jobs');
 const oracleQueryProvider = require('../database/oracle-query-provider');
 const responseHandler = require('../modules/response-handler');
 const loggerModule = require('../modules/logger-module');
+const converterModule = require('../modules/converter-module');
 const validatorModule = require('../modules/validator-module');
 
 /* local variables */
@@ -49,7 +50,7 @@ einsatzRouter.get('/', (req, res) => {
     if (!validatorModule.isValidSubQuery(req.query, validatorModule.patterns.getSubQueryEinsatzPattern(), true)) {
         responseHandler.invalidSubQuery(res, null);
         return;
-    } else if (req.query.name&&req.query.zeit) {
+    } else if (req.query.name && req.query.zeit) {
         logger.debug('-- search: einsatzName&zeit');
 
         var params = [];

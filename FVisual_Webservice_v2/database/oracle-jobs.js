@@ -10,8 +10,13 @@ oracledb.queueTimeout = 3000;
 //const usn = `rel`;
 //const pwd = `rel`;
 
-const usn = `d5a20`;
-const pwd = `d5a`;
+//Sandro testing
+const usn = `scott`;
+const pwd = `tiger`;
+const cStr = `192.168.43.205:1521/ora11g`;
+
+//const usn = `d5a20`;
+//const pwd = `d5a`;
 
 //intern backup
 //const cStr = `192.168.193.243:1521/ora11g`;
@@ -20,7 +25,7 @@ const pwd = `d5a`;
 //const cStr = `10.0.6.111:1521/ora11g`;
 
 //extern
-const cStr = `212.152.179.117:1521/ora11g`;
+//const cStr = `212.152.179.117:1521/ora11g`;
 
 /* single execute */
 var execute = async function(querystring, params, cbf) {
