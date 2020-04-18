@@ -6,7 +6,7 @@ module.exports.EARTEN_GET = "SELECT id, beschreibung FROM Einsatzarten ORDER BY 
 module.exports.ECODES_GET = "SELECT id, code FROM Einsatzcodes ORDER BY id";
 module.exports.DG_GET = "SELECT id, kuerzel, bezeichnung FROM Dienstgrade ORDER BY id";
 
-module.exports.AORGS_GET = "SELECT id, name FROM Andere_Organisationen ORDER BY id";
+module.exports.AORGS_GET = "SELECT AORG.id, AORG.name, NVL(AWBE.ID_EINSATZ, '0') AS ID_EINSATZ FROM Andere_Organisationen AORG LEFT JOIN AORG_WB_EINSATZ AWBE ON AORG.ID = AWBE.ID_ANDERE_ORG ORDER BY AORG.NAME";
 module.exports.AORGS_GETBY_AORGS_ID = "SELECT id, name FROM Andere_Organisationen WHERE id = :1";
 module.exports.AORGS_GETBY_AORGS_NAME = "SELECT id, name FROM Andere_Organisationen WHERE name = :1";
 module.exports.AORGS_POST = "INSERT INTO Andere_Organisationen(id, name) VALUES(seq_Andere_Organisationen.nextval, :1)";
@@ -52,8 +52,9 @@ module.exports.EINSATZ_GET = "SELECT E.id, E.id_einsatzart, EA.beschreibung, MTG
 module.exports.EINSATZ_GET_BY_ID = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.zeit FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id WHERE E.id = :1";
 module.exports.EINSATZ_GET_BY_NAME_ZEIT = "";
 module.exports.EINSATZ_GET_MITGLIEDER = "SELECT Mitglieder.id, id_dienstgrad, MTG_WB_EINSATZ.id_einsatz, Mitglieder.ID_STUETZPUNKT, kuerzel, bezeichnung, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad INNER JOIN MTG_WB_EINSATZ ON MTG_WB_EINSATZ.ID_STUETZPUNKT = Mitglieder.ID_STUETZPUNKT WHERE MTG_WB_EINSATZ.ID_EINSATZ = :1 AND MTG_WB_EINSATZ.ID_MITGLIED = Mitglieder.id";
-module.exports.EINSATZ_GET_FAHRZEUGE = "SELECT id, id_stuetzpunkt, bezeichnung FROM Einsatzfahrzeuge INNER JOIN FZG_wb_Einsatz ON id_einsatz = :1";
-module.exports.EINSATZ_GET_AORGS = "SELECT id, name FROM Andere_Organisationen INNER JOIN AOrg_wb_Einsatz ON id_einsatz = :1";
+module.exports.EINSATZ_GET_FAHRZEUGE = "SELECT EF.ID, EF.BEZEICHNUNG, EF.ID_STUETZPUNKT, FZWBE.ID_EINSATZ FROM EINSATZFAHRZEUGE EF INNER JOIN FZG_wb_Einsatz FZWBE ON EF.ID_STUETZPUNKT = FZWBE.ID_STUETZPUNKT WHERE FZWBE.ID_EINSATZ = :1 AND EF.ID = FZWBE.ID_EINSATZFAHRZEUG ORDER BY EF.BEZEICHNUNG DESC";
+module.exports.EINSATZ_GET_AORGS = "SELECT AORG.ID, AORG.name, AORGWBE.ID_EINSATZ FROM ANDERE_ORGANISATIONEN AORG INNER JOIN AORG_WB_EINSATZ AORGWBE ON AORG.ID = AORGWBE.ID_ANDERE_ORG WHERE AORGWBE.ID_EINSATZ = :1 AND AORGWBE.ID_ANDERE_ORG = AORG.ID ORDER BY AORG.name DESC";
 
 /* IS support */
-module.exports.FZG_GET = "SELECT * FROM Einsatzfahrzeuge ORDER BY bezeichnung";
+//module.exports.FZG_GET = "SELECT * FROM Einsatzfahrzeuge ORDER BY bezeichnung";
+module.exports.FZG_GET = "SELECT E.ID, E.BEZEICHNUNG, E.ID_STUETZPUNKT, NVL(FWBE.ID_EINSATZ, '0') AS ID_EINSATZ FROM Einsatzfahrzeuge E LEFT JOIN FZG_wb_Einsatz FWBE ON E.ID = FWBE.ID_EINSATZFAHRZEUG ORDER BY bezeichnung";

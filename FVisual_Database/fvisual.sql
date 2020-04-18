@@ -325,6 +325,8 @@ INSERT INTO Andere_Organisationen( id, name )
 VALUES ( seq_Andere_Organisationen.nextval, 'Notarzt' );
 INSERT INTO Andere_Organisationen( id, name )
 VALUES ( seq_Andere_Organisationen.nextval, 'Rettungshubschrauber' );
+INSERT INTO ANDERE_ORGANISATIONEN(id, name)
+VALUES ( seq_Andere_Organisationen.nextval, 'Test' );
 
 INSERT INTO Stuetzpunkte( id, name, ort, plz, strasse, hausnr )
 VALUES ( seq_Stuetzpunkte.nextval, 'Feuerwehr St. Peter Spittal', 'Spittal/Drau', 9800, 'St. Peter', 47 );
@@ -493,6 +495,7 @@ VALUES (1, 1, 2);
 
 INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
 VALUES(2, 1);
+
 INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
 VALUES (2, 1, 2);
 
@@ -500,6 +503,27 @@ INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt)
 VALUES(3, 1);
 INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied)
 VALUES (3, 1, 2);
+INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZfahrzeug)
+VALUES(1, 1, 1);
+INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZfahrzeug)
+VALUES(1, 1, 2);
+INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZfahrzeug)
+VALUES(2, 1, 3);
+INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZfahrzeug)
+VALUES(2, 1, 4);
+INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZfahrzeug)
+VALUES(3, 1, 4);
+INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZfahrzeug)
+VALUES(3, 1, 2);
+
+INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(1, 1);
+INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(1, 4);
+INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(2, 3);
+INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(3, 2);
+INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(3, 5);
+INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(3, 3);
+
+SELECT * FROM EINSATZFAHRZEUGE EF INNER JOIN STUETZPUNKTE S ON EF.ID_STUETZPUNKT = S.ID WHERE S.ID = 2;
 
 SELECT * FROM Einsatzcodes;
 SELECT * FROM Einsatzarten;

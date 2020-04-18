@@ -187,8 +187,8 @@ einsatzRouter.delete('/:eId/mitglieder/:mgtId', (req, res) => {
 });
 
 // GET    |  /einsaetze/:eId/fahrzeuge
-einsatzRouter.get('/:eId/fahrzeuge/', (req, res) => {
-    logger.debug('GET /:eId/mitglieder');
+einsatzRouter.get('/:eId/fahrzeuge', (req, res) => {
+    logger.debug('GET /:eId/fahrzeuge');
 
     if (!validatorModule.isValidParamId(req.params.eId)) {
         responseHandler.invalidParamId(res, null);
@@ -237,7 +237,7 @@ einsatzRouter.delete('/:eId/fahrzeuge/:mgtId', (req, res) => {
 
 // GET    |  /einsaetze/:eId/andere_organisationen
 einsatzRouter.get('/:eId/andere_organisationen', (req, res) => {
-    logger.debug('GET /:eId/mitglieder');
+    logger.debug('GET /:eId/andere_organisationen');
 
     if (!validatorModule.isValidParamId(req.params.eId)) {
         responseHandler.invalidParamId(res, null);
