@@ -72,7 +72,7 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 					&& !this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem().getDescription()
 							.equals("Name for new Vehicle")
 					&& !this.obsListLVAvailableOperationVehicles
-							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null))) {
+							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null))) {
 				this.btnAddOneOperationVehicle.setDisable(false);
 				this.btnRemoveOneOperationVehicle.setDisable(true);
 				this.isLVAvailableOperationVehiclesSelected = true;
@@ -84,7 +84,7 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 					&& !this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem().getDescription()
 							.equals("Name for new Vehicle")
 					&& !this.obsListLVAvailableOperationVehicles
-							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null))) {
+							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null))) {
 				this.btnAddOneOperationVehicle.setDisable(true);
 				this.btnRemoveOneOperationVehicle.setDisable(false);
 				this.isLVAvailableOperationVehiclesSelected = false;
@@ -175,7 +175,7 @@ public class ControllerCreateBaseTabOperationVehicleManagement implements Initia
 	@FXML
 	private void onClickBtnAddNewOperationVehicle(ActionEvent event) {
 		if (this.btnAddNewOperationVehicle.getText().equals(CONST_BTN_TEXT_ADD_NEW_VEHICLE)) {
-			this.obsListLVAvailableOperationVehicles.add(0, new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null));
+			this.obsListLVAvailableOperationVehicles.add(0, new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null));
 
 			this.lvAvailableOperationVehicles.refresh();
 			this.lvAvailableOperationVehicles.setEditable(true);

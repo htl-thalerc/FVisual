@@ -42,11 +42,10 @@ public class OtherOrganisationManager {
 		Response response = null;
 		
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
-		HashMap<String, String> mainMetadata = CentralHandler.getInstance().setMetadataMap(ClassTypes.OTHER_ORG, null);
-
+		
 		try {
 			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
-			headers.add(CentralHandler.CONST_METADATA, CentralHandler.getInstance().getHeaderMetadataString(mainMetadata, null));
+			headers.add(CentralHandler.CONST_METADATA, "[{\"otherOrganisationId\":\"ID\", \"name\":\"NAME\",\"operation\":{\"operationId\":\"ID_EINSATZ\"}}]");
 			invocationBuilder = this.webTargetOtherOrganisation.request(MediaType.APPLICATION_JSON).headers(headers);
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
@@ -67,9 +66,12 @@ public class OtherOrganisationManager {
 		Invocation.Builder invocationBuilder = null;
 		Response response = null;
 		WebTarget webTargetGetAllVehicles = this.webTargetOtherOrganisationServiceForOperations.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_OTHER_ORGANISATION);
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
 		try {
-			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-					CentralHandler.getInstance().getHeaderAuthorization()); 
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA, "[{\"otherOrganisationId\":\"ID\", \"name\":\"NAME\",\"operation\":{\"operationId\":\"ID_EINSATZ\"}}]");
+			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).headers(headers); 
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if(response.getStatus() == 200) {
 				collOfOtherOrganisations = response.readEntity(new GenericType<ArrayList<OtherOrganisation>>() {

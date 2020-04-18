@@ -498,11 +498,21 @@ public class CentralHandler {
 	public void mergeFullVehicleObject() {
 		ArrayList<OperationVehicle> tempListOfVehciles = OperationVehicleHandler.getInstance().getVehicleList();
 		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+		ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
+		
 		// add base to vehicleobj
 		for (int i = 0; i < tempListOfVehciles.size(); i++) {
 			for (int j = 0; j < tempListOfBases.size(); j++) {
 				if (tempListOfVehciles.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
 					tempListOfVehciles.get(i).setBase(tempListOfBases.get(j));
+				}
+			}
+		}
+		// add operation to vehicleobj
+		for (int i = 0; i < tempListOfVehciles.size(); i++) {
+			for (int j = 0; j < tempListOfOperations.size(); j++) {
+				if (tempListOfVehciles.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
+					tempListOfVehciles.get(i).setOperation(tempListOfOperations.get(j));
 				}
 			}
 		}

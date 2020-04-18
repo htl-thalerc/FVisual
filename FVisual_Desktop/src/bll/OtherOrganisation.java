@@ -4,6 +4,7 @@ public class OtherOrganisation {
 	private int otherOrganisationId;
 	private String name;
 	private Operation operation;
+	private int operationId;
 	
 	private static OtherOrganisation otherOrgObj = null;
 	
@@ -56,6 +57,14 @@ public class OtherOrganisation {
 
 	public void setOperation(Operation operation) {
 		this.operation = operation;
+	}
+
+	public int getOperationId() {
+		return operationId;
+	}
+
+	public void setOperationId(int operationId) {
+		this.operationId = operationId;
 	}
 
 	@Override

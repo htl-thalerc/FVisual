@@ -33,6 +33,10 @@ public class MemberHandler {
 	public void setMemberList(ArrayList<Member> memberList) {
 		this.listOfMembers.clear();
 		this.listOfMembers = memberList;
+		
+		for(int i=0;i<memberList.size();i++) {
+			
+		}
 	}
 	
 	public ArrayList<Member> getMemberListByBaseId() {
@@ -139,8 +143,6 @@ public class MemberHandler {
 					}
 				}
 			}
-			
-			System.out.println(this.listOfMembersByOperationId.get(0).toFullString());
 		}
 	}
 }

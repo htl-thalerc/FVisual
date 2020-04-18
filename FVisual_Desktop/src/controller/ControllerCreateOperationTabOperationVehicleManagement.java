@@ -83,7 +83,7 @@ public class ControllerCreateOperationTabOperationVehicleManagement implements I
 					&& !this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem().getDescription()
 							.equals("Name for new Vehicle")
 					&& !this.obsListLVAvailableOperationVehicles
-							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null))) {
+							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null))) {
 				this.btnAddOneOperationVehicle.setDisable(false);
 				this.btnRemoveOneOperationVehicle.setDisable(true);
 				this.isLVAvailableOperationVehiclesSelected = true;
@@ -95,7 +95,7 @@ public class ControllerCreateOperationTabOperationVehicleManagement implements I
 					&& !this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem().getDescription()
 							.equals("Name for new Vehicle")
 					&& !this.obsListLVAvailableOperationVehicles
-							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null))) {
+							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null))) {
 				this.btnAddOneOperationVehicle.setDisable(true);
 				this.btnRemoveOneOperationVehicle.setDisable(false);
 				this.isLVAvailableOperationVehiclesSelected = false;

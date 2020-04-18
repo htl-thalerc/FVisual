@@ -187,8 +187,8 @@
                           </rowConstraints>
                            <children>
                               <Button fx:id="btnLoadOperationMembers" mnemonicParsing="false" onAction="#onClickBtnLoadOperationMembers" text="Load Oper. Memb." GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                              <Button fx:id="btnLoadOperationOtherOrg" mnemonicParsing="false" onAction="#onClickBtnLoadOperationOtherOrg" text="Load Oper. Org." GridPane.halignment="CENTER" />
-      								<Button fx:id="btnLoadOperationVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadOperationVehicles" text="Load Oper. Veh." GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                              <Button fx:id="btnLoadOperationOtherOrg" mnemonicParsing="false" onAction="#onClickBtnLoadOperationOtherOrg" text="Load Oper. Org." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+      								<Button fx:id="btnLoadOperationVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadOperationVehicles" text="Load Oper. Veh." GridPane.halignment="CENTER">
       									<GridPane.margin>
       										<Insets />
       									</GridPane.margin>

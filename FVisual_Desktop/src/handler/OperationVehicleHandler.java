@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import bll.Base;
+import bll.Operation;
 import bll.OperationVehicle;
 import javafx.collections.ObservableList;
 
@@ -14,6 +15,9 @@ public class OperationVehicleHandler {
 	private ArrayList<OperationVehicle> listOfVehicles = new ArrayList<OperationVehicle>();
 	private ArrayList<OperationVehicle> listOfGroupedVehicles = new ArrayList<OperationVehicle>();
 	private ArrayList<OperationVehicle> listOfVehiclesByBaseId = new ArrayList<OperationVehicle>();
+	
+	private ArrayList<OperationVehicle> listOfVehiclesByOperationId = new ArrayList<OperationVehicle>();
+	private ArrayList<OperationVehicle> listOfVehiclesWithOperationAttr = new ArrayList<OperationVehicle>();
 	
 	private OperationVehicle updatedOperationVehicle = null;
 	
@@ -96,11 +100,79 @@ public class OperationVehicleHandler {
 		tempListOfAllVehicles.addAll(this.listOfVehicles);
 		
 		for(int i=0;i<tempListOfAllVehicles.size();i++) {
-			System.out.println("H: " + tempListOfAllVehicles.get(i).toFullString());
 			if(tempListOfAllVehicles.get(i).getDescription().equals(operationVehicle.getDescription())) {
 				return false;
 			}
 		}
 		return true;
+	}
+	
+	public void setVehicleListByOperationId(ArrayList<OperationVehicle> list) {
+		if(list != null) {
+			ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+			ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
+			this.listOfVehiclesByOperationId = list;
+			
+			for(int i=0;i<this.listOfVehiclesByOperationId.size();i++) {
+				for(int j=0;j<tempListOfBases.size();j++) {
+					if(this.listOfVehiclesByOperationId.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+						this.listOfVehiclesByOperationId.get(i).setBase(tempListOfBases.get(j));
+						break;
+					}
+				}
+			}
+			
+			for(int i=0;i<this.listOfVehiclesByOperationId.size();i++) {
+				for(int j=0;j<tempListOfOperations.size();j++) {
+					if(this.listOfVehiclesByOperationId.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
+						this.listOfVehiclesByOperationId.get(i).setOperation(tempListOfOperations.get(j));
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	public ArrayList<OperationVehicle> getVehiclesListByOperationId() {
+		return this.listOfVehiclesByOperationId;
+	}
+	
+	public void setVehicleListWithOperationAttr(ArrayList<OperationVehicle> list) {
+		if(list != null) {
+			ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
+			ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
+			this.listOfVehiclesWithOperationAttr = list;
+			
+			//Set base
+			for(int i=0;i<this.listOfVehiclesWithOperationAttr.size();i++) {
+				for(int j=0;j<tempListOfBases.size();j++) {
+					if(this.listOfVehiclesWithOperationAttr.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
+						this.listOfVehiclesWithOperationAttr.get(i).setBase(tempListOfBases.get(j));
+						break;
+					}
+				}
+			}
+			
+			//Set operation
+			for(int i=0;i<this.listOfVehiclesWithOperationAttr.size();i++) {
+				for(int j=0;j<tempListOfOperations.size();j++) {
+					if(this.listOfVehiclesWithOperationAttr.get(i).getOperation().getOperationId() != 0) {
+						if(this.listOfVehiclesWithOperationAttr.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
+							this.listOfVehiclesWithOperationAttr.get(i).setOperation(tempListOfOperations.get(j));
+							break;
+						}
+					} else {
+						Operation newOperation = new Operation();
+						newOperation.setOperationId(-1);
+						newOperation.setTitle("Not assigned yet");
+						this.listOfVehiclesWithOperationAttr.get(i).setOperation(newOperation);
+					}
+				}
+			}
+		}
+	}
+	
+	public ArrayList<OperationVehicle> getVehicleListWithOperationAttr() {
+		return this.listOfVehiclesWithOperationAttr;
 	}
 }

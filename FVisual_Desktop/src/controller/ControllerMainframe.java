@@ -39,6 +39,7 @@ import loader.OperationCodeLoader;
 import loader.OperationLoader;
 import loader.OperationTypeLoader;
 import loader.OperationVehicleLoader;
+import loader.OperationVehicleWithOperationAttrLoader;
 import loader.OtherOrganisationLoader;
 import loader.RankLoader;
 
@@ -113,7 +114,7 @@ public class ControllerMainframe implements Initializable {
 				Thread threadGETBases = new Thread(loadBases(latchGETMethods));
 				Thread threadGETOperations = new Thread(loadOperation(latchGETMethods));
 				Thread threadGETMembers = new Thread(loadMembers(latchGETMethods));
-				Thread threadGETOperationVehicles = new Thread(loadOperationVehicles(latchGETMethods));
+				Thread threadGETOperationVehicles = new Thread(loadOperationVehiclesWithOperations(latchGETMethods));
 				Thread threadGETOtherOrgs = new Thread(loadOtherOrgs(latchGETMethods));
 				
 				int lastProgressValue = 0;
@@ -245,7 +246,7 @@ public class ControllerMainframe implements Initializable {
 				threadGETMembers.start();
 				threadGETMembers.join();
 				
-				int nrOfMemberObj =  OperationHandler.getInstance().getOperationList().size();
+				int nrOfMemberObj =  MemberHandler.getInstance().getMemberList().size();
 				double processIncreasePerMemberObj = (15 / nrOfMemberObj);
 				if(processIncreasePerMemberObj < 1) {
 					nrOfMemberObj = 10;
@@ -264,7 +265,7 @@ public class ControllerMainframe implements Initializable {
 				threadGETOperationVehicles.start();
 				threadGETOperationVehicles.join();
 				
-				int nrOfVehicleObj =  OperationVehicleHandler.getInstance().getVehicleList().size();
+				int nrOfVehicleObj =  OperationVehicleHandler.getInstance().getVehicleListWithOperationAttr().size();
 				double processIncreasePerVehicleObj = (15 / nrOfVehicleObj);
 				if(processIncreasePerVehicleObj < 1) {
 					nrOfVehicleObj = 10;
@@ -337,7 +338,6 @@ public class ControllerMainframe implements Initializable {
 		}
 		this.progressbar.progressProperty().unbind();
 		CountDownLatch latchGETMethods = new CountDownLatch(4);
-		
 
 		Task<Void> mainTask = new Task<Void>() {
 			@Override
@@ -608,6 +608,18 @@ public class ControllerMainframe implements Initializable {
 			@Override
 			protected Void call() throws Exception {
 				Thread threadLoadOtherOrgs = new Thread(new OtherOrganisationLoader(latch));
+				threadLoadOtherOrgs.start();
+				threadLoadOtherOrgs.join();
+				latch.countDown();
+				return null;
+			}
+		};
+	}
+	
+	private Task<Void> loadOperationVehiclesWithOperations(CountDownLatch latch) {
+		return new Task<Void>() {
+			protected Void call() throws Exception {
+				Thread threadLoadOtherOrgs = new Thread(new OperationVehicleWithOperationAttrLoader(latch));
 				threadLoadOtherOrgs.start();
 				threadLoadOtherOrgs.join();
 				latch.countDown();

@@ -9,8 +9,8 @@ import handler.OperationVehicleHandler;
 import manager.OperationVehicleManager;
 
 public class OperationVehicleLoader implements Runnable {
-	private CountDownLatch countDownLatch = null;
-			
+	private CountDownLatch countDownLatch = null;	
+	
 	public OperationVehicleLoader(CountDownLatch latch) {
 		if(latch != null) {
 			this.countDownLatch = latch;	

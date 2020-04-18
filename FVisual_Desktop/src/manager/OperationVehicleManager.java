@@ -74,6 +74,32 @@ public class OperationVehicleManager {
 		}
 		return collOfVehicles;
 	}
+	
+	public ArrayList<OperationVehicle> getVehiclesWithOperationAttr() {
+		ArrayList<OperationVehicle> collOfVehicles = null;
+		Invocation.Builder invocationBuilder = null;
+		Response response = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+
+		try {
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA,
+					"[{\"description\":\"BEZEICHNUNG\", \"operationVehicleId\":\"ID\", \"base\":{\"baseId\":\"ID_STUETZPUNKT\"}, \"operation\":{\"operationId\":\"ID_EINSATZ\"}}]");
+			invocationBuilder = this.webTargetOperationVehilceService.request(MediaType.APPLICATION_JSON)
+					.headers(headers);
+			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
+			if (response.getStatus() == 200) {
+				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
+				});
+				LOGGER.info("[OperationVehicleManager] [GET]: OperationVehiles");
+			} else {
+				ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.GET);
+			}
+		} catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+		}
+		return collOfVehicles;
+	}
 
 	// Base Services
 	public ArrayList<OperationVehicle> getVehiclesFromBase(int baseId) {
@@ -213,9 +239,14 @@ public class OperationVehicleManager {
 		Response response = null;
 		WebTarget webTargetGetAllVehicles = this.webTargetOperationVehicleServiceForOperations
 				.path(String.valueOf(operationId) + "/" + CentralHandler.CONST_VEHICLE);
+		
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+
 		try {
-			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON)
-					.header(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+			headers.add(CentralHandler.CONST_METADATA,
+					"[{\"description\":\"BEZEICHNUNG\", \"operationVehicleId\":\"ID\", \"base\":{\"baseId\":\"ID_STUETZPUNKT\"}, \"operation\":{\"operationId\":\"ID_EINSATZ\"}}]");
+			invocationBuilder = webTargetGetAllVehicles.request(MediaType.APPLICATION_JSON).headers(headers);
 			response = invocationBuilder.accept(MediaType.APPLICATION_JSON).get();
 			if (response.getStatus() == 200) {
 				collOfVehicles = response.readEntity(new GenericType<ArrayList<OperationVehicle>>() {
