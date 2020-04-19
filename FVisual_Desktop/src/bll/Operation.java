@@ -28,7 +28,7 @@ public class Operation {
 	public static final String CONST_DB_TIME = "ZEIT";
 
 	public Operation(int operationId, OperationCode operationCode, OperationType operationType, String address, int postCode,
-			String title, String shortDescription, Date date, Timestamp time) {
+			String title, String shortDescription, Date date, Timestamp time, Base base) {
 		super();
 		this.operationId = operationId;
 		this.operationCode = operationCode;
@@ -39,6 +39,7 @@ public class Operation {
 		this.shortDescription = shortDescription;
 		this.date = date;
 		this.time = time;
+		this.base = base;
 	}
 
 	public Operation() {
