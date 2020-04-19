@@ -20,6 +20,12 @@ var post = function (res, data) {
   loggerModule.lineFeed();
 }
 
+var post2 = function (res, data) {
+  res.status(201).send(data);
+  logger.debug('responded with {201}: valid');
+  loggerModule.lineFeed();
+}
+
 var put = function (res, data) {
   res.header('content-type', 'application/json');
   res.status(200).send(data);

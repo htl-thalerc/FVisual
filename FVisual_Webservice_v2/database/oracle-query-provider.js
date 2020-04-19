@@ -50,10 +50,16 @@ module.exports.STPNKT_FZG_DELETE = "DELETE FROM Einsatzfahrzeuge WHERE id_stuetz
 
 module.exports.EINSATZ_GET = "SELECT E.id, E.id_einsatzart, EA.beschreibung, MTG_WB_EINSATZ.ID_STUETZPUNKT, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.plz, E.zeit FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id INNER JOIN MTG_WB_EINSATZ ON MTG_WB_EINSATZ.ID_EINSATZ = E.ID";
 module.exports.EINSATZ_GET_BY_ID = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.zeit FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id WHERE E.id = :1";
-module.exports.EINSATZ_GET_BY_NAME_ZEIT = "";
+module.exports.EINSATZ_GET_BY_TITEL = "SELECT E.id, E.id_einsatzart, EA.beschreibung, E.id_einsatzcode, EC.code, E.titel, E.kurzbeschreibung, E.adresse, E.zeit FROM Einsaetze E INNER JOIN Einsatzcodes EC ON E.id_einsatzcode = EC.id INNER JOIN Einsatzarten EA on E.id_einsatzart = EA.id WHERE E.id = :1 WHERE E.titel = :1";
 module.exports.EINSATZ_GET_MITGLIEDER = "SELECT Mitglieder.id, id_dienstgrad, MTG_WB_EINSATZ.id_einsatz, Mitglieder.ID_STUETZPUNKT, kuerzel, bezeichnung, vorname, nachname, username, password, isAdmin FROM Mitglieder INNER JOIN Dienstgrade ON Dienstgrade.id=Mitglieder.id_dienstgrad INNER JOIN MTG_WB_EINSATZ ON MTG_WB_EINSATZ.ID_STUETZPUNKT = Mitglieder.ID_STUETZPUNKT WHERE MTG_WB_EINSATZ.ID_EINSATZ = :1 AND MTG_WB_EINSATZ.ID_MITGLIED = Mitglieder.id";
 module.exports.EINSATZ_GET_FAHRZEUGE = "SELECT EF.ID, EF.BEZEICHNUNG, EF.ID_STUETZPUNKT, FZWBE.ID_EINSATZ FROM EINSATZFAHRZEUGE EF INNER JOIN FZG_wb_Einsatz FZWBE ON EF.ID_STUETZPUNKT = FZWBE.ID_STUETZPUNKT WHERE FZWBE.ID_EINSATZ = :1 AND EF.ID = FZWBE.ID_EINSATZFAHRZEUG ORDER BY EF.BEZEICHNUNG DESC";
 module.exports.EINSATZ_GET_AORGS = "SELECT AORG.ID, AORG.name, AORGWBE.ID_EINSATZ FROM ANDERE_ORGANISATIONEN AORG INNER JOIN AORG_WB_EINSATZ AORGWBE ON AORG.ID = AORGWBE.ID_ANDERE_ORG WHERE AORGWBE.ID_EINSATZ = :1 AND AORGWBE.ID_ANDERE_ORG = AORG.ID ORDER BY AORG.name DESC";
+module.exports.EINSATZ_POST_AORG = "INSERT INTO AORG_WB_EINSATZ(ID_EINSATZ, ID_ANDERE_ORG)VALUES(:1, :2)";
+module.exports.EINSATZ_POST_FAHRZEUG = "INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, ID_STUETZPUNKT, ID_EINSATZFAHRZEUG)VALUES(:1, :2, :3)";
+module.exports.EINSATZ_POST_EINSATZKRAFT = "INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt) VALUES(:1, :2)";
+module.exports.EINSATZ_POST_MITGLIED = "INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied) VALUES (:1, :2, :3)";
+
+module.exports.EINSATZ_POST = "INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit) VALUES(seq_Einsaetze.nextval, :1, :2, :3, :4, :5, :6,TO_TIMESTAMP(:7, 'YYYY-MM-DD HH24:MI:SS'));"
 
 /* IS support */
 //module.exports.FZG_GET = "SELECT * FROM Einsatzfahrzeuge ORDER BY bezeichnung";

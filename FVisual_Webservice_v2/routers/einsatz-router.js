@@ -12,6 +12,9 @@
 /*  POST    |  /einsaetze                                                    */
 /*  PUT     |  /einsaetze/:eId                                               */
 /*  DELETE  |  /einsaetze/:eId                                               */
+/*  POST    |  /einsaetze/:eId/stuetzpunkte                                  */
+/*  PUT     |  /einsaetze/:eId/stuetzpunkte/:stuetzId                        */
+/*  DELETE  |  /einsaetze/:eId/stuetzpunkte/:stuetzId                        */
 /*  GET     |  /einsaetze/:eId/mitglieder                                    */
 /*  POST    |  /einsaetze/:eId/mitglieder                                    */
 /*  PUT     |  /einsaetze/:eId/mitglieder/:mgtId                             */
@@ -124,7 +127,73 @@ einsatzRouter.get('/:eId', (req, res) => {
 
 // POST   |  /einsaetze
 einsatzRouter.post('/', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('POST /einsaetze');
+
+var data;
+var metaData;
+if (req.headers.metadata) {
+    try {
+        metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+        data = converterModule.convertSimpleInput(metaData, req.body);
+        if (!data) {
+            responseHandler.invalidMetaData(res, null);
+            return;
+        }
+    } catch (ex) {
+        responseHandler.invalidMetaData(res, null);
+        return;
+    }
+} else {
+    
+    data = {
+        "ID_EINSATZCODE":req.body.id_einsatzcode,
+        "ID_EINSATZART":req.body.id_einsatzart,
+        "TITEL":req.body.titel,
+        "KURZBESCHREIBUNG":req.body.kurzbeschreibung,
+        "ADRESSE": req.body.adresse,
+        "PLZ": req.body.plz,
+        "ZEIT" :req.body.zeit
+    };
+}
+
+if (!validatorModule.isValidBody(data, validatorModule.patterns.getEinsatzPattern())) {
+    responseHandler.invalidBody(res, null);
+    return;
+}
+
+var params = [];
+params.push(data.ID_EINSATZCODE);
+params.push(data.ID_EINSATZART);
+params.push(data.TITEL);
+params.push(data.KURZBESCHREIBUNG);
+params.push(data.ADRESSE);
+params.push(data.PLZ);
+params.push(data.ZEIT);
+
+oracleJobs.execute(oracleQueryProvider.EINSATZ_POST, params, (err, result) => {
+    if (err) {
+        responseHandler.internalServerError(res, err);
+    }
+    else {
+        var params = [];
+        params.push(data.TITEL);
+        oracleJobs.execute(oracleQueryProvider.EINSATZ_GET_BY_TITEL, params, (err, result) => {
+            if (err) {
+                responseHandler.internalServerError(res, err);
+            } else {
+                if (metaData) {
+                    let data = converterModule.convertResult(converterModule.convertValuesToUpper(metaData), result);
+                    if (data)
+                        responseHandler.post(res, data);
+                    else
+                        responseHandler.invalidMetaData(res, null);
+                } else {
+                    responseHandler.post(res, result.rows);
+                }
+            }
+        });
+    }
+});
 });
 
 // PUT    |  /einsaetze/:eId
@@ -134,6 +203,65 @@ einsatzRouter.put('/:eId', (req, res) => {
 
 // DELETE |  /einsaetze/:eId
 einsatzRouter.delete('/:eId', (req, res) => {
+    res.status(501).send('not implemented yet');
+});
+
+// POST   |  /einsaetze/:eId/stuetzpunkte
+einsatzRouter.post('/:eId/stuetzpunkte', (req, res) => {
+    logger.debug('POST /:eId/stuetzpunkte');
+
+    var data;
+    var metaData;
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    if (req.headers.metadata) {
+        try {
+            metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+            data = converterModule.convertSimpleInput(metaData, req.body);
+            if (!data) {
+                responseHandler.invalidMetaData(res, null);
+                return;
+            }
+        } catch (ex) {
+            responseHandler.invalidMetaData(res, null);
+            return;
+        }
+    } else {
+        data = {
+            "ID": req.body.id
+        };
+    }
+
+    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
+        responseHandler.invalidBody(res, null);
+        return;
+    }
+
+    var params = [];
+    params.push(req.params.eId);
+    params.push(data.ID);
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_POST_EINSATZKRAFT, params, (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        }
+        else {
+            responseHandler.post2(res, true);
+        }
+    });
+});
+
+// PUT    |  /einsaetze/:eId/stuetzpunkte/:stuetzId
+einsatzRouter.put('/:eId/stuetzpunkte/:stuetzId', (req, res) => {
+    res.status(501).send('not stuetzpunkte yet');
+});
+
+// DELETE |  /einsaetze/:eId/stuetzpunkte/:stuetzId
+einsatzRouter.delete('/:eId/stuetzpunkte/:stuetzId', (req, res) => {
     res.status(501).send('not implemented yet');
 });
 
@@ -173,7 +301,48 @@ einsatzRouter.get('/:eId/mitglieder', (req, res) => {
 
 // POST   |  /einsaetze/:eId/mitglieder
 einsatzRouter.post('/:eId/mitglieder', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('POST /:eId/mitglieder');
+
+    var data;
+    var metaData;
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    if (req.headers.metadata) {
+        try {
+            metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+            data = converterModule.convertSimpleInput(metaData, req.body);
+            if (!data) {
+                responseHandler.invalidMetaData(res, null);
+                return;
+            }
+        } catch (ex) {
+            responseHandler.invalidMetaData(res, null);
+            return;
+        }
+    } else {
+        data = {
+            "ID": req.body.id,
+            "ID_STUETZPUNKT": req.body.id_stuetzpunkt
+        };
+    }
+
+    var params = [];
+    params.push(req.params.eId);
+    params.push(data.ID_STUETZPUNKT);
+    params.push(data.ID);
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_POST_MITGLIED, params, (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        }
+        else {
+            responseHandler.post2(res, true);
+        }
+    });
 });
 
 // PUT    |  /einsaetze/:eId/mitglieder/:mgtId
@@ -222,7 +391,53 @@ einsatzRouter.get('/:eId/fahrzeuge', (req, res) => {
 
 // POST   |  /einsaetze/:eId/fahrzeuge
 einsatzRouter.post('/:eId/fahrzeuge', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('POST /:eId/fahrzeuge');
+
+    var data;
+    var metaData;
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    if (req.headers.metadata) {
+        try {
+            metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+            data = converterModule.convertSimpleInput(metaData, req.body);
+            if (!data) {
+                responseHandler.invalidMetaData(res, null);
+                return;
+            }
+        } catch (ex) {
+            responseHandler.invalidMetaData(res, null);
+            return;
+        }
+    } else {
+        data = {
+            "ID": req.body.id,
+            "ID_STUETZPUNKT": req.body.id_stuetzpunkt
+        };
+    }
+
+    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
+        responseHandler.invalidBody(res, null);
+        return;
+    }
+
+    var params = [];
+    params.push(req.params.eId);
+    params.push(data.ID_STUETZPUNKT);
+    params.push(data.ID);
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_POST_FAHRZEUG, params, (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        }
+        else {
+            responseHandler.post2(res, true);
+        }
+    });
 });
 
 // PUT    |  /einsaetze/:eId/fahrzeuge/:fzgId
@@ -271,7 +486,51 @@ einsatzRouter.get('/:eId/andere_organisationen', (req, res) => {
 
 // POST   |  /einsaetze/:eId/andere_organisationen
 einsatzRouter.post('/:eId/andere_organisationen', (req, res) => {
-    res.status(501).send('not implemented yet');
+    logger.debug('POST /:eId/andere_organisationen');
+
+    var data;
+    var metaData;
+
+    if (!validatorModule.isValidParamId(req.params.eId)) {
+        responseHandler.invalidParamId(res, null);
+        return;
+    }
+
+    if (req.headers.metadata) {
+        try {
+            metaData = JSON.parse(req.headers.metadata.substring(1, req.headers.metadata.length - 1));
+            data = converterModule.convertSimpleInput(metaData, req.body);
+            if (!data) {
+                responseHandler.invalidMetaData(res, null);
+                return;
+            }
+        } catch (ex) {
+            responseHandler.invalidMetaData(res, null);
+            return;
+        }
+    } else {
+        data = {
+            "ID": req.body.id
+        };
+    }
+
+    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
+        responseHandler.invalidBody(res, null);
+        return;
+    }
+
+    var params = [];
+    params.push(req.params.eId);
+    params.push(data.ID);
+
+    oracleJobs.execute(oracleQueryProvider.EINSATZ_POST_AORG, params, (err, result) => {
+        if (err) {
+            responseHandler.internalServerError(res, err);
+        }
+        else {
+            responseHandler.post2(res, true);
+        }
+    });
 });
 
 // PUT    |  /einsaetze/:eId/andere_organisationen/:aOrgId
