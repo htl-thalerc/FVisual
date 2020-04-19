@@ -30,15 +30,11 @@ public class PostFullBaseTask extends Task<Void>{
 		reqDuringBaseCreation+=this.collOfMembersToAddToBase.size();
 		reqDuringBaseCreation+=this.collOfOperationVehiclesToAddToBase.size();
 		
-		//this.updateMessage("Creating base");
 		Thread threadBasePostLoader = new Thread(new BasePostHandler(baseToCreate));
 		threadBasePostLoader.start();
 		threadBasePostLoader.join();
 		Thread.sleep(100);
 		
-		//this.updateProgress(33, nrOfPosts);
-
-		//this.updateMessage("Creating OperationVehicles");
 		if (this.collOfOperationVehiclesToAddToBase.size() >= 1) {
 			for (int i = 0; i < collOfOperationVehiclesToAddToBase.size(); i++) {
 				this.updateProgress(i, reqDuringBaseCreation);

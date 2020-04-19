@@ -9,6 +9,7 @@ public class OperationHandler {
 	private static OperationHandler operationHandlerInstance = null;
 	private ArrayList<Operation> listOfOperations = new ArrayList<Operation>();
 	private Operation listOfOperationIdByOperationId = null;
+	private Operation createdOperation;
 	
 	public static OperationHandler getInstance() {
 		if(operationHandlerInstance == null) {
@@ -31,5 +32,13 @@ public class OperationHandler {
 	
 	public Operation getOperationByOperationId() {
 		return this.listOfOperationIdByOperationId;
+	}
+
+	public void setCreatedOperation(Operation operation) {
+		this.createdOperation = operation;
+	}
+	
+	public Operation getCreatedOperation() {
+		return this.createdOperation;
 	}
 }

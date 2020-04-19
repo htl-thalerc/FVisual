@@ -66,4 +66,10 @@ public class ControllerOperationManagement implements Initializable {
 		}
 		this.mainTabPaneOperationManagement.getTabs().add(tabCreateBase);
 	}
+
+	public void reloadOperationLookup() {
+		this.controllerOperationManagementOperationLookup.fillTableViews(true); //boolean: is for reloading
+		this.controllerCreateOperationManagement.resetCreateOperartionTabs();;
+		this.mainTabPaneOperationManagement.getSelectionModel().select(0);
+	}
 }

@@ -106,15 +106,93 @@ public class OperationManager {
 		return foundedOperation;
 	}
 	
-	public boolean postOperation(Operation operationObj) {
-		Invocation.Builder invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).header(CentralHandler.CONST_AUTHORIZATION,
-				CentralHandler.getInstance().getHeaderAuthorization());
-		Response response = invocationBuilder.post(Entity.entity(operationObj, MediaType.APPLICATION_JSON));
+	public Operation postOperation(Operation operationObj) {
+		Operation retVal = null;
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, "[{\"address\":\"ADRESSE\", \"operationId\":\"ID\", \"postCode\":\"PLZ\", \"shortDescription\":\"KURZBESCHREIBUNG\", \"title\":\"TITEL\", \"operationType\":{\"operationTypeId\":\"ID\"}, \"operationCode\":{\"operationCodeId\":\"ID\"}, \"base\":{\"baseId\":\"ID_STUETZPUNKT\"}}]");
+		
+		Invocation.Builder invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).headers(headers);
+		
+		String jsonStr = "{\"id_einsatzcode\":\"" + operationObj.getOperationCode().getOperationCodeId() +"\", +"
+				+ "\"id_einsatzart\":\""+operationObj.getOperationType().getOperationTypeId() +"\", +"
+				+ "\"titel\":\"\"" + operationObj.getTitle() +"\", +"
+				+ "\"kurzbeschreibung\":\"\"" + operationObj.getShortDescription() +"\", +"
+				+ "\"adresse\":\"\"" + operationObj.getAddress() +"\", +"
+				+ "\"plz\":\"\"" + operationObj.getPostCode() +"\", +"
+				+ "\"zeit\":\"\"" + operationObj.getTime() +"\"}";
+				
+		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
+
+		if (response.getStatus() == 201) {
+			ArrayList<Operation> list = response.readEntity(new GenericType<ArrayList<Operation>>() {
+			});
+			retVal = list.get(0);
+		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.POST);
+		}
+		return retVal;
+	}
+	
+	public boolean postMemberToOperation(int operationId, int memberId, int baseId) {
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, "");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(operationId) + "/mitglieder");
+		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
+		
+		String jsonStr = "{\"id\":\"" + memberId +"\", +"
+				+ "\"id_stuetzpunkt\":\"" + baseId +"\"}";
+		
+		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 
 		if (response.getStatus() == 201) {
 			return true;
 		} else {
-			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION, EnumCRUDOption.POST);
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER_IS_IN_OPERATION, EnumCRUDOption.POST);
+			return false;
+		}
+	}
+	
+	public boolean postOperationVehicleToOperation(int operationId, int operationVehicleId, int baseId) {
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, "");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(operationId) + "/fahrzeuge");
+		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
+		
+		String jsonStr = "{\"id\":\"" + operationVehicleId +"\", +"
+				+ "\"id_stuetzpunkt\":\"" + baseId +"\"}";
+		
+		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
+
+		if (response.getStatus() == 201) {
+			return true;
+		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OPERATION_VEHICLE, EnumCRUDOption.POST);
+			return false;
+		}
+	}
+	
+	public boolean postOtherOrgVehicleToOperation(int operationId, int otherOrgId) {
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, "");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(operationId) + "/andere_organisationen");
+		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
+		
+		String jsonStr = "{\"id\":\"" + otherOrgId +"\"}";
+		
+		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
+
+		if (response.getStatus() == 201) {
+			return true;
+		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.OTHER_ORG, EnumCRUDOption.POST);
 			return false;
 		}
 	}

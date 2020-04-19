@@ -1,9 +1,15 @@
 package controller;
 
 import java.net.URL;
+import java.util.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import bll.Base;
+import bll.Operation;
 import bll.OperationCode;
 import bll.OperationType;
 import handler.OperationCodeHandler;
@@ -27,9 +33,11 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 	@FXML
 	private TextField tfTitle, tfAddress;
 	@FXML
-	private DatePicker dpDate, dpTime;
+	private DatePicker dpDate;
 
 	private ControllerCreateOperationManagement controllerCreateOperationManagement;
+	private int plzFromAddress = 0;
+	private Base selectedBase;
 
 	public ControllerCreateOperationTabOperationManagement(
 			ControllerCreateOperationManagement controllerCreateOperationManagement) {
@@ -41,32 +49,31 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 		this.fillComboboxes();
 		this.initComponentsListeners();
 	}
-	
+
 	private void fillComboboxes() {
-		if(this.cbOperationCode.getItems().size() == 0) {
+		if (this.cbOperationCode.getItems().size() == 0) {
 			ObservableList<OperationCode> obsListOfOperationCodes = FXCollections.observableArrayList();
 			ObservableList<OperationType> obsListOfOperationTypes = FXCollections.observableArrayList();
-			
+
 			obsListOfOperationCodes.addAll(OperationCodeHandler.getInstance().getOperationCodeList());
 			obsListOfOperationTypes.addAll(OperationTypeHandler.getInstance().getOperationTypeList());
-			
+
 			this.cbOperationCode.setItems(obsListOfOperationCodes);
 			this.cbOperationType.setItems(obsListOfOperationTypes);
-			
+
 			this.cbOperationCode.getSelectionModel().select(0);
 			this.cbOperationType.getSelectionModel().select(0);
 		}
 	}
-	
+
 	private void initComponentsListeners() {
 		AtomicBoolean isValidTitle = new AtomicBoolean(false);
 		AtomicBoolean isValidShortDesc = new AtomicBoolean(false);
 		AtomicBoolean isValidAddress = new AtomicBoolean(false);
 		AtomicBoolean isValidDate = new AtomicBoolean(false);
-		AtomicBoolean isValidTime = new AtomicBoolean(true); //change to false
-		
+
 		this.tfTitle.textProperty().addListener((obj, oldValue, newValue) -> {
-			if(this.tfTitle.getText().length() >= 10) {
+			if (this.tfTitle.getText().length() >= 10) {
 				isValidTitle.set(true);
 				this.tfTitle.setStyle("-fx-text-box-border: green;");
 				this.tfTitle.setStyle("-fx-focus-color: green;");
@@ -77,12 +84,11 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 				this.tfTitle.setStyle("-fx-focus-color: red;");
 				this.tfTitle.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidTitle.get(), isValidShortDesc.get(),
-					isValidAddress.get(), isValidDate.get(), isValidTime.get());
+			setControlDisability(isValidTitle.get(), isValidShortDesc.get(), isValidAddress.get(), isValidDate.get());
 		});
-		
+
 		this.tfShortDescription.textProperty().addListener((obj, oldValue, newValue) -> {
-			if(this.tfShortDescription.getText().length() >= 30) {
+			if (this.tfShortDescription.getText().length() >= 30) {
 				isValidShortDesc.set(true);
 				this.tfShortDescription.setStyle("-fx-text-box-border: green;");
 				this.tfShortDescription.setStyle("-fx-focus-color: green;");
@@ -93,12 +99,11 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 				this.tfShortDescription.setStyle("-fx-focus-color: red;");
 				this.tfShortDescription.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidTitle.get(), isValidShortDesc.get(),
-					isValidAddress.get(), isValidDate.get(), isValidTime.get());
+			setControlDisability(isValidTitle.get(), isValidShortDesc.get(), isValidAddress.get(), isValidDate.get());
 		});
-		
+
 		this.tfAddress.textProperty().addListener((obj, oldValue, newValue) -> {
-			if(this.tfAddress.getText().length() >= 1) {
+			if (this.tfAddress.getText().length() >= 1) {
 				isValidAddress.set(true);
 				this.tfAddress.setStyle("-fx-text-box-border: green;");
 				this.tfAddress.setStyle("-fx-focus-color: green;");
@@ -109,12 +114,11 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 				this.tfAddress.setStyle("-fx-focus-color: red;");
 				this.tfAddress.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidTitle.get(), isValidShortDesc.get(),
-					isValidAddress.get(), isValidDate.get(), isValidTime.get());
+			setControlDisability(isValidTitle.get(), isValidShortDesc.get(), isValidAddress.get(), isValidDate.get());
 		});
-		
+
 		this.dpDate.valueProperty().addListener((obj, oldValue, newValue) -> {
-			if(this.dpDate.getValue() != null) {
+			if (this.dpDate.getValue() != null) {
 				isValidDate.set(true);
 				this.dpDate.setStyle("");
 			} else {
@@ -123,14 +127,13 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 				this.dpDate.setStyle("-fx-focus-color: red;");
 				this.dpDate.setStyle("-fx-border-color: red;");
 			}
-			setControlDisability(isValidTitle.get(), isValidShortDesc.get(),
-					isValidAddress.get(), isValidDate.get(), isValidTime.get());
+			setControlDisability(isValidTitle.get(), isValidShortDesc.get(), isValidAddress.get(), isValidDate.get());
 		});
 	}
-	
-	private void setControlDisability(boolean isValidTitle, 
-			boolean isValidShortDesc, boolean isValidAddress, boolean isValidDate, boolean isValidTime) {
-		if (isValidTitle && isValidShortDesc && isValidAddress && isValidDate && isValidTime) {
+
+	private void setControlDisability(boolean isValidTitle, boolean isValidShortDesc, boolean isValidAddress,
+			boolean isValidDate) {
+		if (isValidTitle && isValidShortDesc && isValidAddress && isValidDate) {
 			this.controllerCreateOperationManagement.setButtonResetDisability(false);
 			this.controllerCreateOperationManagement.setButtonNextDisability(false);
 			this.controllerCreateOperationManagement.setButtonFinishDisability(false);
@@ -145,5 +148,13 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 			this.controllerCreateOperationManagement.setTabMemberManagementDisability(true);
 			this.controllerCreateOperationManagement.setTabOtherOrganisationManagementDisability(true);
 		}
+	}
+
+	public Operation getCreatedOperationData() {
+		return new Operation(0, this.cbOperationCode.getSelectionModel().getSelectedItem(),
+				this.cbOperationType.getSelectionModel().getSelectedItem(), this.tfAddress.getText().trim(),
+				this.plzFromAddress, this.tfTitle.getText().trim(), this.tfShortDescription.getText().trim(),
+				Date.from(Instant.from(this.dpDate.getValue().atStartOfDay(ZoneId.systemDefault()))),
+				new Timestamp(System.currentTimeMillis()), this.selectedBase);
 	}
 }
