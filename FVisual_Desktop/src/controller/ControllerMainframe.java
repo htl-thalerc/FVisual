@@ -55,7 +55,7 @@ public class ControllerMainframe implements Initializable {
 	@FXML
 	private GridPane gridPane;
 
-	private CentralHandler ch;
+	private CentralHandler centralHandler;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 	private static Stage currentStage;
 	
@@ -474,7 +474,7 @@ public class ControllerMainframe implements Initializable {
 
 	@FXML
 	private void onClickmItemProfileSettings(ActionEvent event) throws IOException {
-		ch = CentralHandler.getInstance();
+		centralHandler = CentralHandler.getInstance();
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		fxmlLoader.setLocation(getClass().getResource("/gui/EditProfile.fxml"));
 		fxmlLoader.setController(new ControllerEditProfile());

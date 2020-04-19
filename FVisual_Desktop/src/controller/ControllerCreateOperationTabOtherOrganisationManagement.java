@@ -1,11 +1,11 @@
 package controller;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import bll.OtherOrganisation;
+import handler.OtherOrganisationHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,14 +44,7 @@ public class ControllerCreateOperationTabOtherOrganisationManagement implements 
 	}
 	
 	private void initAvailableOperationVehicles() {
-		ArrayList<OtherOrganisation> list = new ArrayList<OtherOrganisation>();
-		list.add(new OtherOrganisation(1, "Polizei"));
-		list.add(new OtherOrganisation(2, "Polizeihubschrauber"));
-		list.add(new OtherOrganisation(3, "Rotes Kreuz"));
-		list.add(new OtherOrganisation(4, "Notarzt"));
-		list.add(new OtherOrganisation(5, "Rettungshubschrauber"));
-		
-		this.obsListLVAvailableOrganisation = FXCollections.observableArrayList(list);
+		this.obsListLVAvailableOrganisation = FXCollections.observableArrayList(OtherOrganisationHandler.getInstance().getOtherOrganisationList());
 		this.lvAvailableOrganisation.setItems(this.obsListLVAvailableOrganisation);
 		
 		this.nrOfTotalOrganisations = this.lvAvailableOrganisation.getItems().size();
