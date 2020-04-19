@@ -212,6 +212,52 @@ var getStuetzpunktPattern = function() {
     };
 }
 
+var getEinsatzPattern = function() {
+    return {
+        "length": 7,
+        "data": {
+            "id": {
+                "isMandatory": false
+            },
+            "ID_EINSATZCODE": {
+                "isMandatory": true,
+                "type": "number",
+                "min-length": "0"
+            },
+            "ID_EINSATZART": {
+                "isMandatory": true,
+                "type": "number",
+                "min-length": "0"
+            },
+            "TITEL": {
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
+            },
+            "KURZBESCHREIBUNG": {
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
+            },
+            "ADRESSE": {
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
+            },
+            "PLZ": {
+                "isMandatory": true,
+                "type": "number",
+                "min-length": "3"
+            },
+            "ZEIT": {
+                "isMandatory": true,
+                "type": "string",
+                "min-length": "3"
+            }
+        }
+    };
+}
+
 var getFahrzeugPattern = function() {
     return {
         "length": 1,
@@ -301,6 +347,7 @@ module.exports = {
         'getAdminsPattern': getAdminsPattern,
         'getSubQueryNamePattern': getSubQueryNamePattern,
         'getSubQueryEinsatzPattern': getSubQueryEinsatzPattern,
-        'getSubQueryIdPattern': getSubQueryIdPattern
+        'getSubQueryIdPattern': getSubQueryIdPattern,
+        'getEinsatzPattern': getEinsatzPattern
     }
 }
