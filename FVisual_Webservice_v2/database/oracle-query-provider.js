@@ -59,7 +59,7 @@ module.exports.EINSATZ_POST_FAHRZEUG = "INSERT INTO FZG_WB_EINSATZ(ID_EINSATZ, I
 module.exports.EINSATZ_POST_EINSATZKRAFT = "INSERT INTO EKraft_wb_Einsatz(id_einsatz, id_stuetzpunkt) VALUES(:1, :2)";
 module.exports.EINSATZ_POST_MITGLIED = "INSERT INTO Mtg_wb_Einsatz(id_einsatz, id_stuetzpunkt, id_mitglied) VALUES (:1, :2, :3)";
 
-module.exports.EINSATZ_POST = "INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit) VALUES(seq_Einsaetze.nextval, :1, :2, :3, :4, :5, :6,TO_TIMESTAMP(:7, 'YYYY-MM-DD HH24:MI:SS'));"
+module.exports.EINSATZ_POST = "INSERT INTO Einsaetze(id, id_einsatzcode, id_einsatzart, titel, kurzbeschreibung, adresse, plz, zeit) VALUES(seq_Einsaetze.nextval, :1, :2, :3, :4, :5, :6,TO_TIMESTAMP(':7', 'YYYY-MM-DD HH24:MI:SS'));"
 
 /* IS support */
 //module.exports.FZG_GET = "SELECT * FROM Einsatzfahrzeuge ORDER BY bezeichnung";
