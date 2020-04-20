@@ -211,7 +211,7 @@ public class ControllerCreateBaseManagement implements Initializable {
 				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
 				stageProgressBarDialog.setScene(sceneProgressBarDialog);
 				stageProgressBarDialog.setTitle("Post Base");
-				stageProgressBarDialog.show();
+				stageProgressBarDialog.showAndWait();
 				
 				controllerThreadProgressBarDialog.unbindProgressBar();
 				
