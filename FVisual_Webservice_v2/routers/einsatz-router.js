@@ -162,12 +162,12 @@ if (!validatorModule.isValidBody(data, validatorModule.patterns.getEinsatzPatter
 }
 
 var params = [];
-params.push(data.ID_EINSATZCODE);
-params.push(data.ID_EINSATZART);
+params.push(parseInt(data.ID_EINSATZCODE));
+params.push(parseInt(data.ID_EINSATZART));
 params.push(data.TITEL);
 params.push(data.KURZBESCHREIBUNG);
 params.push(data.ADRESSE);
-params.push(data.PLZ);
+params.push(parseInt(data.PLZ));
 params.push(data.ZEIT);
 
 oracleJobs.execute(oracleQueryProvider.EINSATZ_POST, params, (err, result) => {
