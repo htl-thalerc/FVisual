@@ -36,6 +36,6 @@ public class OperationCode {
 	
 	@Override
 	public String toString() {
-		return "" + operationCodeId + ", " + code;
+		return this.code;
 	}
 }

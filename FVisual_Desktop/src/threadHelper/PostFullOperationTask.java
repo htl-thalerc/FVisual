@@ -39,43 +39,85 @@ public class PostFullOperationTask extends Task<Void> {
 		threadBasePostLoader.join();
 		Thread.sleep(100);
 		
-//		this.updateMessage("Posting OperationVehicles");
-//		if (this.collOfOperationVehiclesToAddToOperation.size() >= 1) {
-//			for (int i = 0; i < collOfOperationVehiclesToAddToOperation.size(); i++) {
-//				this.updateProgress(i, reqDuringOperationCreation);
-//				
-//					// Create Vehicle
-//					OperationVehicle vehicleToCreate = collOfOperationVehiclesToAddToOperation.get(i);
-//					vehicleToCreate = this
-//							.setBaseObjAndBaseIdToVehicle(collOfOperationVehiclesToAddToOperation.get(i));
-//
-//					Thread threadCreateOperationVehicle = new Thread(
-//							new OperationVehiclePostHandler(vehicleToCreate));
-//					threadCreateOperationVehicle.start();
-//					threadCreateOperationVehicle.join();
-//					Thread.sleep(100);
-//				
-//			}
-//		}
-//		
-//		this.updateMessage("Posting Members");
-//		if (this.collOfMembersToAddToBase.size() >= 1) {
-//			for (int i = 0; i < collOfMembersToAddToBase.size(); i++) {
-//				this.updateProgress(i, reqDuringBaseCreation);
-//				if (collOfMembersToAddToBase.get(i).getBaseId() == 0
-//						&& collOfMembersToAddToBase.get(i).getMemberId() != -1) {
-//					// Members with no base
-//					Member memberToUpdate = collOfMembersToAddToBase.get(i);
-//					memberToUpdate.setRankId(memberToUpdate.getRank().getRankId());
-//					memberToUpdate = this.setBaseObjAndBaseIdToMember(collOfMembersToAddToBase.get(i));
-//
-//					Thread threadUpdateMember = new Thread(new MemberUpdateHandler(memberToUpdate));
-//					threadUpdateMember.start();
-//					threadUpdateMember.join();
-//					Thread.sleep(100);
-//				} 
-//			}	
-//		}
+		this.updateMessage("Posting OperationVehicles");
+		if (this.collOfOperationVehiclesToAddToOperation.size() >= 1) {
+			for (int i = 0; i < this.collOfOperationVehiclesToAddToOperation.size(); i++) {
+				this.updateProgress(i, reqDuringOperationCreation);
+					//post into Table FZG_wb_Einsatz
+					OperationVehicle operationVehicleToCreate = this.collOfOperationVehiclesToAddToOperation.get(i);
+
+					Thread threadCreateOperationVehicle = new Thread(
+							postOperationVehicleToOperation(operationVehicleToCreate));
+					threadCreateOperationVehicle.start();
+					threadCreateOperationVehicle.join();
+			}
+		}
+		
+		this.updateMessage("Posting OtherOrganisations");
+		if (this.collOfOtherOrgsToAddToOperation.size() >= 1) {
+			for (int i = 0; i < this.collOfOtherOrgsToAddToOperation.size(); i++) {
+				this.updateProgress(i, reqDuringOperationCreation);
+					//post into Table AORG_WB_EINSATZ
+					OtherOrganisation otherOrgsToCreate = this.collOfOtherOrgsToAddToOperation.get(i);
+
+					Thread threadCreateOtherOrgs = new Thread(
+							postOtherOrgToOperation(otherOrgsToCreate));
+					threadCreateOtherOrgs.start();
+					threadCreateOtherOrgs.join();
+			}
+		}
+		
+		this.updateMessage("Posting Members");
+		if (this.collOfMembersToAddToOperation.size() >= 1) {
+			for (int i = 0; i < this.collOfMembersToAddToOperation.size(); i++) {
+				this.updateProgress(i, reqDuringOperationCreation);
+					//post into Table MTG_WB_EINSATZ
+					Member memberToCreate = this.collOfMembersToAddToOperation.get(i);
+					
+					Thread threadCreateMember = new Thread(postMemberToOperation(memberToCreate));
+					threadCreateMember.start();
+					threadCreateMember.join();
+				} 
+			}	
 		return null;
+	}
+	
+	private Task<Void> postOperationVehicleToOperation(OperationVehicle operationVehicleToCreate) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread thread = new Thread(new OperationVehiclePostHandler(operationVehicleToCreate.getOperation().getOperationId(), 
+								operationVehicleToCreate.getOperationVehicleId(), operationVehicleToCreate.getBase().getBaseId()));
+				thread.start();
+				thread.join();
+				return null;
+			}
+		};
+	}
+	
+	private Task<Void> postOtherOrgToOperation(OtherOrganisation otherOrgToCreate) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread thread = new Thread(new OtherOrgPostHandler(otherOrgToCreate.getOtherOrganisationId(), 
+						otherOrgToCreate.getOperation().getOperationId()));
+				thread.start();
+				thread.join();
+				return null;
+			}
+		};
+	}
+	
+	private Task<Void> postMemberToOperation(Member memberToCreate) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread thread = new Thread(new MemberPostHandler(memberToCreate.getOperation().getOperationId(), 
+						memberToCreate.getMemberId(), memberToCreate.getBase().getBaseId()));
+				thread.start();
+				thread.join();
+				return null;
+			}
+		};
 	}
 }
