@@ -17,7 +17,7 @@
       <AnchorPane prefHeight="447.0" prefWidth="1100.0" BorderPane.alignment="CENTER">
          <children>
         	 	<AnchorPane blendMode="SRC_ATOP" focusTraversable="true" layoutX="491.0" layoutY="18.0" prefHeight="407.0" prefWidth="592.0" style="-fx-border-color: black;">
-        	 		
+        	 		<GoogleMapView fx:id="mapView" prefHeight="406.0" prefWidth="591.0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0" />
         	 	</AnchorPane>
             <GridPane layoutX="16.0" layoutY="17.0" prefHeight="408.0" prefWidth="449.0" style="-fx-background-color: white; -fx-border-color: black; -fx-background-radius: 10; -fx-border-radius: 10;">
                <columnConstraints>

@@ -1,6 +1,7 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -8,10 +9,25 @@ import java.time.ZoneId;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.event.GMapMouseEvent;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+import com.lynden.gmapsfx.service.geocoding.GeocodingResult;
+import com.lynden.gmapsfx.service.geocoding.GeocodingService;
+import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
+
 import bll.Base;
 import bll.Operation;
 import bll.OperationCode;
 import bll.OperationType;
+import handler.BaseHandler;
 import handler.OperationCodeHandler;
 import handler.OperationTypeHandler;
 import javafx.collections.FXCollections;
@@ -22,8 +38,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import manager.GeoLocationsManager;
 
-public class ControllerCreateOperationTabOperationManagement implements Initializable {
+public class ControllerCreateOperationTabOperationManagement implements Initializable, MapComponentInitializedListener {
+	private GeocodingService geocodingService;
+	@FXML
+	private GoogleMapView mapView;
 	@FXML
 	private ComboBox<OperationCode> cbOperationCode;
 	@FXML
@@ -35,6 +55,9 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 	@FXML
 	private DatePicker dpDate;
 
+	private GeoLocationsManager geoCodingService;
+	private GoogleMap map;
+	private ArrayList<Base> bases = new ArrayList<Base>();
 	private ControllerCreateOperationManagement controllerCreateOperationManagement;
 	private int plzFromAddress = 0;
 	private Base selectedBase;
@@ -48,6 +71,80 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.fillComboboxes();
 		this.initComponentsListeners();
+		mapView.addMapInializedListener(this);
+	}
+
+	@Override
+	public void mapInitialized() {
+		fillMapViewWithBases();
+	}
+	
+	private void fillMapViewWithBases() {
+		MapOptions mapOptions = new MapOptions();
+
+		mapOptions.center(new LatLong(46.6103, 13.8558)).mapType(MapTypeIdEnum.ROADMAP).overviewMapControl(false)
+				.panControl(false).rotateControl(false).scaleControl(false).streetViewControl(false).zoomControl(false)
+				.zoom(12);
+
+		map = mapView.createMap(mapOptions);
+		
+		geocodingService = new GeocodingService();
+		ArrayList<Base> list = BaseHandler.getInstance().getBaseList();
+
+		list.forEach((b) -> {
+			geocodingService.geocode(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr(),
+					(GeocodingResult[] results, GeocoderStatus status) -> {
+
+						LatLong latLong = null;
+
+						if (status == GeocoderStatus.ZERO_RESULTS) {
+							return;
+						} else if (results.length > 1) {
+							latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(),
+									results[0].getGeometry().getLocation().getLongitude());
+						} else {
+							latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(),
+									results[0].getGeometry().getLocation().getLongitude());
+						}
+						MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
+						markerOptionsCurrentMarker.position(latLong);
+						Marker m = new Marker(markerOptionsCurrentMarker);
+						map.addMarker(m);
+					});
+		});
+		
+		bases = list;
+		
+		map.addMouseEventHandler(UIEventType.click, (GMapMouseEvent event) -> {
+			try {
+				LatLong latLong = event.getLatLong();
+				geoCodingService = GeoLocationsManager.newInstance();
+				LatLong currentPosition = new LatLong(latLong.getLatitude(), latLong.getLongitude());
+				Base b = checkForBases(geoCodingService.reverseGeoCoding(currentPosition));
+				// do something with the Base
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		});
+	}
+	
+	private Base checkForBases(String Adress) {
+		Base clickedBase = new Base();
+		try {
+			String[] temp = Adress.split(",");
+			//tfPostCode.setText(temp[1].split(" ")[1]);
+			//tfPlace.setText(temp[1].split(" ")[2]);
+			//tfStreet.setText(temp[0].split(" ")[0]);
+			//tfHouseNr.setText(temp[0].split(" ")[1]);
+			for(int i = 0; i < bases.size(); i++) {
+				if(bases.get(i).getStreet() == temp[0].split(" ")[0] && bases.get(i).getPlace() == temp[1].split(" ")[2]) {
+					clickedBase = bases.get(i);
+				}
+			}
+		} catch(NullPointerException ex) {
+			ex.printStackTrace();
+		}
+		return clickedBase;
 	}
 
 	private void fillComboboxes() {
