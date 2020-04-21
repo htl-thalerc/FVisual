@@ -214,7 +214,7 @@ var getStuetzpunktPattern = function() {
 
 var getEinsatzPattern = function() {
     return {
-        "length": 7,
+        "length": 6,
         "data": {
             "id": {
                 "isMandatory": false
@@ -248,12 +248,13 @@ var getEinsatzPattern = function() {
                 "isMandatory": true,
                 "type": "number",
                 "min-length": "3"
-            },
-            "ZEIT": {
-                "isMandatory": true,
-                "type": "string",
-                "min-length": "3"
             }
+            /*,
+                        "ZEIT": {
+                            "isMandatory": true,
+                            "type": "string",
+                            "min-length": "3"
+                        }*/
         }
     };
 }
@@ -308,16 +309,17 @@ var getSubQueryNamePattern = function() {
 
 var getSubQueryEinsatzPattern = function() {
     return {
-        "length": 2,
+        "length": 1,
         "data": {
             "name": {
                 "isMandatory": true,
                 "type": "string",
                 "min-length": "3"
-            },
-            "zeit": {
-                "isMandatory": true
             }
+            /*,
+                        "zeit": {
+                            "isMandatory": true
+                        }*/
         }
     }
 }

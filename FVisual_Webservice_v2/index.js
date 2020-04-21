@@ -16,8 +16,8 @@ const einsatzRouter = require('./routers/einsatz-router');
 loggerModule.settings.Development();
 
 /* local variables */
-const HOSTNAME = ip.address();
-//const HOSTNAME = '192.168.178.28';
+//const HOSTNAME = ip.address();
+const HOSTNAME = '192.168.178.28';
 const PORT = 3030;
 var app = express();
 var logger = loggerModule.loggers['Application'];
