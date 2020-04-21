@@ -41,7 +41,6 @@ import javafx.scene.control.TextField;
 import manager.GeoLocationsManager;
 
 public class ControllerCreateOperationTabOperationManagement implements Initializable, MapComponentInitializedListener {
-	private GeocodingService geocodingService;
 	@FXML
 	private GoogleMapView mapView;
 	@FXML
@@ -80,6 +79,7 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 	}
 	
 	private void fillMapViewWithBases() {
+		geoCodingService = GeoLocationsManager.newInstance();
 		MapOptions mapOptions = new MapOptions();
 
 		mapOptions.center(new LatLong(46.6103, 13.8558)).mapType(MapTypeIdEnum.ROADMAP).overviewMapControl(false)
@@ -88,29 +88,25 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 
 		map = mapView.createMap(mapOptions);
 		
-		geocodingService = new GeocodingService();
 		ArrayList<Base> list = BaseHandler.getInstance().getBaseList();
 
 		list.forEach((b) -> {
-			geocodingService.geocode(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr(),
-					(GeocodingResult[] results, GeocoderStatus status) -> {
+			try {
+				String coordinates = geoCodingService.GeoCoding(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr());
+				coordinates = coordinates.split(",")[17] + "," + coordinates.split(",")[18];
+				coordinates = coordinates.split(":")[1];
+				coordinates = coordinates.replaceAll("[", "");
+				coordinates = coordinates.replaceAll("}", "");
+				
+				LatLong latLong = new LatLong(new Double(coordinates.split(",")[0]), new Double(coordinates.split(",")[1]));
 
-						LatLong latLong = null;
-
-						if (status == GeocoderStatus.ZERO_RESULTS) {
-							return;
-						} else if (results.length > 1) {
-							latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(),
-									results[0].getGeometry().getLocation().getLongitude());
-						} else {
-							latLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(),
-									results[0].getGeometry().getLocation().getLongitude());
-						}
-						MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
-						markerOptionsCurrentMarker.position(latLong);
-						Marker m = new Marker(markerOptionsCurrentMarker);
-						map.addMarker(m);
-					});
+				MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
+				markerOptionsCurrentMarker.position(latLong);
+				Marker m = new Marker(markerOptionsCurrentMarker);
+				map.addMarker(m);
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
 		});
 		
 		bases = list;
