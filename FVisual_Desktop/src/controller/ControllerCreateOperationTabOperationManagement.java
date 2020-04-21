@@ -95,13 +95,18 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 				String coordinates = geoCodingService.GeoCoding(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr());
 				coordinates = coordinates.split(",")[17] + "," + coordinates.split(",")[18];
 				coordinates = coordinates.split(":")[1];
-				coordinates = coordinates.replaceAll("[", "");
-				coordinates = coordinates.replaceAll("}", "");
+				coordinates = coordinates.replace("[", "");
+				coordinates = coordinates.replace("}", "");
+				coordinates = coordinates.replace("]", "");
 				
-				LatLong latLong = new LatLong(new Double(coordinates.split(",")[0]), new Double(coordinates.split(",")[1]));
+				String[] latLong = coordinates.split(",");
+				double lat = Double.valueOf(latLong[0]);
+				double lon = Double.valueOf(latLong[1]);
+				
+				LatLong latLonge = new LatLong(lat, lon);
 
 				MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
-				markerOptionsCurrentMarker.position(latLong);
+				markerOptionsCurrentMarker.position(latLonge);
 				Marker m = new Marker(markerOptionsCurrentMarker);
 				map.addMarker(m);
 			}catch(Exception ex) {

@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.CountDownLatch;
-
 import handler.BaseHandler;
 import handler.CentralHandler;
 import handler.MemberHandler;
@@ -54,17 +53,14 @@ public class ControllerMainframe implements Initializable {
 	private ProgressBar progressbar;
 	@FXML
 	private GridPane gridPane;
-
+	
 	private CentralHandler centralHandler;
 	private ArrayList<Node> middlePaneContent = new ArrayList<>();
 	private static Stage currentStage;
-	
 	private boolean isBasePaneLoaded = false;
 	private boolean isOperationPaneLoaded = false;
-
 	static void setStage(Stage stage) {
 		currentStage = stage;
-
 		currentStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
 				System.exit(0);
@@ -82,131 +78,141 @@ public class ControllerMainframe implements Initializable {
 		this.removeInnerBorderPaneContent();
 		currentStage.setTitle("Operation-Management");
 		this.isOperationPaneLoaded = true;
-		if(this.isBasePaneLoaded) {
+		if (this.isBasePaneLoaded) {
 			this.addProgressbar();
 		}
+
 		this.progressbar.progressProperty().unbind();
 		CountDownLatch latchGETMethods = new CountDownLatch(8);
-		
 		Task<Void> mainTask = new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
 				updateProgress(0, 100);
+				
 				// Thread for each GET Method:
 				Thread threadGETOperationTypes = null;
 				Thread threadGETOperationCodes = null;
 				Thread threadGETRanks = null;
-				if(OperationTypeHandler.getInstance().getOperationTypeList().size() == 0) {
-					threadGETOperationTypes = new Thread(loadOperationTypes(latchGETMethods));	
+
+				if (OperationTypeHandler.getInstance().getOperationTypeList().size() == 0) {
+					threadGETOperationTypes = new Thread(loadOperationTypes(latchGETMethods));
 				} else {
 					latchGETMethods.countDown();
 				}
-				if(OperationCodeHandler.getInstance().getOperationCodeList().size() == 0) {
-					threadGETOperationCodes = new Thread(loadOperationCodes(latchGETMethods));	
+
+				if (OperationCodeHandler.getInstance().getOperationCodeList().size() == 0) {
+					threadGETOperationCodes = new Thread(loadOperationCodes(latchGETMethods));
 				} else {
 					latchGETMethods.countDown();
 				}
-				if(RankHandler.getInstance().getRankList().size() == 0) {
-					threadGETRanks = new Thread(loadRanks(latchGETMethods));	
+
+				if (RankHandler.getInstance().getRankList().size() == 0) {
+					threadGETRanks = new Thread(loadRanks(latchGETMethods));
 				} else {
 					latchGETMethods.countDown();
 				}
+
 				Thread threadGETBases = new Thread(loadBases(latchGETMethods));
 				Thread threadGETOperations = new Thread(loadOperation(latchGETMethods));
 				Thread threadGETMembers = new Thread(loadMembers(latchGETMethods));
 				Thread threadGETOperationVehicles = new Thread(loadOperationVehiclesWithOperations(latchGETMethods));
 				Thread threadGETOtherOrgs = new Thread(loadOtherOrgs(latchGETMethods));
-				
 				int lastProgressValue = 0;
+
 				updateMessage("Initializing Components");
 				
-				//set progress for operationTypes
+				// set progress for operationTypes
 				updateProgress(0, 100);
-				if(threadGETOperationTypes != null) {
+				if (threadGETOperationTypes != null) {
 					threadGETOperationTypes.start();
-					threadGETOperationTypes.join();	
+					threadGETOperationTypes.join();
 					updateMessage("Loading OperationTypes from Database");
-					int nrOfOperationTypeObj =  OperationTypeHandler.getInstance().getOperationTypeList().size();
+					int nrOfOperationTypeObj = OperationTypeHandler.getInstance().getOperationTypeList().size();
 					double processIncreasePerOperationTypeObj = (10 / nrOfOperationTypeObj);
-					if(processIncreasePerOperationTypeObj < 1) {
+					if (processIncreasePerOperationTypeObj < 1) {
 						nrOfOperationTypeObj = 5;
 						processIncreasePerOperationTypeObj = 1;
 					}
-					for(int i=0;i<nrOfOperationTypeObj;i++) {
+
+					for (int i = 0; i < nrOfOperationTypeObj; i++) {
 						lastProgressValue += processIncreasePerOperationTypeObj;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
 					}
 				} else {
 					updateMessage("Loading OperationTypes from Memory");
-					for(int i=0;i<5;i++) {
+					for (int i = 0; i < 5; i++) {
 						lastProgressValue += 2;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
 					}
 				}
-				
-				//set progress for operationCodes
+
+				// set progress for operationCodes
 				lastProgressValue = 10;
 				updateProgress(lastProgressValue, 100);
-				if(threadGETOperationCodes != null) {
+				if (threadGETOperationCodes != null) {
 					updateMessage("Loading OperationCodes from Database");
 					lastProgressValue = 10;
 					threadGETOperationCodes.start();
-					threadGETOperationCodes.join();	
-					int nrOfOperationCodeObj =  OperationCodeHandler.getInstance().getOperationCodeList().size();
+					threadGETOperationCodes.join();
+					
+					int nrOfOperationCodeObj = OperationCodeHandler.getInstance().getOperationCodeList().size();
 					double processIncreasePerOperationCodeObj = (10 / nrOfOperationCodeObj);
-					if(processIncreasePerOperationCodeObj < 1) {
+					if (processIncreasePerOperationCodeObj < 1) {
 						nrOfOperationCodeObj = 5;
 						processIncreasePerOperationCodeObj = 1;
 					}
-					for(int i=0;i<nrOfOperationCodeObj;i++) {
+					for (int i = 0; i < nrOfOperationCodeObj; i++) {
 						lastProgressValue += processIncreasePerOperationCodeObj;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
 					}
 				} else {
 					updateMessage("Loading OperationCodes from Memory");
-					for(int i=0;i<5;i++) {
+					for (int i = 0; i < 5; i++) {
 						lastProgressValue += 2;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
 					}
 				}
-				
-				//Set progress for operation
+
+				// Set progress for base
 				lastProgressValue = 20;
 				updateProgress(lastProgressValue, 100);
 				updateMessage("Loading Bases from Database");
 				threadGETBases.start();
 				threadGETBases.join();
-				
+
 				int nrOfBaseObj = BaseHandler.getInstance().getBaseList().size();
 				double processIncreasePerBaseObj = (10 / nrOfBaseObj);
-				if(processIncreasePerBaseObj < 1) {
+				if (processIncreasePerBaseObj < 1) {
 					nrOfBaseObj = 10;
 					processIncreasePerBaseObj = 2.5;
 				}
-				for(int i=0;i<nrOfBaseObj;i++) {
+				for (int i = 0; i < nrOfBaseObj; i++) {
 					lastProgressValue += processIncreasePerBaseObj;
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
 				}
-				
-				//Set progress for operation
+
+				// Set progress for operation
 				lastProgressValue = 35;
 				updateProgress(lastProgressValue, 100);
 				updateMessage("Loading Operations from Database");
+				
 				threadGETOperations.start();
 				threadGETOperations.join();
-				
-				int nrOfOperationObj =  OperationHandler.getInstance().getOperationList().size();
+
+				int nrOfOperationObj = OperationHandler.getInstance().getOperationList().size();
+
 				double processIncreasePerOperationObj = (15 / nrOfOperationObj);
-				if(processIncreasePerOperationObj < 1) {
+				if (processIncreasePerOperationObj < 1) {
 					nrOfOperationObj = 10;
 					processIncreasePerOperationObj = 2.5;
 				}
-				for(int i=0;i<nrOfOperationObj;i++) {
+
+				for (int i = 0; i < nrOfOperationObj; i++) {
 					lastProgressValue += processIncreasePerOperationObj;
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
@@ -215,93 +221,94 @@ public class ControllerMainframe implements Initializable {
 				// set progress for rank
 				lastProgressValue = 45;
 				updateProgress(lastProgressValue, 100);
-				if(threadGETRanks != null) {
+				if (threadGETRanks != null) {
 					updateMessage("Loading Ranks from Database");
 					threadGETRanks.start();
-					threadGETRanks.join();	
-					int nrOfRankObj =  RankHandler.getInstance().getRankList().size();
+					threadGETRanks.join();
+					
+					int nrOfRankObj = RankHandler.getInstance().getRankList().size();
 					double processIncreasePerRankObj = (10 / nrOfRankObj);
-					if(processIncreasePerRankObj < 1) {
+					if (processIncreasePerRankObj < 1) {
 						nrOfRankObj = 5;
 						processIncreasePerRankObj = 1;
 					}
-					for(int i=0;i<nrOfRankObj;i++) {
+					for (int i = 0; i < nrOfRankObj; i++) {
 						lastProgressValue += processIncreasePerRankObj;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
 					}
 				} else {
 					updateMessage("Loading Ranks from Memory");
-					for(int i=0;i<5;i++) {
+					for (int i = 0; i < 5; i++) {
 						lastProgressValue += 2;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
 					}
 				}
-				
-				//set progress for members
+
+				// set progress for members
 				lastProgressValue = 55;
 				updateProgress(lastProgressValue, 100);
 				updateMessage("Loading Members from Database");
 				threadGETMembers.start();
 				threadGETMembers.join();
 				
-				int nrOfMemberObj =  MemberHandler.getInstance().getMemberList().size();
+				int nrOfMemberObj = MemberHandler.getInstance().getMemberList().size();
 				double processIncreasePerMemberObj = (15 / nrOfMemberObj);
-				if(processIncreasePerMemberObj < 1) {
+				if (processIncreasePerMemberObj < 1) {
 					nrOfMemberObj = 10;
 					processIncreasePerMemberObj = 1.5;
 				}
-				for(int i=0;i<nrOfMemberObj;i++) {
+
+				for (int i = 0; i < nrOfMemberObj; i++) {
 					lastProgressValue += processIncreasePerMemberObj;
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
 				}
-				
-				//set progress for ov
+
+				// set progress for ov
 				lastProgressValue = 70;
 				updateProgress(lastProgressValue, 100);
 				updateMessage("Loading OperationVehicles from Database");
 				threadGETOperationVehicles.start();
 				threadGETOperationVehicles.join();
-				
-				int nrOfVehicleObj =  OperationVehicleHandler.getInstance().getVehicleListWithOperationAttr().size();
+				int nrOfVehicleObj = OperationVehicleHandler.getInstance().getVehicleListWithOperationAttr().size();
 				double processIncreasePerVehicleObj = (15 / nrOfVehicleObj);
-				if(processIncreasePerVehicleObj < 1) {
+				if (processIncreasePerVehicleObj < 1) {
 					nrOfVehicleObj = 10;
 					processIncreasePerVehicleObj = 1.5;
 				}
-				for(int i=0;i<nrOfVehicleObj;i++) {
+
+				for (int i = 0; i < nrOfVehicleObj; i++) {
 					lastProgressValue += processIncreasePerVehicleObj;
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
 				}
-				
-				//set progress for otherorgs
+
+				// set progress for otherorgs
 				lastProgressValue = 85;
 				updateProgress(85, 100);
 				updateMessage("Loading Other-Organisations from Database");
 				threadGETOtherOrgs.start();
 				threadGETOtherOrgs.join();
-				
-				int nrOfOtherOrgObj =  OtherOrganisationHandler.getInstance().getOtherOrganisationList().size();
+
+				int nrOfOtherOrgObj = OtherOrganisationHandler.getInstance().getOtherOrganisationList().size();
 				double processIncreasePerOtherOrgObj = (15 / nrOfOtherOrgObj);
-				if(processIncreasePerOtherOrgObj < 1) {
+
+				if (processIncreasePerOtherOrgObj < 1) {
 					nrOfOtherOrgObj = 10;
 					processIncreasePerOtherOrgObj = 1.5;
 				}
-				for(int i=0;i<nrOfOtherOrgObj;i++) {
+
+				for (int i = 0; i < nrOfOtherOrgObj; i++) {
 					lastProgressValue += processIncreasePerOtherOrgObj;
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
 				}
-				
 				latchGETMethods.await();
-
 				updateProgress(99, 100);
 				updateMessage("");
 				updateProgress(100, 100);
-				
 				return null;
 			}
 		};
@@ -317,7 +324,6 @@ public class ControllerMainframe implements Initializable {
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("/gui/OperationManagement.fxml"));
 				loader.setController(new ControllerOperationManagement(this));
-
 				this.middlePaneContent.addAll(this.innerContentBorderPane.getChildren());
 				this.innerContentBorderPane.getChildren().add(loader.load());
 			} catch (IOException ex) {
@@ -333,40 +339,47 @@ public class ControllerMainframe implements Initializable {
 		this.removeInnerBorderPaneContent();
 		currentStage.setTitle("Base-Management");
 		this.isBasePaneLoaded = true;
-		if(this.isOperationPaneLoaded) {
+		if (this.isOperationPaneLoaded) {
 			this.addProgressbar();
 		}
+
 		this.progressbar.progressProperty().unbind();
 		CountDownLatch latchGETMethods = new CountDownLatch(4);
-
 		Task<Void> mainTask = new Task<Void>() {
+
 			@Override
 			protected Void call() throws Exception {
 				updateProgress(0, 100);
+
 				// Thread for each GET Method:
 				Thread threadGETBase = new Thread(loadBases(latchGETMethods));
 				Thread threadGETOperationVehicle = new Thread(loadOperationVehicles(latchGETMethods));
 				Thread threadGETRank = null;
-				if(RankHandler.getInstance().getRankList().size() == 0) {
+
+				if (RankHandler.getInstance().getRankList().size() == 0) {
 					threadGETRank = new Thread(loadRanks(latchGETMethods));
 				}
+
 				Thread threadGETMember = new Thread(loadMembers(latchGETMethods));
-				
 				int lastProgressValue = 0;
 				updateProgress(0, 100);
 				updateMessage("Initializing Components");
-				
+
 				// Set progress for bases
+
 				threadGETBase.start();
 				threadGETBase.join();
+				
 				updateMessage("Loading Bases from Database");
 				double progressIncreasePerBaseObject = (25 / BaseHandler.getInstance().getBaseList().size());
 				int nrOfBaseObjects = BaseHandler.getInstance().getBaseList().size();
+
 				// Progressbar lags when to many objects are there
 				if (progressIncreasePerBaseObject < 1) {
 					progressIncreasePerBaseObject = 1;
 					nrOfBaseObjects = 25;
 				}
+
 				for (int i = 0; i < nrOfBaseObjects; i++) {
 					lastProgressValue += progressIncreasePerBaseObject;
 					updateProgress(lastProgressValue, 100);
@@ -379,9 +392,11 @@ public class ControllerMainframe implements Initializable {
 				updateMessage("Loading OperationVehicles from Database");
 				threadGETOperationVehicle.start();
 				threadGETOperationVehicle.join();
+				
 				double progressIncreasePerOperationVehicleObject = (25
 						/ OperationVehicleHandler.getInstance().getVehicleList().size());
 				int nrOfOperationVehicleObjects = OperationVehicleHandler.getInstance().getVehicleList().size();
+
 				// Progressbar lags when to many objects are there
 				if (progressIncreasePerOperationVehicleObject < 1) {
 					progressIncreasePerOperationVehicleObject = 1;
@@ -396,24 +411,27 @@ public class ControllerMainframe implements Initializable {
 				// set progress for ranks
 				updateProgress(50, 100);
 				lastProgressValue = 50;
-				
-				if(threadGETRank != null) {
+
+				if (threadGETRank != null) {
 					updateMessage("Loading Ranks from Database");
 					threadGETRank.start();
 					threadGETRank.join();
+
 					double progressIncreasePerRankObject = (25 / RankHandler.getInstance().getRankList().size());
 					int nrOfRankObjects = RankHandler.getInstance().getRankList().size();
 					if (progressIncreasePerRankObject < 1) {
 						progressIncreasePerRankObject = 1;
 						nrOfRankObjects = 25;
 					}
+
 					for (int i = 0; i < nrOfRankObjects; i++) {
 						lastProgressValue += progressIncreasePerRankObject;
 						updateProgress(lastProgressValue, 100);
 						Thread.sleep(100);
-					}	
+					}
 				} else {
 					updateMessage("Loading Ranks from Memory");
+
 					for (int i = 0; i < 5; i++) {
 						lastProgressValue += 5;
 						updateProgress(lastProgressValue, 100);
@@ -427,6 +445,7 @@ public class ControllerMainframe implements Initializable {
 				updateMessage("Loading Members from Database");
 				threadGETMember.start();
 				threadGETMember.join();
+				
 				double progressIncreasePerMemberObject = (25 / MemberHandler.getInstance().getMemberList().size());
 				int nrOfMemberObjects = MemberHandler.getInstance().getMemberList().size();
 				if (progressIncreasePerMemberObject < 1) {
@@ -437,42 +456,41 @@ public class ControllerMainframe implements Initializable {
 					lastProgressValue += progressIncreasePerMemberObject;
 					updateProgress(lastProgressValue, 100);
 					Thread.sleep(100);
-				}
-				
-				latchGETMethods.await();
 
+				}
+				latchGETMethods.await();
 				updateProgress(99, 100);
 				updateMessage("");
 				updateProgress(100, 100);
-
 				return null;
 			}
 		};
+
 		mainTask.messageProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
 				lbStatusbar.setText(newValue);
 			}
 		});
+
 		mainTask.setOnSucceeded(e -> {
 			try {
 				this.removeInnerBorderPaneContent();
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("/gui/BaseManagement.fxml"));
 				loader.setController(new ControllerBaseManagement(this));
-
 				this.middlePaneContent.addAll(this.innerContentBorderPane.getChildren());
 				this.innerContentBorderPane.getChildren().add(loader.load());
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
 		});
-
 		this.progressbar.progressProperty().bind(mainTask.progressProperty());
 		new Thread(mainTask).start();
 	}
 
 	@FXML
+
 	private void onClickmItemProfileSettings(ActionEvent event) throws IOException {
 		centralHandler = CentralHandler.getInstance();
 		FXMLLoader fxmlLoader = new FXMLLoader();
@@ -505,7 +523,6 @@ public class ControllerMainframe implements Initializable {
 			curStage.setTitle("List of Exeptions");
 			curStage.setScene(scene);
 			curStage.initModality(Modality.APPLICATION_MODAL);
-
 			curStage.showAndWait();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -523,6 +540,7 @@ public class ControllerMainframe implements Initializable {
 				return null;
 			}
 		};
+
 	}
 
 	private Task<Void> loadOperationVehicles(CountDownLatch latch) {
@@ -563,7 +581,7 @@ public class ControllerMainframe implements Initializable {
 			}
 		};
 	}
-	
+
 	private Task<Void> loadOperationTypes(CountDownLatch latch) {
 		return new Task<Void>() {
 			@Override
@@ -576,7 +594,7 @@ public class ControllerMainframe implements Initializable {
 			}
 		};
 	}
-	
+
 	private Task<Void> loadOperationCodes(CountDownLatch latch) {
 		return new Task<Void>() {
 			@Override
@@ -589,7 +607,7 @@ public class ControllerMainframe implements Initializable {
 			}
 		};
 	}
-	
+
 	private Task<Void> loadOperation(CountDownLatch latch) {
 		return new Task<Void>() {
 			@Override
@@ -602,7 +620,7 @@ public class ControllerMainframe implements Initializable {
 			}
 		};
 	}
-	
+
 	private Task<Void> loadOtherOrgs(CountDownLatch latch) {
 		return new Task<Void>() {
 			@Override
@@ -615,7 +633,7 @@ public class ControllerMainframe implements Initializable {
 			}
 		};
 	}
-	
+
 	private Task<Void> loadOperationVehiclesWithOperations(CountDownLatch latch) {
 		return new Task<Void>() {
 			protected Void call() throws Exception {
@@ -627,7 +645,7 @@ public class ControllerMainframe implements Initializable {
 			}
 		};
 	}
-	
+
 	public void removeInnerBorderPaneContent() {
 		this.middlePaneContent.clear();
 		this.innerContentBorderPane.getChildren().clear();
@@ -636,7 +654,7 @@ public class ControllerMainframe implements Initializable {
 	public void removeProgressbar() {
 		this.mainBorderPane.getChildren().remove(this.gridPane);
 	}
-	
+
 	public void addProgressbar() {
 		this.mainBorderPane.getChildren().add(this.gridPane);
 	}

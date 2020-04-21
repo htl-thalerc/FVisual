@@ -120,8 +120,7 @@ public class OperationManager {
 				+ "\"titel\":\"\"" + operationObj.getTitle() +"\", +"
 				+ "\"kurzbeschreibung\":\"\"" + operationObj.getShortDescription() +"\", +"
 				+ "\"adresse\":\"\"" + operationObj.getAddress() +"\", +"
-				+ "\"plz\":\"\"" + operationObj.getPostCode() +"\", +"
-				+ "\"zeit\":\"\"" + operationObj.getTime() +"\"}";
+				+ "\"plz\":\"\"" + operationObj.getPostCode() +"\"}";
 				
 		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 

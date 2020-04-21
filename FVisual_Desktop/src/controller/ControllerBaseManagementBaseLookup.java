@@ -259,7 +259,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@FXML
 	private void onClickBtnLoadBaseVehicles(ActionEvent event) {
-		this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
 			try {
@@ -299,6 +298,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 				});
 				loadingOperationVehicleByBaseTask.setOnSucceeded(e -> {
 					stageProgressBarDialog.close();
+					this.accordionSubTables.setExpandedPane(this.tpOperationVehcile);
 
 					this.obsListTVVehicles.clear();
 					ArrayList<OperationVehicle> tempListOfVehicles = OperationVehicleHandler.getInstance()
@@ -328,7 +328,6 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 
 	@FXML
 	private void onClickBtnLoadBaseMembers(ActionEvent event) {
-		this.accordionSubTables.setExpandedPane(this.tpMember);
 		Base selectedBase = this.tvBaseData.getSelectionModel().getSelectedItem();
 		if (selectedBase != null) {
 			try {
@@ -354,7 +353,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 				protected Void call() throws Exception {
 					updateProgress(0, 100);
 					
-					Thread threadBaseMemberLoader = new Thread();
+					Thread threadBaseMemberLoader = new Thread(taskBaseMemberLoader);
 					threadBaseMemberLoader.start();
 					threadBaseMemberLoader.join();
 
@@ -369,6 +368,7 @@ public class ControllerBaseManagementBaseLookup implements Initializable {
 			});
 			loadingMembersByBaseTask.setOnSucceeded(e -> {
 				stageProgressBarDialog.close();
+				this.accordionSubTables.setExpandedPane(this.tpMember);
 
 				this.obsListTVMembers.clear();
 				ArrayList<Member> tempListOfMembers = MemberHandler.getInstance().getMemberListByBaseId();

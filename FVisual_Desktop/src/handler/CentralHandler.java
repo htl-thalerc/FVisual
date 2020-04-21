@@ -510,10 +510,12 @@ public class CentralHandler {
 		}
 		// add operation to vehicleobj
 		for (int i = 0; i < tempListOfVehciles.size(); i++) {
-			for (int j = 0; j < tempListOfOperations.size(); j++) {
-				if (tempListOfVehciles.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
-					tempListOfVehciles.get(i).setOperation(tempListOfOperations.get(j));
-				}
+			if(tempListOfVehciles.get(i).getOperation().getOperationId() != 0) {
+				for (int j = 0; j < tempListOfOperations.size(); j++) {
+					if (tempListOfVehciles.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
+						tempListOfVehciles.get(i).setOperation(tempListOfOperations.get(j));
+					}
+				}	
 			}
 		}
 	}

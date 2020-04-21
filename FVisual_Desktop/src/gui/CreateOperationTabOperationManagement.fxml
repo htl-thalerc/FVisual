@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import com.lynden.gmapsfx.GoogleMapView?>
+
 <BorderPane prefHeight="481.0" prefWidth="1100.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="447.0" prefWidth="1100.0" BorderPane.alignment="CENTER">

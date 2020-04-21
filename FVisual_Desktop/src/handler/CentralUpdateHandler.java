@@ -119,12 +119,13 @@ public class CentralUpdateHandler {
 				stageProgressBarDialog.setScene(sceneProgressBarDialog);
 				stageProgressBarDialog.setTitle("Update Base, Member(s) and Vehicle(s)");
 				stageProgressBarDialog.show();	
-				stageProgressBarDialog.centerOnScreen();
 			} catch(IOException ex) {
 				ex.printStackTrace();
 			}
 			
 			controllerThreadProgressBarDialog.unbindProgressBar();
+			
+			Task<Void> updateTask = updateTask(updatedBaseData);
 			
 			Task<Void> mainUpdateTask = new Task<Void>() {
 				@Override
@@ -137,7 +138,7 @@ public class CentralUpdateHandler {
 					lastProgressValue = 20;
 					
 					if(isThreadUpdateBaseInitialized) {
-						Thread threadUpdateBase = new Thread(new BaseUpdateHandler(updatedBaseData));
+						Thread threadUpdateBase = new Thread(updateTask);
 						threadUpdateBase.start();
 						threadUpdateBase.join();
 						
@@ -298,6 +299,7 @@ public class CentralUpdateHandler {
 					stageProgressBarDialog.close();
 			});
 			controllerThreadProgressBarDialog.bindProgressBarOnTask(mainUpdateTask);
+			controllerThreadProgressBarDialog.bindProgressBarOnTask(updateTask);
 			try {
 				Thread mainThread = new Thread(mainUpdateTask);
 				mainThread.start();
@@ -540,5 +542,17 @@ public class CentralUpdateHandler {
 
 	public Base getCurrBaseToUpdate() {
 		return this.currBaseToUpdate;
+	}
+	
+	private Task<Void> updateTask(Base updatedBaseData) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread thread = new Thread(new BaseUpdateHandler(updatedBaseData));
+				thread.start();
+				thread.join();
+				return null;
+			}
+		};
 	}
 }

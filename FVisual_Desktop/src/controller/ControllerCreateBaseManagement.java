@@ -211,69 +211,22 @@ public class ControllerCreateBaseManagement implements Initializable {
 				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
 				stageProgressBarDialog.setScene(sceneProgressBarDialog);
 				stageProgressBarDialog.setTitle("Post Base");
-				stageProgressBarDialog.showAndWait();
+				stageProgressBarDialog.show();
 				
 				controllerThreadProgressBarDialog.unbindProgressBar();
 				
-				Thread postThread = new Thread(managePostTask(this, baseToCreate, collOfMembersToAddToBase,
-						collOfOperationVehiclesToAddToBase));
+				Task<Void> postTask = managePostTask(this, baseToCreate, collOfMembersToAddToBase,
+						collOfOperationVehiclesToAddToBase);
 				
 				Task<Void> managePostTask = new Task<Void>() {
 					@Override
 					protected Void call() throws Exception {
 						updateProgress(0, 100);
-						int lastProgressValue = 0;
-						updateProgress(0, 100);
 						
 						//Start post thread
+						Thread postThread = new Thread(postTask);
 						postThread.start();
 						postThread.join();
-
-						// Set progress for base
-						for(int i=0;i<5;i++) {
-							lastProgressValue += 4;
-							updateProgress(lastProgressValue, 100);
-							Thread.sleep(200);
-						}
-
-						// set progress for OperationVehicles
-						updateProgress(20, 100);
-						lastProgressValue = 20;
-						int nrOfOperationVehiclesToCreate = collOfOperationVehiclesToAddToBase.size();
-						if (nrOfOperationVehiclesToCreate == 0) {
-							nrOfOperationVehiclesToCreate = 1;
-						}
-						double progressIncreasePerOperationVehicleObject = (40 / nrOfOperationVehiclesToCreate);
-						if(progressIncreasePerOperationVehicleObject < 1) {
-							progressIncreasePerOperationVehicleObject = 1;
-							nrOfOperationVehiclesToCreate = 40;
-						}
-						for (int i = 0; i < nrOfOperationVehiclesToCreate; i++) {
-							lastProgressValue += progressIncreasePerOperationVehicleObject;
-							updateProgress(lastProgressValue, 100);
-							Thread.sleep(100);
-						}
-
-						// set progress for Members
-						updateProgress(60, 100);
-						lastProgressValue = 60;
-						int nrOfMembersToCreate = collOfMembersToAddToBase.size();
-						if (nrOfMembersToCreate == 0) {
-							nrOfMembersToCreate = 1;
-						}
-						double progressIncreasePerMemberObject = (40 / nrOfMembersToCreate);
-						if(progressIncreasePerMemberObject < 1) {
-							progressIncreasePerMemberObject = 1;
-							nrOfMembersToCreate = 40;
-						}
-						for (int i = 0; i < nrOfMembersToCreate; i++) {
-							lastProgressValue += progressIncreasePerMemberObject;
-							updateProgress(lastProgressValue, 100);
-							Thread.sleep(100);
-						}
-						
-						updateProgress(100, 100);
-						updateMessage("Finising");
 						
 						return null;
 					}
@@ -291,6 +244,7 @@ public class ControllerCreateBaseManagement implements Initializable {
 					this.controllerBaseManagement.reloadBaseLookup();
 				});
 				controllerThreadProgressBarDialog.bindProgressBarOnTask(managePostTask);
+				controllerThreadProgressBarDialog.bindProgressBarOnTask(postTask);
 				new Thread(managePostTask).start();
 			}
 		} catch (IOException e) {
@@ -301,12 +255,59 @@ public class ControllerCreateBaseManagement implements Initializable {
 	private Task<Void> managePostTask(ControllerCreateBaseManagement controllerCreateBaseManagement, Base baseToCreate,
 			List<Member> collOfMembersToAddToBase, List<OperationVehicle> collOfOperationVehiclesToAddToBase) {
 		return new Task<Void>() {
+			double lastProgressValue = 0;
 			@Override
 			protected Void call() throws Exception {
 				Thread postFullBase = new Thread(new PostFullBaseTask(controllerCreateBaseManagement, baseToCreate,
 						collOfMembersToAddToBase, collOfOperationVehiclesToAddToBase));
 				postFullBase.start();
 				postFullBase.join();
+				
+				// Set progress for base
+				for(int i=0;i<5;i++) {
+					lastProgressValue += 4;
+					updateProgress(lastProgressValue, 100);
+					Thread.sleep(200);
+				}
+
+				// set progress for OperationVehicles
+				updateProgress(20, 100);
+				lastProgressValue = 20;
+				int nrOfOperationVehiclesToCreate = collOfOperationVehiclesToAddToBase.size();
+				if (nrOfOperationVehiclesToCreate == 0) {
+					nrOfOperationVehiclesToCreate = 1;
+				}
+				double progressIncreasePerOperationVehicleObject = (40 / nrOfOperationVehiclesToCreate);
+				if(progressIncreasePerOperationVehicleObject < 1) {
+					progressIncreasePerOperationVehicleObject = 1;
+					nrOfOperationVehiclesToCreate = 40;
+				}
+				for (int i = 0; i < nrOfOperationVehiclesToCreate; i++) {
+					lastProgressValue += progressIncreasePerOperationVehicleObject;
+					updateProgress(lastProgressValue, 100);
+					Thread.sleep(100);
+				}
+
+				// set progress for Members
+				updateProgress(60, 100);
+				lastProgressValue = 60;
+				int nrOfMembersToCreate = collOfMembersToAddToBase.size();
+				if (nrOfMembersToCreate == 0) {
+					nrOfMembersToCreate = 1;
+				}
+				double progressIncreasePerMemberObject = (40 / nrOfMembersToCreate);
+				if(progressIncreasePerMemberObject < 1) {
+					progressIncreasePerMemberObject = 1;
+					nrOfMembersToCreate = 40;
+				}
+				for (int i = 0; i < nrOfMembersToCreate; i++) {
+					lastProgressValue += progressIncreasePerMemberObject;
+					updateProgress(lastProgressValue, 100);
+					Thread.sleep(100);
+				}
+				
+				updateProgress(100, 100);
+				updateMessage("Finising");
 				return null;
 			}
 		};
