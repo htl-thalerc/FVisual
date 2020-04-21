@@ -1,6 +1,7 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
@@ -17,6 +18,7 @@ import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 
 import bll.Base;
+import handler.BaseHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -194,6 +196,7 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 
 	@Override
 	public void mapInitialized() {
+		geoCodingService = GeoLocationsManager.newInstance();
 		MapOptions mapOptions = new MapOptions();
 
 		mapOptions.center(new LatLong(46.6103, 13.8558)).mapType(MapTypeIdEnum.ROADMAP).overviewMapControl(false)
@@ -205,7 +208,6 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		map.addMouseEventHandler(UIEventType.click, (GMapMouseEvent event) -> {
 			try {
 				LatLong latLong = event.getLatLong();
-				geoCodingService = GeoLocationsManager.newInstance();
 
 				// no Marker on MAP
 				if (currentMarker == null) {
@@ -222,6 +224,29 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		});
+		
+		ArrayList<Base> list = BaseHandler.getInstance().getBaseList();
+
+		list.forEach((b) -> {
+			try {	
+				String coordinates = geoCodingService.GeoCoding(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr());
+				System.out.println(coordinates);
+				coordinates = coordinates.substring(coordinates.indexOf("\"coordinates\":")+15, coordinates.indexOf("\"coordinates\":")+34);
+				
+				String[] latLong = coordinates.split(",");
+				double lat = Double.valueOf(latLong[1]);
+				double lon = Double.valueOf(latLong[0]);
+				
+				LatLong latLonge = new LatLong(lat, lon);
+
+				MarkerOptions markerOptionsCurrentMarker = new MarkerOptions();
+				markerOptionsCurrentMarker.position(latLonge);
+				Marker m = new Marker(markerOptionsCurrentMarker);
+				map.addMarker(m);
+			}catch(Exception ex) {
+				ex.printStackTrace();
 			}
 		});
 		System.out.println("map initialized");
