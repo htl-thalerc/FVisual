@@ -19,9 +19,6 @@ import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
-import com.lynden.gmapsfx.service.geocoding.GeocodingResult;
-import com.lynden.gmapsfx.service.geocoding.GeocodingService;
-import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
 
 import bll.Base;
 import bll.Operation;
@@ -91,17 +88,14 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 		ArrayList<Base> list = BaseHandler.getInstance().getBaseList();
 
 		list.forEach((b) -> {
-			try {
+			try {	
 				String coordinates = geoCodingService.GeoCoding(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr());
-				coordinates = coordinates.split(",")[17] + "," + coordinates.split(",")[18];
-				coordinates = coordinates.split(":")[1];
-				coordinates = coordinates.replace("[", "");
-				coordinates = coordinates.replace("}", "");
-				coordinates = coordinates.replace("]", "");
+				System.out.println(coordinates);
+				coordinates = coordinates.substring(coordinates.indexOf("\"coordinates\":")+15, coordinates.indexOf("\"coordinates\":")+34);
 				
 				String[] latLong = coordinates.split(",");
-				double lat = Double.valueOf(latLong[0]);
-				double lon = Double.valueOf(latLong[1]);
+				double lat = Double.valueOf(latLong[1]);
+				double lon = Double.valueOf(latLong[0]);
 				
 				LatLong latLonge = new LatLong(lat, lon);
 
@@ -122,7 +116,8 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 				geoCodingService = GeoLocationsManager.newInstance();
 				LatLong currentPosition = new LatLong(latLong.getLatitude(), latLong.getLongitude());
 				Base b = checkForBases(geoCodingService.reverseGeoCoding(currentPosition));
-				// do something with the Base
+				System.out.println(b.toString());
+				// do something with the Base here
 			}catch(Exception ex) {
 				ex.printStackTrace();
 			}
@@ -133,12 +128,8 @@ public class ControllerCreateOperationTabOperationManagement implements Initiali
 		Base clickedBase = new Base();
 		try {
 			String[] temp = Adress.split(",");
-			//tfPostCode.setText(temp[1].split(" ")[1]);
-			//tfPlace.setText(temp[1].split(" ")[2]);
-			//tfStreet.setText(temp[0].split(" ")[0]);
-			//tfHouseNr.setText(temp[0].split(" ")[1]);
 			for(int i = 0; i < bases.size(); i++) {
-				if(bases.get(i).getStreet() == temp[0].split(" ")[0] && bases.get(i).getPlace() == temp[1].split(" ")[2]) {
+				if(temp[1].contains(Integer.toString((bases.get(i).getPostCode())))) {
 					clickedBase = bases.get(i);
 				}
 			}
