@@ -47,7 +47,7 @@ const einsatzRouter = express.Router();
 const logger = loggerModule.loggers['Routing'];
 
 //  GET     |  /einsaetze
-//  GET     |  /einsaetze?name=eName&zeit=eZeit
+//  GET     |  /einsaetze?name=eName
 einsatzRouter.get('/', (req, res) => {
 
     if (!validatorModule.isValidSubQuery(req.query, validatorModule.patterns.getSubQueryEinsatzPattern(), true)) {
@@ -233,11 +233,6 @@ einsatzRouter.post('/:eId/stuetzpunkte', (req, res) => {
         };
     }
 
-    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
-        responseHandler.invalidBody(res, null);
-        return;
-    }
-
     var params = [];
     params.push(req.params.eId);
     params.push(data.ID);
@@ -415,11 +410,6 @@ einsatzRouter.post('/:eId/fahrzeuge', (req, res) => {
         };
     }
 
-    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
-        responseHandler.invalidBody(res, null);
-        return;
-    }
-
     var params = [];
     params.push(req.params.eId);
     params.push(data.ID_STUETZPUNKT);
@@ -506,11 +496,6 @@ einsatzRouter.post('/:eId/andere_organisationen', (req, res) => {
         data = {
             "ID": req.body.id
         };
-    }
-
-    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
-        responseHandler.invalidBody(res, null);
-        return;
     }
 
     var params = [];
