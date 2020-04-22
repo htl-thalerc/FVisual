@@ -133,5 +133,6 @@ module.exports.notImplementedYet = notImplementedYet;
 module.exports.notFound = notFound;
 module.exports.get = get;
 module.exports.post = post;
+module.exports.post2 = post2;
 module.exports.put = put;
 module.exports.delete = del;
