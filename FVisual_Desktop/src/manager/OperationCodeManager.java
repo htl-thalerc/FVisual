@@ -20,7 +20,6 @@ import com.google.gson.JsonSyntaxException;
 import bll.ClassTypes;
 import bll.EnumCRUDOption;
 import bll.OperationCode;
-import bll.OperationType;
 import handler.CentralHandler;
 import handler.ExceptionHandler;
 

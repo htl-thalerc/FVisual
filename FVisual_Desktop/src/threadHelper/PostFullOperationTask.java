@@ -39,6 +39,11 @@ public class PostFullOperationTask extends Task<Void> {
 		threadBasePostLoader.join();
 		Thread.sleep(100);
 		
+		Thread threadPostBaseToOPeration = new Thread(new BasePostOperationHandler(operationToCreate.getBase().getBaseId()));
+		threadPostBaseToOPeration.start();
+		threadPostBaseToOPeration.join();
+		Thread.sleep(100);
+		
 		this.updateMessage("Posting OperationVehicles");
 		if (this.collOfOperationVehiclesToAddToOperation.size() >= 1) {
 			for (int i = 0; i < this.collOfOperationVehiclesToAddToOperation.size(); i++) {
@@ -86,8 +91,8 @@ public class PostFullOperationTask extends Task<Void> {
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				Thread thread = new Thread(new OperationVehiclePostHandler(operationVehicleToCreate.getOperation().getOperationId(), 
-								operationVehicleToCreate.getOperationVehicleId(), operationVehicleToCreate.getBase().getBaseId()));
+				Thread thread = new Thread(new OperationVehiclePostHandler(operationVehicleToCreate.getOperationVehicleId(), 
+						operationVehicleToCreate.getBase().getBaseId()));
 				thread.start();
 				thread.join();
 				return null;
@@ -99,8 +104,7 @@ public class PostFullOperationTask extends Task<Void> {
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				Thread thread = new Thread(new OtherOrgPostHandler(otherOrgToCreate.getOtherOrganisationId(), 
-						otherOrgToCreate.getOperation().getOperationId()));
+				Thread thread = new Thread(new OtherOrgPostHandler(otherOrgToCreate.getOtherOrganisationId()));
 				thread.start();
 				thread.join();
 				return null;
@@ -112,8 +116,8 @@ public class PostFullOperationTask extends Task<Void> {
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				Thread thread = new Thread(new MemberPostHandler(memberToCreate.getOperation().getOperationId(), 
-						memberToCreate.getMemberId(), memberToCreate.getBase().getBaseId()));
+				Thread thread = new Thread(new MemberPostHandler(memberToCreate.getMemberId(), 
+						memberToCreate.getBase().getBaseId()));
 				thread.start();
 				thread.join();
 				return null;

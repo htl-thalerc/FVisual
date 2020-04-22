@@ -2,7 +2,6 @@ package handler;
 
 import java.util.ArrayList;
 
-import bll.Base;
 import bll.Operation;
 
 public class OperationHandler {

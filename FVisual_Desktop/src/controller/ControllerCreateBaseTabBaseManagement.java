@@ -232,7 +232,6 @@ public class ControllerCreateBaseTabBaseManagement implements Initializable, Map
 		list.forEach((b) -> {
 			try {	
 				String coordinates = geoCodingService.GeoCoding(b.getPlace() + " " + b.getPostCode() + " " + b.getStreet() + " " + b.getHouseNr());
-				System.out.println(coordinates);
 				coordinates = coordinates.substring(coordinates.indexOf("\"coordinates\":")+15, coordinates.indexOf("\"coordinates\":")+34);
 				
 				String[] latLong = coordinates.split(",");

@@ -21,7 +21,6 @@ import com.google.gson.JsonSyntaxException;
 
 import bll.ClassTypes;
 import bll.EnumCRUDOption;
-import bll.Exception;
 import bll.OperationVehicle;
 import handler.CentralHandler;
 import handler.ExceptionHandler;

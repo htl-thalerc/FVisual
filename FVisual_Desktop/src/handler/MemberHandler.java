@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import bll.Base;
 import bll.Member;
-import bll.Member_Is_In_Operation;
 import bll.Operation;
 import bll.Rank;
 

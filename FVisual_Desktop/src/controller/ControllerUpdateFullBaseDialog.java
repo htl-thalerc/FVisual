@@ -37,6 +37,7 @@ public class ControllerUpdateFullBaseDialog implements Initializable {
 		this.isSingleUpdate = isSingleUpdate;
 	}
 
+	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.setTabUpdateBaseContent();
 		this.setTabUpdateOperationVehicleContent();

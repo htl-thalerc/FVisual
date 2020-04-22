@@ -49,29 +49,11 @@ public class ControllerCreateOperationTabMemberManagement implements Initializab
 	}
 
 	private void initAvailableMembers() {
-		Thread threadLoadMembersByBase = new Thread(loadMembersByBase());
-		Task<Void> mainTask = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				threadLoadMembersByBase.start();
-				threadLoadMembersByBase.join();
-				return null;
-			}
-		};
-		mainTask.setOnSucceeded(e -> {
-			this.obsListLVAvailableMembers = FXCollections
-					.observableArrayList(MemberHandler.getInstance().getMemberListByBaseId());
-			this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);
+		this.obsListLVAvailableMembers = FXCollections
+				.observableArrayList(MemberHandler.getInstance().getMemberListByBaseId());
+		this.lvAvailableMembers.setItems(this.obsListLVAvailableMembers);
 
-			this.nrOfTotalOrganisations = this.lvAvailableMembers.getItems().size();
-		});
-		try {
-			Thread threadLoading = new Thread(mainTask);
-			threadLoading.start();
-			threadLoading.join();
-		} catch(InterruptedException ex) {
-			ex.printStackTrace();
-		}
+		this.nrOfTotalOrganisations = this.lvAvailableMembers.getItems().size();
 	}
 	
 	private Task<Void> loadMembersByBase() {

@@ -1,9 +1,7 @@
 package handler;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -483,12 +481,11 @@ public class CentralHandler {
 				}
 			}
 		}
-		
-		//Add Base Object
+
+		// Add Base Object
 		for (int i = 0; i < tempListOfOperations.size(); i++) {
 			for (int j = 0; j < tempListOfBases.size(); j++) {
-				if (tempListOfOperations.get(i).getBase().getBaseId() == tempListOfBases
-						.get(j).getBaseId()) {
+				if (tempListOfOperations.get(i).getBase().getBaseId() == tempListOfBases.get(j).getBaseId()) {
 					tempListOfOperations.get(i).setBase(tempListOfBases.get(j));
 				}
 			}
@@ -499,7 +496,7 @@ public class CentralHandler {
 		ArrayList<OperationVehicle> tempListOfVehciles = OperationVehicleHandler.getInstance().getVehicleList();
 		ArrayList<Base> tempListOfBases = BaseHandler.getInstance().getBaseList();
 		ArrayList<Operation> tempListOfOperations = OperationHandler.getInstance().getOperationList();
-		
+
 		// add base to vehicleobj
 		for (int i = 0; i < tempListOfVehciles.size(); i++) {
 			for (int j = 0; j < tempListOfBases.size(); j++) {
@@ -508,14 +505,17 @@ public class CentralHandler {
 				}
 			}
 		}
-		// add operation to vehicleobj
-		for (int i = 0; i < tempListOfVehciles.size(); i++) {
-			if(tempListOfVehciles.get(i).getOperation().getOperationId() != 0) {
-				for (int j = 0; j < tempListOfOperations.size(); j++) {
-					if (tempListOfVehciles.get(i).getOperation().getOperationId() == tempListOfOperations.get(j).getOperationId()) {
-						tempListOfVehciles.get(i).setOperation(tempListOfOperations.get(j));
+		if (tempListOfVehciles.get(0).getOperation() != null) {
+			// add operation to vehicleobj
+			for (int i = 0; i < tempListOfVehciles.size(); i++) {
+				if (tempListOfVehciles.get(i).getOperation().getOperationId() != 0) {
+					for (int j = 0; j < tempListOfOperations.size(); j++) {
+						if (tempListOfVehciles.get(i).getOperation().getOperationId() == tempListOfOperations.get(j)
+								.getOperationId()) {
+							tempListOfVehciles.get(i).setOperation(tempListOfOperations.get(j));
+						}
 					}
-				}	
+				}
 			}
 		}
 	}

@@ -80,6 +80,7 @@ public class ControllerEditProfile {
 		popup.getContent().addAll(pane, label, buttonContinue, buttonCancel);
 
 		buttonContinue.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent e) {
 				// change User in Database
 				CentralHandler.getInstance().setMember(null);
@@ -87,6 +88,7 @@ public class ControllerEditProfile {
 			}
 		});
 		buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent e) {
 				popup.hide();
 				group.getChildren().remove(1);

@@ -137,6 +137,6 @@ public class Operation {
 	@Override
 	public String toString() {
 		return operationId + ", OperationCode: {" + operationCode.toString() + "}, OperationType: {" + operationType.toString() + "}, " + 
-				address + ", " + title + ", " + shortDescription + ", PLZ" + postCode;
+				address + ", " + title + ", " + shortDescription + ", PLZ" + postCode + "{" + base.getBaseId() + "}";
 	}
 }

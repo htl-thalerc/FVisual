@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import bll.Member;
-import bll.OperationVehicle;
 import bll.Rank;
 import handler.CentralUpdateHandler;
 import handler.MemberHandler;

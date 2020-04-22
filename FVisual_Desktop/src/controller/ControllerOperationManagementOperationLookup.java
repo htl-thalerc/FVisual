@@ -38,16 +38,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import loader.BaseLoader;
 import loader.MemberLoader;
-import loader.OperationCodeLoader;
 import loader.OperationLoader;
 import loader.OperationMemberLoader;
-import loader.OperationTypeLoader;
 import loader.OperationVehicleByOperationLoader;
 import loader.OperationVehicleLoader;
 import loader.OperationVehicleWithOperationAttrLoader;
 import loader.OtherOrganisationByOperationLoader;
 import loader.OtherOrganisationLoader;
-import loader.RankLoader;
 
 public class ControllerOperationManagementOperationLookup implements Initializable {
 	@FXML
@@ -760,6 +757,7 @@ public class ControllerOperationManagementOperationLookup implements Initializab
 
 	private Task<Void> loadOperationVehiclesWithOperations(CountDownLatch latch) {
 		return new Task<Void>() {
+			@Override
 			protected Void call() throws Exception {
 				Thread threadLoadOtherOrgs = new Thread(new OperationVehicleWithOperationAttrLoader(latch));
 				threadLoadOtherOrgs.start();

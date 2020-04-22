@@ -1,15 +1,12 @@
 package controller;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import bll.Member;
 import bll.Rank;
-import bll.TableViewRowData;
-import handler.CentralHandler;
 import handler.MemberHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,14 +16,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import loader.BaselessMemberLoader;
-import manager.MemberManager;
 import manager.RankManager;
 
 public class ControllerCreateBaseTabMemberManagement implements Initializable {

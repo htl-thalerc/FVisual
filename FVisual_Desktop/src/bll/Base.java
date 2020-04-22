@@ -133,7 +133,7 @@ public class Base implements Comparable<Base> {
 
 	@Override
 	public String toString() {
-		return this.baseId + ", " + this.name + ", " + this.place + ", " + this.postCode + ", " + this.street + ", "
+		return this.name + ", " + this.place + ", " + this.postCode + ", " + this.street + ", "
 				+ this.houseNr;
 	}
 }

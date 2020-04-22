@@ -62,6 +62,7 @@ public class ControllerMainframe implements Initializable {
 	static void setStage(Stage stage) {
 		currentStage = stage;
 		currentStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
 			public void handle(WindowEvent we) {
 				System.exit(0);
 			}
@@ -636,6 +637,7 @@ public class ControllerMainframe implements Initializable {
 
 	private Task<Void> loadOperationVehiclesWithOperations(CountDownLatch latch) {
 		return new Task<Void>() {
+			@Override
 			protected Void call() throws Exception {
 				Thread threadLoadOtherOrgs = new Thread(new OperationVehicleWithOperationAttrLoader(latch));
 				threadLoadOtherOrgs.start();

@@ -5,11 +5,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import bll.Member;
 import bll.OperationVehicle;
-import bll.Rank;
 import handler.CentralUpdateHandler;
-import handler.EditingListCellOperationVehicle;
 import handler.OperationVehicleHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

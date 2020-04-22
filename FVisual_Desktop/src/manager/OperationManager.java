@@ -1,8 +1,6 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -24,6 +22,7 @@ import bll.EnumCRUDOption;
 import bll.Operation;
 import handler.CentralHandler;
 import handler.ExceptionHandler;
+import handler.OperationHandler;
 
 public class OperationManager {
 	private static OperationManager operationManagerInstance = null;
@@ -111,16 +110,16 @@ public class OperationManager {
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
 		
 		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
-		headers.add(CentralHandler.CONST_METADATA, "[{\"address\":\"ADRESSE\", \"operationId\":\"ID\", \"postCode\":\"PLZ\", \"shortDescription\":\"KURZBESCHREIBUNG\", \"title\":\"TITEL\", \"operationType\":{\"operationTypeId\":\"ID\"}, \"operationCode\":{\"operationCodeId\":\"ID\"}, \"base\":{\"baseId\":\"ID_STUETZPUNKT\"}}]");
+		headers.add(CentralHandler.CONST_METADATA, "[{\"address\":\"ADRESSE\", \"operationId\":\"ID\", \"postCode\":\"PLZ\", \"shortDescription\":\"KURZBESCHREIBUNG\", \"title\":\"TITEL\", \"operationTypeId\":\"ID_EINSATZART\", \"operationCodeId\":\"ID_EINSATZCODE\"}]");
 		
 		Invocation.Builder invocationBuilder = this.webTargetOperationService.request(MediaType.APPLICATION_JSON).headers(headers);
 		
-		String jsonStr = "{\"id_einsatzcode\":\"" + operationObj.getOperationCode().getOperationCodeId() +"\", +"
-				+ "\"id_einsatzart\":\""+operationObj.getOperationType().getOperationTypeId() +"\", +"
-				+ "\"titel\":\"\"" + operationObj.getTitle() +"\", +"
-				+ "\"kurzbeschreibung\":\"\"" + operationObj.getShortDescription() +"\", +"
-				+ "\"adresse\":\"\"" + operationObj.getAddress() +"\", +"
-				+ "\"plz\":\"\"" + operationObj.getPostCode() +"\"}";
+		String jsonStr = "{\"operationCodeId\":\"" + operationObj.getOperationCode().getOperationCodeId() +"\", " +
+				"\"operationTypeId\":\""+operationObj.getOperationType().getOperationTypeId() +"\", " +
+				"\"title\":\"" + operationObj.getTitle() +"\", " +
+				"\"shortDescription\":\"" + operationObj.getShortDescription() +"\", " + 
+				"\"address\":\"" + operationObj.getAddress() +"\", " +
+				"\"postCode\":\"" + operationObj.getPostCode() +"\"}";
 				
 		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 
@@ -134,16 +133,16 @@ public class OperationManager {
 		return retVal;
 	}
 	
-	public boolean postMemberToOperation(int operationId, int memberId, int baseId) {
+	public boolean postBaseToOperation(int baseId) {
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
 		
 		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
-		headers.add(CentralHandler.CONST_METADATA, "");		
-		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(operationId) + "/mitglieder");
+		headers.add(CentralHandler.CONST_METADATA, "[{\"baseId\":\"ID\"}]");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(OperationHandler.getInstance()
+				.getCreatedOperation().getOperationId()) + "/stuetzpunkte");
 		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
 		
-		String jsonStr = "{\"id\":\"" + memberId +"\", +"
-				+ "\"id_stuetzpunkt\":\"" + baseId +"\"}";
+		String jsonStr = "{\"baseId\":" + baseId + "}";
 		
 		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 
@@ -155,16 +154,37 @@ public class OperationManager {
 		}
 	}
 	
-	public boolean postOperationVehicleToOperation(int operationId, int operationVehicleId, int baseId) {
+	public boolean postMemberToOperation(int memberId, int baseId) {
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
 		
 		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
-		headers.add(CentralHandler.CONST_METADATA, "");		
-		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(operationId) + "/fahrzeuge");
+		headers.add(CentralHandler.CONST_METADATA, "[{\"memberId\":\"ID\", \"baseId\":\"ID_STUETZPUNKT\"}]");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(OperationHandler
+				.getInstance().getCreatedOperation().getOperationId()) + "/mitglieder");
 		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
 		
-		String jsonStr = "{\"id\":\"" + operationVehicleId +"\", +"
-				+ "\"id_stuetzpunkt\":\"" + baseId +"\"}";
+		String jsonStr = "{\"memberId\":" + memberId + ", \"baseId\":" + baseId + "}";
+		
+		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
+
+		if (response.getStatus() == 201) {
+			return true;
+		} else {
+			ExceptionHandler.getInstance().setException(response, ClassTypes.MEMBER_IS_IN_OPERATION, EnumCRUDOption.POST);
+			return false;
+		}
+	}
+	
+	public boolean postOperationVehicleToOperation(int operationVehicleId, int baseId) {
+		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
+		
+		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
+		headers.add(CentralHandler.CONST_METADATA, "[{\"operationVehicleId\":\"ID\", \"baseId\":\"ID_STUETZPUNKT\"}]");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(OperationHandler
+				.getInstance().getCreatedOperation().getOperationId()) + "/fahrzeuge");
+		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
+		
+		String jsonStr = "{\"operationVehicleId\":" + operationVehicleId + ", \"baseId\":" + baseId + "}";
 		
 		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 
@@ -176,15 +196,16 @@ public class OperationManager {
 		}
 	}
 	
-	public boolean postOtherOrgVehicleToOperation(int operationId, int otherOrgId) {
+	public boolean postOtherOrgVehicleToOperation(int otherOrgId) {
 		MultivaluedHashMap<String, Object> headers = new MultivaluedHashMap<String, Object>();
 		
 		headers.add(CentralHandler.CONST_AUTHORIZATION, CentralHandler.getInstance().getHeaderAuthorization());
-		headers.add(CentralHandler.CONST_METADATA, "");		
-		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(operationId) + "/andere_organisationen");
+		headers.add(CentralHandler.CONST_METADATA, "[{\"otherOrganisationId\":\"ID\"}]");		
+		WebTarget webTargetPostMemberToOperation = this.webTargetOperationService.path(String.valueOf(OperationHandler
+				.getInstance().getCreatedOperation().getOperationId()) + "/andere_organisationen");
 		Invocation.Builder invocationBuilder = webTargetPostMemberToOperation.request(MediaType.APPLICATION_JSON).headers(headers);
 		
-		String jsonStr = "{\"id\":\"" + otherOrgId +"\"}";
+		String jsonStr = "{\"otherOrganisationId\":" + otherOrgId + "}";
 		
 		Response response = invocationBuilder.post(Entity.entity(jsonStr, MediaType.APPLICATION_JSON));
 

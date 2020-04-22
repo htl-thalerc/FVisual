@@ -1,9 +1,6 @@
 package manager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;

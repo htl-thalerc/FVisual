@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -14,6 +13,8 @@ import bll.Operation;
 import bll.OperationVehicle;
 import bll.OtherOrganisation;
 import handler.CentralHandler;
+import handler.MemberHandler;
+import handler.OperationVehicleHandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -31,7 +32,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import threadHelper.PostFullBaseTask;
+import loader.BaseMemberLoader;
+import loader.BaseVehicleLoader;
 import threadHelper.PostFullOperationTask;
 
 public class ControllerCreateOperationManagement implements Initializable {
@@ -51,6 +53,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 	private ControllerOperationManagement controllerOperationManagement;
 
 	private Operation createdOperation = null;
+	private Base selectedBase = new Base(0, "", "", 0, "", "");
 
 	public ControllerCreateOperationManagement(ControllerOperationManagement controllerOperationManagement) {
 		this.controllerOperationManagement = controllerOperationManagement;
@@ -59,11 +62,11 @@ public class ControllerCreateOperationManagement implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		this.initPaneOperation();
-		this.initPaneOperationVehicle();
-		this.initPaneOtherOrg();
-		this.initPaneMember();
-		this.initTabPaneListeners();
-		this.initDisability();
+		// this.initPaneOperationVehicle();
+		// this.initPaneOtherOrg();
+		// this.initPaneMember();
+		// this.initTabPaneListeners();
+		// this.initDisability();
 	}
 
 	private void initPaneOperation() {
@@ -186,8 +189,10 @@ public class ControllerCreateOperationManagement implements Initializable {
 		Operation operationToCreate = this.getCreatedOperation();
 		List<OperationVehicle> collOfOperationVehiclesToAddToOperation = this.controllerCreateOperationTabOperationVehicleManagement
 				.getOperationVehcilesToCreate();
-		List<Member> collOfMembersToAddToOperation = this.controllerCreateOperationTabMemberManagement.getMembersToCreate();
-		List<OtherOrganisation> collOfOtherOrgsToAddToOperation = this.controllerCreateOperationTabOtherOrganisationManagement.getOrganisationsToCreate();
+		List<Member> collOfMembersToAddToOperation = this.controllerCreateOperationTabMemberManagement
+				.getMembersToCreate();
+		List<OtherOrganisation> collOfOtherOrgsToAddToOperation = this.controllerCreateOperationTabOtherOrganisationManagement
+				.getOrganisationsToCreate();
 
 		try {
 			Stage curStage = new Stage();
@@ -210,25 +215,25 @@ public class ControllerCreateOperationManagement implements Initializable {
 				stageProgressBarDialog.setScene(sceneProgressBarDialog);
 				stageProgressBarDialog.setTitle("Post Operation");
 				stageProgressBarDialog.show();
-				
+
 				controllerThreadProgressBarDialog.unbindProgressBar();
-				
+
 				Thread postThread = new Thread(managePostTask(this, operationToCreate, collOfMembersToAddToOperation,
 						collOfOperationVehiclesToAddToOperation, collOfOtherOrgsToAddToOperation));
-				
+
 				Task<Void> managePostTask = new Task<Void>() {
 					@Override
 					protected Void call() throws Exception {
 						updateProgress(0, 100);
 						int lastProgressValue = 0;
 						updateProgress(0, 100);
-						
-						//Start post thread
+
+						// Start post thread
 						postThread.start();
 						postThread.join();
 
 						// Set progress for base
-						for(int i=0;i<5;i++) {
+						for (int i = 0; i < 5; i++) {
 							lastProgressValue += 5;
 							updateProgress(lastProgressValue, 100);
 							Thread.sleep(125);
@@ -242,7 +247,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 							nrOfOperationVehiclesToCreate = 1;
 						}
 						double progressIncreasePerOperationVehicleObject = (25 / nrOfOperationVehiclesToCreate);
-						if(progressIncreasePerOperationVehicleObject < 1) {
+						if (progressIncreasePerOperationVehicleObject < 1) {
 							progressIncreasePerOperationVehicleObject = 1;
 							nrOfOperationVehiclesToCreate = 25;
 						}
@@ -251,7 +256,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 							updateProgress(lastProgressValue, 100);
 							Thread.sleep(100);
 						}
-						
+
 						// set progress for OtherOrgs
 						updateProgress(50, 100);
 						lastProgressValue = 50;
@@ -260,7 +265,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 							nrOfOtherOrgsToCreate = 1;
 						}
 						double progressIncreasePerOterOrgObject = (25 / nrOfOtherOrgsToCreate);
-						if(progressIncreasePerOterOrgObject < 1) {
+						if (progressIncreasePerOterOrgObject < 1) {
 							progressIncreasePerOterOrgObject = 1;
 							nrOfOtherOrgsToCreate = 25;
 						}
@@ -278,7 +283,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 							nrOfMembersToCreate = 1;
 						}
 						double progressIncreasePerMemberObject = (25 / nrOfMembersToCreate);
-						if(progressIncreasePerMemberObject < 1) {
+						if (progressIncreasePerMemberObject < 1) {
 							progressIncreasePerMemberObject = 1;
 							nrOfMembersToCreate = 25;
 						}
@@ -287,10 +292,10 @@ public class ControllerCreateOperationManagement implements Initializable {
 							updateProgress(lastProgressValue, 100);
 							Thread.sleep(100);
 						}
-						
+
 						updateProgress(100, 100);
 						updateMessage("Finising");
-						
+
 						return null;
 					}
 				};
@@ -302,7 +307,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 				});
 				managePostTask.setOnSucceeded(e -> {
 					stageProgressBarDialog.close();
-					
+
 					this.resetCreateOperartionTabs();
 					this.controllerOperationManagement.reloadOperationLookup();
 				});
@@ -313,12 +318,17 @@ public class ControllerCreateOperationManagement implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
-	private Task<Void> managePostTask(ControllerCreateOperationManagement controllerCreateOperationManagement, Operation operationToCreate, List<Member> collOfMembersToAddToOperation, List<OperationVehicle> collOfOperationVehiclesToAddToOperation, List<OtherOrganisation> collOfOtherOrgsToAddToOperation) {
+
+	private Task<Void> managePostTask(ControllerCreateOperationManagement controllerCreateOperationManagement,
+			Operation operationToCreate, List<Member> collOfMembersToAddToOperation,
+			List<OperationVehicle> collOfOperationVehiclesToAddToOperation,
+			List<OtherOrganisation> collOfOtherOrgsToAddToOperation) {
 		return new Task<Void>() {
 			@Override
 			protected Void call() throws Exception {
-				Thread thread = new Thread(new PostFullOperationTask(controllerCreateOperationManagement, operationToCreate, collOfMembersToAddToOperation, collOfOperationVehiclesToAddToOperation, collOfOtherOrgsToAddToOperation));
+				Thread thread = new Thread(new PostFullOperationTask(controllerCreateOperationManagement,
+						operationToCreate, collOfMembersToAddToOperation, collOfOperationVehiclesToAddToOperation,
+						collOfOtherOrgsToAddToOperation));
 				thread.start();
 				thread.join();
 				return null;
@@ -329,13 +339,151 @@ public class ControllerCreateOperationManagement implements Initializable {
 	@FXML
 	private void onClickBtnNext(ActionEvent event) {
 		// this.setCreatedBase(this.controllerCreateBaseTabBaseManagement.getCreatedBaseData());
-		if (this.tabOperationManagement.isSelected()) {
-			this.tabPaneOperation.getSelectionModel().select(this.tabOperationVehicleManagement);
-		} else if (this.tabOperationVehicleManagement.isSelected()) {
-			this.tabPaneOperation.getSelectionModel().select(this.tabOtherOrgManagement);
-		} else if (this.tabOtherOrgManagement.isSelected()) {
-			this.tabPaneOperation.getSelectionModel().select(this.tabMemberManagement);
+		// Fill Tabs
+		try {
+			if (this.tabOperationManagement.isSelected()
+					&& !this.selectedBase.equals(controllerCreateOperationTabOperationManagement.getSelectedBase())) {
+
+				FXMLLoader loaderProgressBarDialog = CentralHandler.loadFXML("/gui/ThreadProgressBarDialog.fxml");
+				ControllerThreadProgressBarDialog controllerThreadProgressBarDialog = new ControllerThreadProgressBarDialog();
+				loaderProgressBarDialog.setController(controllerThreadProgressBarDialog);
+
+				Stage stageProgressBarDialog = new Stage();
+				Scene sceneProgressBarDialog = new Scene(loaderProgressBarDialog.load());
+				stageProgressBarDialog.setScene(sceneProgressBarDialog);
+				stageProgressBarDialog.setTitle("Post Operation");
+				stageProgressBarDialog.show();
+
+				controllerThreadProgressBarDialog.unbindProgressBar();
+				this.selectedBase = controllerCreateOperationTabOperationManagement.getSelectedBase();
+				
+				Task<Void> mainTask = new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						updateProgress(0, 0);
+						double lastProgressValue = 0;
+						
+						updateMessage("Loading Operation-Vehicles from Base");
+						Thread threadLoadVehiclesByBase = new Thread(loadOperationVehiclesByBase());
+						threadLoadVehiclesByBase.start();
+						threadLoadVehiclesByBase.join();
+						
+						int nrOfOperationVehicles = OperationVehicleHandler.getInstance().getVehicleListByBaseId().size();
+						if (nrOfOperationVehicles == 0) {
+							nrOfOperationVehicles = 1;
+						}
+						double progressIncreasePerOperationVehicle = (50 / nrOfOperationVehicles);
+						if (progressIncreasePerOperationVehicle < 1) {
+							progressIncreasePerOperationVehicle = 1;
+							nrOfOperationVehicles = 50;
+						}
+						for (int i = 0; i < nrOfOperationVehicles; i++) {
+							lastProgressValue += progressIncreasePerOperationVehicle;
+							updateProgress(lastProgressValue, 100);
+							Thread.sleep(100);
+						}
+
+						Thread threadLoadMembersByBase = new Thread(loadMembersByBase());
+						threadLoadMembersByBase.start();
+						threadLoadMembersByBase.join();
+						
+						updateProgress(50, 100);
+						updateMessage("Loading Members from Base");
+						lastProgressValue = 50;
+						int nrOfMembers = MemberHandler.getInstance().getMemberListByBaseId().size();
+						if (nrOfMembers == 0) {
+							nrOfMembers = 1;
+						}
+						double progressIncreasePerMemberObject = (50 / nrOfMembers);
+						if (progressIncreasePerMemberObject < 1) {
+							progressIncreasePerMemberObject = 1;
+							nrOfMembers = 50;
+						}
+						for (int i = 0; i < nrOfMembers; i++) {
+							lastProgressValue += progressIncreasePerMemberObject;
+							updateProgress(lastProgressValue, 100);
+							Thread.sleep(100);
+						}
+						
+						updateProgress(100, 100);
+						updateMessage("Finising");
+						
+						return null;
+					}
+				};
+				mainTask.messageProperty().addListener(new ChangeListener<String>() {
+					@Override
+					public void changed(ObservableValue<? extends String> obs, String oldValue, String newValue) {
+						controllerThreadProgressBarDialog.setLabelText(newValue);
+					}
+				});
+				mainTask.setOnSucceeded(e -> {
+					stageProgressBarDialog.close();
+					for (int i = 0; i < this.tabPaneOperation.getTabs().size(); i++) {
+						if (!this.tabPaneOperation.getTabs().get(i).equals(this.tabOperationManagement)) {
+							this.tabPaneOperation.getTabs().remove(this.tabPaneOperation.getTabs().get(i));
+						}
+					}
+					this.initPaneOperationVehicle();
+					this.initPaneOtherOrg();
+					this.initPaneMember();
+					try {
+						Thread.sleep(250);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					this.tabMemberManagement.setDisable(false);
+					this.tabOtherOrgManagement.setDisable(false);
+					this.tabOperationVehicleManagement.setDisable(false);
+					this.tabOperationManagement.setDisable(false);
+
+					if (this.tabOperationManagement.isSelected()) {
+						this.tabPaneOperation.getSelectionModel().select(this.tabOperationVehicleManagement);
+					} else if (this.tabOperationVehicleManagement.isSelected()) {
+						this.tabPaneOperation.getSelectionModel().select(this.tabOtherOrgManagement);
+					} else if (this.tabOtherOrgManagement.isSelected()) {
+						this.tabPaneOperation.getSelectionModel().select(this.tabMemberManagement);
+					}
+					this.initTabPaneListeners();
+				});
+				controllerThreadProgressBarDialog.bindProgressBarOnTask(mainTask);
+				new Thread(mainTask).start();
+			} else {
+				if (this.tabOperationManagement.isSelected()) {
+					this.tabPaneOperation.getSelectionModel().select(this.tabOperationVehicleManagement);
+				} else if (this.tabOperationVehicleManagement.isSelected()) {
+					this.tabPaneOperation.getSelectionModel().select(this.tabOtherOrgManagement);
+				} else if (this.tabOtherOrgManagement.isSelected()) {
+					this.tabPaneOperation.getSelectionModel().select(this.tabMemberManagement);
+				}
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
+	}
+
+	private Task<Void> loadOperationVehiclesByBase() {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread thread = new Thread(new BaseVehicleLoader(selectedBase));
+				thread.start();
+				thread.join();
+				return null;
+			}
+		};
+	}
+
+	private Task<Void> loadMembersByBase() {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Thread thread = new Thread(new BaseMemberLoader(selectedBase));
+				thread.start();
+				thread.join();
+				return null;
+			}
+		};
 	}
 
 	@FXML
@@ -390,7 +538,7 @@ public class ControllerCreateOperationManagement implements Initializable {
 	public void setTabOperationVehicleManagementDisability(boolean isDiabled) {
 		this.tabOperationVehicleManagement.setDisable(isDiabled);
 	}
-	
+
 	public void setTabOtherOrganisationManagementDisability(boolean isDisabled) {
 		this.tabOtherOrgManagement.setDisable(isDisabled);
 	}

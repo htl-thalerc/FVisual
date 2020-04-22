@@ -42,10 +42,8 @@ import loader.BaseVehicleLoader;
 import loader.MemberLoader;
 import loader.OperationVehicleDeleteFromBaseLoader;
 import loader.OperationVehicleLoader;
-import loader.RankLoader;
 import manager.BaseManager;
 import manager.MemberManager;
-import threadHelper.OperationVehicleUpdateHandler;
 
 public class ControllerBaseManagementBaseLookup implements Initializable {
 	@FXML

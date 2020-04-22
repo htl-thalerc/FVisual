@@ -186,9 +186,9 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="btnLoadOperationMembers" mnemonicParsing="false" onAction="#onClickBtnLoadOperationMembers" text="Load Oper. Memb." GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                              <Button fx:id="btnLoadOperationOtherOrg" mnemonicParsing="false" onAction="#onClickBtnLoadOperationOtherOrg" text="Load Oper. Org." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-      								<Button fx:id="btnLoadOperationVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadOperationVehicles" text="Load Oper. Veh." GridPane.halignment="CENTER">
+                              <Button fx:id="btnLoadOperationMembers" mnemonicParsing="false" onAction="#onClickBtnLoadOperationMembers" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load Oper. Memb." GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                              <Button fx:id="btnLoadOperationOtherOrg" mnemonicParsing="false" onAction="#onClickBtnLoadOperationOtherOrg" style="-fx-text-fill: white; -fx-background-color: #BF463E;" text="Load Oper. Org." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+      								<Button fx:id="btnLoadOperationVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadOperationVehicles" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load Oper. Veh." GridPane.halignment="CENTER">
       									<GridPane.margin>
       										<Insets />
       									</GridPane.margin>
@@ -273,9 +273,9 @@
                      <bottom>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <buttons>
-                            <Button fx:id="btnLoadAllVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadAllVehicles" text="Load all Vehicles" />
-                              <Button fx:id="btnLoadAllOtherOrg" mnemonicParsing="false" onAction="#onClickBtnLoadAllOtherOrg" text="Load all Org." />
-                              <Button fx:id="btnLoadAllMembers" mnemonicParsing="false" onAction="#onClickBtnLoadAllMembers" text="Load all Members" />
+                            <Button fx:id="btnLoadAllVehicles" mnemonicParsing="false" onAction="#onClickBtnLoadAllVehicles" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load all Vehicles" />
+                              <Button fx:id="btnLoadAllOtherOrg" mnemonicParsing="false" onAction="#onClickBtnLoadAllOtherOrg" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load all Org." />
+                              <Button fx:id="btnLoadAllMembers" mnemonicParsing="false" onAction="#onClickBtnLoadAllMembers" style="-fx-background-color: #BF463E; -fx-text-fill: white;" text="Load all Members" />
                           </buttons>
                            <BorderPane.margin>
                               <Insets bottom="10.0" right="10.0" />

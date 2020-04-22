@@ -4,18 +4,15 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import bll.Base;
 import bll.OperationVehicle;
 import handler.OperationVehicleHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import loader.BaseVehicleLoader;
 
 public class ControllerCreateOperationTabOperationVehicleManagement implements Initializable {
 	@FXML
@@ -23,6 +20,7 @@ public class ControllerCreateOperationTabOperationVehicleManagement implements I
 	@FXML
 	private Button btnAddOneOperationVehicle, btnRemoveOneOperationVehicle, btnAddAllOperationVehicles,
 			btnRemoveAllOperationVehicles;
+	private final String CONST_NAME_FOR_NEW_VEHICLE = "Name for new Vehicle";
 
 	private ControllerCreateOperationManagement controllerCreateOperationManagement;
 	private ObservableList<OperationVehicle> obsListLVAvailableOperationVehicles, obsListLVSelectedOperationVehciles;
@@ -45,44 +43,41 @@ public class ControllerCreateOperationTabOperationVehicleManagement implements I
 		this.btnRemoveAllOperationVehicles.setDisable(true);
 		this.initAvailableOperationVehicles();
 		this.initSelecetedOperationVehicles();
+		this.initListViewListeners();
 	}
 
 	private void initAvailableOperationVehicles() {
-		Thread threadLoadVehiclesByBase = new Thread(loadOperationVehiclesByBase());
-		Task<Void> mainTask = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				threadLoadVehiclesByBase.start();
-				threadLoadVehiclesByBase.join();
-				return null;
-			}
-		};
-		mainTask.setOnSucceeded(e -> {
-			this.obsListLVAvailableOperationVehicles = FXCollections.observableArrayList(
-					OperationVehicleHandler.getInstance().getVehicleListByBaseId());
-			this.lvAvailableOperationVehicles.setItems(this.obsListLVAvailableOperationVehicles);
+		this.obsListLVAvailableOperationVehicles = FXCollections.observableArrayList(
+				OperationVehicleHandler.getInstance().getVehicleListByBaseId());
+		this.lvAvailableOperationVehicles.setItems(this.obsListLVAvailableOperationVehicles);
 
-			this.nrOfTotalOperationVehicles = this.lvAvailableOperationVehicles.getItems().size();
-		});
-		try {
-			Thread threadLoading = new Thread(mainTask);
-			threadLoading.start();
-			threadLoading.join();
-		} catch(InterruptedException ex) {
-			ex.printStackTrace();
-		}
+		this.nrOfTotalOperationVehicles = this.lvAvailableOperationVehicles.getItems().size();
 	}
 	
-	private Task<Void> loadOperationVehiclesByBase() {
-		return new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				Thread thread = new Thread(new BaseVehicleLoader(new Base(1, null, null, 0, null, null)));
-				thread.start();
-				thread.join();
-				return null;
+	private void initListViewListeners() {
+		this.lvAvailableOperationVehicles.setOnMouseClicked(event -> {
+			if (this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem() != null
+					&& !this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem().getDescription()
+							.equals("Name for new Vehicle")
+					&& !this.obsListLVAvailableOperationVehicles
+							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null))) {
+				this.btnAddOneOperationVehicle.setDisable(false);
+				this.btnRemoveOneOperationVehicle.setDisable(true);
+				this.isLVAvailableOperationVehiclesSelected = true;
 			}
-		};
+		});
+
+		this.lvSelectedOperationVehciles.setOnMouseClicked(event -> {
+			if (this.lvSelectedOperationVehciles.getSelectionModel().getSelectedItem() != null
+					&& !this.lvAvailableOperationVehicles.getSelectionModel().getSelectedItem().getDescription()
+							.equals("Name for new Vehicle")
+					&& !this.obsListLVAvailableOperationVehicles
+							.contains(new OperationVehicle(-1, CONST_NAME_FOR_NEW_VEHICLE, null, null))) {
+				this.btnAddOneOperationVehicle.setDisable(true);
+				this.btnRemoveOneOperationVehicle.setDisable(false);
+				this.isLVAvailableOperationVehiclesSelected = false;
+			}
+		});
 	}
 
 	private void initSelecetedOperationVehicles() {
