@@ -233,7 +233,7 @@ einsatzRouter.post('/:eId/stuetzpunkte', (req, res) => {
         };
     }
 
-    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern)) {
+    if (!validatorModule.isValidBody(data, validatorModule.patterns.getSubQueryIdPattern())) {
         responseHandler.invalidBody(res, null);
         return;
     }
